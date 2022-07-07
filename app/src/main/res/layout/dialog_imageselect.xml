@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@drawable/login_bg"
+    android:backgroundTint="@color/white"
+    android:orientation="vertical">
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:id="@+id/rlCamera"
+        style="@style/Ripple"
+        android:padding="@dimen/_10sdp"
+
+        >
+
+        <ImageView
+            android:id="@+id/imgCamera"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_centerVertical="true"
+            android:src="@drawable/ic_camera"
+            app:tint="@color/black">
+
+        </ImageView>
+
+        <com.application.smartstation.view.CustomTextViewNormal
+            android:id="@+id/textDeposit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="@dimen/_5sdp"
+            android:layout_toRightOf="@+id/imgCamera"
+            android:text="Camera"
+            android:textColor="@color/black">
+
+        </com.application.smartstation.view.CustomTextViewNormal>
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:background="@color/viewgrey"
+        android:layout_height="0.1dp">
+
+    </View>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        style="@style/Ripple"
+        android:id="@+id/rlGallery"
+        android:padding="@dimen/_9sdp"
+
+        >
+
+        <ImageView
+            android:id="@+id/imgPhoto"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_centerVertical="true"
+            app:tint="@color/black"
+            android:src="@drawable/ic_photo">
+
+        </ImageView>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="@dimen/_5sdp"
+            android:layout_toRightOf="@+id/imgPhoto"
+            android:text="Gallery"
+            android:textColor="@color/black">
+
+        </TextView>
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:background="@color/viewgrey"
+        android:layout_height="0.1dp">
+
+    </View>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Cancel"
+        android:textColor="@color/black"
+        style="@style/Ripple"
+        android:id="@+id/textCancel"
+        android:gravity="center"
+        android:layout_gravity="center"
+        android:layout_marginBottom="@dimen/_2sdp"
+        android:padding="@dimen/_10sdp"
+        >
+
+    </TextView>
+
+
+</LinearLayout>

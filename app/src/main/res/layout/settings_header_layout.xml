@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/white"
+    android:layout_height="wrap_content">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cLayout"
+        android:layout_width="match_parent"
+        android:layout_height="90dp"
+        android:background="@color/color_chat_popup_gray"
+        >
+
+        <ImageView
+            android:id="@+id/imgBack"
+            android:layout_width="18dp"
+            android:layout_height="18dp"
+            android:layout_marginStart="16dp"
+            android:src="@drawable/ic_arrow_back_use"
+            app:layout_constraintBottom_toBottomOf="@+id/txtSettings"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/txtSettings" />
+
+        <com.application.smartstation.view.CustomTextViewMedium
+            android:id="@+id/txtSettings"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/settings"
+            android:textColor="@color/white"
+            android:textSize="18sp"
+            android:layout_marginTop="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/imgBack"
+            app:layout_constraintTop_toTopOf="parent">
+
+        </com.application.smartstation.view.CustomTextViewMedium>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/imgProfilePic"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_below="@+id/cLayout"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="-40dp"
+        android:layout_marginBottom="16dp"
+        android:src="@drawable/pht1"
+        app:civ_border_color="@color/white"
+        app:civ_border_width="3dp" />
+
+    <com.application.smartstation.view.CustomTextViewBold
+        android:id="@+id/txtName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/cLayout"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="-35dp"
+        android:layout_marginEnd="36dp"
+        android:layout_toEndOf="@+id/imgProfilePic"
+        android:ellipsize="end"
+        android:singleLine="true"
+        android:text="Bala BI"
+        android:textColor="@color/white"
+        android:textSize="18sp">
+
+    </com.application.smartstation.view.CustomTextViewBold>
+
+    <com.application.smartstation.view.CustomTextViewMedium
+        android:id="@+id/txtAbout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/cLayout"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="36dp"
+        android:layout_toEndOf="@+id/imgProfilePic"
+        android:ellipsize="end"
+        android:singleLine="true"
+        android:text="Hello, I'm using Smart Station ..."
+        android:textColor="@color/color_settings_gray"
+        android:textSize="16sp">
+
+    </com.application.smartstation.view.CustomTextViewMedium>
+
+</RelativeLayout>

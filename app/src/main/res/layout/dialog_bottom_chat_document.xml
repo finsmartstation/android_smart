@@ -1,0 +1,297 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/chat_round_use"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:id="@+id/llCamera"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:gravity="center"
+            android:foreground="?attr/selectableItemBackground"
+            android:orientation="horizontal"
+            android:padding="16dp">
+
+            <ImageView
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:src="@drawable/ic_camera"
+                android:layout_marginEnd="8dp"
+                app:tint="@color/color_green"
+                />
+
+            <com.application.smartstation.view.CustomTextViewMedium
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/camera"
+                android:textSize="18sp"
+                android:layout_marginStart="8dp"
+                android:textColor="@color/black"
+                >
+
+            </com.application.smartstation.view.CustomTextViewMedium>
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/color_view" />
+
+        <LinearLayout
+            android:id="@+id/llPhoto"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:gravity="center"
+            android:foreground="?attr/selectableItemBackground"
+            android:orientation="horizontal"
+            android:padding="16dp">
+
+            <ImageView
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:src="@drawable/ic_photo"
+                android:layout_marginEnd="8dp"
+                app:tint="@color/color_green"
+                />
+
+            <com.application.smartstation.view.CustomTextViewMedium
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/photo_chat"
+                android:textSize="18sp"
+                android:layout_marginStart="8dp"
+                android:textColor="@color/black"
+                >
+
+            </com.application.smartstation.view.CustomTextViewMedium>
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/color_view" />
+
+        <LinearLayout
+            android:id="@+id/llDocument"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:gravity="center"
+            android:foreground="?attr/selectableItemBackground"
+            android:orientation="horizontal"
+            android:padding="16dp">
+
+            <ImageView
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:src="@drawable/ic_photo"
+                android:layout_marginEnd="8dp"
+                app:tint="@color/color_green"
+                />
+
+            <com.application.smartstation.view.CustomTextViewMedium
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/document"
+                android:textSize="18sp"
+                android:layout_marginStart="8dp"
+                android:textColor="@color/black"
+                >
+
+            </com.application.smartstation.view.CustomTextViewMedium>
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/color_view" />
+
+        <LinearLayout
+            android:id="@+id/llPay"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:gravity="center"
+            android:foreground="?attr/selectableItemBackground"
+            android:orientation="horizontal"
+            android:padding="16dp">
+
+            <ImageView
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:src="@drawable/ic_dollar_icon_use"
+                android:layout_marginEnd="8dp"
+                app:tint="@color/color_green"
+                />
+
+            <com.application.smartstation.view.CustomTextViewMedium
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/pay"
+                android:textSize="18sp"
+                android:layout_marginStart="8dp"
+                android:textColor="@color/black"
+                >
+
+            </com.application.smartstation.view.CustomTextViewMedium>
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/color_view" />
+
+        <LinearLayout
+            android:id="@+id/llFolder"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:gravity="center"
+            android:foreground="?attr/selectableItemBackground"
+            android:orientation="horizontal"
+            android:padding="16dp">
+
+            <ImageView
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:src="@drawable/ic_folder_icon_use"
+                android:layout_marginEnd="8dp"
+                app:tint="@color/color_green"
+                />
+
+            <com.application.smartstation.view.CustomTextViewMedium
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/folder"
+                android:textSize="18sp"
+                android:layout_marginStart="8dp"
+                android:textColor="@color/black"
+                >
+
+            </com.application.smartstation.view.CustomTextViewMedium>
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:visibility="gone"
+            android:background="@color/color_view" />
+
+        <LinearLayout
+            android:id="@+id/llLocation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:gravity="center"
+            android:visibility="gone"
+            android:foreground="?attr/selectableItemBackground"
+            android:orientation="horizontal"
+            android:padding="16dp">
+
+            <ImageView
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:src="@drawable/ic_photo"
+                app:tint="@color/grey"
+                android:layout_marginEnd="8dp"
+                />
+
+            <com.application.smartstation.view.CustomTextViewMedium
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/location"
+                android:textSize="18sp"
+                android:layout_weight="1"
+                android:layout_marginStart="8dp"
+                android:textColor="@color/black"
+                >
+
+            </com.application.smartstation.view.CustomTextViewMedium>
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:visibility="gone"
+            android:background="@color/color_view" />
+
+        <LinearLayout
+            android:id="@+id/llContact"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:visibility="gone"
+            android:gravity="center"
+            android:foreground="?attr/selectableItemBackground"
+            android:orientation="horizontal"
+            android:padding="16dp">
+
+            <ImageView
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:src="@drawable/ic_photo"
+                android:layout_marginEnd="8dp"
+                app:tint="@color/grey"
+                />
+
+            <com.application.smartstation.view.CustomTextViewMedium
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/contact"
+                android:textSize="18sp"
+                android:layout_weight="1"
+                android:layout_marginStart="8dp"
+                android:textColor="@color/black"
+                >
+
+            </com.application.smartstation.view.CustomTextViewMedium>
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/llCancel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:background="@drawable/chat_round_use"
+        android:clickable="true"
+        android:foreground="?attr/selectableItemBackground"
+        android:orientation="vertical"
+        android:padding="15dp">
+
+        <com.application.smartstation.view.CustomTextViewBold
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/cancel"
+            android:gravity="center"
+            android:textSize="18sp"
+            android:layout_weight="1"
+            android:layout_marginStart="8dp"
+            android:textColor="@color/red"
+            >
+
+        </com.application.smartstation.view.CustomTextViewBold>
+
+    </LinearLayout>
+
+</LinearLayout>

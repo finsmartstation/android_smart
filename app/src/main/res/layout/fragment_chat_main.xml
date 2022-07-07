@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".ui.fragment.ChatMainFragment">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:id="@+id/flChat"
+        >
+
+    </FrameLayout>
+
+    <RadioGroup
+        android:id="@+id/rgChat"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        android:paddingTop="4dp"
+        android:paddingBottom="4dp"
+        android:paddingStart="4dp"
+        android:visibility="gone"
+        android:paddingEnd="4dp"
+        android:backgroundTint="@color/black"
+        android:background="@drawable/num_bg"
+        >
+
+        <RadioButton
+            android:id="@+id/rbChat"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:button="@null"
+            android:textAlignment="center"
+            android:layout_weight="1"
+            android:checked="true"
+            android:textColor="@drawable/rb_selector"
+            android:background="@drawable/rb_selector"
+            android:fontFamily="@font/dinregular"
+            android:text="@string/chat"
+            android:textSize="14sp"
+            >
+
+        </RadioButton>
+
+        <RadioButton
+            android:id="@+id/rbContact"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:button="@null"
+            android:textAlignment="center"
+            android:layout_weight="1"
+            android:textColor="@drawable/rb_selector"
+            android:background="@drawable/rb_selector"
+            android:text="@string/contact"
+            android:fontFamily="@font/dinregular"
+            android:textSize="14sp"
+            >
+
+        </RadioButton>
+
+        <RadioButton
+            android:id="@+id/rbCalls"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:button="@null"
+            android:textAlignment="center"
+            android:layout_weight="1"
+            android:textColor="@drawable/rb_selector"
+            android:background="@drawable/rb_selector"
+            android:text="@string/call"
+            android:fontFamily="@font/dinregular"
+            android:textSize="14sp"
+            >
+
+        </RadioButton>
+
+
+    </RadioGroup>
+
+</LinearLayout>

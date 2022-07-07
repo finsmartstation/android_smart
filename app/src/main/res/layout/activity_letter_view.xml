@@ -1,0 +1,281 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_height="match_parent"
+    tools:context=".ui.activity.LetterViewActivity">
+
+    <include layout="@layout/header_layout"
+        android:id="@+id/ilHeader"
+        />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:scrollbars="none"
+        >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            >
+
+            <com.application.smartstation.view.CustomTextViewBold
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:text="@string/to"
+                android:textSize="18sp"
+                android:layout_marginTop="26dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                >
+
+            </com.application.smartstation.view.CustomTextViewBold>
+
+            <com.application.smartstation.view.CustomTextViewNormal
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:id="@+id/txtTo"
+                android:text="123@smartstation.com"
+                android:textSize="16sp"
+                android:layout_marginTop="10dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                >
+
+            </com.application.smartstation.view.CustomTextViewNormal>
+
+            <com.application.smartstation.view.CustomTextViewBold
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:text="@string/cc"
+                android:textSize="18sp"
+                android:layout_marginTop="16dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                >
+
+            </com.application.smartstation.view.CustomTextViewBold>
+
+            <com.application.smartstation.view.CustomTextViewNormal
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:id="@+id/txtCc"
+                android:text="456@smartstation.com"
+                android:textSize="16sp"
+                android:layout_marginTop="10dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                >
+
+            </com.application.smartstation.view.CustomTextViewNormal>
+
+            <com.application.smartstation.view.CustomTextViewBold
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:text="@string/bcc"
+                android:textSize="18sp"
+                android:layout_marginTop="16dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                >
+
+            </com.application.smartstation.view.CustomTextViewBold>
+
+            <com.application.smartstation.view.CustomTextViewNormal
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:id="@+id/txtBcc"
+                android:text="678@smartstation.com"
+                android:textSize="16sp"
+                android:layout_marginTop="10dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                >
+
+            </com.application.smartstation.view.CustomTextViewNormal>
+
+            <com.application.smartstation.view.CustomTextViewBold
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:text="@string/subject"
+                android:textSize="18sp"
+                android:layout_marginTop="16dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                >
+
+            </com.application.smartstation.view.CustomTextViewBold>
+
+            <com.application.smartstation.view.CustomTextViewNormal
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:id="@+id/txtSubject"
+                android:text="Request For One Month Advance Salary"
+                android:textSize="16sp"
+                android:layout_marginTop="10dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                >
+
+            </com.application.smartstation.view.CustomTextViewNormal>
+
+            <com.application.smartstation.view.CustomTextViewBold
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:text="@string/body"
+                android:textSize="18sp"
+                android:layout_marginTop="16dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                >
+
+            </com.application.smartstation.view.CustomTextViewBold>
+
+            <com.application.smartstation.view.CustomTextViewNormal
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:id="@+id/txtBody"
+                android:textSize="16sp"
+                android:textAlignment="center"
+                android:text="With this application, I humbly request for an advance salary for One month, as I am currently suffering from financial difficulties and in urgent need of funds.
+
+I humbly request the company to deduct the requested amount from my July and August Salaries in two installments [Provide Your Own Month]. My salary is INR _________ [Mention Your Salary Amount] and the company can recover this amount by deducting INR __________ [Mention Amount] from my July and August month Salary.
+
+Looking forward to your positive response and many thanks in advance for your kind consideration and understanding.
+
+Thanking you."
+                android:layout_marginTop="10dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                >
+
+            </com.application.smartstation.view.CustomTextViewNormal>
+
+            <com.application.smartstation.view.CustomTextViewBold
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:text="@string/attachment"
+                android:textSize="18sp"
+                android:layout_marginTop="16dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                >
+
+            </com.application.smartstation.view.CustomTextViewBold>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:orientation="horizontal"
+                android:layout_marginTop="10dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="16dp"
+                >
+
+                <ImageView
+                    android:id="@+id/imgAttach"
+                    android:layout_width="@dimen/_60sdp"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/sample"
+                    />
+
+                <com.application.smartstation.view.CustomTextViewNormal
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/browser"
+                    android:layout_gravity="center_vertical"
+                    android:textSize="14sp"
+                    android:visibility="gone"
+                    android:layout_marginStart="16dp"
+                    android:id="@+id/txtBrowser"
+                    android:textColor="@color/black"
+                    android:gravity="center"
+                    >
+
+                </com.application.smartstation.view.CustomTextViewNormal>
+
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"
+        >
+
+        <LinearLayout
+            android:id="@+id/llApprove"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="4dp"
+            android:layout_weight="1"
+            android:layout_marginEnd="8dp"
+            android:backgroundTint="@color/green"
+            android:background="@drawable/button_blue_bg"
+            >
+
+            <com.application.smartstation.view.CustomTextViewBold
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/approve"
+                android:textColor="@color/white"
+                android:textSize="18sp"
+                android:textAlignment="center"
+                android:layout_margin="4dp">
+
+            </com.application.smartstation.view.CustomTextViewBold>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/llReject"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="4dp"
+            android:layout_weight="1"
+            android:layout_marginStart="8dp"
+            android:background="@drawable/reject_bg"
+            >
+
+            <com.application.smartstation.view.CustomTextViewBold
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/reject"
+                android:textColor="@color/white"
+                android:textSize="18sp"
+                android:textAlignment="center"
+                android:layout_margin="4dp">
+
+            </com.application.smartstation.view.CustomTextViewBold>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>

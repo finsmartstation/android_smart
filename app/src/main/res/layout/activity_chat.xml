@@ -1,0 +1,269 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:id="@+id/llChat"
+    android:background="@color/white"
+    tools:context=".ui.activity.ChatActivity">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:alpha="0.4"
+        android:scaleType="centerCrop"
+        android:src="@drawable/ic_splash_bg_use" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        >
+
+    <include layout="@layout/chat_header_layout"
+        android:id="@+id/ilHeader"
+        />
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/clChat"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:layout_marginBottom="4dp"
+        >
+
+        <ImageView
+            android:layout_width="40dp"
+            android:layout_height="30dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:src="@drawable/login_logo_use"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:id="@+id/rvChatRoom"
+                android:nestedScrollingEnabled="false"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                />
+
+        <ImageView
+            android:id="@+id/imgRec"
+            android:layout_width="40dp"
+            android:layout_height="50dp"
+            android:layout_marginEnd="6dp"
+            android:src="@drawable/ic_microphone_rec_use"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <LinearLayout
+        android:id="@+id/llMsg"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:background="@drawable/chat_edt_bg"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        >
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/replyLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/replyBackground"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:visibility="gone">
+
+            <View
+                android:id="@+id/image_line"
+                android:layout_width="2dp"
+                android:layout_height="60dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="8dp"
+                android:background="@color/color_green"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <com.application.smartstation.view.CustomTextViewBold
+                android:id="@+id/txtReplyName"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:textSize="14sp"
+                android:textColor="@color/color_green"
+                app:layout_constraintEnd_toEndOf="@+id/textQuotedMessage"
+                app:layout_constraintStart_toStartOf="@+id/image_line"
+                app:layout_constraintTop_toTopOf="parent"
+                 />
+
+            <com.application.smartstation.view.CustomTextViewMedium
+                android:id="@+id/textQuotedMessage"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:layout_marginBottom="4dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:textColor="@color/black"
+                android:textSize="13sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/ibtnCancel"
+                app:layout_constraintStart_toStartOf="@+id/image_line"
+                app:layout_constraintTop_toBottomOf="@+id/txtReplyName"
+                />
+
+            <ImageButton
+                android:id="@+id/ibtnCancel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="8dp"
+                android:layout_marginBottom="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:background="@drawable/ic_close_black_24dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingTop="4dp"
+            android:paddingBottom="4dp"
+            >
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_weight="1"
+            android:minHeight="40dp"
+            android:layout_marginStart="12dp"
+            android:layout_marginEnd="12dp"
+            >
+
+            <ImageView
+                android:id="@+id/imgEmoji"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_smile_message_icon_use"/>
+
+            <com.application.smartstation.view.CustomEmojiEditText
+                android:id="@+id/edtChat"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginEnd="8dp"
+                android:layout_marginStart="12dp"
+                android:hint="@string/type_your_message"
+                android:singleLine="false"
+                android:inputType="textMultiLine"
+                android:textSize="18sp"
+                android:scrollbars="vertical"
+                android:maxLines="4"
+                android:minLines="1"
+                android:textColor="@color/black"
+                android:textColorHint="@color/chat_txt_hint_color"
+                android:background="@null"/>
+
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/imgFolder"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:src="@drawable/ic_folder_icon_use"
+            android:layout_gravity="center"
+            android:visibility="gone"
+            />
+
+
+            <ImageView
+                android:id="@+id/imgAttach"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:padding="2dp"
+                android:visibility="gone"
+                android:src="@drawable/ic_attacgmenyt_icon_use"
+                android:layout_marginStart="12dp"
+                android:layout_gravity="center"
+                />
+
+        <ImageView
+                android:id="@+id/imgPay"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+            android:visibility="gone"
+                android:src="@drawable/ic_dollar_icon_use"
+                android:layout_marginStart="12dp"
+                android:layout_gravity="center"
+                />
+
+            <ImageView
+                android:id="@+id/imgPlus"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@drawable/ic_menu_plus_use"
+                android:layout_marginEnd="12dp"
+                android:layout_gravity="center"
+                />
+
+
+        <LinearLayout
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:id="@+id/llSend"
+            android:visibility="gone"
+            app:cardCornerRadius="30dp"
+            android:layout_gravity="center"
+            android:layout_marginEnd="12dp"
+            >
+
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:padding="2dp"
+                android:src="@drawable/input_send"
+                app:tint="@color/color_green"
+                android:layout_gravity="center"
+                />
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+    </LinearLayout>
+
+    </LinearLayout>
+
+
+
+</RelativeLayout>

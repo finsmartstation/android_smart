@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_marginTop="16dp"
+    android:gravity="center"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        >
+
+    <com.application.smartstation.view.CustomTextViewNormal
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/txtCountry"
+        android:textSize="16sp"
+        android:layout_marginEnd="8dp"
+        >
+
+    </com.application.smartstation.view.CustomTextViewNormal>
+
+    <com.application.smartstation.view.CustomTextViewMedium
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/txtCountryName"
+        android:textSize="16sp"
+        android:layout_weight="1"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:textColor="@color/black"
+        >
+
+    </com.application.smartstation.view.CustomTextViewMedium>
+
+    <com.application.smartstation.view.CustomTextViewNormal
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/txtCountryCode"
+        android:textSize="16sp"
+        android:textColor="@color/chat_txt_hint_color"
+        >
+
+    </com.application.smartstation.view.CustomTextViewNormal>
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="16dp"
+        android:background="@color/bg" />
+
+</LinearLayout>

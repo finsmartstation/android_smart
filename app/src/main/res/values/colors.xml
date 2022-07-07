@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="purple_200">#FFBB86FC</color>
+    <color name="purple_500">#FF6200EE</color>
+    <color name="purple_700">#FF3700B3</color>
+    <color name="teal_200">#FF03DAC5</color>
+    <color name="teal_700">#FF018786</color>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="bg">#e5e5e5</color>
+    <color name="app_blue_color">#14558d</color>
+    <color name="light_grey">#f5f5f5</color>
+    <color name="viewgrey">#d3d3d3</color>
+    <color name="button_blue">#0583D2</color>
+    <color name="green">#00FF00</color>
+    <color name="red">#D2042D</color>
+    <color name="phn_bg_color">#F2F2F2</color>
+    <color name="grey">#999999</color>
+    <color name="bottom_bg">#212121</color>
+    <color name="statusbar_color">#090808</color>
+    <color name="chat_txt_hint_color">#c4c0bd</color>
+
+    <color name="color_green">#00c412</color>
+    <color name="color_dark_green">#18937b</color>
+    <color name="color_gray">#424242</color>
+    <color name="color_lite_gray">#f7f7f7</color>
+    <color name="color_gray_1">#dbdbdb</color>
+    <color name="color_tab_bg">#eeeeee</color>
+    <color name="color_tab_select_bg">#f8f9f9</color>
+    <color name="color_gray_2">#b8b8b8</color>
+    <color name="color_gray_txt">#424242</color>
+    <color name="color_view">#f3f7f9</color>
+    <color name="color_chat_bg">#eee7df</color>
+    <color name="color_chat_popup_gray">#999999</color>
+    <color name="color_settings_gray">#606060</color>
+    <color name="color_lost_gray">#101010</color>
+    <color name="color_chat_time">#FDF9F9</color>
+    <color name="colorE">#c4c4c4</color>
+    <color name="replyBackground">#97F7F7F7</color>
+    <color name="mail_date_coloe">#525659</color>
+    <color name="mail_unread_red">#FF0000</color>
+</resources>

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/white"
+    tools:context=".ui.activity.SelectCountryActivity">
+
+    <include layout="@layout/header_layout"
+        android:id="@+id/ilHeader"
+        />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:orientation="horizontal"
+        android:paddingStart="4dp"
+        android:paddingEnd="4dp"
+        android:backgroundTint="@color/phn_bg_color"
+        android:background="@drawable/num_bg"
+        >
+
+        <com.application.smartstation.view.CustomEditText
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:textColor="@color/black"
+            android:background="@null"
+            android:id="@+id/edtSearch"
+            android:textSize="18sp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:drawablePadding="8dp"
+            android:drawableStart="@drawable/ic_search"
+            android:imeOptions="actionDone"
+            android:textColorHint="@color/grey"
+            android:hint="@string/search"
+            android:inputType="text">
+
+
+        </com.application.smartstation.view.CustomEditText>
+
+
+    </LinearLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:id="@+id/rvCountry"
+        android:layout_weight="1"
+        android:layout_marginTop="16dp"
+        />
+
+</LinearLayout>

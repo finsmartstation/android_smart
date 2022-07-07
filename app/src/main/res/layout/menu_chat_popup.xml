@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/imgBtn"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="6dp"
+        android:layout_marginEnd="24dp"
+        android:background="@drawable/popup_bg_chat"
+        android:orientation="vertical">
+
+        <com.application.smartstation.view.CustomTextViewMedium
+            android:id="@+id/txtViewContact"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="16dp"
+            android:text="@string/view_contact"
+            android:textColor="@color/white"
+            android:textSize="16sp">
+
+        </com.application.smartstation.view.CustomTextViewMedium>
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="5dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="16dp"
+            android:src="@drawable/dot_view_use" />
+
+        <com.application.smartstation.view.CustomTextViewMedium
+            android:id="@+id/txtMedia"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:text="@string/media_link"
+            android:textColor="@color/white"
+            android:textSize="16sp">
+
+        </com.application.smartstation.view.CustomTextViewMedium>
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="5dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="16dp"
+            android:src="@drawable/dot_view_use" />
+
+        <com.application.smartstation.view.CustomTextViewMedium
+            android:id="@+id/txtSearch"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:text="@string/search_txt"
+            android:textColor="@color/white"
+            android:textSize="16sp">
+
+        </com.application.smartstation.view.CustomTextViewMedium>
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="5dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="16dp"
+            android:src="@drawable/dot_view_use" />
+
+        <com.application.smartstation.view.CustomTextViewMedium
+            android:id="@+id/txtMute"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:text="@string/mute_notify"
+            android:textColor="@color/white"
+            android:textSize="16sp">
+
+        </com.application.smartstation.view.CustomTextViewMedium>
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="5dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="16dp"
+            android:src="@drawable/dot_view_use" />
+
+        <com.application.smartstation.view.CustomTextViewMedium
+            android:id="@+id/txtWallpaper"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:text="@string/wallpaper"
+            android:textColor="@color/white"
+            android:textSize="16sp">
+
+        </com.application.smartstation.view.CustomTextViewMedium>
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="5dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="16dp"
+            android:src="@drawable/dot_view_use" />
+
+        <LinearLayout
+            android:id="@+id/llMore"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="20dp">
+
+        <com.application.smartstation.view.CustomTextViewMedium
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/more"
+            android:drawableEnd="@drawable/ic_arrow_more_chat"
+            android:drawableTint="@color/white"
+            android:textColor="@color/white"
+            android:textSize="16sp">
+
+        </com.application.smartstation.view.CustomTextViewMedium>
+
+    </LinearLayout>
+
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/imgBtn"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        android:src="@drawable/ic_menu_logo_use" />
+
+</RelativeLayout>

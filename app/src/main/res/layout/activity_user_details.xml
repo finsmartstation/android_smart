@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical"
+    tools:context=".ui.activity.UserDetailsActivity">
+
+  <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="65dp"
+      android:orientation="horizontal"
+      >
+
+
+    <ImageView
+        android:id="@+id/imgBack"
+        android:layout_width="22dp"
+        android:layout_height="22dp"
+        android:src="@drawable/ic_down_arrow"
+        android:rotation="90"
+        android:visibility="visible"
+        app:tint="@color/color_green"
+        android:layout_marginStart="16dp"
+        android:layout_gravity="center_vertical"
+        />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="end"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:orientation="horizontal"
+        >
+
+      <LinearLayout
+          android:id="@+id/llSearch"
+          android:layout_width="match_parent"
+          android:layout_height="match_parent"
+          android:orientation="horizontal"
+          android:paddingStart="4dp"
+          android:paddingEnd="4dp"
+          android:layout_weight="1"
+          android:layout_marginEnd="16dp"
+          android:visibility="gone"
+          android:backgroundTint="@color/phn_bg_color"
+          android:background="@drawable/search_bg_use"
+          >
+
+        <com.application.smartstation.view.CustomEditText
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:textColor="@color/black"
+            android:background="@null"
+            android:id="@+id/edtSearch"
+            android:textCursorDrawable="@drawable/cusor_bg"
+            android:textSize="16sp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:drawablePadding="8dp"
+            android:drawableStart="@drawable/ic_search"
+            android:imeOptions="actionDone"
+            android:textColorHint="@color/grey"
+            android:hint="@string/search"
+            android:inputType="text">
+
+
+        </com.application.smartstation.view.CustomEditText>
+
+
+      </LinearLayout>
+
+      <ImageView
+          android:id="@+id/imgSearch"
+          android:layout_width="22dp"
+          android:layout_height="22dp"
+          android:src="@drawable/ic_search_use"
+          android:layout_marginEnd="16dp"
+          android:layout_gravity="center_vertical"
+          />
+
+      <ImageView
+          android:id="@+id/imgCancel"
+          android:layout_width="22dp"
+          android:layout_height="22dp"
+          android:src="@drawable/ic_cancel"
+          app:tint="@color/color_green"
+          android:visibility="gone"
+          android:layout_marginEnd="16dp"
+          android:layout_gravity="center_vertical"
+          />
+
+    </LinearLayout>
+
+  </LinearLayout>
+
+  <androidx.recyclerview.widget.RecyclerView
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:id="@+id/rvContact"
+      android:visibility="visible"
+      android:nestedScrollingEnabled="true"
+      android:layout_marginTop="6dp"
+      />
+
+  <com.application.smartstation.view.CustomTextViewNormal
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:text="@string/no_chat_found"
+      android:id="@+id/txtNoFound"
+      android:textSize="18sp"
+      android:visibility="gone"
+      android:textColor="@color/black"
+      android:layout_marginTop="@dimen/_60sdp"
+      android:layout_marginBottom="@dimen/_60sdp"
+      android:layout_marginStart="16dp"
+      android:layout_marginEnd="16dp"
+      android:gravity="center"
+      >
+
+  </com.application.smartstation.view.CustomTextViewNormal>
+
+  </LinearLayout>
