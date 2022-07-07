@@ -17,6 +17,7 @@ import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.OnFocusChangeListener
 import android.view.inputmethod.InputMethodManager
 import android.widget.LinearLayout
 import android.widget.PopupWindow
@@ -38,15 +39,16 @@ import com.application.smartstation.ui.model.DataResChat
 import com.application.smartstation.ui.model.GetChatDetailsListResponse
 import com.application.smartstation.ui.model.InputParams
 import com.application.smartstation.util.*
-import com.application.smartstation.view.ImageSelectorDialog
 import com.application.smartstation.view.ImageVideoSelectorDialog
 import com.application.smartstation.view.MessageSwipeReplyView
 import com.application.smartstation.viewmodel.ApiViewModel
 import com.application.smartstation.viewmodel.ChatEvent
 import com.bumptech.glide.Glide
+import com.google.android.gms.tasks.OnCompleteListener
+import com.google.android.gms.tasks.OnSuccessListener
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.firebase.database.*
 import com.google.gson.Gson
-import com.theartofdev.edmodo.cropper.CropImage
 import com.vanniktech.emoji.EmojiImageView
 import com.vanniktech.emoji.EmojiPopup
 import com.vanniktech.emoji.emoji.Emoji
@@ -74,7 +76,8 @@ class ChatActivity : BaseActivity(),ImageVideoSelectorDialog.Action {
     var receiverProfile = ""
     var CAMERA_MIC_PERMISSION_REQUEST_CODE = 791
     var imageVideoSelectorDialog: ImageVideoSelectorDialog? = null
-
+    var sendTypingIndication: DatabaseReference? = null
+    var receiveTypingIndication: DatabaseReference? = null
 
     companion object {
         val RESULT_CODE = 124
@@ -242,6 +245,8 @@ class ChatActivity : BaseActivity(),ImageVideoSelectorDialog.Action {
 
         getChatDetails()
 
+        receiveTypeIndication()
+
         roomEmit(receiverId)
 
         runTimePermission = RunTimePermission(this)
@@ -270,7 +275,7 @@ class ChatActivity : BaseActivity(),ImageVideoSelectorDialog.Action {
         val messageSwipeController = MessageSwipeReplyView(this, object : SwipeControllerActions {
             override fun showReplyUI(position: Int) {
                 quotedMessagePos = position
-//                showQuotedMessage(list[position])
+                showQuotedMessage(list[position])
             }
         })
 
@@ -330,8 +335,20 @@ class ChatActivity : BaseActivity(),ImageVideoSelectorDialog.Action {
 //                    binding.imgCamera.visibility = View.VISIBLE
                     binding.llSend.visibility = View.GONE
                 }
+
+                if (p3 == 0) {
+                    sendTypingIndicator(false)
+                } else {
+                    sendTypingIndicator(true)
+                }
             }
 
+        })
+
+        binding.edtChat.setOnFocusChangeListener(OnFocusChangeListener { v, hasFocus ->
+            if (!hasFocus) {
+                sendTypingIndicator(false)
+            }
         })
 
     }
@@ -386,15 +403,23 @@ class ChatActivity : BaseActivity(),ImageVideoSelectorDialog.Action {
         }
     }
 
-    private fun showQuotedMessage(dataResChat: DataResChat) {
+    //reply msg
+    private fun showQuotedMessage(dataResChat: ChatDetailsRes) {
         binding.replyLayout.visibility = View.VISIBLE
         binding.edtChat.requestFocus()
         val inputMethodManager =
             getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         inputMethodManager.showSoftInput(binding.edtChat, InputMethodManager.SHOW_IMPLICIT)
 
-        binding.textQuotedMessage.text = dataResChat.msg
-        binding.txtReplyName.text = "You"
+        if (dataResChat.message_type.equals("text")) {
+            binding.textQuotedMessage.text = dataResChat.message
+            if (dataResChat.senter_id.equals(UtilsDefault.getSharedPreferenceString(Constants.USER_ID))){
+                binding.txtReplyName.text = "You"
+            }else{
+                binding.txtReplyName.text = receiverName
+            }
+
+        }
     }
 
     private fun showDialogChat() {
@@ -536,6 +561,58 @@ class ChatActivity : BaseActivity(),ImageVideoSelectorDialog.Action {
             mIntent.putExtra(Constants.TYPE, "video")
             startActivityForResult(mIntent, RESULT_CODE)
         }
+    }
+
+    fun sendTypingIndicator(indicate: Boolean) {
+        // if the type indicator is present then we remove it if not then we create the typing indicator
+        if (indicate) {
+            val message_user_map = HashMap<Any, Any>()
+            message_user_map["receiver_id"] = receiverId
+            message_user_map["sender_id"] = UtilsDefault.getSharedPreferenceString(Constants.USER_ID)!!
+            sendTypingIndication =
+                FirebaseDatabase.getInstance().reference.child("typing_indicator")
+            sendTypingIndication!!.child(UtilsDefault.getSharedPreferenceString(Constants.USER_ID) + "-" + receiverId).setValue(message_user_map)
+                .addOnSuccessListener(
+                    OnSuccessListener<Void?> {
+                        sendTypingIndication!!.child(receiverId + "-" + UtilsDefault.getSharedPreferenceString(Constants.USER_ID))
+                            .setValue(message_user_map).addOnSuccessListener(
+                                OnSuccessListener<Void?> { })
+                    })
+        } else {
+            sendTypingIndication =
+                FirebaseDatabase.getInstance().reference.child("typing_indicator")
+            sendTypingIndication!!.child(UtilsDefault.getSharedPreferenceString(Constants.USER_ID) + "-" + receiverId).removeValue()
+                .addOnCompleteListener(
+                    OnCompleteListener<Void?> {
+                        sendTypingIndication!!.child(UtilsDefault.getSharedPreferenceString(Constants.USER_ID) + "-" + receiverId).removeValue()
+                            .addOnCompleteListener(
+                                OnCompleteListener<Void?> { })
+                    })
+        }
+    }
+
+    fun receiveTypeIndication() {
+        receiveTypingIndication = FirebaseDatabase.getInstance().reference.child("typing_indicator")
+        receiveTypingIndication!!.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                if (dataSnapshot.child(receiverId + "-" + UtilsDefault.getSharedPreferenceString(Constants.USER_ID)).exists()) {
+                    val receiver = dataSnapshot.child(receiverId + "-" + UtilsDefault.getSharedPreferenceString(Constants.USER_ID))
+                        .child("sender_id").value.toString()
+                    if (receiver == receiverId) {
+                        binding.typeindicator.setVisibility(View.VISIBLE)
+                    }
+                } else {
+                    binding.typeindicator.setVisibility(View.GONE)
+                }
+            }
+
+            override fun onCancelled(databaseError: DatabaseError) {}
+        })
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        sendTypingIndicator(false)
     }
 
 
