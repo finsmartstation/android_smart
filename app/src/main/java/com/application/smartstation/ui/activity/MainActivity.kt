@@ -91,6 +91,19 @@ class MainActivity : BaseActivity() {
 
         contactAdapter!!.onItemClick = { model ->
             startActivity(Intent(this, ChatActivity::class.java).putExtra(Constants.REC_ID,model.user_id).putExtra(Constants.NAME,model.name).putExtra(Constants.PROFILE,model.profile_pic))
+            UtilsDefault.hideKeyboardForFocusedView(this)
+            binding.llSearch.visibility = View.GONE
+            binding.imgSearch.visibility = View.VISIBLE
+            binding.imgCancel.visibility = View.GONE
+
+            binding.llTab.visibility = View.VISIBLE
+            binding.mainFrameContainer.visibility = View.VISIBLE
+            binding.rlBottom.visibility = View.VISIBLE
+            binding.imgBack.visibility = View.GONE
+            binding.imgMenu.visibility = View.VISIBLE
+            binding.llSearchView.visibility = View.GONE
+
+            binding.edtSearch.setText("")
         }
 
         binding.rvMessage.layoutManager = LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false)
@@ -99,6 +112,19 @@ class MainActivity : BaseActivity() {
 
         chatAdapter!!.onItemClick = { model ->
             startActivity(Intent(this, ChatActivity::class.java).putExtra(Constants.REC_ID,model.userid).putExtra(Constants.NAME,model.name).putExtra(Constants.PROFILE,model.profile))
+            UtilsDefault.hideKeyboardForFocusedView(this)
+            binding.llSearch.visibility = View.GONE
+            binding.imgSearch.visibility = View.VISIBLE
+            binding.imgCancel.visibility = View.GONE
+
+            binding.llTab.visibility = View.VISIBLE
+            binding.mainFrameContainer.visibility = View.VISIBLE
+            binding.rlBottom.visibility = View.VISIBLE
+            binding.imgBack.visibility = View.GONE
+            binding.imgMenu.visibility = View.VISIBLE
+            binding.llSearchView.visibility = View.GONE
+
+            binding.edtSearch.setText("")
         }
 
         binding.dlView.addDrawerListener(object : SimpleDrawerListener() {
@@ -209,7 +235,6 @@ class MainActivity : BaseActivity() {
             binding.rlMail.background = getDrawable(R.color.color_tab_select_bg)
             binding.rlChat.background = null
             binding.rlLetter.background = null
-            chatMainFragment.stopTime()
             fragmentHelper?.push(EmailMainFragment())
             binding.imgNewMail.visibility = View.VISIBLE
             binding.imgPlus.visibility = View.INVISIBLE
@@ -225,7 +250,6 @@ class MainActivity : BaseActivity() {
             binding.rlLetter.background = getDrawable(R.color.color_tab_select_bg)
             binding.rlMail.background = null
             binding.rlChat.background = null
-            chatMainFragment.stopTime()
             fragmentHelper?.push(LetterMainFragment())
             type = "letter"
         }
@@ -483,15 +507,4 @@ class MainActivity : BaseActivity() {
             chatAdapter?.setChat(listChat)
         }
     }
-
-    override fun onStop() {
-        super.onStop()
-        chatMainFragment.stopTime()
-    }
-
-    override fun onResume() {
-        super.onResume()
-        chatMainFragment.startTimer()
-    }
-
 }

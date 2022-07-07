@@ -47,13 +47,4 @@ class ChatMainFragment : BaseFragment(R.layout.fragment_chat_main) {
             }
         }
     }
-
-    fun stopTime(){
-        chatFragment.stopTimer()
-    }
-
-    fun startTimer(){
-        chatFragment.startTimer()
-    }
-
 }

@@ -7,6 +7,7 @@ import android.os.IBinder
 import android.util.Log
 import com.application.smartstation.BuildConfig
 import com.application.smartstation.viewmodel.ChatEvent
+import com.application.smartstation.viewmodel.RecentChatEvent
 import io.socket.client.IO
 import io.socket.client.Socket
 import org.greenrobot.eventbus.EventBus
@@ -49,8 +50,15 @@ class SocketService: Service() {
         socket!!.on("message") { args ->
             var jsonObject = JSONObject()
             jsonObject = args[0] as JSONObject
-            Log.d("TAG", "onStartCommand: "+jsonObject)
+            Log.d("TAG", "msg: "+jsonObject)
             EventBus.getDefault().post(ChatEvent(jsonObject))
+        }
+
+        socket!!.on("chat_list") { args ->
+            var jsonObject = JSONObject()
+            jsonObject = args[0] as JSONObject
+            Log.d("TAG", "recent: "+jsonObject)
+            EventBus.getDefault().post(RecentChatEvent(jsonObject))
         }
         
         return START_STICKY
@@ -64,6 +72,10 @@ class SocketService: Service() {
 
         fun room(jsonObject: JSONObject) {
             socket!!.emit("room", jsonObject)
+        }
+
+        fun recent_chat_emit(jsonObject: JSONObject) {
+            socket!!.emit("chat_list", jsonObject)
         }
 
     }

@@ -1,5 +1,6 @@
 package com.application.smartstation.ui.fragment
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
@@ -12,16 +13,26 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.application.smartstation.R
 import com.application.smartstation.databinding.FragmentChatBinding
 import com.application.smartstation.service.Status
+import com.application.smartstation.service.background.SocketService
 import com.application.smartstation.ui.activity.ChatActivity
 import com.application.smartstation.ui.activity.MainActivity
 import com.application.smartstation.ui.adapter.ChatAdapter
 import com.application.smartstation.ui.model.DataChatList
+import com.application.smartstation.ui.model.GetChatDetailsListResponse
+import com.application.smartstation.ui.model.GetChatListResponse
 import com.application.smartstation.ui.model.InputParams
 import com.application.smartstation.util.Constants
 import com.application.smartstation.util.UtilsDefault
 import com.application.smartstation.util.viewBinding
 import com.application.smartstation.viewmodel.ApiViewModel
+import com.application.smartstation.viewmodel.ChatEvent
+import com.application.smartstation.viewmodel.RecentChatEvent
+import com.google.gson.Gson
 import dagger.hilt.android.AndroidEntryPoint
+import org.greenrobot.eventbus.EventBus
+import org.greenrobot.eventbus.Subscribe
+import org.greenrobot.eventbus.ThreadMode
+import org.json.JSONObject
 import java.util.*
 
 
@@ -34,6 +45,12 @@ class ChatFragment : BaseFragment(R.layout.fragment_chat){
     var chatAdapter: ChatAdapter? = null
     val apiViewModel: ApiViewModel by viewModels()
     val mainHandler = Handler(Looper.getMainLooper())
+    var emitters: SocketService.Emitters? = null
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        emitters = SocketService.Emitters(context)
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -42,8 +59,6 @@ class ChatFragment : BaseFragment(R.layout.fragment_chat){
     }
 
     private fun initView() {
-
-        startTimer()
 
         binding.rvChat.layoutManager = LinearLayoutManager(requireActivity(),LinearLayoutManager.VERTICAL,false)
         chatAdapter = ChatAdapter(requireActivity())
@@ -54,6 +69,8 @@ class ChatFragment : BaseFragment(R.layout.fragment_chat){
         }
 
         getChatList()
+
+        emitRecentChat()
 
 //        binding.edtSearch.addTextChangedListener(object : TextWatcher {
 //            override fun afterTextChanged(s: Editable?) {
@@ -136,53 +153,49 @@ class ChatFragment : BaseFragment(R.layout.fragment_chat){
 
     }
 
-    private val updateChat = object : Runnable {
-        override fun run() {
-            Log.d("TAG", "runChat: "+"aaaaaaaa")
-            getChatListRefresh()
-            mainHandler.postDelayed(this, 3000)
+    fun emitRecentChat(){
+        if (UtilsDefault.isOnline()) {
+            val jsonObject = JSONObject()
+            try {
+                jsonObject.put("user_id", UtilsDefault.getSharedPreferenceString(Constants.USER_ID))
+                jsonObject.put("accessToken", UtilsDefault.getSharedPreferenceString(Constants.ACCESS_TOKEN))
+//                Log.d("TAG", "recent: "+jsonObject)
+                emitters!!.recent_chat_emit(jsonObject)
+            } catch (e: java.lang.Exception) {
+                e.printStackTrace()
+            }
         }
     }
 
-    private fun getChatListRefresh() {
-        val inputParams = InputParams()
-        inputParams.user_id = UtilsDefault.getSharedPreferenceString(Constants.USER_ID)
-        inputParams.accessToken = UtilsDefault.getSharedPreferenceString(Constants.ACCESS_TOKEN)
+    override fun onStart() {
+        super.onStart()
+        EventBus.getDefault().register(this)
+    }
 
-        try {
-            apiViewModel.getChatlist(inputParams).observe(requireActivity(), Observer {
-                it.let {
-                    when(it.status){
-                        Status.LOADING -> {
-                        }
-                        Status.SUCCESS -> {
-                            if (it.data!!.status){
-                                list = it.data.data
-                                if(list.isNotEmpty()) {
-                                    setData(list)
-                                }
-                            }else{
-                                toast(it.data.message)
-                            }
-                        }
-                        Status.ERROR -> {
-                            toast(it.message!!)
-                        }
-                    }
-                }
-            })
-        }catch (e:Exception){
-            Log.d("TAG", "getChatListRefresh: "+e)
+    override fun onStop() {
+        super.onStop()
+        EventBus.getDefault().unregister(this)
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun onRecentChatEvent(event: RecentChatEvent) {
+        var jsonObject: JSONObject? = JSONObject()
+        jsonObject = event.getJsonObject()
+        setRecentEvent(jsonObject)
+        Log.d("TAG", "ONCHATEVENT: "+jsonObject)
+    }
+
+    private fun setRecentEvent(jsonObject: JSONObject?) {
+        val gson = Gson()
+        val messageSocketModel: GetChatListResponse = gson.fromJson(jsonObject.toString(),
+            GetChatListResponse::class.java)
+        if (messageSocketModel.status){
+            if (messageSocketModel.data.isNotEmpty()){
+                setData(messageSocketModel.data)
+            }
+        }else{
+            toast(messageSocketModel.message)
         }
-
-    }
-
-    fun startTimer(){
-        mainHandler.post(updateChat)
-    }
-
-    fun stopTimer(){
-        mainHandler.removeCallbacks(updateChat)
     }
 
 }

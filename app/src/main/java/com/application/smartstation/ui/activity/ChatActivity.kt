@@ -2,6 +2,7 @@ package com.application.smartstation.ui.activity
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -21,6 +22,8 @@ import android.view.View.OnFocusChangeListener
 import android.view.inputmethod.InputMethodManager
 import android.widget.LinearLayout
 import android.widget.PopupWindow
+import androidx.activity.result.ActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
@@ -53,10 +56,14 @@ import com.vanniktech.emoji.EmojiImageView
 import com.vanniktech.emoji.EmojiPopup
 import com.vanniktech.emoji.emoji.Emoji
 import dagger.hilt.android.AndroidEntryPoint
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 import org.json.JSONObject
+import java.io.File
 
 @AndroidEntryPoint
 class ChatActivity : BaseActivity(),ImageVideoSelectorDialog.Action {
@@ -78,6 +85,18 @@ class ChatActivity : BaseActivity(),ImageVideoSelectorDialog.Action {
     var imageVideoSelectorDialog: ImageVideoSelectorDialog? = null
     var sendTypingIndication: DatabaseReference? = null
     var receiveTypingIndication: DatabaseReference? = null
+
+    val mimeTypes = arrayOf(
+        "image/jpeg", // jpeg or jpg
+        "image/png", // png
+        "application/pdf", // pdf
+        "application/msword", // doc
+        "application/vnd.openxmlformats-officedocument.wordprocessingml.document", // docx
+        "application/vnd.ms-excel", // xls
+        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", // xlsx
+        "video/mp4", // mp4
+        "audio/mpeg", // mp3
+    )
 
     companion object {
         val RESULT_CODE = 124
@@ -460,8 +479,18 @@ class ChatActivity : BaseActivity(),ImageVideoSelectorDialog.Action {
             }
 
             bind.llPhoto.setOnClickListener {
+                binding.llMsg.visibility = View.VISIBLE
                 imagePermission {
                     imageVideoSelectorDialog = ImageVideoSelectorDialog(this@ChatActivity,this)
+                }
+                mBottomDialogDocument!!.dismiss()
+            }
+
+            bind.llDocument.setOnClickListener {
+                binding.llMsg.visibility = View.VISIBLE
+                mBottomDialogDocument!!.dismiss()
+                imagePermission {
+                    startFilePicker()
                 }
             }
 
@@ -615,5 +644,76 @@ class ChatActivity : BaseActivity(),ImageVideoSelectorDialog.Action {
         sendTypingIndicator(false)
     }
 
+    private val filePickerLauncher = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult(), ::onFilePickerResult
+    )
+
+    private fun startFilePicker() {
+        val pickerIntent = Intent(Intent.ACTION_OPEN_DOCUMENT)
+        pickerIntent.addCategory(Intent.CATEGORY_OPENABLE)
+        pickerIntent.type = "*/*"
+        pickerIntent.putExtra(Intent.EXTRA_MIME_TYPES, mimeTypes)
+        pickerIntent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, false)
+        filePickerLauncher.launch(pickerIntent)
+    }
+
+    private fun onFilePickerResult(result: ActivityResult) {
+        if (result.resultCode != Activity.RESULT_OK) {
+            return
+        }
+
+        val multipleUriData = result.data?.clipData
+        val singleUri = result.data?.data
+
+        when {
+            multipleUriData != null -> {
+                for (i in 0 until multipleUriData.itemCount) {
+                    val uri = multipleUriData.getItemAt(i).uri
+                    Log.d("TAG", "onFilePickerResult: "+uri)
+                }
+            }
+            singleUri != null -> {
+                val uri = singleUri
+                val files = File(uri.toString())
+                val requestBody = RequestBody.create("multipart/form-data".toMediaTypeOrNull(), files)
+                val file = MultipartBody.Part.createFormData("file", files.getName(), requestBody)
+                val user_id: RequestBody = RequestBody.create("text/plain".toMediaTypeOrNull(), UtilsDefault.getSharedPreferenceString(Constants.USER_ID)!!)
+                val accessToken: RequestBody = RequestBody.create("text/plain".toMediaTypeOrNull(),
+                    UtilsDefault.getSharedPreferenceString(Constants.ACCESS_TOKEN)!!
+                )
+//                fileUpload(user_id,accessToken,file)
+            }
+            else -> return
+        }
+    }
+
+    private fun fileUpload(
+        user_id: RequestBody,
+        accessToken: RequestBody,
+        file: MultipartBody.Part
+    ) {
+        apiViewModel.fileUpload(user_id, accessToken, file).observe(this, Observer {
+            it.let {
+                when(it.status){
+                    Status.LOADING -> {
+                        showProgress()
+                    }
+                    Status.SUCCESS -> {
+                        dismissProgress()
+                        if (it.data!!.status){
+                            toast(it.data.message)
+                            sendMessage(it.data.filepath, "image")
+                        }else{
+                            toast(it.data.message)
+                        }
+                    }
+                    Status.ERROR -> {
+                        dismissProgress()
+                        toast(it.message!!)
+                    }
+                }
+            }
+        })
+    }
 
 }
