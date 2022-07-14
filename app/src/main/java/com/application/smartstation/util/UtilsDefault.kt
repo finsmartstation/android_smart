@@ -1,7 +1,6 @@
 package com.application.smartstation.util
 
 
-import android.R.attr
 import android.annotation.SuppressLint
 import android.app.*
 import android.content.*
@@ -34,6 +33,7 @@ import java.security.MessageDigest
 import java.security.NoSuchAlgorithmException
 import java.text.DateFormat
 import java.text.DecimalFormat
+import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.regex.Matcher
@@ -839,4 +839,80 @@ object UtilsDefault {
         val mimeType: String = URLConnection.guessContentTypeFromName(path)
         return mimeType != null && mimeType.startsWith("image")
     }
+
+    fun localTimeConvert(date:String):String?{
+        val df = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH)
+        df.setTimeZone(TimeZone.getTimeZone("GMT")) // missing line
+
+        val date: Date = df.parse(date)
+        val tz = TimeZone.getDefault()
+        val writeDate = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
+        writeDate.timeZone = TimeZone.getTimeZone(tz.id)
+        val s = writeDate.format(date)
+        return s
+    }
+
+    fun dateLastSeen(date:String):String{
+        val dateTime = SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(date)
+        val calendar = Calendar.getInstance()
+        calendar.time = dateTime
+        val today = Calendar.getInstance()
+        val yesterday = Calendar.getInstance()
+        yesterday.add(Calendar.DATE, -1)
+        val one = Calendar.getInstance()
+        one.add(Calendar.DATE, -2)
+        val two = Calendar.getInstance()
+        two.add(Calendar.DATE, -3)
+        val three = Calendar.getInstance()
+        three.add(Calendar.DATE, -4)
+        val four = Calendar.getInstance()
+        four.add(Calendar.DATE, -5)
+        val five = Calendar.getInstance()
+        five.add(Calendar.DATE, -6)
+
+        return if (calendar[Calendar.YEAR] == today[Calendar.YEAR] && calendar[Calendar.DAY_OF_YEAR] == today[Calendar.DAY_OF_YEAR]) {
+           "Last seen today @ "+todayDate(localTimeConvert(date))
+        } else if (calendar[Calendar.YEAR] == yesterday[Calendar.YEAR] && calendar[Calendar.DAY_OF_YEAR] == yesterday[Calendar.DAY_OF_YEAR]) {
+            "Last seen yesterday @ "+todayDate(localTimeConvert(date))
+        } else if (calendar[Calendar.YEAR] == one[Calendar.YEAR] && calendar[Calendar.DAY_OF_YEAR] == one[Calendar.DAY_OF_YEAR]) {
+            "Last seen "+ dayName(localTimeConvert(date)!!)+" "+todayDate(localTimeConvert(date))
+        } else if (calendar[Calendar.YEAR] == two[Calendar.YEAR] && calendar[Calendar.DAY_OF_YEAR] == two[Calendar.DAY_OF_YEAR]) {
+            "Last seen "+ dayName(localTimeConvert(date)!!)+" "+todayDate(localTimeConvert(date))
+        } else if (calendar[Calendar.YEAR] == three[Calendar.YEAR] && calendar[Calendar.DAY_OF_YEAR] == three[Calendar.DAY_OF_YEAR]) {
+            "Last seen "+ dayName(localTimeConvert(date)!!)+" "+todayDate(localTimeConvert(date))
+        }else if (calendar[Calendar.YEAR] == four[Calendar.YEAR] && calendar[Calendar.DAY_OF_YEAR] == four[Calendar.DAY_OF_YEAR]) {
+            "Last seen "+ dayName(localTimeConvert(date)!!)+" "+todayDate(localTimeConvert(date))
+        }else if (calendar[Calendar.YEAR] == five[Calendar.YEAR] && calendar[Calendar.DAY_OF_YEAR] == five[Calendar.DAY_OF_YEAR]) {
+            "Last seen "+ dayName(localTimeConvert(date)!!)+" "+todayDate(localTimeConvert(date))
+        } else {
+            "Last seen "+ monthName(localTimeConvert(date)!!)+" "+todayDate(localTimeConvert(date))
+        }
+    }
+
+    fun dayName(dates:String):String?{
+        val sdf = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
+        var date: Date? = null
+        try {
+            date = sdf.parse(dates)
+        } catch (ex: java.lang.Exception) {
+            ex.printStackTrace()
+        }
+        val formatter = SimpleDateFormat("EEEE")
+        val newFormat = formatter.format(date)
+        return newFormat
+    }
+
+    fun monthName(dates:String):String?{
+        val sdf = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
+        var date: Date? = null
+        try {
+            date = sdf.parse(dates)
+        } catch (ex: java.lang.Exception) {
+            ex.printStackTrace()
+        }
+        val formatter = SimpleDateFormat("dd-MMM-yyyy")
+        val newFormat = formatter.format(date)
+        return newFormat
+    }
+
 }

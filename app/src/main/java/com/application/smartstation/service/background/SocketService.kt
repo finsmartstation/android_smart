@@ -6,8 +6,7 @@ import android.content.Intent
 import android.os.IBinder
 import android.util.Log
 import com.application.smartstation.BuildConfig
-import com.application.smartstation.viewmodel.ChatEvent
-import com.application.smartstation.viewmodel.RecentChatEvent
+import com.application.smartstation.viewmodel.*
 import io.socket.client.IO
 import io.socket.client.Socket
 import org.greenrobot.eventbus.EventBus
@@ -60,6 +59,27 @@ class SocketService: Service() {
             Log.d("TAG", "recent: "+jsonObject)
             EventBus.getDefault().post(RecentChatEvent(jsonObject))
         }
+
+        socket!!.on("online_users") { args ->
+            var jsonObject = JSONObject()
+            jsonObject = args[0] as JSONObject
+            Log.d("TAG", "online: "+jsonObject)
+            EventBus.getDefault().post(OnlineChatEvent(jsonObject))
+        }
+
+        socket!!.on("typing_individual_room") { args ->
+            var jsonObject = JSONObject()
+            jsonObject = args[0] as JSONObject
+            Log.d("TAG", "typing: "+jsonObject)
+            EventBus.getDefault().post(TypingEvent(jsonObject))
+        }
+
+        socket!!.on("typing_individual_chatlist") { args ->
+            var jsonObject = JSONObject()
+            jsonObject = args[0] as JSONObject
+            Log.d("TAG", "typing_ind: "+jsonObject)
+            EventBus.getDefault().post(TypingEvent(jsonObject))
+        }
         
         return START_STICKY
     }
@@ -76,6 +96,14 @@ class SocketService: Service() {
 
         fun recent_chat_emit(jsonObject: JSONObject) {
             socket!!.emit("chat_list", jsonObject)
+        }
+
+        fun offline(jsonObject: JSONObject) {
+            socket!!.emit("disconnect", jsonObject)
+        }
+
+        fun typingStatus(jsonObject: JSONObject) {
+            socket!!.emit("typing_individual", jsonObject)
         }
 
     }

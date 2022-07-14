@@ -71,8 +71,8 @@ class ChatHistoryAdapter(val context: Context) : RecyclerView.Adapter<ChatHistor
                         Glide.with(context).load(model.message)
                             .diskCacheStrategy(DiskCacheStrategy.DATA).into(binding.imgChat)
                     }
-                    binding.txtTime.text = UtilsDefault.todayDate(model.date)
-                    binding.txtTimeImg.text = UtilsDefault.todayDate(model.date)
+                    binding.txtTime.text = UtilsDefault.todayDate(UtilsDefault.localTimeConvert(model.date))
+                    binding.txtTimeImg.text = UtilsDefault.todayDate(UtilsDefault.localTimeConvert(model.date))
                 } else {
                     if (model.message_status.equals("0")) {
                         binding.llSend.setBackgroundResource(R.drawable.send_chat_bg_blue)
@@ -90,8 +90,8 @@ class ChatHistoryAdapter(val context: Context) : RecyclerView.Adapter<ChatHistor
                             Glide.with(context).load(model.message)
                                 .diskCacheStrategy(DiskCacheStrategy.DATA).into(binding.imgChatSend)
                         }
-                        binding.txtTimeSend.text = UtilsDefault.todayDate(model.date)
-                        binding.txtTimeImgSend.text = UtilsDefault.todayDate(model.date)
+                        binding.txtTimeSend.text = UtilsDefault.todayDate(UtilsDefault.localTimeConvert(model.date))
+                        binding.txtTimeImgSend.text = UtilsDefault.todayDate(UtilsDefault.localTimeConvert(model.date))
                     } else {
                         binding.llSend.setBackgroundResource(R.drawable.send_chat_bg_green)
                         binding.llRec.visibility = View.GONE
@@ -108,8 +108,8 @@ class ChatHistoryAdapter(val context: Context) : RecyclerView.Adapter<ChatHistor
                             Glide.with(context).load(model.message)
                                 .diskCacheStrategy(DiskCacheStrategy.DATA).into(binding.imgChatSend)
                         }
-                        binding.txtTimeSend.text = UtilsDefault.todayDate(model.date)
-                        binding.txtTimeImgSend.text = UtilsDefault.todayDate(model.date)
+                        binding.txtTimeSend.text = UtilsDefault.todayDate(UtilsDefault.localTimeConvert(model.date))
+                        binding.txtTimeImgSend.text = UtilsDefault.todayDate(UtilsDefault.localTimeConvert(model.date))
                     }
                 }
             }

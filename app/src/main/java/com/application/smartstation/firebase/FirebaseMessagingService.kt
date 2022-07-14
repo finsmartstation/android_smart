@@ -15,6 +15,8 @@ import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
 import com.application.smartstation.R
 import com.application.smartstation.ui.activity.CallActivity
+import com.application.smartstation.ui.activity.MainActivity
+import com.application.smartstation.ui.activity.SplashActivity
 import com.application.smartstation.util.Constants
 import com.application.smartstation.util.UtilsDefault
 import com.google.firebase.messaging.FirebaseMessaging
@@ -56,12 +58,16 @@ open class FirebaseMessagingService: FirebaseMessagingService() {
             message = remoteMessage.data["body"].toString()
             title = remoteMessage.data["title"].toString()
             type = remoteMessage.data["type"].toString()
+            action = remoteMessage.data["action"].toString()
+            id = remoteMessage.data["senderId"].toString()
+            image = remoteMessage.data["senderImage"].toString()
+            roomName = remoteMessage.data["message"].toString()
             Log.d(TAG, "Message data payload: " + remoteMessage.data)
         }
 
         if (remoteMessage.notification !=null){
             message = remoteMessage.notification!!.body!!
-            title = remoteMessage.notification!!.title!!
+//            title = remoteMessage.notification!!.title!!
 //            type = remoteMessage.notification!!.type!!
             Log.d(TAG, "Message Notification Body: " + remoteMessage.notification!!.body!!)
         }
@@ -70,12 +76,6 @@ open class FirebaseMessagingService: FirebaseMessagingService() {
 //            if (UtilsDefault.getSharedPreferenceString(Constants.PUSHNOTIFICATION) == "enable"){
             if (type != null && (type == "video_call" || type == "voice_call")){
                     if (UtilsDefault.isOnline()){
-                        if (remoteMessage.data.isNotEmpty()){
-                            action = remoteMessage.data["action"].toString()
-                            id = remoteMessage.data["senderId"].toString()
-                            image = remoteMessage.data["senderImage"].toString()
-                            roomName = remoteMessage.data["message"].toString()
-
                             if (action == CallActivity.callReceive || CallActivity.is_calling_activity_open) {
                                 val i = Intent(this, CallActivity::class.java)
                                 i.putExtra(Constants.REC_ID, id)
@@ -87,30 +87,42 @@ open class FirebaseMessagingService: FirebaseMessagingService() {
                                 i.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
                                 startActivity(i)
                             }
-                        }
                     }
             }else {
-                sendNotification(message, title)
+                sendNotification(message, title,type,action,id,image,roomName)
                 Log.i("onmessage", "message" + message)
             }
-//            }
         } catch (e: Exception) {
             e.printStackTrace()
         }
     }
 
-    private fun sendNotification(message: String, title: String) {
+    private fun sendNotification(
+        message: String,
+        title: String,
+        type: String,
+        action: String,
+        id: String,
+        image: String,
+        roomName: String
+    ) {
 
         val channelId = "SMART_STATION_CHANNEL_ID"
         val channelName = "SMART_STATION"
-        val extras = intent!!.extras
-//        val intent = if (message.contains("Kyc")){
-//            Intent(this, KYCActivity::class.java)
-//        } else {
-//            Intent(this, MainActivity::class.java)
-//        }
-//        intent!!.putExtra("dataNotification", 1)
-//        intent!!.flags = Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP
+        Log.d(TAG, "sendNotification: "+"aaaaaaa")
+
+        val intent = if (type != null && (type == "video_call" || type == "voice_call")){
+          Intent(this, CallActivity::class.java)
+            intent!!.putExtra(Constants.REC_ID, id)
+            intent!!.putExtra(Constants.REC_NAME, title)
+            intent!!.putExtra(Constants.REC_PROFILE, image)
+            intent!!.putExtra(Constants.STATUS, action)
+            intent!!.putExtra(Constants.CALL_TYPE, type)
+            intent!!.putExtra(Constants.ROOM_NAME, roomName)
+        } else {
+            Intent(this, MainActivity::class.java)
+        }
+        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
 
         val pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
         val defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)

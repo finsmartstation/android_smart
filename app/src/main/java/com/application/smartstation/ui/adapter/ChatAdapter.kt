@@ -21,6 +21,7 @@ class ChatAdapter(val context: Context) : RecyclerView.Adapter<ChatAdapter.ViewH
     private var list = emptyList<DataChatList>()
     var onItemClick: ((model: DataChatList) -> Unit)? = null
     private val viewBinderHelper = ViewBinderHelper()
+    var typingStatus = 0
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
 
@@ -41,6 +42,23 @@ class ChatAdapter(val context: Context) : RecyclerView.Adapter<ChatAdapter.ViewH
 
             Glide.with(context).load(model.profile).diskCacheStrategy(DiskCacheStrategy.DATA).into(binding.imgProfile)
 
+            if (typingStatus.equals(1)){
+                binding.imgPht.visibility = View.GONE
+                binding.txtMsg.visibility = View.GONE
+                binding.txtTyping.visibility = View.VISIBLE
+                if (model.unread_message.equals("0")) {
+                    binding.llRead.visibility = View.GONE
+                }else{
+                    binding.llRead.visibility = View.VISIBLE
+                    if (model.unread_message > "9"){
+                        binding.txtUnread.text = "9+"
+                    }else {
+                        binding.txtUnread.text = model.unread_message
+                    }
+                }
+            }else{
+                binding.txtMsg.visibility = View.VISIBLE
+                binding.txtTyping.visibility = View.GONE
             if (model.unread_message.equals("0")){
                 binding.llRead.visibility = View.GONE
                 if(model.message_type.equals("text")) {
@@ -67,7 +85,7 @@ class ChatAdapter(val context: Context) : RecyclerView.Adapter<ChatAdapter.ViewH
                 }
                 binding.txtMsg.setTextColor(context.resources.getColor(R.color.black))
             }
-
+            }
             binding.flChat.setOnClickListener {
                 onItemClick!!.invoke(model)
 //                viewBinderHelper.closeLayout(model.name)
@@ -83,6 +101,11 @@ class ChatAdapter(val context: Context) : RecyclerView.Adapter<ChatAdapter.ViewH
     internal fun setChat(chat: List<DataChatList>) {
         this.list = chat
         notifyDataSetChanged()
+    }
+
+    internal fun setChats(typing:Int, position: Int) {
+        this.typingStatus = typing
+        notifyItemChanged(position)
     }
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {

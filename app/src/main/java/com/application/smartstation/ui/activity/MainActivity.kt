@@ -43,6 +43,7 @@ import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.nav_header_main.view.*
+import org.json.JSONObject
 
 
 @AndroidEntryPoint
@@ -60,6 +61,7 @@ class MainActivity : BaseActivity() {
     var contactAdapter: ContactAdapter? = null
     var listChat: ArrayList<DataChatList> = java.util.ArrayList()
     var chatAdapter: ChatAdapter? = null
+    val emitters: SocketService.Emitters = SocketService.Emitters(this)
 
     interface SearchInterface {
         fun searchData(searchTxt:String,type:String)
@@ -80,6 +82,8 @@ class MainActivity : BaseActivity() {
         initView()
         setUpFragments()
         setOnClickListener()
+
+        offline()
     }
 
     private fun initView() {
@@ -505,6 +509,22 @@ class MainActivity : BaseActivity() {
         } else {
             binding.llMsgList.visibility = View.GONE
             chatAdapter?.setChat(listChat)
+        }
+    }
+
+    override fun onDestroy() {
+        offline()
+        super.onDestroy()
+    }
+
+    fun offline(){
+        val jsonObject = JSONObject()
+        try {
+            jsonObject.put("s_id", UtilsDefault.getSharedPreferenceString(Constants.USER_ID))
+            Log.d("TAG", "offline: "+jsonObject)
+            emitters.offline(jsonObject)
+        } catch (e: java.lang.Exception) {
+            e.printStackTrace()
         }
     }
 }

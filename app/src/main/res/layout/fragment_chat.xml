@@ -69,22 +69,22 @@
 
     </ScrollView>
 
-    <com.application.smartstation.view.CustomTextViewNormal
+    <com.application.smartstation.view.CustomTextViewBold
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:text="@string/no_chat_found"
         android:id="@+id/txtNoFound"
-        android:textSize="18sp"
+        android:textSize="30sp"
         android:visibility="gone"
-        android:textColor="@color/black"
-        android:layout_marginTop="@dimen/_60sdp"
-        android:layout_marginBottom="@dimen/_60sdp"
+        android:textColor="@color/colorE"
+        android:layout_marginTop="@dimen/_16sdp"
+        android:layout_marginBottom="@dimen/_16sdp"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
         android:gravity="center"
         >
 
-    </com.application.smartstation.view.CustomTextViewNormal>
+    </com.application.smartstation.view.CustomTextViewBold>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

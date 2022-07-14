@@ -10,12 +10,15 @@ import android.graphics.Color
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.provider.Settings
 import android.text.Editable
 import android.text.TextUtils
 import android.text.TextWatcher
 import android.util.Log
 import android.view.Gravity
+import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.View.OnFocusChangeListener
@@ -37,15 +40,14 @@ import com.application.smartstation.databinding.MenuChatPopupBinding
 import com.application.smartstation.service.Status
 import com.application.smartstation.service.background.SocketService
 import com.application.smartstation.ui.adapter.ChatHistoryAdapter
-import com.application.smartstation.ui.model.ChatDetailsRes
-import com.application.smartstation.ui.model.DataResChat
-import com.application.smartstation.ui.model.GetChatDetailsListResponse
-import com.application.smartstation.ui.model.InputParams
+import com.application.smartstation.ui.model.*
 import com.application.smartstation.util.*
 import com.application.smartstation.view.ImageVideoSelectorDialog
 import com.application.smartstation.view.MessageSwipeReplyView
 import com.application.smartstation.viewmodel.ApiViewModel
 import com.application.smartstation.viewmodel.ChatEvent
+import com.application.smartstation.viewmodel.OnlineChatEvent
+import com.application.smartstation.viewmodel.TypingEvent
 import com.bumptech.glide.Glide
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.gms.tasks.OnSuccessListener
@@ -64,6 +66,10 @@ import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 import org.json.JSONObject
 import java.io.File
+import java.text.SimpleDateFormat
+import java.util.*
+import kotlin.collections.ArrayList
+import kotlin.collections.HashMap
 
 @AndroidEntryPoint
 class ChatActivity : BaseActivity(),ImageVideoSelectorDialog.Action {
@@ -264,8 +270,6 @@ class ChatActivity : BaseActivity(),ImageVideoSelectorDialog.Action {
 
         getChatDetails()
 
-        receiveTypeIndication()
-
         roomEmit(receiverId)
 
         runTimePermission = RunTimePermission(this)
@@ -294,6 +298,7 @@ class ChatActivity : BaseActivity(),ImageVideoSelectorDialog.Action {
         val messageSwipeController = MessageSwipeReplyView(this, object : SwipeControllerActions {
             override fun showReplyUI(position: Int) {
                 quotedMessagePos = position
+                Log.d("TAG", "showReplyUI: "+list.size)
                 showQuotedMessage(list[position])
             }
         })
@@ -301,10 +306,10 @@ class ChatActivity : BaseActivity(),ImageVideoSelectorDialog.Action {
         val itemTouchHelper = ItemTouchHelper(messageSwipeController)
         itemTouchHelper.attachToRecyclerView(binding.rvChatRoom)
 
-        chatHistoryAdapter!!.onItemClick = {
-            binding.rvChatRoom.smoothScrollToPosition(it - 1)
-            chatHistoryAdapter!!.blinkItem(it)
-        }
+//        chatHistoryAdapter!!.onItemClick = {
+//            binding.rvChatRoom.smoothScrollToPosition(it - 1)
+//            chatHistoryAdapter!!.blinkItem(it)
+//        }
 
         emojiPopup = EmojiPopup.Builder.fromRootView(binding.llChat)
             .setOnEmojiBackspaceClickListener { ignore: View? ->
@@ -333,15 +338,20 @@ class ChatActivity : BaseActivity(),ImageVideoSelectorDialog.Action {
         //chat msg listener
         binding.edtChat.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(p0: Editable?) {
-
+                if (p0!!.length == 0) {
+                    sendTypingIndicator(false)
+                } else {
+                    sendTypingIndicator(true)
+                    typingHandler()
+                }
             }
 
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-
             }
 
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
                 val text = p0.toString()
+                var txt = p3
                 if (text!=""){
                     binding.imgPlus.visibility = View.GONE
 //                    binding.imgPay.visibility = View.GONE
@@ -353,12 +363,6 @@ class ChatActivity : BaseActivity(),ImageVideoSelectorDialog.Action {
 //                    binding.imgPay.visibility = View.VISIBLE
 //                    binding.imgCamera.visibility = View.VISIBLE
                     binding.llSend.visibility = View.GONE
-                }
-
-                if (p3 == 0) {
-                    sendTypingIndicator(false)
-                } else {
-                    sendTypingIndicator(true)
                 }
             }
 
@@ -404,6 +408,7 @@ class ChatActivity : BaseActivity(),ImageVideoSelectorDialog.Action {
     }
 
     private fun setData(list: ArrayList<ChatDetailsRes>) {
+        this.list = list
         chatHistoryAdapter!!.setChatHis(list)
         layoutManager!!.scrollToPosition(chatHistoryAdapter!!.getItemCount() - 1)
     }
@@ -520,6 +525,25 @@ class ChatActivity : BaseActivity(),ImageVideoSelectorDialog.Action {
         }
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun onOnlineChatEvent(event: OnlineChatEvent) {
+        var jsonObject: JSONObject? = JSONObject()
+        jsonObject = event.getJsonObject()
+        setOnlineEvent(jsonObject)
+        Log.d("TAG", "ONONLINEEVENT: "+jsonObject)
+    }
+
+    private fun setOnlineEvent(jsonObject: JSONObject?) {
+        val gson = Gson()
+        val onlineSocketModel: OnlineRes = gson.fromJson(jsonObject.toString(),
+            OnlineRes::class.java)
+        if(onlineSocketModel.online_status.equals("0")){
+            Log.d("TAG", "setOnlineEvent: "+UtilsDefault.dateLastSeen(onlineSocketModel.last_seen))
+        }else{
+            binding.ilHeader.txtStatus.text = "Online"
+        }
+    }
+
     override fun onStart() {
         super.onStart()
         EventBus.getDefault().register(this)
@@ -595,48 +619,25 @@ class ChatActivity : BaseActivity(),ImageVideoSelectorDialog.Action {
     fun sendTypingIndicator(indicate: Boolean) {
         // if the type indicator is present then we remove it if not then we create the typing indicator
         if (indicate) {
-            val message_user_map = HashMap<Any, Any>()
-            message_user_map["receiver_id"] = receiverId
-            message_user_map["sender_id"] = UtilsDefault.getSharedPreferenceString(Constants.USER_ID)!!
-            sendTypingIndication =
-                FirebaseDatabase.getInstance().reference.child("typing_indicator")
-            sendTypingIndication!!.child(UtilsDefault.getSharedPreferenceString(Constants.USER_ID) + "-" + receiverId).setValue(message_user_map)
-                .addOnSuccessListener(
-                    OnSuccessListener<Void?> {
-                        sendTypingIndication!!.child(receiverId + "-" + UtilsDefault.getSharedPreferenceString(Constants.USER_ID))
-                            .setValue(message_user_map).addOnSuccessListener(
-                                OnSuccessListener<Void?> { })
-                    })
+            typingEmit("1")
         } else {
-            sendTypingIndication =
-                FirebaseDatabase.getInstance().reference.child("typing_indicator")
-            sendTypingIndication!!.child(UtilsDefault.getSharedPreferenceString(Constants.USER_ID) + "-" + receiverId).removeValue()
-                .addOnCompleteListener(
-                    OnCompleteListener<Void?> {
-                        sendTypingIndication!!.child(UtilsDefault.getSharedPreferenceString(Constants.USER_ID) + "-" + receiverId).removeValue()
-                            .addOnCompleteListener(
-                                OnCompleteListener<Void?> { })
-                    })
+            typingEmit("0")
         }
     }
 
-    fun receiveTypeIndication() {
-        receiveTypingIndication = FirebaseDatabase.getInstance().reference.child("typing_indicator")
-        receiveTypingIndication!!.addValueEventListener(object : ValueEventListener {
-            override fun onDataChange(dataSnapshot: DataSnapshot) {
-                if (dataSnapshot.child(receiverId + "-" + UtilsDefault.getSharedPreferenceString(Constants.USER_ID)).exists()) {
-                    val receiver = dataSnapshot.child(receiverId + "-" + UtilsDefault.getSharedPreferenceString(Constants.USER_ID))
-                        .child("sender_id").value.toString()
-                    if (receiver == receiverId) {
-                        binding.typeindicator.setVisibility(View.VISIBLE)
-                    }
-                } else {
-                    binding.typeindicator.setVisibility(View.GONE)
-                }
+    fun typingEmit(s: String) {
+        if (UtilsDefault.isOnline()) {
+            val jsonObject = JSONObject()
+            try {
+                jsonObject.put("sid", UtilsDefault.getSharedPreferenceString(Constants.USER_ID))
+                jsonObject.put("rid", receiverId)
+                jsonObject.put("status", s)
+                Log.d("TAG", "typing: "+jsonObject)
+                emitters.typingStatus(jsonObject)
+            } catch (e: java.lang.Exception) {
+                e.printStackTrace()
             }
-
-            override fun onCancelled(databaseError: DatabaseError) {}
-        })
+        }
     }
 
     override fun onDestroy() {
@@ -714,6 +715,37 @@ class ChatActivity : BaseActivity(),ImageVideoSelectorDialog.Action {
                 }
             }
         })
+    }
+
+    fun typingHandler(){
+        Handler(Looper.getMainLooper()).postDelayed({
+            sendTypingIndicator(false)
+        }, 2000)
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun onTypingEvent(event: TypingEvent) {
+        var jsonObject: JSONObject? = JSONObject()
+        jsonObject = event.getJsonObject()
+        setTypingEvent(jsonObject)
+        Log.d("TAG", "TYPINGEVENT: "+jsonObject)
+    }
+
+    fun setTypingEvent(jsonObject: JSONObject?) {
+        val gson = Gson()
+        val typingModel: TypingRes = gson.fromJson(jsonObject.toString(),
+            TypingRes::class.java)
+        if(typingModel.status){
+            if (typingModel.user_id.equals(receiverId)){
+                if(typingModel.typing.equals("1")){
+                    binding.ilHeader.txtStatus.visibility = View.GONE
+                    binding.ilHeader.txtTypingStatus.visibility = View.VISIBLE
+                }else{
+                    binding.ilHeader.txtStatus.visibility = View.VISIBLE
+                    binding.ilHeader.txtTypingStatus.visibility = View.GONE
+                }
+            }
+        }
     }
 
 }

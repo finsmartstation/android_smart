@@ -143,6 +143,19 @@
 
         </LinearLayout>
 
+        <com.application.smartstation.view.CustomTextViewMedium
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:maxLines="1"
+            android:layout_marginTop="5dp"
+            android:ellipsize="end"
+            android:visibility="gone"
+            android:id="@+id/txtTyping"
+            android:text="@string/typing"
+            android:textColor="@color/color_green"
+            android:textSize="15sp"
+            />
+
     </LinearLayout>
 
         <LinearLayout

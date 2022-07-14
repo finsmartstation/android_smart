@@ -17,16 +17,11 @@ import com.application.smartstation.service.background.SocketService
 import com.application.smartstation.ui.activity.ChatActivity
 import com.application.smartstation.ui.activity.MainActivity
 import com.application.smartstation.ui.adapter.ChatAdapter
-import com.application.smartstation.ui.model.DataChatList
-import com.application.smartstation.ui.model.GetChatDetailsListResponse
-import com.application.smartstation.ui.model.GetChatListResponse
-import com.application.smartstation.ui.model.InputParams
+import com.application.smartstation.ui.model.*
 import com.application.smartstation.util.Constants
 import com.application.smartstation.util.UtilsDefault
 import com.application.smartstation.util.viewBinding
-import com.application.smartstation.viewmodel.ApiViewModel
-import com.application.smartstation.viewmodel.ChatEvent
-import com.application.smartstation.viewmodel.RecentChatEvent
+import com.application.smartstation.viewmodel.*
 import com.google.gson.Gson
 import dagger.hilt.android.AndroidEntryPoint
 import org.greenrobot.eventbus.EventBus
@@ -113,7 +108,12 @@ class ChatFragment : BaseFragment(R.layout.fragment_chat){
                         if (it.data!!.status){
                             list = it.data.data
                             if(list.isNotEmpty()) {
+                                binding.rvChat.visibility = View.VISIBLE
+                                binding.txtNoFound.visibility = View.GONE
                                 setData(list)
+                            }else{
+                                binding.rvChat.visibility = View.GONE
+                                binding.txtNoFound.visibility = View.VISIBLE
                             }
                         }else{
                             toast(it.data.message)
@@ -195,6 +195,32 @@ class ChatFragment : BaseFragment(R.layout.fragment_chat){
             }
         }else{
             toast(messageSocketModel.message)
+        }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun onTypingEvent(event: TypingEvent) {
+        var jsonObject: JSONObject? = JSONObject()
+        jsonObject = event.getJsonObject()
+        setTypingEvent(jsonObject)
+        Log.d("TAG", "TYPINGEVENT: "+jsonObject)
+    }
+
+    fun setTypingEvent(jsonObject: JSONObject?) {
+        val gson = Gson()
+        val typingModel: TypingRes = gson.fromJson(jsonObject.toString(),
+            TypingRes::class.java)
+        if(typingModel.status){
+            for (i in 0 until list.size){
+                if (typingModel.user_id.equals(list[i].userid)){
+                    if(typingModel.typing.equals("1")){
+                        chatAdapter?.setChats(1,i)
+                    } else{
+                        chatAdapter?.setChats(0,i)
+                    }
+                }
+            }
+
         }
     }
 

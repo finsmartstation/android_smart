@@ -52,6 +52,7 @@
             android:exported="false" />
         <activity
             android:name=".ui.activity.CallActivity"
+            android:launchMode="singleTop"
             android:exported="false" />
         <activity
             android:name=".ui.activity.ImagePerviewActivity"
@@ -141,7 +142,8 @@
             android:stopWithTask="false" /> <!-- firebase -->
         <service
             android:name=".firebase.FirebaseMessagingService"
-            android:exported="true" >
+            android:exported="false"
+            android:directBootAware="true">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
@@ -153,6 +155,11 @@
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_color"
             android:resource="@color/color_green" />
+
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_channel_id"
+            android:value="@string/default_notification_channel_id"/>
+
     </application>
 
 </manifest>
