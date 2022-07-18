@@ -343,6 +343,12 @@ class MainActivity : BaseActivity() {
             popupWindow.dismiss()
         }
 
+        bind.txtNewGrp.setOnClickListener {
+            startActivity(Intent(this,CreateGroupActivity::class.java))
+            binding.imgMenu.visibility = View.VISIBLE
+            popupWindow.dismiss()
+        }
+
         bind.txtLogout.setOnClickListener {
             binding.imgMenu.visibility = View.VISIBLE
             popupWindow.dismiss()

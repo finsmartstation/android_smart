@@ -159,7 +159,6 @@ class ChatFragment : BaseFragment(R.layout.fragment_chat){
             try {
                 jsonObject.put("user_id", UtilsDefault.getSharedPreferenceString(Constants.USER_ID))
                 jsonObject.put("accessToken", UtilsDefault.getSharedPreferenceString(Constants.ACCESS_TOKEN))
-//                Log.d("TAG", "recent: "+jsonObject)
                 emitters!!.recent_chat_emit(jsonObject)
             } catch (e: java.lang.Exception) {
                 e.printStackTrace()

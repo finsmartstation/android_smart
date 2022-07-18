@@ -39,9 +39,11 @@
         <entry key="..\:/smartstation/app/src/main/res/drawable/send_chat_bg_blue.xml" value="0.134" />
         <entry key="..\:/smartstation/app/src/main/res/drawable/send_chat_bg_green.xml" value="0.134" />
         <entry key="..\:/smartstation/app/src/main/res/layout/activity_account.xml" value="0.25" />
+        <entry key="..\:/smartstation/app/src/main/res/layout/activity_add_group.xml" value="0.165" />
         <entry key="..\:/smartstation/app/src/main/res/layout/activity_call.xml" value="0.32135416666666666" />
         <entry key="..\:/smartstation/app/src/main/res/layout/activity_camera.xml" value="0.2125" />
         <entry key="..\:/smartstation/app/src/main/res/layout/activity_chat.xml" value="0.165" />
+        <entry key="..\:/smartstation/app/src/main/res/layout/activity_create_group.xml" value="0.165" />
         <entry key="..\:/smartstation/app/src/main/res/layout/activity_edit_profile.xml" value="0.25" />
         <entry key="..\:/smartstation/app/src/main/res/layout/activity_image_perview.xml" value="0.25" />
         <entry key="..\:/smartstation/app/src/main/res/layout/activity_image_preview.xml" value="0.32135416666666666" />
@@ -68,8 +70,10 @@
         <entry key="..\:/smartstation/app/src/main/res/layout/fragment_welcome.xml" value="0.32135416666666666" />
         <entry key="..\:/smartstation/app/src/main/res/layout/header_layout.xml" value="0.32135416666666666" />
         <entry key="..\:/smartstation/app/src/main/res/layout/header_layout_mail.xml" value="0.26378794356562635" />
+        <entry key="..\:/smartstation/app/src/main/res/layout/item_add_grp_chat.xml" value="0.309375" />
         <entry key="..\:/smartstation/app/src/main/res/layout/item_chat.xml" value="0.26378794356562635" />
         <entry key="..\:/smartstation/app/src/main/res/layout/item_chat_his.xml" value="0.42857142857142855" />
+        <entry key="..\:/smartstation/app/src/main/res/layout/item_grp_chat.xml" value="0.41965973534971646" />
         <entry key="..\:/smartstation/app/src/main/res/layout/item_inbox.xml" value="0.26378794356562635" />
         <entry key="..\:/smartstation/app/src/main/res/layout/media_controller.xml" value="0.32135416666666666" />
         <entry key="..\:/smartstation/app/src/main/res/layout/menu_popup.xml" value="0.309375" />

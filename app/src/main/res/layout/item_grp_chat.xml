@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_marginTop="10dp"
+    android:id="@+id/svLayout"
+    android:layout_height="wrap_content">
+
+<!--    com.application.smartstation.view.SmartStationSwipeView-->
+<!--    app:dragEdge="right"-->
+<!--    app:mode="same_level"-->
+
+    <FrameLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        android:background="@color/color_gray_2"
+        >
+        <LinearLayout
+            android:id="@+id/llMore"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical|end"
+            android:paddingStart="20dp"
+            android:paddingEnd="20dp"
+            android:layout_gravity="center"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:rotation="90"
+                android:layout_gravity="center"
+                app:srcCompat="@drawable/ic_settings_dot_right_use"
+                app:tint="@color/white" />
+
+            <com.application.smartstation.view.CustomTextViewMedium
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:text="@string/more"
+                android:textColor="@color/white"
+                android:textSize="15sp"
+                />
+
+        </LinearLayout>
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/flChat"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clickable="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:background="@color/white"
+            >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        >
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:layout_marginEnd="8dp"
+            >
+
+            <RelativeLayout
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                >
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/cardView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    app:cardCornerRadius="24dp"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="2dp"
+                    android:layout_marginEnd="2dp"
+                    android:layout_marginTop="2dp"
+                    android:layout_marginBottom="2dp"
+                    app:cardBackgroundColor="@color/white"
+                    app:cardElevation="3dp"
+                    >
+
+                    <com.google.android.material.imageview.ShapeableImageView
+                        android:layout_width="57dp"
+                        android:layout_height="57dp"
+                        android:layout_gravity="center"
+                        android:id="@+id/imgProfile"
+                        android:src="@color/button_blue"
+                        android:scaleType="centerCrop"
+                        app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize16Percent"
+                        />
+
+                </androidx.cardview.widget.CardView>
+
+            </RelativeLayout>
+
+
+            <ImageView
+                android:id="@+id/imgTick"
+                android:layout_width="20dp"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_height="20dp"
+                android:src="@drawable/tick" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_weight="1"
+        android:layout_gravity="center"
+        android:layout_marginTop="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        >
+
+        <com.application.smartstation.view.CustomTextViewMedium
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:singleLine="true"
+            android:id="@+id/txtName"
+            android:textColor="@color/black"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="5dp"
+            >
+
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@drawable/ic_photo"
+                android:id="@+id/imgPht"
+                android:visibility="gone"
+                android:layout_marginEnd="8dp"
+                />
+
+        <com.application.smartstation.view.CustomTextViewMedium
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:maxLines="1"
+            android:ellipsize="end"
+            android:id="@+id/txtMsg"
+            android:textColor="@color/black"
+            android:textSize="15sp"
+            />
+
+        </LinearLayout>
+
+        <com.application.smartstation.view.CustomTextViewMedium
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:maxLines="1"
+            android:layout_marginTop="5dp"
+            android:ellipsize="end"
+            android:visibility="gone"
+            android:id="@+id/txtTyping"
+            android:text="@string/typing"
+            android:textColor="@color/color_green"
+            android:textSize="15sp"
+            />
+
+    </LinearLayout>
+
+    </LinearLayout>
+
+    <View
+        android:id="@+id/divider"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:background="@color/color_view" />
+
+        </LinearLayout>
+
+    </FrameLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

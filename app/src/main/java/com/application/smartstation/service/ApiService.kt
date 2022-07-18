@@ -94,6 +94,9 @@ interface ApiService {
     @POST(ApiUrl.GET_USER_LIST)
     suspend fun getUserlist(@Body inputParams: InputParams): GetUserListResponse
 
+    @POST(ApiUrl.CREATE_GRP)
+    suspend fun grpCreate(@Part("user_id")user_id:RequestBody,@Part("accessToken")accessToken:RequestBody,@Part("group_name")group_name:RequestBody,@Part("members")members:RequestBody,@Part group_profile: MultipartBody.Part): BaseResponse
+
     @Multipart
     @POST(ApiUrl.FILE_UPLOAD)
     suspend fun fileUpload(@Part("user_id")user_id:RequestBody,@Part("accessToken")accessToken:RequestBody,@Part file: MultipartBody.Part): BaseResponse

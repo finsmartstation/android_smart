@@ -201,6 +201,13 @@ class ApiRepository @Inject constructor(val apiService: ApiService) {
         }.flowOn(Dispatchers.IO)
     }
 
+    fun grpCreate(user_id:RequestBody,accessToken:RequestBody,group_name:RequestBody,members:RequestBody,group_profile: MultipartBody.Part): Flow<BaseResponse> {
+        return flow {
+            val response = apiService.grpCreate(user_id, accessToken, group_name, members, group_profile)
+            emit(response)
+        }.flowOn(Dispatchers.IO)
+    }
+
     fun fileUpload(user_id:RequestBody,accessToken:RequestBody,file: MultipartBody.Part): Flow<BaseResponse> {
         return flow {
             val response = apiService.fileUpload(user_id,accessToken, file)

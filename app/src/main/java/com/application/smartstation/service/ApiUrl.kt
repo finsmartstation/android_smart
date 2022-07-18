@@ -36,5 +36,6 @@ object ApiUrl {
     const val GET_MAIL_LIST =API+"getmail_list"
     const val GET_USER_LIST =API+"get_all_user_details"
     const val FILE_UPLOAD =API+"fileupload"
+    const val CREATE_GRP =API+"create_group"
 
 }

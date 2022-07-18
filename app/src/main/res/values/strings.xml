@@ -1138,8 +1138,8 @@
     <string name="connected_to">Connected to</string>
     <string name="connected">Connected</string>
     <string name="failed_to_connect">Failed to connect</string>
-<string name="disconnected">Disconnected</string>
-<string name="disconnected_from">Disconnected from</string>
+    <string name="disconnected">Disconnected</string>
+    <string name="disconnected_from">Disconnected from</string>
     <string name="reconnecting_to">Reconnecting to</string>
     <string name="reconnecting">Reconnecting</string>
     <string name="firebase_server_key">AAAAnqJdfqU:APA91bFg0A-Gs1ODpHriOXCYYQveZgZFfgmXuJ-qqh8K59WvREMQQOzyRT0GcLRKCVXZZw-6CRbGT9iAWAckNTDAYdCU9Vxh7zUFIC_juw7wuxzcav3u4YqrE3mjllVqG-F_R020aep0</string>
@@ -1161,5 +1161,11 @@
     <string name="message">Message</string>
     <string name="default_notification_channel_id">SMART_STATION_CHANNEL_ID</string>
     <string name="typing">typing ...</string>
+    <string name="create_grp">New Group</string>
+    <string name="add_participants">Add Participants</string>
+    <string name="type_group_subject">Type group subject here ...</string>
+    <string name="provide_a_grp">Provide a group subject and optional group icon</string>
+    <string name="participant">Participants :</string>
+    <string name="please_enter_grp_name">Please enter group name</string>
 
 </resources>
