@@ -507,7 +507,12 @@ class ApiViewModel @Inject constructor(
 
     }
 
-    fun grpCreate(user_id:RequestBody,accessToken:RequestBody,group_name:RequestBody,members:RequestBody,group_profile: MultipartBody.Part) = liveData<Resource<BaseResponse>> {
+    fun grpCreate(
+        user_id:RequestBody,
+        accessToken:RequestBody,
+        group_name:RequestBody,
+        members: Array<String?>,
+        group_profile: MultipartBody.Part) = liveData<Resource<BaseResponse>> {
         if (UtilsDefault.isOnline()) {
             repository.grpCreate(user_id, accessToken, group_name, members, group_profile)
                 .onStart {

@@ -61,14 +61,16 @@ class ChatAdapter(val context: Context) : RecyclerView.Adapter<ChatAdapter.ViewH
                 binding.txtTyping.visibility = View.GONE
             if (model.unread_message.equals("0")){
                 binding.llRead.visibility = View.GONE
-                if(model.message_type.equals("text")) {
-                    binding.txtMsg.text = model.message
-                    binding.imgPht.visibility = View.GONE
-                }else{
-                    binding.txtMsg.text = "Photo"
-                    binding.imgPht.visibility = View.VISIBLE
+                if(!model.message_type.equals("")) {
+                    if (model.message_type.equals("text")) {
+                        binding.txtMsg.text = model.message
+                        binding.imgPht.visibility = View.GONE
+                    } else {
+                        binding.txtMsg.text = "Photo"
+                        binding.imgPht.visibility = View.VISIBLE
+                    }
+                    binding.txtMsg.setTextColor(context.resources.getColor(R.color.color_gray_2))
                 }
-                binding.txtMsg.setTextColor(context.resources.getColor(R.color.color_gray_2))
             }else{
                 binding.llRead.visibility = View.VISIBLE
                 if (model.unread_message > "9"){
@@ -76,14 +78,16 @@ class ChatAdapter(val context: Context) : RecyclerView.Adapter<ChatAdapter.ViewH
                 }else {
                     binding.txtUnread.text = model.unread_message
                 }
-                if(model.message_type.equals("text")) {
-                    binding.txtMsg.text = UtilsDefault.chatBold(model.message)
-                    binding.imgPht.visibility = View.GONE
-                }else{
-                    binding.txtMsg.text = "Photo"
-                    binding.imgPht.visibility = View.VISIBLE
+                if(!model.message_type.equals("")) {
+                    if (model.message_type.equals("text")) {
+                        binding.txtMsg.text = UtilsDefault.chatBold(model.message)
+                        binding.imgPht.visibility = View.GONE
+                    } else {
+                        binding.txtMsg.text = "Photo"
+                        binding.imgPht.visibility = View.VISIBLE
+                    }
+                    binding.txtMsg.setTextColor(context.resources.getColor(R.color.black))
                 }
-                binding.txtMsg.setTextColor(context.resources.getColor(R.color.black))
             }
             }
             binding.flChat.setOnClickListener {

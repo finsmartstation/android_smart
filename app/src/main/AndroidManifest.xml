@@ -45,7 +45,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.SmartStation">
         <activity
-            android:name=".AddGroupActivity"
+            android:name=".ui.activity.AddGroupActivity"
             android:exported="false" />
         <activity
             android:name=".ui.activity.CreateGroupActivity"

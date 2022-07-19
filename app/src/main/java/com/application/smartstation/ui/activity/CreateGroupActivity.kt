@@ -1,7 +1,9 @@
 package com.application.smartstation.ui.activity
 
 import android.content.Intent
+import android.icu.lang.UCharacter.GraphemeClusterBreak.T
 import android.os.Bundle
+import android.os.Parcelable
 import android.util.Log
 import android.view.View
 import androidx.activity.viewModels
@@ -19,6 +21,8 @@ import com.application.smartstation.util.UtilsDefault
 import com.application.smartstation.util.viewBinding
 import com.application.smartstation.viewmodel.ApiViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import java.io.Serializable
+
 
 @AndroidEntryPoint
 class CreateGroupActivity : BaseActivity() {
@@ -26,7 +30,9 @@ class CreateGroupActivity : BaseActivity() {
     val binding: ActivityCreateGroupBinding by viewBinding()
     val apiViewModel: ApiViewModel by viewModels()
     var list:ArrayList<DataUserList> = ArrayList()
-    var listAdd:ArrayList<DataUserList> = ArrayList()
+    companion object{
+        var listAdd:ArrayList<DataUserList> = ArrayList()
+    }
     var contactAdapter: ContactGroupAdapter? = null
     var addGrpAdapter: AddGroupAdapter? = null
     var layoutManager:LinearLayoutManager? = null
@@ -63,7 +69,7 @@ class CreateGroupActivity : BaseActivity() {
             listAdd.removeAt(pos)
             if (!listAdd.isNullOrEmpty()){
                 binding.llSelectUser.visibility = View.VISIBLE
-                addGrpAdapter!!.setChat(listAdd)
+                addGrpAdapter!!.setChat(listAdd,true)
                 layoutManager!!.scrollToPosition(addGrpAdapter!!.getItemCount() - 1)
             }else{
                 binding.llSelectUser.visibility = View.GONE
@@ -107,7 +113,7 @@ class CreateGroupActivity : BaseActivity() {
 
         if (!listAdd.isNullOrEmpty()){
             binding.llSelectUser.visibility = View.VISIBLE
-            addGrpAdapter!!.setChat(listAdd)
+            addGrpAdapter!!.setChat(listAdd,true)
             layoutManager!!.scrollToPosition(addGrpAdapter!!.getItemCount() - 1)
         }else{
             binding.llSelectUser.visibility = View.GONE
@@ -116,7 +122,7 @@ class CreateGroupActivity : BaseActivity() {
 
     private fun setOnClickListener() {
         binding.ilHeader.imgBack.setOnClickListener {
-            finish()
+           onBackPressed()
         }
 
         binding.fbSelectGrp.setOnClickListener {
@@ -132,7 +138,6 @@ class CreateGroupActivity : BaseActivity() {
     private fun createGrp(user: String, listAdd: ArrayList<DataUserList>) {
         val intent = Intent(this,AddGroupActivity::class.java)
         intent.putExtra("members",user)
-        intent.putExtra("list",listAdd)
         startActivity(intent)
     }
 
@@ -169,5 +174,10 @@ class CreateGroupActivity : BaseActivity() {
 
     private fun setData(list: ArrayList<DataUserList>) {
         contactAdapter!!.setChat(list)
+    }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        listAdd.clear()
     }
 }

@@ -25,6 +25,7 @@ class AddGroupAdapter(val context: Context) : RecyclerView.Adapter<AddGroupAdapt
     private var list = emptyList<DataUserList>()
     var onItemClick: ((model: DataUserList,pos:Int) -> Unit)? = null
     private val viewBinderHelper = ViewBinderHelper()
+    var showClose = false
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
 
@@ -48,16 +49,19 @@ class AddGroupAdapter(val context: Context) : RecyclerView.Adapter<AddGroupAdapt
                 onItemClick!!.invoke(model,position)
             }
 
+            if (!showClose){
+                binding.imgClose.visibility = View.GONE
+            }else{
+                binding.imgClose.visibility = View.VISIBLE
+            }
+
         }
     }
 
-    internal fun setChat(chat: List<DataUserList>) {
+    internal fun setChat(chat: List<DataUserList>, close:Boolean) {
         this.list = chat
+        this.showClose = close
         notifyDataSetChanged()
-    }
-
-    internal fun setChats(position: Int) {
-        notifyItemChanged(position)
     }
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {

@@ -2,7 +2,6 @@ package com.application.smartstation.ui.activity
 
 import android.content.Intent
 import android.net.Uri
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.TextUtils
 import android.util.Log
@@ -10,10 +9,8 @@ import android.view.View
 import androidx.activity.viewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.application.smartstation.R
 import com.application.smartstation.databinding.ActivityAddGroupBinding
-import com.application.smartstation.databinding.ActivityCreateGroupBinding
 import com.application.smartstation.service.Status
 import com.application.smartstation.ui.adapter.AddGroupAdapter
 import com.application.smartstation.ui.model.DataUserList
@@ -23,8 +20,6 @@ import com.application.smartstation.util.viewBinding
 import com.application.smartstation.view.ImageSelectorDialog
 import com.application.smartstation.viewmodel.ApiViewModel
 import com.bumptech.glide.Glide
-import com.bumptech.glide.load.engine.DiskCacheStrategy
-import com.bumptech.glide.request.RequestOptions
 import com.theartofdev.edmodo.cropper.CropImage
 import com.theartofdev.edmodo.cropper.CropImageView
 import com.vanniktech.emoji.EmojiImageView
@@ -34,7 +29,11 @@ import dagger.hilt.android.AndroidEntryPoint
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
+import org.json.JSONArray
 import java.io.File
+import java.util.*
+import kotlin.collections.ArrayList
+
 
 @AndroidEntryPoint
 class AddGroupActivity : BaseActivity(), ImageSelectorDialog.Action {
@@ -68,12 +67,10 @@ class AddGroupActivity : BaseActivity(), ImageSelectorDialog.Action {
         }
 
         if (intent != null){
-            user = intent.getStringExtra("members")!!
-            listAdd = intent.getSerializableExtra("list") as ArrayList<DataUserList>
-
+            user = intent!!.getStringExtra("members")!!
+            listAdd = CreateGroupActivity.listAdd
             binding.txtParticipants.text = resources.getString(R.string.participant)+" "+listAdd.size
-
-            addGrpAdapter!!.setChat(listAdd)
+            addGrpAdapter!!.setChat(listAdd,false)
         }
 
         emojiPopup = EmojiPopup.Builder.fromRootView(binding.clAddGrp)
@@ -132,16 +129,25 @@ class AddGroupActivity : BaseActivity(), ImageSelectorDialog.Action {
                     val group_name: RequestBody = RequestBody.create("text/plain".toMediaTypeOrNull(),
                         grpName
                     )
-                    val members: RequestBody = RequestBody.create("text/plain".toMediaTypeOrNull(),
-                        user
-                    )
+
+                    val member = "["+user+"]"
+                    val jsonArray = JSONArray(member)
+                    val strArr = arrayOfNulls<String>(jsonArray.length())
+                    for (i in 0 until jsonArray.length()) {
+                        strArr[i] = jsonArray.getString(i)
+                    }
+                    val members: Array<String?> = strArr
+                    Log.d("TAG", "setOnClickListener: "+ Arrays.toString(members))
+                    val file = File(pics)
+                    val requestBody = RequestBody.create("multipart/form-data".toMediaTypeOrNull(), file)
+                    grpProfile = MultipartBody.Part.createFormData("group_profile", file.getName(), requestBody)
                     createGrp(user_id,accessToken,group_name,members,grpProfile)
                 }
             }
         }
     }
 
-    private fun createGrp(userId: RequestBody, accessToken: RequestBody, groupName: RequestBody, members: RequestBody, grpProfile: MultipartBody.Part?) {
+    private fun createGrp(userId: RequestBody, accessToken: RequestBody, groupName: RequestBody, members: Array<String?>, grpProfile: MultipartBody.Part?) {
         apiViewModel.grpCreate(userId,accessToken,groupName,members,grpProfile!!).observe(this, Observer {
             it.let {
                 when(it.status){
@@ -152,6 +158,9 @@ class AddGroupActivity : BaseActivity(), ImageSelectorDialog.Action {
                         dismissProgress()
                         if (it.data!!.status){
                             toast(it.data.message)
+                            CreateGroupActivity.listAdd.clear()
+                            startActivity(Intent(this,MainActivity::class.java)
+                                .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK))
                             finish()
                         }else{
                             toast(it.data.message)
@@ -189,9 +198,6 @@ class AddGroupActivity : BaseActivity(), ImageSelectorDialog.Action {
                     val uri = result.getUri()
                     Glide.with(this).load(uri).into(binding.imgCamera)
                     pics = uri.path.toString()
-                    val file = File(pics)
-                    val requestBody = RequestBody.create("multipart/form-data".toMediaTypeOrNull(), file)
-                    grpProfile = MultipartBody.Part.createFormData("group_profile", file.getName(), requestBody)
                 }
             }
             else -> {

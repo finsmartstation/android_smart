@@ -45,11 +45,11 @@
             android:layout_marginEnd="16dp"
             >
 
-            <ImageView
+            <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/imgCamera"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:src="@drawable/ic_cam_icon_use"
+                android:src="@drawable/ic_photo"
                 android:layout_marginStart="10dp"
                />
 
@@ -60,6 +60,8 @@
                 android:textSize="16sp"
                 android:layout_weight="1"
                 android:singleLine="true"
+                android:inputType="text"
+                android:imeOptions="actionDone"
                 android:textColorHint="@color/color_gray_2"
                 android:hint="@string/type_group_subject"
                 android:backgroundTint="@color/color_green"
