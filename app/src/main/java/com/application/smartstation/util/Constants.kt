@@ -16,6 +16,8 @@ object Constants {
     @JvmField var EMAIL = "EMAIL"
     @JvmField var ABOUT = "ABOUT"
     @JvmField var PROFILE = "PROFILE"
+    @JvmField var ROOM = "ROOM"
+    @JvmField var CHAT_TYPE = "CHAT_TYPE"
     @JvmField var PROFILE_PIC = "PROFILE_PIC"
     @JvmField var NOTIFICATION_SHOW = "NOTIFICATION_SHOW"
     @JvmField var SOUND = "SOUND"

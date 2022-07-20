@@ -21,6 +21,7 @@
     <color name="chat_txt_hint_color">#c4c0bd</color>
 
     <color name="color_green">#00c412</color>
+    <color name="color_green1">#8600C412</color>
     <color name="color_dark_green">#18937b</color>
     <color name="color_gray">#424242</color>
     <color name="color_lite_gray">#f7f7f7</color>

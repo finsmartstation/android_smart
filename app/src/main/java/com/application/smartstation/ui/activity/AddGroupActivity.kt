@@ -136,8 +136,11 @@ class AddGroupActivity : BaseActivity(), ImageSelectorDialog.Action {
                     for (i in 0 until jsonArray.length()) {
                         strArr[i] = jsonArray.getString(i)
                     }
-                    val members: Array<String?> = strArr
-                    Log.d("TAG", "setOnClickListener: "+ Arrays.toString(members))
+//                    val members: Array<String?> = strArr
+                    val members:RequestBody = RequestBody.create("text/plain".toMediaTypeOrNull(),
+                        user
+                    )
+//                    Log.d("TAG", "setOnClickListener: "+ Arrays.toString(members))
                     val file = File(pics)
                     val requestBody = RequestBody.create("multipart/form-data".toMediaTypeOrNull(), file)
                     grpProfile = MultipartBody.Part.createFormData("group_profile", file.getName(), requestBody)
@@ -147,7 +150,7 @@ class AddGroupActivity : BaseActivity(), ImageSelectorDialog.Action {
         }
     }
 
-    private fun createGrp(userId: RequestBody, accessToken: RequestBody, groupName: RequestBody, members: Array<String?>, grpProfile: MultipartBody.Part?) {
+    private fun createGrp(userId: RequestBody, accessToken: RequestBody, groupName: RequestBody, members: RequestBody, grpProfile: MultipartBody.Part?) {
         apiViewModel.grpCreate(userId,accessToken,groupName,members,grpProfile!!).observe(this, Observer {
             it.let {
                 when(it.status){

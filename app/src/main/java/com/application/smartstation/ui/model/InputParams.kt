@@ -50,4 +50,7 @@ class InputParams {
     //file upload
     var file:String? = null
 
+    //grp details
+    var group_id:String? = null
+
 }

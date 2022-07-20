@@ -87,6 +87,8 @@ class ChatActivity : BaseActivity(),ImageVideoSelectorDialog.Action {
     var receiverId = ""
     var receiverName = ""
     var receiverProfile = ""
+    var room = ""
+    var chatType = ""
     var CAMERA_MIC_PERMISSION_REQUEST_CODE = 791
     var imageVideoSelectorDialog: ImageVideoSelectorDialog? = null
     var sendTypingIndication: DatabaseReference? = null
@@ -260,17 +262,29 @@ class ChatActivity : BaseActivity(),ImageVideoSelectorDialog.Action {
     private fun initView() {
 
         if (intent != null) {
-            receiverId = intent.getStringExtra(Constants.REC_ID)!!
+            if(intent.getStringExtra(Constants.REC_ID) != null) {
+                receiverId = intent.getStringExtra(Constants.REC_ID)!!
+            }
             receiverName = intent.getStringExtra(Constants.NAME)!!
             receiverProfile = intent.getStringExtra(Constants.PROFILE)!!
+            if (intent.getStringExtra(Constants.ROOM) != null) {
+                room = intent.getStringExtra(Constants.ROOM)!!
+
+            }
+            if (intent.getStringExtra(Constants.CHAT_TYPE) != null) {
+                chatType = intent.getStringExtra(Constants.CHAT_TYPE)!!
+            }
             binding.ilHeader.txtName.text = intent.getStringExtra(Constants.NAME)
             Glide.with(this).load(intent.getStringExtra(Constants.PROFILE))
                 .into(binding.ilHeader.imgProfile)
         }
 
-        getChatDetails()
-
-        roomEmit(receiverId)
+        if (chatType.equals("private")) {
+            getChatDetails()
+            roomEmit(receiverId)
+        }else{
+            getGrpChatDetails()
+        }
 
         runTimePermission = RunTimePermission(this)
 
@@ -376,6 +390,37 @@ class ChatActivity : BaseActivity(),ImageVideoSelectorDialog.Action {
 
     }
 
+    private fun getGrpChatDetails() {
+        val inputParams = InputParams()
+        inputParams.accessToken = UtilsDefault.getSharedPreferenceString(Constants.ACCESS_TOKEN)
+        inputParams.user_id = UtilsDefault.getSharedPreferenceString(Constants.USER_ID)
+        inputParams.group_id = room
+
+        apiViewModel.getGrpDetails(inputParams).observe(this, Observer {
+            it.let {
+                when(it.status){
+                    Status.LOADING -> {
+                        showProgress()
+                    }
+                    Status.SUCCESS -> {
+                        dismissProgress()
+                        if (it.data!!.status){
+                            if (it.data.data.list.isNotEmpty()){
+                                setData(it.data.data.list,true)
+                            }
+                        }else{
+                            toast(it.data.message)
+                        }
+                    }
+                    Status.ERROR -> {
+                        dismissProgress()
+                        toast(it.message!!)
+                    }
+                }
+            }
+        })
+    }
+
     private fun getChatDetails() {
         val inputParams = InputParams()
         inputParams.accessToken = UtilsDefault.getSharedPreferenceString(Constants.ACCESS_TOKEN)
@@ -392,7 +437,7 @@ class ChatActivity : BaseActivity(),ImageVideoSelectorDialog.Action {
                         dismissProgress()
                         if (it.data!!.status){
                            if (it.data.data.list.isNotEmpty()){
-                               setData(it.data.data.list)
+                               setData(it.data.data.list,false)
                            }
                         }else{
                             toast(it.data.message)
@@ -407,9 +452,9 @@ class ChatActivity : BaseActivity(),ImageVideoSelectorDialog.Action {
         })
     }
 
-    private fun setData(list: ArrayList<ChatDetailsRes>) {
+    private fun setData(list: ArrayList<ChatDetailsRes>,chatType:Boolean) {
         this.list = list
-        chatHistoryAdapter!!.setChatHis(list)
+        chatHistoryAdapter!!.setChatHis(list,chatType)
         layoutManager!!.scrollToPosition(chatHistoryAdapter!!.getItemCount() - 1)
     }
 
@@ -517,8 +562,8 @@ class ChatActivity : BaseActivity(),ImageVideoSelectorDialog.Action {
         val messageSocketModel: GetChatDetailsListResponse = gson.fromJson(jsonObject.toString(),
             GetChatDetailsListResponse::class.java)
         if (messageSocketModel.status){
-            if (messageSocketModel.data.list.isNotEmpty()){
-                setData(messageSocketModel.data.list)
+            if (!messageSocketModel.data.list.isNullOrEmpty()){
+                setData(messageSocketModel.data.list,false)
             }
         }else{
             toast(messageSocketModel.message)

@@ -105,7 +105,7 @@
         android:layout_marginEnd="8dp"
         >
 
-        <com.application.smartstation.view.CustomTextViewMedium
+        <com.vanniktech.emoji.EmojiTextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:singleLine="true"

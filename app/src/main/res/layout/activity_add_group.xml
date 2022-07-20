@@ -47,8 +47,8 @@
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/imgCamera"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
                 android:src="@drawable/ic_photo"
                 android:layout_marginStart="10dp"
                />
@@ -123,8 +123,8 @@
 
     <ImageView
         android:id="@+id/imgTick"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
         android:src="@drawable/tick"
         android:layout_margin="16dp"
         app:layout_constraintBottom_toBottomOf="parent"

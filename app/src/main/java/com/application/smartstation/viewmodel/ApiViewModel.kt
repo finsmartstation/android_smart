@@ -507,11 +507,29 @@ class ApiViewModel @Inject constructor(
 
     }
 
+    fun getGrpDetails(inputParams: InputParams) = liveData<Resource<GetChatDetailsListResponse>> {
+        if (UtilsDefault.isOnline()) {
+            repository.getGrpDetails(inputParams)
+                .onStart {
+                    emit(Resource.loading(data = null))
+                }
+                .catch {
+                    emit(Resource.error(data = null, msg = "Cannot reach server..try again"))
+                }
+                .collect {
+                    emit(Resource.success(it))
+                }
+        } else {
+            emit(Resource.error(data = null, msg = "No internet connection"))
+        }
+
+    }
+
     fun grpCreate(
         user_id:RequestBody,
         accessToken:RequestBody,
         group_name:RequestBody,
-        members: Array<String?>,
+        members:RequestBody,
         group_profile: MultipartBody.Part) = liveData<Resource<BaseResponse>> {
         if (UtilsDefault.isOnline()) {
             repository.grpCreate(user_id, accessToken, group_name, members, group_profile)

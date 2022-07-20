@@ -37,5 +37,7 @@ object ApiUrl {
     const val GET_USER_LIST =API+"get_all_user_details"
     const val FILE_UPLOAD =API+"fileupload"
     const val CREATE_GRP =API+"create_group"
+    const val GET_GRP_DETAILS =API+"get_group_chat_details"
+    const val ADD_GRP_USER =API+"add_group_member"
 
 }

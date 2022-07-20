@@ -28,6 +28,7 @@ class ChatHistoryAdapter(val context: Context) : RecyclerView.Adapter<ChatHistor
     private var list = emptyList<ChatDetailsRes>()
     var onItemClick: ((pos: Int) -> Unit)? = null
     var blinkItem = NO_POSITION
+    var chatType = false
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
 
@@ -48,6 +49,11 @@ class ChatHistoryAdapter(val context: Context) : RecyclerView.Adapter<ChatHistor
                 binding.llChatDate.visibility = View.VISIBLE
                 binding.llChatMsg.visibility = View.GONE
             }
+            else if (model.type.equals("notification")){
+                binding.txtDate.text = model.message
+                binding.llChatDate.visibility = View.VISIBLE
+                binding.llChatMsg.visibility = View.GONE
+            }
             else {
                 binding.llChatDate.visibility = View.GONE
                 binding.llChatMsg.visibility = View.VISIBLE
@@ -57,13 +63,21 @@ class ChatHistoryAdapter(val context: Context) : RecyclerView.Adapter<ChatHistor
                     model.type = "receive"
                 }
                 if (model.type.equals("receive")) {
+
+                    if (chatType){
+                        binding.txtRecName.visibility = View.VISIBLE
+                        binding.txtRecName.text = model.name
+                    }else{
+                        binding.txtRecName.visibility = View.GONE
+                    }
+
                     binding.llRec.visibility = View.VISIBLE
                     binding.llSend.visibility = View.GONE
                     if (model.message_type.equals("text")) {
                         binding.flMsg.visibility = View.VISIBLE
                         binding.imgChat.visibility = View.GONE
                         binding.txtTimeImg.visibility = View.GONE
-                        binding.txtMsg.text = Html.fromHtml(model.message+" &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;")
+                        binding.txtMsg.text =model.message
                     } else {
                         binding.flMsg.visibility = View.GONE
                         binding.imgChat.visibility = View.VISIBLE
@@ -82,7 +96,7 @@ class ChatHistoryAdapter(val context: Context) : RecyclerView.Adapter<ChatHistor
                             binding.flMsgSend.visibility = View.VISIBLE
                             binding.imgChatSend.visibility = View.GONE
                             binding.txtTimeImgSend.visibility = View.GONE
-                            binding.txtMsgSend.text = Html.fromHtml(model.message+" &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;")
+                            binding.txtMsgSend.text =model.message
                         } else {
                             binding.flMsgSend.visibility = View.GONE
                             binding.imgChatSend.visibility = View.VISIBLE
@@ -100,7 +114,7 @@ class ChatHistoryAdapter(val context: Context) : RecyclerView.Adapter<ChatHistor
                             binding.flMsgSend.visibility = View.VISIBLE
                             binding.imgChatSend.visibility = View.GONE
                             binding.txtTimeImgSend.visibility = View.GONE
-                            binding.txtMsgSend.text = Html.fromHtml(model.message+" &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;")
+                            binding.txtMsgSend.text = model.message
                         } else {
                             binding.flMsgSend.visibility = View.GONE
                             binding.imgChatSend.visibility = View.VISIBLE
@@ -149,8 +163,9 @@ class ChatHistoryAdapter(val context: Context) : RecyclerView.Adapter<ChatHistor
         }
     }
 
-    internal fun setChatHis(chat: List<ChatDetailsRes>) {
+    internal fun setChatHis(chat: List<ChatDetailsRes>,chatType:Boolean) {
         this.list = chat
+//        this.chatType = chatType
         notifyDataSetChanged()
     }
 

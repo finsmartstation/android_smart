@@ -60,7 +60,7 @@ class ChatFragment : BaseFragment(R.layout.fragment_chat){
         binding.rvChat.adapter = chatAdapter
 
         chatAdapter!!.onItemClick = { model ->
-            startActivity(Intent(requireActivity(), ChatActivity::class.java).putExtra(Constants.REC_ID,model.userid).putExtra(Constants.NAME,model.name).putExtra(Constants.PROFILE,model.profile))
+            startActivity(Intent(requireActivity(), ChatActivity::class.java).putExtra(Constants.REC_ID,model.userid).putExtra(Constants.NAME,model.name).putExtra(Constants.PROFILE,model.profile).putExtra(Constants.CHAT_TYPE,model.chat_type).putExtra(Constants.ROOM,model.room))
         }
 
         getChatList()
