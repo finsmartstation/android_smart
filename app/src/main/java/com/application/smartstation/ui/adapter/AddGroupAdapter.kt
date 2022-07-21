@@ -43,7 +43,7 @@ class AddGroupAdapter(val context: Context) : RecyclerView.Adapter<AddGroupAdapt
         with(holder) {
             binding.txtName.text = model.name
 
-            Glide.with(context).load(model.profile_pic).diskCacheStrategy(DiskCacheStrategy.DATA).into(binding.imgProfile)
+            Glide.with(context).load(model.profile_pic).placeholder(R.drawable.ic_default).error(R.drawable.ic_default).diskCacheStrategy(DiskCacheStrategy.DATA).into(binding.imgProfile)
 
             binding.imgClose.setOnClickListener {
                 onItemClick!!.invoke(model,position)

@@ -93,7 +93,7 @@ class AddGroupActivity : BaseActivity(), ImageSelectorDialog.Action {
                     "Opened soft keyboard"
                 )
             }
-            .setOnEmojiPopupDismissListener { binding.imgEmoji.setImageResource(R.drawable.ic_smile_message_icon_use) }
+            .setOnEmojiPopupDismissListener { binding.imgEmoji.setImageResource(R.drawable.ic_smile_use) }
             .setOnSoftKeyboardCloseListener { Log.d("TAG", "Closed soft keyboard") }
             .build(binding.edtGrpName)
 

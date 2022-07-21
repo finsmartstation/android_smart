@@ -54,8 +54,8 @@ class SettingsActivity : BaseActivity() {
 
         Glide.with(this).applyDefaultRequestOptions(
             RequestOptions()
-                .error(R.drawable.profile)
-        ).load(UtilsDefault.getSharedPreferenceString(Constants.PROFILE_PIC)).diskCacheStrategy(DiskCacheStrategy.DATA).into(binding.ilHeader.imgProfilePic)
+                .error(R.drawable.ic_default)
+        ).load(UtilsDefault.getSharedPreferenceString(Constants.PROFILE_PIC)).placeholder(R.drawable.ic_default).diskCacheStrategy(DiskCacheStrategy.DATA).into(binding.ilHeader.imgProfilePic)
 
     }
 }

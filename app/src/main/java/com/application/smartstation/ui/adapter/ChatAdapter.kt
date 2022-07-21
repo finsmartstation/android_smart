@@ -40,7 +40,7 @@ class ChatAdapter(val context: Context) : RecyclerView.Adapter<ChatAdapter.ViewH
             binding.txtName.text = model.name
             binding.txtTime.text = UtilsDefault.dateChatList(model.date)
 
-            Glide.with(context).load(model.profile).diskCacheStrategy(DiskCacheStrategy.DATA).into(binding.imgProfile)
+            Glide.with(context).load(model.profile).placeholder(R.drawable.ic_default).error(R.drawable.ic_default).diskCacheStrategy(DiskCacheStrategy.DATA).into(binding.imgProfile)
 
             if (typingStatus.equals(1)){
                 binding.imgPht.visibility = View.GONE

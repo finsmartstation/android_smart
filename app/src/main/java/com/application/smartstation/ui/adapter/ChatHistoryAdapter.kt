@@ -83,7 +83,7 @@ class ChatHistoryAdapter(val context: Context) : RecyclerView.Adapter<ChatHistor
                         binding.imgChat.visibility = View.VISIBLE
                         binding.txtTimeImg.visibility = View.VISIBLE
                         Glide.with(context).load(model.message)
-                            .diskCacheStrategy(DiskCacheStrategy.DATA).into(binding.imgChat)
+                            .diskCacheStrategy(DiskCacheStrategy.DATA).placeholder(R.drawable.ic_default).error(R.drawable.ic_default).into(binding.imgChat)
                     }
                     binding.txtTime.text = UtilsDefault.todayDate(UtilsDefault.localTimeConvert(model.date))
                     binding.txtTimeImg.text = UtilsDefault.todayDate(UtilsDefault.localTimeConvert(model.date))
@@ -101,7 +101,7 @@ class ChatHistoryAdapter(val context: Context) : RecyclerView.Adapter<ChatHistor
                             binding.flMsgSend.visibility = View.GONE
                             binding.imgChatSend.visibility = View.VISIBLE
                             binding.txtTimeImgSend.visibility = View.VISIBLE
-                            Glide.with(context).load(model.message)
+                            Glide.with(context).load(model.message).placeholder(R.drawable.ic_default).error(R.drawable.ic_default)
                                 .diskCacheStrategy(DiskCacheStrategy.DATA).into(binding.imgChatSend)
                         }
                         binding.txtTimeSend.text = UtilsDefault.todayDate(UtilsDefault.localTimeConvert(model.date))
@@ -119,7 +119,7 @@ class ChatHistoryAdapter(val context: Context) : RecyclerView.Adapter<ChatHistor
                             binding.flMsgSend.visibility = View.GONE
                             binding.imgChatSend.visibility = View.VISIBLE
                             binding.txtTimeImgSend.visibility = View.VISIBLE
-                            Glide.with(context).load(model.message)
+                            Glide.with(context).load(model.message).placeholder(R.drawable.ic_default).error(R.drawable.ic_default)
                                 .diskCacheStrategy(DiskCacheStrategy.DATA).into(binding.imgChatSend)
                         }
                         binding.txtTimeSend.text = UtilsDefault.todayDate(UtilsDefault.localTimeConvert(model.date))
@@ -165,7 +165,7 @@ class ChatHistoryAdapter(val context: Context) : RecyclerView.Adapter<ChatHistor
 
     internal fun setChatHis(chat: List<ChatDetailsRes>,chatType:Boolean) {
         this.list = chat
-//        this.chatType = chatType
+        this.chatType = chatType
         notifyDataSetChanged()
     }
 

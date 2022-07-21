@@ -60,7 +60,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             android:layout_height="20dp"
-            android:src="@drawable/close" />
+            android:src="@drawable/ic_close_use" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

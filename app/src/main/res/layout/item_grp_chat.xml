@@ -120,7 +120,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 android:layout_height="20dp"
-                android:src="@drawable/tick" />
+                android:src="@drawable/ic_tick_use" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -13,7 +13,6 @@
         android:id="@+id/ilHeader"
         />
 
-
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -49,7 +48,7 @@
                 android:id="@+id/imgCamera"
                 android:layout_width="60dp"
                 android:layout_height="60dp"
-                android:src="@drawable/ic_photo"
+                android:src="@drawable/ic_grp_icon_use"
                 android:layout_marginStart="10dp"
                />
 
@@ -78,7 +77,7 @@
                 android:layout_gravity="center"
                 android:layout_marginEnd="10dp"
                 app:tint="@color/color_chat_popup_gray"
-                android:src="@drawable/ic_smile_message_icon_use"
+                android:src="@drawable/ic_smile_use"
                 />
 
         </LinearLayout>
@@ -125,7 +124,7 @@
         android:id="@+id/imgTick"
         android:layout_width="70dp"
         android:layout_height="70dp"
-        android:src="@drawable/tick"
+        android:src="@drawable/ic_tick_use"
         android:layout_margin="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />

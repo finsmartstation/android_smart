@@ -1167,5 +1167,6 @@
     <string name="provide_a_grp">Provide a group subject and optional group icon</string>
     <string name="participant">Participants :</string>
     <string name="please_enter_grp_name">Please enter group name</string>
+    <string name="contact_info">Contact Info</string>
 
 </resources>

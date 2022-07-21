@@ -35,7 +35,7 @@ class ReceivedLetterAdapter(val context: Context) : RecyclerView.Adapter<Receive
             binding.txtDate.text = model.date
             binding.txtTime.text = model.time
             binding.txtSub.text = model.sub
-            Glide.with(context).load(model.profile).diskCacheStrategy(DiskCacheStrategy.DATA).into(binding.imgMailProfile)
+            Glide.with(context).load(model.profile).placeholder(R.drawable.ic_default).error(R.drawable.ic_default).diskCacheStrategy(DiskCacheStrategy.DATA).into(binding.imgMailProfile)
 
             if (model.status == 1){
                 binding.txtTitle.setTextColor(context.resources.getColor(R.color.black))

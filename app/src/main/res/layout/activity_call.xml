@@ -39,82 +39,82 @@
             android:orientation="vertical">
 
             <TextView
+                android:id="@+id/username"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="@dimen/_16sdp"
-                android:layout_marginTop="100dp"
-                android:id="@+id/username"
                 android:layout_centerHorizontal="true"
+                android:layout_gravity="center"
+                android:layout_marginTop="100dp"
                 android:textColor="@color/black"
-                android:layout_gravity="center"/>
+                android:textSize="@dimen/_16sdp" />
 
             <TextView
+                android:id="@+id/callingStatusText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="@dimen/_14sdp"
-                android:layout_centerHorizontal="true"
                 android:layout_below="@+id/username"
-                android:id="@+id/callingStatusText"
+                android:layout_centerHorizontal="true"
                 android:layout_marginTop="@dimen/_6sdp"
-                android:textColor="@color/black"/>
+                android:textColor="@color/black"
+                android:textSize="@dimen/_14sdp" />
 
             <androidx.cardview.widget.CardView
                 android:layout_width="@dimen/_90sdp"
                 android:layout_height="@dimen/_90sdp"
-                app:cardCornerRadius="@dimen/_45sdp"
-                app:cardBackgroundColor="@color/white"
+                android:layout_centerInParent="true"
                 android:layout_gravity="center"
-                android:layout_centerInParent="true">
+                app:cardBackgroundColor="@color/white"
+                app:cardCornerRadius="@dimen/_45sdp">
 
                 <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/userimage"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:src="@drawable/profile"
-                    android:id="@+id/userimage"/>
+                    android:src="@drawable/profile" />
 
             </androidx.cardview.widget.CardView>
 
             <RelativeLayout
+                android:id="@+id/receiveDisconnectLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:visibility="gone"
                 android:layout_alignParentBottom="true"
-                android:id="@+id/receiveDisconnectLayout"
-                android:layout_marginBottom="60dp"
                 android:layout_marginLeft="40dp"
-                android:layout_marginRight="40dp">
+                android:layout_marginRight="40dp"
+                android:layout_marginBottom="60dp"
+                android:visibility="gone">
 
                 <ImageButton
+                    android:id="@+id/cancelIncomingButton"
                     android:layout_width="80dp"
                     android:layout_height="80dp"
-                    android:id="@+id/cancelIncomingButton"
                     android:layout_alignParentEnd="true"
-                    android:scaleType="fitXY"
                     android:background="@android:color/transparent"
+                    android:scaleType="fitXY"
                     android:src="@drawable/ic_cancel_incoming_white" />
 
                 <ImageButton
+                    android:id="@+id/pickIncomingCall"
                     android:layout_width="80dp"
                     android:layout_height="80dp"
-                    android:id="@+id/pickIncomingCall"
                     android:background="@android:color/transparent"
-                    android:src="@drawable/receive_call"
-                    android:scaleType="fitXY" />
+                    android:scaleType="fitXY"
+                    android:src="@drawable/receive_call" />
 
             </RelativeLayout>
 
             <ImageButton
+                android:id="@+id/cancel_call"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
-                android:scaleType="centerCrop"
-                android:visibility="gone"
-                android:padding="15dp"
-                android:layout_centerHorizontal="true"
                 android:layout_alignParentBottom="true"
-                android:id="@+id/cancel_call"
+                android:layout_centerHorizontal="true"
                 android:layout_marginBottom="60dp"
                 android:background="@color/transparent"
-                android:src="@drawable/ic_cancel_incoming_white"/>
+                android:padding="15dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/ic_cancel_incoming_white"
+                android:visibility="gone" />
 
         </RelativeLayout>
 

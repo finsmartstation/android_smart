@@ -64,9 +64,9 @@ class EditProfileActivity : BaseActivity() , ImageSelectorDialog.Action{
                         if (it.data!!.status){
                             Glide.with(this).applyDefaultRequestOptions(
                                 RequestOptions()
-                                    .error(R.drawable.profile)
+                                    .error(R.drawable.ic_default)
                             ).load(it.data.data.profile_pic).diskCacheStrategy(
-                                DiskCacheStrategy.DATA).into(binding.imgProfile)
+                                DiskCacheStrategy.DATA).placeholder(R.drawable.ic_default).into(binding.imgProfile)
                             binding.edtName.setText(it.data.data.name)
                             binding.edtEmail.setText(it.data.data.email)
                             binding.edtAbout.setText(it.data.data.about)
@@ -216,9 +216,9 @@ class EditProfileActivity : BaseActivity() , ImageSelectorDialog.Action{
                             toast(it.data.message)
                             Glide.with(this).applyDefaultRequestOptions(
                                 RequestOptions()
-                                    .error(R.drawable.profile)
+                                    .error(R.drawable.ic_default)
                             ).load(it.data.profile_pic).diskCacheStrategy(
-                                DiskCacheStrategy.DATA).into(binding.imgProfile)
+                                DiskCacheStrategy.DATA).placeholder(R.drawable.ic_default).into(binding.imgProfile)
 
                             UtilsDefault.updateSharedPreferenceString(Constants.PROFILE_PIC,it.data.profile_pic)
                         }else{

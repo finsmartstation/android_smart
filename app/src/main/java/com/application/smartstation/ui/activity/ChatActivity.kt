@@ -125,6 +125,11 @@ class ChatActivity : BaseActivity(),ImageVideoSelectorDialog.Action {
             finish()
         }
 
+        binding.ilHeader.rlChat.setOnClickListener {
+            startActivity(Intent(this,ChatInfoActivity::class.java)
+                .putExtra(Constants.NAME,receiverName).putExtra(Constants.PROFILE_PIC,receiverProfile))
+        }
+
         binding.imgEmoji.setOnClickListener {
             emojiPopup!!.toggle()
         }

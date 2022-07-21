@@ -41,7 +41,7 @@ class InboxAdapter(val context: Context) : RecyclerView.Adapter<InboxAdapter.Vie
             binding.txtDate.text = UtilsDefault.dateConvert(model.datetime)
             binding.txtTime.text = UtilsDefault.todayDate(model.datetime)
             binding.txtSub.text = model.body
-            Glide.with(context).load(model.profile_pic).diskCacheStrategy(DiskCacheStrategy.DATA).into(binding.imgMailProfile)
+            Glide.with(context).load(model.profile_pic).placeholder(R.drawable.ic_default).error(R.drawable.ic_default).diskCacheStrategy(DiskCacheStrategy.DATA).into(binding.imgMailProfile)
 
             if (model.mail_read_status == "1"){
                 binding.txtTitle.setTextColor(context.resources.getColor(R.color.black))

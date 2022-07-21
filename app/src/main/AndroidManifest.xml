@@ -45,6 +45,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.SmartStation">
         <activity
+            android:name=".ui.activity.ChatInfoActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.activity.AddGroupActivity"
             android:exported="false" />
         <activity

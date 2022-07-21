@@ -42,8 +42,13 @@ class ContactGroupAdapter(val context: Context) : RecyclerView.Adapter<ContactGr
             binding.txtName.text = model.name
             binding.txtMsg.text = model.about
 
-            Glide.with(context).load(model.profile_pic).diskCacheStrategy(DiskCacheStrategy.DATA).into(binding.imgProfile)
+            if(model.profile_pic != "") {
+                Glide.with(context).load(model.profile_pic).placeholder(R.drawable.ic_default)
+                    .error(R.drawable.ic_default).diskCacheStrategy(DiskCacheStrategy.DATA)
+                    .into(binding.imgProfile)
+            }else{
 
+            }
             binding.flChat.setOnClickListener {
                 onItemClick!!.invoke(model,position)
             }

@@ -23,7 +23,9 @@
         <entry key="..\:/smartstation/app/src/main/res/drawable/ic_mic_white_24dp.xml" value="0.134" />
         <entry key="..\:/smartstation/app/src/main/res/drawable/ic_rec_side_use.xml" value="0.134" />
         <entry key="..\:/smartstation/app/src/main/res/drawable/ic_settings_dot_right_use.xml" value="0.134" />
+        <entry key="..\:/smartstation/app/src/main/res/drawable/ic_smile_use.xml" value="0.134" />
         <entry key="..\:/smartstation/app/src/main/res/drawable/ic_splash_bg_use.xml" value="0.134" />
+        <entry key="..\:/smartstation/app/src/main/res/drawable/ic_stamp_use.xml" value="0.134" />
         <entry key="..\:/smartstation/app/src/main/res/drawable/ic_switch_camera_white_24dp.xml" value="0.134" />
         <entry key="..\:/smartstation/app/src/main/res/drawable/ic_top_gry_01.xml" value="0.134" />
         <entry key="..\:/smartstation/app/src/main/res/drawable/ic_top_gry_chat_use.xml" value="0.134" />
@@ -45,6 +47,7 @@
         <entry key="..\:/smartstation/app/src/main/res/layout/activity_call.xml" value="0.32135416666666666" />
         <entry key="..\:/smartstation/app/src/main/res/layout/activity_camera.xml" value="0.2125" />
         <entry key="..\:/smartstation/app/src/main/res/layout/activity_chat.xml" value="0.165" />
+        <entry key="..\:/smartstation/app/src/main/res/layout/activity_chat_info.xml" value="0.165" />
         <entry key="..\:/smartstation/app/src/main/res/layout/activity_create_group.xml" value="0.165" />
         <entry key="..\:/smartstation/app/src/main/res/layout/activity_edit_profile.xml" value="0.25" />
         <entry key="..\:/smartstation/app/src/main/res/layout/activity_image_perview.xml" value="0.25" />
@@ -68,6 +71,7 @@
         <entry key="..\:/smartstation/app/src/main/res/layout/fragment_inbox.xml" value="0.26378794356562635" />
         <entry key="..\:/smartstation/app/src/main/res/layout/fragment_letter_main.xml" value="0.309375" />
         <entry key="..\:/smartstation/app/src/main/res/layout/fragment_login.xml" value="0.26378794356562635" />
+        <entry key="..\:/smartstation/app/src/main/res/layout/fragment_profile.xml" value="0.309375" />
         <entry key="..\:/smartstation/app/src/main/res/layout/fragment_received_letter.xml" value="0.25" />
         <entry key="..\:/smartstation/app/src/main/res/layout/fragment_welcome.xml" value="0.32135416666666666" />
         <entry key="..\:/smartstation/app/src/main/res/layout/header_layout.xml" value="0.32135416666666666" />

@@ -15,70 +15,64 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="horizontal"
-        >
+        android:orientation="horizontal">
 
-    <ImageView
-        android:id="@+id/imgBack"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:src="@drawable/ic_back"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginBottom="16dp"
-        android:layout_gravity="center"
-        />
+        <ImageView
+            android:id="@+id/imgBack"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_gravity="center"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
+            android:src="@drawable/ic_back" />
 
-    <de.hdodenhof.circleimageview.CircleImageView
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:id="@+id/imgHeader"
-        android:visibility="gone"
-        android:layout_gravity="center"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"
-        />
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/imgHeader"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:visibility="gone" />
 
-    <com.application.smartstation.view.CustomTextViewBold
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:id="@+id/txtHeader"
-        android:textColor="@color/white"
-        android:textSize="18sp"
-        android:layout_weight="1"
-        android:layout_gravity="center"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginBottom="16dp"
-        android:layout_marginEnd="16dp"
-        android:singleLine="true"
-        />
+        <com.application.smartstation.view.CustomTextViewBold
+            android:id="@+id/txtHeader"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="16dp"
+            android:layout_weight="1"
+            android:singleLine="true"
+            android:textColor="@color/white"
+            android:textSize="18sp" />
 
-    <ImageView
-        android:id="@+id/imgVideo"
-        android:layout_width="30dp"
-        android:visibility="gone"
-        android:layout_height="30dp"
-        android:src="@drawable/ic_video"
-        android:layout_gravity="center"
-        android:layout_marginTop="16dp"
-        android:layout_marginBottom="16dp"
-        />
+        <ImageView
+            android:id="@+id/imgVideo"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
+            android:src="@drawable/ic_video"
+            android:visibility="gone" />
 
-    <ImageView
-        android:id="@+id/imgAudio"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:src="@drawable/call"
-        app:tint="@color/white"
-        android:visibility="gone"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginBottom="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_gravity="center"
-        />
+        <ImageView
+            android:id="@+id/imgAudio"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_gravity="center"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="16dp"
+            android:src="@drawable/call"
+            android:visibility="gone"
+            app:tint="@color/white" />
 
     </LinearLayout>
 
