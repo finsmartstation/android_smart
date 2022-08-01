@@ -208,6 +208,13 @@ class ApiRepository @Inject constructor(val apiService: ApiService) {
         }.flowOn(Dispatchers.IO)
     }
 
+    fun getGrpUserList(inputParams: InputParams): Flow<GrpUserListRes> {
+        return flow {
+            val response = apiService.getGrpUserList(inputParams)
+            emit(response)
+        }.flowOn(Dispatchers.IO)
+    }
+
     fun grpCreate(
         user_id:RequestBody,
         accessToken:RequestBody,

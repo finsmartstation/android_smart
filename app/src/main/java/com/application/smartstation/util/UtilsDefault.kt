@@ -764,7 +764,7 @@ object UtilsDefault {
         } else if (calendar[Calendar.YEAR] == yesterday[Calendar.YEAR] && calendar[Calendar.DAY_OF_YEAR] == yesterday[Calendar.DAY_OF_YEAR]) {
             "Yesterday"
         } else {
-            date
+            dateConvert(date)
         }
     }
 

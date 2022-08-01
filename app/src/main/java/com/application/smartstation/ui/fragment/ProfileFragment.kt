@@ -37,6 +37,7 @@ class ProfileFragment : BaseFragment(R.layout.fragment_profile),ImageSelectorDia
     val apiViewModel:ApiViewModel by viewModels()
     var imageSelectorDialog:ImageSelectorDialog? = null
     var pics=""
+    var profile:MultipartBody.Part? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -61,17 +62,26 @@ class ProfileFragment : BaseFragment(R.layout.fragment_profile),ImageSelectorDia
                 TextUtils.isEmpty(profilePic) -> toast(requireActivity().resources.getString(R.string.please_upload_profile))
 
                 else -> {
-                    val file = File(pics)
-                    val requestBody = RequestBody.create("multipart/form-data".toMediaTypeOrNull(), file)
-                    val profile = MultipartBody.Part.createFormData("profile_pic", file.getName(), requestBody)
+                    if (!profilePic.isNullOrEmpty()) {
+                        val file = File(profilePic)
+                        val requestBody =
+                            RequestBody.create("multipart/form-data".toMediaTypeOrNull(), file)
+                        profile  = MultipartBody.Part.createFormData("profile_pic",
+                            file.getName(),
+                            requestBody)
 
+                    }else{
+                        val attachmentEmpty: RequestBody = RequestBody.create("text/plain".toMediaTypeOrNull(), "")
+                        profile =
+                            MultipartBody.Part.createFormData("profile_pic", "", attachmentEmpty)
+                    }
                     val name1: RequestBody = RequestBody.create("text/plain".toMediaTypeOrNull(), name)
                     val user_id: RequestBody = RequestBody.create("text/plain".toMediaTypeOrNull(), UtilsDefault.getSharedPreferenceString(Constants.USER_ID)!!)
                     val accessToken: RequestBody = RequestBody.create("text/plain".toMediaTypeOrNull(),
                         UtilsDefault.getSharedPreferenceString(Constants.ACCESS_TOKEN)!!
                     )
 
-                    updateProfile(user_id,accessToken,name1,profile)
+                    updateProfile(user_id,accessToken,name1, profile!!)
                 }
             }
         }
@@ -115,7 +125,7 @@ class ProfileFragment : BaseFragment(R.layout.fragment_profile),ImageSelectorDia
     private fun initView() {
 
     }
-
+    
     override fun onResume() {
         super.onResume()
         loginBack = 1

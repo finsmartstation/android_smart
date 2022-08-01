@@ -40,4 +40,8 @@
     <color name="replyBackground">#97F7F7F7</color>
     <color name="mail_date_coloe">#525659</color>
     <color name="mail_unread_red">#FF0000</color>
+    <color name="txt_chat_info">#879197</color>
+    <color name="view_chat_info">#f7f8fa</color>
+    <color name="dec_chat_info">#776463</color>
+    <color name="dec_time_chat_info">#acb2b3</color>
 </resources>

@@ -525,6 +525,24 @@ class ApiViewModel @Inject constructor(
 
     }
 
+    fun getGrpUserList(inputParams: InputParams) = liveData<Resource<GrpUserListRes>> {
+        if (UtilsDefault.isOnline()) {
+            repository.getGrpUserList(inputParams)
+                .onStart {
+                    emit(Resource.loading(data = null))
+                }
+                .catch {
+                    emit(Resource.error(data = null, msg = "Cannot reach server..try again"))
+                }
+                .collect {
+                    emit(Resource.success(it))
+                }
+        } else {
+            emit(Resource.error(data = null, msg = "No internet connection"))
+        }
+
+    }
+
     fun grpCreate(
         user_id:RequestBody,
         accessToken:RequestBody,

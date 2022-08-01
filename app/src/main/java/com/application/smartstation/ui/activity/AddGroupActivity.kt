@@ -26,13 +26,13 @@ import com.vanniktech.emoji.EmojiImageView
 import com.vanniktech.emoji.EmojiPopup
 import com.vanniktech.emoji.emoji.Emoji
 import dagger.hilt.android.AndroidEntryPoint
+import okhttp3.MediaType
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import org.json.JSONArray
 import java.io.File
 import java.util.*
-import kotlin.collections.ArrayList
 
 
 @AndroidEntryPoint
@@ -141,9 +141,19 @@ class AddGroupActivity : BaseActivity(), ImageSelectorDialog.Action {
                         user
                     )
 //                    Log.d("TAG", "setOnClickListener: "+ Arrays.toString(members))
-                    val file = File(pics)
-                    val requestBody = RequestBody.create("multipart/form-data".toMediaTypeOrNull(), file)
-                    grpProfile = MultipartBody.Part.createFormData("group_profile", file.getName(), requestBody)
+                    if (pics != null && pics != "") {
+                        val file = File(pics)
+                        val requestBody =
+                            RequestBody.create("multipart/form-data".toMediaTypeOrNull(), file)
+                        grpProfile = MultipartBody.Part.createFormData("group_profile",
+                            file.getName(),
+                            requestBody)
+                    }else{
+                        val attachmentEmpty: RequestBody = RequestBody.create("text/plain".toMediaTypeOrNull(), "")
+                        grpProfile =
+                            MultipartBody.Part.createFormData("group_profile", "", attachmentEmpty)
+                    }
+                    Log.d("TAG", "setOnClickListener: "+pics)
                     createGrp(user_id,accessToken,group_name,members,grpProfile)
                 }
             }

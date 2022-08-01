@@ -74,6 +74,10 @@
         <item name="cornerSize">24dp</item>
     </style>
 
+    <style name="ShapeAppearanceOverlay.App.CornerSize10Percent" parent="">
+        <item name="cornerSize">10dp</item>
+    </style>
+
     <style name="ShapeAppearanceOverlay.App.CornerSize24Percent" parent="">
         <item name="cornerSize">24dp</item>
     </style>

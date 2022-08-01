@@ -49,6 +49,7 @@ import com.application.smartstation.viewmodel.ChatEvent
 import com.application.smartstation.viewmodel.OnlineChatEvent
 import com.application.smartstation.viewmodel.TypingEvent
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.gms.tasks.OnSuccessListener
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -127,7 +128,8 @@ class ChatActivity : BaseActivity(),ImageVideoSelectorDialog.Action {
 
         binding.ilHeader.rlChat.setOnClickListener {
             startActivity(Intent(this,ChatInfoActivity::class.java)
-                .putExtra(Constants.NAME,receiverName).putExtra(Constants.PROFILE_PIC,receiverProfile))
+                .putExtra(Constants.NAME,receiverName).putExtra(Constants.PROFILE_PIC,receiverProfile)
+                .putExtra(Constants.CHAT_TYPE,chatType).putExtra(Constants.ROOM,room))
         }
 
         binding.imgEmoji.setOnClickListener {
@@ -278,9 +280,12 @@ class ChatActivity : BaseActivity(),ImageVideoSelectorDialog.Action {
             }
             if (intent.getStringExtra(Constants.CHAT_TYPE) != null) {
                 chatType = intent.getStringExtra(Constants.CHAT_TYPE)!!
+            }else{
+                chatType = "private"
             }
             binding.ilHeader.txtName.text = intent.getStringExtra(Constants.NAME)
-            Glide.with(this).load(intent.getStringExtra(Constants.PROFILE))
+            Glide.with(this).load(intent.getStringExtra(Constants.PROFILE)).placeholder(R.drawable.ic_default).error(R.drawable.ic_default).diskCacheStrategy(
+                DiskCacheStrategy.DATA)
                 .into(binding.ilHeader.imgProfile)
         }
 
@@ -313,17 +318,7 @@ class ChatActivity : BaseActivity(),ImageVideoSelectorDialog.Action {
             }
         })
 
-        //reply msg
-        val messageSwipeController = MessageSwipeReplyView(this, object : SwipeControllerActions {
-            override fun showReplyUI(position: Int) {
-                quotedMessagePos = position
-                Log.d("TAG", "showReplyUI: "+list.size)
-                showQuotedMessage(list[position])
-            }
-        })
 
-        val itemTouchHelper = ItemTouchHelper(messageSwipeController)
-        itemTouchHelper.attachToRecyclerView(binding.rvChatRoom)
 
 //        chatHistoryAdapter!!.onItemClick = {
 //            binding.rvChatRoom.smoothScrollToPosition(it - 1)
@@ -461,6 +456,17 @@ class ChatActivity : BaseActivity(),ImageVideoSelectorDialog.Action {
         this.list = list
         chatHistoryAdapter!!.setChatHis(list,chatType)
         layoutManager!!.scrollToPosition(chatHistoryAdapter!!.getItemCount() - 1)
+
+        //reply msg
+        val messageSwipeController = MessageSwipeReplyView(this,list ,object : SwipeControllerActions {
+            override fun showReplyUI(position: Int) {
+                quotedMessagePos = position
+                showQuotedMessage(list[position])
+            }
+        })
+
+        val itemTouchHelper = ItemTouchHelper(messageSwipeController)
+        itemTouchHelper.attachToRecyclerView(binding.rvChatRoom)
     }
 
     private fun roomEmit(receiverId: String) {

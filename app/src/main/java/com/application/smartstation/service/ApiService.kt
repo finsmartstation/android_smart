@@ -97,6 +97,9 @@ interface ApiService {
     @POST(ApiUrl.GET_GRP_DETAILS)
     suspend fun getGrpDetails(@Body inputParams: InputParams): GetChatDetailsListResponse
 
+    @POST(ApiUrl.GET_GRP_USER_LIST)
+    suspend fun getGrpUserList(@Body inputParams: InputParams): GrpUserListRes
+
     @Multipart
     @POST(ApiUrl.CREATE_GRP)
     suspend fun grpCreate(@Part("user_id") user_id:RequestBody, @Part("accessToken") accessToken:RequestBody, @Part("group_name") group_name:RequestBody, @Part("members") members: RequestBody, @Part group_profile: MultipartBody.Part): BaseResponse

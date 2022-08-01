@@ -14,10 +14,11 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.ItemTouchHelper.*
 import androidx.recyclerview.widget.RecyclerView
 import com.application.smartstation.R
+import com.application.smartstation.ui.model.ChatDetailsRes
 import com.application.smartstation.util.AndroidUtils
 import com.application.smartstation.util.SwipeControllerActions
 
-class MessageSwipeReplyView(private val context: Context, private val swipeControllerActions: SwipeControllerActions) :
+class MessageSwipeReplyView(private val context: Context, private val list:ArrayList<ChatDetailsRes>, private val swipeControllerActions: SwipeControllerActions) :
     ItemTouchHelper.Callback() {
 
     private lateinit var imageDrawable: Drawable
@@ -34,10 +35,17 @@ class MessageSwipeReplyView(private val context: Context, private val swipeContr
     private var startTracking = false
 
     override fun getMovementFlags(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder): Int {
-        mView = viewHolder.itemView
-        imageDrawable = context.getDrawable(R.drawable.ic_reply_black_24dp)!!
-        shareRound = context.getDrawable(R.drawable.ic_round_shape)!!
-        return ItemTouchHelper.Callback.makeMovementFlags(ACTION_STATE_IDLE, RIGHT)
+        if (!list.isNullOrEmpty()) {
+            if (!list[viewHolder.adapterPosition].type.equals("date")) {
+                mView = viewHolder.itemView
+                imageDrawable = context.getDrawable(R.drawable.ic_reply_black_24dp)!!
+                shareRound = context.getDrawable(R.drawable.ic_round_shape)!!
+                return ItemTouchHelper.Callback.makeMovementFlags(ACTION_STATE_IDLE, RIGHT)
+            }else{
+                return makeMovementFlags(0, 0)
+            }
+        }
+        return makeMovementFlags(0, 0)
     }
 
     override fun onMove(
@@ -98,6 +106,7 @@ class MessageSwipeReplyView(private val context: Context, private val swipeContr
         if (currentItemViewHolder == null) {
             return
         }
+
         val translationX = mView.translationX
         val newTime = System.currentTimeMillis()
         val dt = Math.min(17, newTime - lastReplyButtonAnimationTime)

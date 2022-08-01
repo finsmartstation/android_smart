@@ -5,22 +5,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
+    android:background="@color/view_chat_info"
     tools:context=".ui.activity.ChatInfoActivity">
 
-    <ImageView
-        android:id="@+id/imageView2"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:scaleType="centerCrop"
-        android:alpha="0.4"
-        android:src="@drawable/ic_splash_bg_use" />
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appBarLayout"
         android:layout_width="match_parent"
-        android:fitsSystemWindows="true"
         android:layout_height="wrap_content"
+        android:fitsSystemWindows="true"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
         >
 
@@ -29,47 +22,46 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:fitsSystemWindows="true"
-            app:layout_scrollFlags="scroll|exitUntilCollapsed">
+            app:layout_scrollFlags="scroll|exitUntilCollapsed|snap">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginTop="70dp"
+                android:layout_marginTop="80dp"
                 android:background="@color/white"
                 android:orientation="vertical"
                 app:layout_collapseMode="none">
 
-                <de.hdodenhof.circleimageview.CircleImageView
+                <com.google.android.material.imageview.ShapeableImageView
                     android:layout_width="100dp"
                     android:layout_height="100dp"
                     android:id="@id/imgProfile"
                     android:layout_gravity="center"
-                    android:layout_margin="16dp"
-                    android:src="@drawable/ic_default"
+                    android:layout_margin="26dp"
+                    app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize16Percent"
                     />
 
                 <com.vanniktech.emoji.EmojiTextView
                     android:id="@+id/txtName"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:layout_gravity="center"
                     android:layout_marginStart="26dp"
                     android:layout_marginEnd="26dp"
-                    android:layout_marginBottom="16dp"
                     android:layout_weight="1"
                     android:singleLine="true"
                     android:textStyle="bold"
                     android:fontFamily="@font/dinbold"
                     android:textAlignment="center"
                     android:textColor="@color/black"
-                    android:textSize="18sp" />
+                    android:textSize="20sp" />
 
             </LinearLayout>
 
             <androidx.appcompat.widget.Toolbar
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="70dp"
                 app:layout_collapseMode="pin"
                 android:background="@color/color_chat_popup_gray"
                 app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
@@ -133,15 +125,289 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scrollbars="none"
+        android:fillViewport="true"
+        android:clipToPadding="false"
+        android:layout_marginBottom="50dp"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         >
 
-        <TextView
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:text="This way, it will always be visible and when scrolled all the way upThis way, it will always be visible and when scrolled all the way upThis way, it will always be visible and when scrolled all the way upThis way, it will always be visible and when scrolled all the way upThis way, it will always be visible and when scrolled all the way upThis way, it will always be visible and when scrolled all the way upThis way, it will always be visible and when scrolled all the way upThis way, it will always be visible and when scrolled all the way upThis way, it will always be visible and when scrolled all the way upThis way, it will always be visible and when scrolled all the way upThis way, it will always be visible and when scrolled all the way upThis way, it will always be visible and when scrolled all the way upThis way, it will always be visible and when scrolled all the way upThis way, it will always be visible and when scrolled all the way upThis way, it will always be visible and when scrolled all the way upThis way, it will always be visible and when scrolled all the way upThis way, it will always be visible and when scrolled all the way upThis way, it will always be visible and when scrolled all the way upThis way, it will always be visible and when scrolled all the way upThis way, it will always be visible and when scrolled all the way upThis way, it will always be visible and when scrolled all the way upThis way, it will always be visible and when scrolled all the way upThis way, it will always be visible and when scrolled all the way upThis way, it will always be visible and when scrolled all the way upThis way, it will always be visible and when scrolled all the way upThis way, it will always be visible and when scrolled all the way upThis way, it will always be visible and when scrolled all the way upThis way, it will always be visible and when scrolled all the way upThis way, it will always be visible and when scrolled all the way upThis way, it will always be visible and when scrolled all the way upThis way, it will always be visible and when scrolled all the way upThis way, it will always be visible and when scrolled all the way upThis way, it will always be visible and when scrolled all the way upThis way, it will always be visible and when scrolled all the way upThis way, it will always be visible and when scrolled all the way upThis way, it will always be visible and when scrolled all the way upThis way, it will always be visible and when scrolled all the way upThis way, it will always be visible and when scrolled all the way upThis way, it will always be visible and when scrolled all the way upThis way, it will always be visible and when scrolled all the way upThis way, it will always be visible and when scrolled all the way upThis way, it will always be visible and when scrolled all the way upThis way, it will always be visible and when scrolled all the way upThis way, it will always be visible and when scrolled all the way upThis way, it will always be visible and when scrolled all the way upThis way, it will always be visible and when scrolled all the way upThis way, it will always be visible and when scrolled all the way upThis way, it will always be visible and when scrolled all the way upThis way, it will always be visible and when scrolled all the way upThis way, it will always be visible and when scrolled all the way upThis way, it will always be visible and when scrolled all the way upThis way, it will always be visible and when scrolled all the way upThis way, it will always be visible and when scrolled all the way upThis way, it will always be visible and when scrolled all the way upThis way, it will always be visible and when scrolled all the way upThis way, it will always be visible and when scrolled all the way upThis way, it will always be visible and when scrolled all the way upThis way, it will always be visible and when scrolled all the way upThis way, it will always be visible and when scrolled all the way upThis way, it will always be visible and when scrolled all the way upThis way, it will always be visible and when scrolled all the way upThis way, it will always be visible and when scrolled all the way upThis way, it will always be visible and when scrolled all the way upThis way, it will always be visible and when scrolled all the way upThis way, it will always be visible and when scrolled all the way upThis way, it will always be visible and when scrolled all the way upThis way, it will always be visible and when scrolled all the way up"
-            />
+            android:orientation="vertical"
+            android:layout_gravity="fill_vertical"
+            android:background="@color/white"
+            >
 
+            <com.application.smartstation.view.CustomTextViewBold
+                android:id="@+id/txtParticipants"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="26dp"
+                android:layout_marginEnd="26dp"
+                android:layout_marginStart="26dp"
+                android:layout_marginBottom="26dp"
+                android:singleLine="true"
+                android:textAlignment="center"
+                android:textColor="@color/txt_chat_info"
+                android:textSize="18sp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginStart="26dp"
+                android:layout_marginEnd="26dp"
+                android:gravity="center"
+                >
+
+                <LinearLayout
+                    android:id="@+id/llAudio"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginEnd="8dp"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    >
+
+                    <ImageView
+                        android:id="@+id/imgAudio"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:src="@drawable/ic_voice_chat_use"
+                        />
+
+                    <com.application.smartstation.view.CustomTextViewBold
+                        android:id="@+id/txtAudio"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="8dp"
+                        android:text="@string/audio"
+                        android:singleLine="true"
+                        android:textAlignment="center"
+                        android:textColor="@color/color_green"
+                        android:textSize="18sp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/llVideo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginStart="8dp"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    >
+
+                    <ImageView
+                        android:id="@+id/imgVideo"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:src="@drawable/ic_video_chat_use"
+                        />
+
+                    <com.application.smartstation.view.CustomTextViewBold
+                        android:id="@+id/txtVideo"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="8dp"
+                        android:text="@string/video"
+                        android:singleLine="true"
+                        android:textAlignment="center"
+                        android:textColor="@color/color_green"
+                        android:textSize="18sp" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="20dp"
+                android:layout_marginTop="26dp"
+                android:background="@color/view_chat_info"
+                />
+
+            <com.application.smartstation.view.CustomTextViewBold
+                android:id="@+id/txtAddDes"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="26dp"
+                android:layout_marginStart="26dp"
+                android:layout_marginEnd="26dp"
+                android:layout_marginBottom="26dp"
+                android:visibility="gone"
+                android:text="@string/add_desc_grp"
+                android:singleLine="true"
+                android:textColor="@color/black"
+                android:textSize="18sp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_margin="26dp"
+                android:visibility="visible"
+                >
+
+                <com.application.smartstation.view.CustomTextViewBold
+                    android:id="@+id/txtViewDes"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="6dp"
+                    android:textAlignment="textStart"
+                    android:textColor="@color/dec_chat_info"
+                    android:textSize="18sp" />
+
+                <com.application.smartstation.view.CustomTextViewBold
+                    android:id="@+id/txtDesTime"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:textAlignment="textStart"
+                    android:textColor="@color/dec_time_chat_info"
+                    android:textSize="18sp" />
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="20dp"
+                android:background="@color/view_chat_info"
+                />
+
+            <LinearLayout
+                android:id="@+id/llGrpPart"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                >
+
+            <com.application.smartstation.view.CustomTextViewBold
+                android:id="@+id/txtParticipants1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:layout_marginStart="26dp"
+                android:layout_marginEnd="26dp"
+                android:singleLine="true"
+                android:textColor="@color/txt_chat_info"
+                android:textSize="16sp" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:nestedScrollingEnabled="true"
+                android:id="@+id/rvChatInfo"
+                android:layout_margin="26dp"
+                />
+
+                <com.application.smartstation.view.CustomTextViewBold
+                    android:id="@+id/txtView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="26dp"
+                    android:layout_marginEnd="26dp"
+                    android:layout_marginBottom="26dp"
+                    android:visibility="gone"
+                    android:text="@string/view_all"
+                    android:gravity="center"
+                    android:singleLine="true"
+                    android:textColor="@color/color_green"
+                    android:textSize="16sp" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="20dp"
+                    android:background="@color/view_chat_info"
+                    />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/llExit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="26dp"
+                android:layout_marginStart="26dp"
+                android:layout_marginEnd="26dp"
+                >
+
+                <ImageView
+                    android:id="@+id/imgExit"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:src="@drawable/ic_exit_group"
+                    />
+
+                <com.application.smartstation.view.CustomTextViewBold
+                    android:id="@+id/txtExit"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="26dp"
+                    android:text="@string/exit"
+                    android:textColor="@color/red"
+                    android:layout_gravity="center"
+                    android:textSize="18sp" />
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="16dp"
+                android:layout_marginStart="26dp"
+                android:layout_marginEnd="26dp"
+                android:layout_marginBottom="26dp"
+                >
+
+                <ImageView
+                    android:id="@+id/imgReport"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:src="@drawable/ic_report_group"
+                    />
+
+                <com.application.smartstation.view.CustomTextViewBold
+                    android:id="@+id/txtReport"
+                    android:layout_width="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="26dp"
+                    android:text="@string/report_grp"
+                    android:textColor="@color/red"
+                    android:textSize="18sp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:background="@color/view_chat_info"
+                >
+
+                <ImageView
+                    android:layout_width="80dp"
+                    android:layout_height="50dp"
+                    android:layout_margin="16dp"
+                    android:src="@drawable/login_logo_use"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent" />
+
+
+            </LinearLayout>
+
+        </LinearLayout>
 
     </androidx.core.widget.NestedScrollView>
 

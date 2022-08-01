@@ -99,7 +99,7 @@ class SocketService: Service() {
         }
 
         fun offline(jsonObject: JSONObject) {
-            socket!!.emit("disconnect", jsonObject)
+            socket!!.emit("dis", jsonObject)
         }
 
         fun typingStatus(jsonObject: JSONObject) {

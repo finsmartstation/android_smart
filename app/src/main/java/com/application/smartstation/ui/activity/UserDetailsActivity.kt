@@ -46,7 +46,7 @@ class UserDetailsActivity : BaseActivity() {
         binding.rvContact.adapter = contactAdapter
 
         contactAdapter!!.onItemClick = { model ->
-            startActivity(Intent(this, ChatActivity::class.java).putExtra(Constants.REC_ID,model.user_id).putExtra(Constants.NAME,model.name).putExtra(Constants.PROFILE,model.profile_pic).putExtra(Constants.CHAT_TYPE,"private"))
+            startActivity(Intent(this, ChatActivity::class.java).putExtra(Constants.REC_ID,model.user_id).putExtra(Constants.NAME,model.name).putExtra(Constants.PROFILE,model.profile_pic))
         }
 
         getUserDetails()

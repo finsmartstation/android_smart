@@ -25,6 +25,9 @@ class ChatListRes(var list:ArrayList<ChatDetailsRes>)
 class ChatDetailsRes(var id:String, var date:String, var senter_id:String, var receiver_id:String, var message:String, var message_type:String, var message_status:String, var room:String, var type:String, var name:String)
 class OnlineRes(var status:Boolean, var message:String,var statuscode:String, var online_status:String, var last_seen:String)
 class TypingRes(var status:Boolean, var message:String,var statuscode:String, var typing:String, var user_id:String)
+class GrpUserListRes(var status:Boolean, var message:String,var statuscode:String,var group_name:String, var group_profile:String, var number_of_members:String, var data:ArrayList<UserListGrp>)
+class UserListGrp(var user_id: String, var username:String, var type:String, var about:String, var profile_pic:String)
+
 
 class SendMsgResponse(var status:Boolean, var message:String)
 class PostResponse(var ip:String)

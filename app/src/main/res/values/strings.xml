@@ -1166,7 +1166,17 @@
     <string name="type_group_subject">Type group subject here ...</string>
     <string name="provide_a_grp">Provide a group subject and optional group icon</string>
     <string name="participant">Participants :</string>
+    <string name="participants">participants</string>
     <string name="please_enter_grp_name">Please enter group name</string>
     <string name="contact_info">Contact Info</string>
+    <string name="audio">Audio</string>
+    <string name="video">Video</string>
+    <string name="add_desc_grp">Add Group Description</string>
+    <string name="view_all">View all</string>
+    <string name="exit">Exit group</string>
+    <string name="report_grp">Report group</string>
+    <string name="group">Group</string>
+    <string name="show_more">Show more</string>
+    <string name="group_info">Group Info</string>
 
 </resources>
