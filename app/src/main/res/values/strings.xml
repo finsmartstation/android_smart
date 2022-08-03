@@ -1142,7 +1142,7 @@
     <string name="disconnected_from">Disconnected from</string>
     <string name="reconnecting_to">Reconnecting to</string>
     <string name="reconnecting">Reconnecting</string>
-    <string name="firebase_server_key">AAAAnqJdfqU:APA91bFg0A-Gs1ODpHriOXCYYQveZgZFfgmXuJ-qqh8K59WvREMQQOzyRT0GcLRKCVXZZw-6CRbGT9iAWAckNTDAYdCU9Vxh7zUFIC_juw7wuxzcav3u4YqrE3mjllVqG-F_R020aep0</string>
+    <string name="firebase_server_key">AAAAqAVg_xA:APA91bFC0G8FU6RNICVlHW6ME-6lnhFFZdHZivK_8N6iO1D6RUutHi2goXNEZnyI5eRNd3gu-c99tkegoaj2StuK9Mphsa-Tn73xrTPjjfLEGXmzJGVXWjQULaU0_oNers7iZi2eZE--</string>
     <string name="joined">" joined"</string>
     <string name="audio_connected">Audio Connected</string>
     <string name="audio_unpublished">Audio Unpublished</string>

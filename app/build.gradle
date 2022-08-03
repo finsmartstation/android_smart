@@ -26,8 +26,8 @@ android {
 
     productFlavors {
         dev {
-            buildConfigField "String", "APP_BASE_URL", "\"https://finsmartstation.com\""
-            buildConfigField "String", "SOCKET_BASE_URL", "\"https://newsockettest.herokuapp.com\""
+//            buildConfigField "String", "APP_BASE_URL", "\"https://finsmartstation.com\""
+//            buildConfigField "String", "SOCKET_BASE_URL", "\"https://newsockettest.herokuapp.com\""
         }
     }
 
@@ -35,7 +35,6 @@ android {
         debug{
             buildConfigField "String", "APP_BASE_URL", "\"http://ec2-3-13-92-3.us-east-2.compute.amazonaws.com\""
             buildConfigField "String", "SOCKET_BASE_URL", "\"http://ec2-3-13-92-3.us-east-2.compute.amazonaws.com:3000\""
-//            buildConfigField "String", "APP_BASE_URL", "\"https://smart-station.000webhostapp.com\""
         }
         release {
             minifyEnabled false
@@ -195,7 +194,7 @@ dependencies {
     //twilio
     implementation 'com.twilio:video-android:5.10.1'
 
-    //
+    //animation calling
     implementation 'pl.bclogic:pulsator4droid:1.0.3'
 
     //firebase

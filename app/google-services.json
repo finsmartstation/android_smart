@@ -1,34 +1,42 @@
 {
   "project_info": {
-    "project_number": "681328869029",
-    "project_id": "smartstation-aacb7",
-    "storage_bucket": "smartstation-aacb7.appspot.com"
+    "project_number": "721644748560",
+    "firebase_url": "https://smartstation-a1330-default-rtdb.firebaseio.com",
+    "project_id": "smartstation-a1330",
+    "storage_bucket": "smartstation-a1330.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:681328869029:android:257d9cd0f6e99f8a69574c",
+        "mobilesdk_app_id": "1:721644748560:android:fd5d662a1204854301af95",
         "android_client_info": {
           "package_name": "com.application.smartstation"
         }
       },
       "oauth_client": [
         {
-          "client_id": "681328869029-1dr56scc0iuu5hkn4ghj2tdiut27ru7k.apps.googleusercontent.com",
+          "client_id": "721644748560-v4353s3jsfjt221j36mjtlsaea4vdh9c.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyDgOGbwnATn6cd2EJv8oBbk035neeu6xX4"
+          "current_key": "AIzaSyCWdnFPWsTvGDmZUC_MEZ9PBYbJAcMY4Ro"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "681328869029-1dr56scc0iuu5hkn4ghj2tdiut27ru7k.apps.googleusercontent.com",
+              "client_id": "721644748560-v4353s3jsfjt221j36mjtlsaea4vdh9c.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "721644748560-k2fquftm0anhne45d5kvk409ajaupeal.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "finsmart2.SmartStation"
+              }
             }
           ]
         }

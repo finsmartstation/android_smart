@@ -25,7 +25,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            app:pulse_count="4"
+            app:pulse_count="1"
             app:pulse_duration="10000"
             app:pulse_repeat="1000"
             app:pulse_color="@color/white"
