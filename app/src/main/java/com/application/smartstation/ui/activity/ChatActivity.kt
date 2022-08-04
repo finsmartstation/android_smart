@@ -127,9 +127,12 @@ class ChatActivity : BaseActivity(),ImageVideoSelectorDialog.Action {
         }
 
         binding.ilHeader.rlChat.setOnClickListener {
-            startActivity(Intent(this,ChatInfoActivity::class.java)
-                .putExtra(Constants.NAME,receiverName).putExtra(Constants.PROFILE_PIC,receiverProfile)
-                .putExtra(Constants.CHAT_TYPE,chatType).putExtra(Constants.ROOM,room))
+            if (!chatType.equals("private")) {
+                startActivity(Intent(this, ChatInfoActivity::class.java)
+                    .putExtra(Constants.NAME, receiverName)
+                    .putExtra(Constants.PROFILE_PIC, receiverProfile)
+                    .putExtra(Constants.CHAT_TYPE, chatType).putExtra(Constants.ROOM, room))
+            }
         }
 
         binding.imgEmoji.setOnClickListener {

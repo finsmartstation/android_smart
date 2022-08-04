@@ -21,6 +21,8 @@ import com.application.smartstation.databinding.ActivityCallBinding
 import com.application.smartstation.service.ApiRequest
 import com.application.smartstation.service.Callback
 import com.application.smartstation.util.*
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.database.*
 import com.twilio.video.*
@@ -162,6 +164,7 @@ class CallActivity : BaseActivity() {
 
     }
 
+    @RequiresApi(Build.VERSION_CODES.M)
     private fun initView() {
 
         identity = UtilsDefault.getSharedPreferenceString(Constants.USER_ID)
@@ -207,6 +210,7 @@ class CallActivity : BaseActivity() {
             })
     }
 
+    @SuppressLint("SetTextI18n")
     private fun showCallingDialog() {
         binding.callingUserInfoLayout.setVisibility(View.VISIBLE)
         binding.callingActionButtons.setVisibility(View.GONE)
@@ -258,9 +262,8 @@ class CallActivity : BaseActivity() {
         } else if (callStatus == callReceive) {
             binding.receiveDisconnectLayout.setVisibility(View.VISIBLE)
             binding.cancelCall.setVisibility(View.GONE)
-            binding.callingStatusText.setText("Calling you")
-            Send_notification(callRinging,
-                "Ringing...")
+            binding.callingStatusText.text = "Calling you..."
+            Send_notification(callRinging, "Ringing...")
         }
 
     }
@@ -340,6 +343,7 @@ class CallActivity : BaseActivity() {
         return object : Room.Listener {
             override fun onConnected(room: Room) {
                 localParticipant = room.localParticipant
+                Log.d(TAG, "onConnected: "+room.remoteParticipants.count())
                 binding.videoView.videoStatusTextView.setText(getString(R.string.connected_to) + " " + callerName)
                 binding.callingStatusText.setText(getString(R.string.connected))
                 title = room.name
@@ -608,6 +612,13 @@ class CallActivity : BaseActivity() {
             callStatus = intent.getStringExtra(Constants.STATUS)
             callType = intent.getStringExtra(Constants.CALL_TYPE)
             roomName = intent.getStringExtra(Constants.ROOM_NAME)
+
+        }
+
+        if (!callerImage.isNullOrEmpty()){
+            Glide.with(this).load(callerImage).placeholder(R.drawable.ic_default).error(R.drawable.ic_default).diskCacheStrategy(
+                DiskCacheStrategy.DATA)
+                .into(binding.userimage)
         }
         do_action_on_status()
     }
@@ -985,7 +996,7 @@ class CallActivity : BaseActivity() {
         audioManager!!.isSpeakerphoneOn = isSpeakerPhoneEnabled
         if (room != null) {
             binding.videoView.reconnectingProgressBar.setVisibility(if (room!!.state != Room.State.RECONNECTING) View.GONE else View.VISIBLE)
-            binding.videoView.videoStatusTextView.setText(getString(R.string.connected_to) + " " + callerName)
+//            binding.videoView.videoStatusTextView.setText(getString(R.string.connected_to) + " " + callerName)
         }
         super.onStart()
     }

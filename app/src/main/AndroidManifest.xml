@@ -2,11 +2,13 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.application.smartstation">
 
+    <uses-sdk
+        android:maxSdkVersion="32"
+        android:minSdkVersion="21" />
+
     <queries>
         <package android:name="com.google.android.apps.authenticator2" />
     </queries>
-
-    <uses-sdk android:minSdkVersion="21" android:maxSdkVersion="32"/>
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
@@ -46,6 +48,9 @@
         android:roundIcon="@mipmap/app_logo"
         android:supportsRtl="true"
         android:theme="@style/Theme.SmartStation">
+        <activity
+            android:name=".ui.activity.ExtraAddGroupActivity"
+            android:exported="false" />
         <activity
             android:name=".ui.activity.ChatInfoActivity"
             android:exported="false" />

@@ -299,6 +299,39 @@
                 android:textColor="@color/txt_chat_info"
                 android:textSize="16sp" />
 
+                <LinearLayout
+                    android:id="@+id/llAddContact"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="26dp"
+                    android:layout_marginStart="26dp"
+                    android:layout_marginEnd="26dp"
+                    android:gravity="center"
+                    android:visibility="gone"
+                    >
+
+                    <ImageView
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:src="@drawable/ic_plus"
+                        app:tint="@color/color_green"
+                        android:padding="4dp"
+                        />
+
+                    <com.application.smartstation.view.CustomTextViewBold
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/add_participants"
+                        android:layout_marginStart="8dp"
+                        android:singleLine="true"
+                        android:textColor="@color/black"
+                        android:textSize="18sp" />
+
+                </LinearLayout>
+
+
+
             <androidx.recyclerview.widget.RecyclerView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

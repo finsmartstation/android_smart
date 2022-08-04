@@ -100,6 +100,9 @@ interface ApiService {
     @POST(ApiUrl.GET_GRP_USER_LIST)
     suspend fun getGrpUserList(@Body inputParams: InputParams): GrpUserListRes
 
+    @POST(ApiUrl.ADD_GRP_USER)
+    suspend fun addGrpUser(@Body inputParams: InputParams): BaseResponse
+
     @Multipart
     @POST(ApiUrl.CREATE_GRP)
     suspend fun grpCreate(@Part("user_id") user_id:RequestBody, @Part("accessToken") accessToken:RequestBody, @Part("group_name") group_name:RequestBody, @Part("members") members: RequestBody, @Part group_profile: MultipartBody.Part): BaseResponse

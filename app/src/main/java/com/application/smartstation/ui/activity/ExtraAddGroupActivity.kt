@@ -1,16 +1,14 @@
 package com.application.smartstation.ui.activity
 
 import android.content.Intent
-import android.icu.lang.UCharacter.GraphemeClusterBreak.T
 import android.os.Bundle
-import android.os.Parcelable
 import android.util.Log
 import android.view.View
 import androidx.activity.viewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.application.smartstation.R
-import com.application.smartstation.databinding.ActivityCreateGroupBinding
+import com.application.smartstation.databinding.ActivityExtraAddGroupBinding
 import com.application.smartstation.service.Status
 import com.application.smartstation.ui.adapter.AddGroupAdapter
 import com.application.smartstation.ui.adapter.ContactGroupAdapter
@@ -21,13 +19,11 @@ import com.application.smartstation.util.UtilsDefault
 import com.application.smartstation.util.viewBinding
 import com.application.smartstation.viewmodel.ApiViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import java.io.Serializable
-
 
 @AndroidEntryPoint
-class CreateGroupActivity : BaseActivity() {
+class ExtraAddGroupActivity : BaseActivity() {
 
-    val binding: ActivityCreateGroupBinding by viewBinding()
+    val binding: ActivityExtraAddGroupBinding by viewBinding()
     val apiViewModel: ApiViewModel by viewModels()
     var list:ArrayList<DataUserList> = ArrayList()
     companion object{
@@ -35,12 +31,13 @@ class CreateGroupActivity : BaseActivity() {
     }
     var contactAdapter: ContactGroupAdapter? = null
     var addGrpAdapter: AddGroupAdapter? = null
-    var layoutManager:LinearLayoutManager? = null
+    var layoutManager: LinearLayoutManager? = null
     var user = ""
+    var room = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_create_group)
+        setContentView(R.layout.activity_extra_add_group)
         initView()
         setOnClickListener()
     }
@@ -55,6 +52,10 @@ class CreateGroupActivity : BaseActivity() {
 
         contactAdapter!!.onItemClick = { model,pos ->
             addGrp(model,pos)
+        }
+
+        if (intent != null){
+            room = intent.getStringExtra("room")!!
         }
 
         user = UtilsDefault.getSharedPreferenceString(Constants.USER_ID)!!
@@ -98,7 +99,7 @@ class CreateGroupActivity : BaseActivity() {
             user = user+","+model.user_id
             Log.d("TAG", "addGrp: "+user)
         }else{
-            for (i in listAdd){
+            for (i in CreateGroupActivity.listAdd){
                 if (model.user_id.equals(i.user_id)){
                     listAdd.remove(i)
                     break
@@ -106,7 +107,7 @@ class CreateGroupActivity : BaseActivity() {
             }
             list.set(pos,
                 DataUserList(model.user_id, model.name, model.profile_pic, model.about, false))
-           user = user.replace(","+model.user_id,"")
+            user = user.replace(","+model.user_id,"")
             Log.d("TAG", "addGrp: "+user)
         }
         contactAdapter!!.setChats(pos)
@@ -122,24 +123,48 @@ class CreateGroupActivity : BaseActivity() {
 
     private fun setOnClickListener() {
         binding.ilHeader.imgBack.setOnClickListener {
-           onBackPressed()
+            onBackPressed()
         }
 
         binding.fbSelectGrp.setOnClickListener {
-            if (!user.isNullOrEmpty() && !user.equals(UtilsDefault.getSharedPreferenceString(Constants.USER_ID))) {
+            if (!user.isNullOrEmpty() && !user.equals(UtilsDefault.getSharedPreferenceString(
+                    Constants.USER_ID))) {
                 user = user.replace(UtilsDefault.getSharedPreferenceString(Constants.USER_ID)+",","")
-                createGrp(user,listAdd)
+                createGrp(user)
             }else{
                 toast("Please select user")
             }
         }
     }
 
-    private fun createGrp(user: String, listAdd: ArrayList<DataUserList>) {
-        val intent = Intent(this,AddGroupActivity::class.java)
-        intent.putExtra("members",user)
-        intent.putExtra("type",1)
-        startActivity(intent)
+    private fun createGrp(user: String) {
+        val inputParams = InputParams()
+        inputParams.user_id = UtilsDefault.getSharedPreferenceString(Constants.USER_ID)
+        inputParams.accessToken = UtilsDefault.getSharedPreferenceString(Constants.ACCESS_TOKEN)
+        inputParams.group_id = room
+        inputParams.members = user
+
+        apiViewModel.addGrpUser(inputParams).observe(this, Observer {
+            it.let {
+                when(it.status){
+                    Status.LOADING -> {
+                        showProgress()
+                    }
+                    Status.SUCCESS -> {
+                        dismissProgress()
+                        if (it.data!!.status){
+                            finish()
+                        }else{
+                            toast(it.data.message)
+                        }
+                    }
+                    Status.ERROR -> {
+                        dismissProgress()
+                        toast(it.message!!)
+                }
+                }
+            }
+        })
     }
 
     private fun getUserDetails() {
@@ -157,7 +182,15 @@ class CreateGroupActivity : BaseActivity() {
                         dismissProgress()
                         if (it.data!!.status){
                             list = it.data.data
-                            if(list.isNotEmpty()) {
+                            if(!list.isNullOrEmpty()) {
+                                for (i in 0 until ChatInfoActivity.list.size){
+                                    for (j in 0 until list.size){
+                                        if (ChatInfoActivity.list[i].user_id.equals(list[j].user_id)){
+                                            list.set(j,
+                                                DataUserList(list[j].user_id, list[j].name, list[j].profile_pic, list[j].about, false,true))
+                                        }
+                                    }
+                                }
                                 setData(list)
                             }
                         }else{

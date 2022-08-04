@@ -59,6 +59,14 @@ class ContactGroupAdapter(val context: Context) : RecyclerView.Adapter<ContactGr
                 binding.imgTick.visibility = View.GONE
             }
 
+            if (model.alreadySelected){
+                binding.flChat.isEnabled = false
+                binding.llGrpChat.setAlpha(0.3f)
+            }else{
+                binding.flChat.isEnabled = true
+                binding.llGrpChat.setAlpha(1f)
+            }
+
             Log.d("TAG", "onBindViewHolder: "+model.statusSelected)
 
         }

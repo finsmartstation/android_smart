@@ -19,7 +19,7 @@ class DataChatList(var id:String, var date:String, var message:String, var messa
 class GetMailListResponse(var status:Boolean, var message:String, var data:ArrayList<DataMailList>)
 class DataMailList(var id:String, var user_id:String, var datetime:String, var subject:String, var body:String, var mail_read_status:String, var profile_pic:String)
 class GetUserListResponse(var status:Boolean, var message:String, var data:ArrayList<DataUserList>)
-class DataUserList(var user_id:String, var name:String, var profile_pic:String, var about:String, var statusSelected:Boolean = false)
+class DataUserList(var user_id:String, var name:String, var profile_pic:String, var about:String, var statusSelected:Boolean = false, var alreadySelected:Boolean = false)
 class GetChatDetailsListResponse(var status:Boolean, var message:String, var data:ChatListRes)
 class ChatListRes(var list:ArrayList<ChatDetailsRes>)
 class ChatDetailsRes(var id:String, var date:String, var senter_id:String, var receiver_id:String, var message:String, var message_type:String, var message_status:String, var room:String, var type:String, var name:String)

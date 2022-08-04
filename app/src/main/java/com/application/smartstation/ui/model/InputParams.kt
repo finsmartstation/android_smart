@@ -53,4 +53,7 @@ class InputParams {
     //grp details
     var group_id:String? = null
 
+    //add user grp
+    var members:String? = null
+
 }

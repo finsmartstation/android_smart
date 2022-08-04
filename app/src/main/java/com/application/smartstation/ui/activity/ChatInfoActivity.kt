@@ -1,5 +1,6 @@
 package com.application.smartstation.ui.activity
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
@@ -34,7 +35,9 @@ class ChatInfoActivity : BaseActivity() {
     var profilePic = ""
     var chatType = ""
     var room = ""
-    var list = ArrayList<UserListGrp>()
+    companion object {
+        var list = ArrayList<UserListGrp>()
+    }
     var userListGrpAdapter: UserListGrpAdapter? = null
     var more = true
 
@@ -72,14 +75,6 @@ class ChatInfoActivity : BaseActivity() {
         binding.rvChatInfo.adapter = userListGrpAdapter
         binding.rvChatInfo.setHasFixedSize(false)
 
-        if (chatType.equals("private")) {
-            binding.toolbar.txtHeader.text = resources.getString(R.string.contact_info)
-            binding.llGrpPart.visibility = View.GONE
-        }else{
-            binding.toolbar.txtHeader.text = resources.getString(R.string.group_info)
-            binding.llGrpPart.visibility = View.VISIBLE
-            getUserListGrp()
-        }
 
         binding.appBarLayout.addOnOffsetChangedListener(object :
             AppBarLayout.OnOffsetChangedListener {
@@ -125,6 +120,15 @@ class ChatInfoActivity : BaseActivity() {
                                 setData(it.data.data)
                                 binding.txtParticipants.text =resources.getString(R.string.group)+" " +it.data.data.size+" "+resources.getString(R.string.participants)
                                 binding.txtParticipants1.text = it.data.data.size.toString()+" "+resources.getString(R.string.participants)
+                                for (i in 0 until it.data.data.size){
+                                    if (UtilsDefault.getSharedPreferenceString(Constants.USER_ID)!!.equals(it.data.data[i].user_id)){
+                                        if (it.data.data[i].type.equals("admin")){
+                                            binding.llAddContact.visibility = View.VISIBLE
+                                        }else{
+                                            binding.llAddContact.visibility = View.GONE
+                                        }
+                                    }
+                                }
                             }
                         }else{
                             toast(it.data.message)
@@ -169,6 +173,22 @@ class ChatInfoActivity : BaseActivity() {
 //                    userListGrpAdapter!!.setUser(list)
 //                }
 //            }
+        }
+
+        binding.llAddContact.setOnClickListener{
+            startActivity(Intent(this,ExtraAddGroupActivity::class.java).putExtra("room",room))
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (chatType.equals("private")) {
+            binding.toolbar.txtHeader.text = resources.getString(R.string.contact_info)
+            binding.llGrpPart.visibility = View.GONE
+        }else{
+            binding.toolbar.txtHeader.text = resources.getString(R.string.group_info)
+            binding.llGrpPart.visibility = View.VISIBLE
+            getUserListGrp()
         }
     }
 }
