@@ -131,23 +131,23 @@ class MainActivity : BaseActivity() {
             binding.edtSearch.setText("")
         }
 
-        binding.dlView.addDrawerListener(object : SimpleDrawerListener() {
-            override fun onDrawerSlide(drawer: View, slideOffset: Float) {
-                binding.llView.setX(binding.nvMenu.getWidth() * slideOffset)
-                val lp:RelativeLayout.LayoutParams = binding.llView.getLayoutParams() as RelativeLayout.LayoutParams
-                lp.height = drawer.height -
-                        (drawer.height * slideOffset * 0.3f).toInt()
-                lp.topMargin = (drawer.height - lp.height) / 2
-                binding.llView.setLayoutParams(lp)
-            }
+//        binding.dlView.addDrawerListener(object : SimpleDrawerListener() {
+//            override fun onDrawerSlide(drawer: View, slideOffset: Float) {
+//                binding.llView.setX(binding.nvMenu.getWidth() * slideOffset)
+//                val lp:RelativeLayout.LayoutParams = binding.llView.getLayoutParams() as RelativeLayout.LayoutParams
+//                lp.height = drawer.height -
+//                        (drawer.height * slideOffset * 0.3f).toInt()
+//                lp.topMargin = (drawer.height - lp.height) / 2
+//                binding.llView.setLayoutParams(lp)
+//            }
+//
+//            override fun onDrawerClosed(drawerView: View) {}
+//        }
+//        )
 
-            override fun onDrawerClosed(drawerView: View) {}
-        }
-        )
+//        binding.nvMenu.setNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
 
-        binding.nvMenu.setNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
-
-        binding.nvMenu.getHeaderView(0).txtUsername.text = "Fin Smart"
+//        binding.nvMenu.getHeaderView(0).txtUsername.text = "Fin Smart"
 
         UtilsDefault.initService(SocketService::class.java,this)
 
@@ -313,15 +313,15 @@ class MainActivity : BaseActivity() {
 //            } else {
 //                binding.dlView.openDrawer(binding.nvMenu)
 //            }
-            binding.imgMenu.visibility = View.INVISIBLE
+//            binding.imgMenu.visibility = View.INVISIBLE
             menuPopup(v)
         }
 
-        binding.nvMenu.getHeaderView(0).imgNavBack.setOnClickListener {
-            if (binding.dlView.isDrawerOpen(binding.nvMenu)) {
-                binding.dlView.closeDrawer(binding.nvMenu)
-            }
-        }
+//        binding.nvMenu.getHeaderView(0).imgNavBack.setOnClickListener {
+//            if (binding.dlView.isDrawerOpen(binding.nvMenu)) {
+//                binding.dlView.closeDrawer(binding.nvMenu)
+//            }
+//        }
     }
 
     fun menuPopup(v: View) {
@@ -336,6 +336,22 @@ class MainActivity : BaseActivity() {
         popupWindow.showAtLocation(v, Gravity.TOP or Gravity.LEFT, -100, -50)
 
         val bind = MenuPopupBinding.bind(popupView)
+
+        if (type.equals("chat")){
+            bind.txtNewGrp.visibility = View.VISIBLE
+            bind.imgNewGrp.visibility = View.VISIBLE
+            bind.txtStarMsg.visibility = View.VISIBLE
+            bind.imgStarMsg.visibility = View.VISIBLE
+            bind.txtSendMail.visibility = View.GONE
+            bind.imgSent.visibility = View.GONE
+        }else if (type.equals("mail")){
+            bind.txtNewGrp.visibility = View.GONE
+            bind.imgNewGrp.visibility = View.GONE
+            bind.txtStarMsg.visibility = View.GONE
+            bind.imgStarMsg.visibility = View.GONE
+            bind.txtSendMail.visibility = View.VISIBLE
+            bind.imgSent.visibility = View.VISIBLE
+        }
 
         bind.txtSettings.setOnClickListener {
             startActivity(Intent(this,SettingsActivity::class.java))
@@ -355,8 +371,8 @@ class MainActivity : BaseActivity() {
             logoutDialog()
         }
 
-        bind.txtAddContact.setOnClickListener {
-            startActivity(Intent(this,UserDetailsActivity::class.java))
+        bind.txtSendMail.setOnClickListener {
+            startActivity(Intent(this,SentMailActivity::class.java))
             binding.imgMenu.visibility = View.VISIBLE
             popupWindow.dismiss()
         }

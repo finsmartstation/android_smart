@@ -40,5 +40,10 @@ object ApiUrl {
     const val GET_GRP_DETAILS =API+"get_group_chat_details"
     const val ADD_GRP_USER =API+"add_group_member"
     const val GET_GRP_USER_LIST =API+"get_group_user_list"
+    const val COMPOSE_MAIL =API+"compose_mail"
+    const val SEND_MAIL =API+"send_mail_list"
+    const val GET_INBOX =API+"get_inbox_mail_details"
+    const val GET_SENT =API+"get_sent_mail_details"
+    const val DELETE_MAIL =API+"deleteEmail"
 
 }

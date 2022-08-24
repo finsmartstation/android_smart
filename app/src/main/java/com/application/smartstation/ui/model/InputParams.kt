@@ -56,4 +56,15 @@ class InputParams {
     //add user grp
     var members:String? = null
 
+    //compose mail
+    var to_mail:String? = null
+    var cc_mail:String? = null
+    var bcc_mail:String? = null
+    var subject:String? = null
+    var body:String? = null
+
+    //inbox details
+    var id:String? = null
+    var type:String? = null
+
 }

@@ -92,8 +92,6 @@ class ChatActivity : BaseActivity(),ImageVideoSelectorDialog.Action {
     var chatType = ""
     var CAMERA_MIC_PERMISSION_REQUEST_CODE = 791
     var imageVideoSelectorDialog: ImageVideoSelectorDialog? = null
-    var sendTypingIndication: DatabaseReference? = null
-    var receiveTypingIndication: DatabaseReference? = null
 
     val mimeTypes = arrayOf(
         "image/jpeg", // jpeg or jpg
@@ -202,26 +200,37 @@ class ChatActivity : BaseActivity(),ImageVideoSelectorDialog.Action {
     }
 
     private fun sendMessage(msg: String, type: String) {
+
         if (UtilsDefault.isOnline()) {
-            val jsonObject = JSONObject()
-            try {
-                jsonObject.put("sid", UtilsDefault.getSharedPreferenceString(Constants.USER_ID))
-                jsonObject.put("rid", receiverId)
-                jsonObject.put("type", type)
-                jsonObject.put("message", msg)
-                Log.d("TAG", "sendMessage: "+jsonObject)
-                emitters.sendMessage(jsonObject)
-                updateMessages(jsonObject)
-            } catch (e: java.lang.Exception) {
-                e.printStackTrace()
+            if (chatType.equals("private")) {
+                val jsonObject = JSONObject()
+                try {
+                    jsonObject.put("sid", UtilsDefault.getSharedPreferenceString(Constants.USER_ID))
+                    jsonObject.put("rid", receiverId)
+                    jsonObject.put("type", type)
+                    jsonObject.put("message", msg)
+                    Log.d("TAG", "sendMessage: " + jsonObject)
+                    emitters.sendMessage(jsonObject)
+                } catch (e: java.lang.Exception) {
+                    e.printStackTrace()
+                }
+            }else{
+                val jsonObject = JSONObject()
+                try {
+                    jsonObject.put("sid", UtilsDefault.getSharedPreferenceString(Constants.USER_ID))
+                    jsonObject.put("accessToken", UtilsDefault.getSharedPreferenceString(Constants.ACCESS_TOKEN))
+                    jsonObject.put("room", room)
+                    jsonObject.put("type", type)
+                    jsonObject.put("message", msg)
+                    Log.d("TAG", "sendMessage: " + jsonObject)
+                    emitters.sendMessage(jsonObject)
+                } catch (e: java.lang.Exception) {
+                    e.printStackTrace()
+                }
             }
             binding.edtChat.setText("")
 //            layoutManager!!.scrollToPosition(list.size - 1)
         }
-    }
-
-    private fun updateMessages(jsonObject: JSONObject) {
-
     }
 
     fun menuPopup(v: View?) {
@@ -297,6 +306,7 @@ class ChatActivity : BaseActivity(),ImageVideoSelectorDialog.Action {
             roomEmit(receiverId)
         }else{
             getGrpChatDetails()
+            grpRoomEmit(room)
         }
 
         runTimePermission = RunTimePermission(this)
@@ -478,6 +488,20 @@ class ChatActivity : BaseActivity(),ImageVideoSelectorDialog.Action {
             try {
                 jsonObject.put("sid", UtilsDefault.getSharedPreferenceString(Constants.USER_ID))
                 jsonObject.put("rid", receiverId)
+                Log.d("TAG", "room: "+jsonObject)
+                emitters.room(jsonObject)
+            } catch (e: java.lang.Exception) {
+                e.printStackTrace()
+            }
+        }
+    }
+
+    private fun grpRoomEmit(receiverId: String) {
+        if (UtilsDefault.isOnline()) {
+            val jsonObject = JSONObject()
+            try {
+                jsonObject.put("userid", UtilsDefault.getSharedPreferenceString(Constants.USER_ID))
+                jsonObject.put("room", receiverId)
                 Log.d("TAG", "room: "+jsonObject)
                 emitters.room(jsonObject)
             } catch (e: java.lang.Exception) {
@@ -676,11 +700,18 @@ class ChatActivity : BaseActivity(),ImageVideoSelectorDialog.Action {
     }
 
     fun sendTypingIndicator(indicate: Boolean) {
-        // if the type indicator is present then we remove it if not then we create the typing indicator
         if (indicate) {
-            typingEmit("1")
+           if (chatType.equals("private")) {
+               typingEmit("1")
+           }else{
+               typingGrpEmit("1")
+           }
         } else {
-            typingEmit("0")
+            if (chatType.equals("private")) {
+                typingEmit("0")
+            }else{
+                typingGrpEmit("0")
+            }
         }
     }
 
@@ -693,6 +724,21 @@ class ChatActivity : BaseActivity(),ImageVideoSelectorDialog.Action {
                 jsonObject.put("status", s)
                 Log.d("TAG", "typing: "+jsonObject)
                 emitters.typingStatus(jsonObject)
+            } catch (e: java.lang.Exception) {
+                e.printStackTrace()
+            }
+        }
+    }
+
+    fun typingGrpEmit(s: String) {
+        if (UtilsDefault.isOnline()) {
+            val jsonObject = JSONObject()
+            try {
+                jsonObject.put("sid", UtilsDefault.getSharedPreferenceString(Constants.USER_ID))
+                jsonObject.put("room", receiverId)
+                jsonObject.put("status", s)
+                Log.d("TAG", "typing: "+jsonObject)
+                emitters.typingGrpStatus(jsonObject)
             } catch (e: java.lang.Exception) {
                 e.printStackTrace()
             }
@@ -795,13 +841,26 @@ class ChatActivity : BaseActivity(),ImageVideoSelectorDialog.Action {
         val typingModel: TypingRes = gson.fromJson(jsonObject.toString(),
             TypingRes::class.java)
         if(typingModel.status){
-            if (typingModel.user_id.equals(receiverId)){
-                if(typingModel.typing.equals("1")){
-                    binding.ilHeader.txtStatus.visibility = View.GONE
-                    binding.ilHeader.txtTypingStatus.visibility = View.VISIBLE
-                }else{
-                    binding.ilHeader.txtStatus.visibility = View.VISIBLE
-                    binding.ilHeader.txtTypingStatus.visibility = View.GONE
+            if (chatType.equals("private")) {
+                if (typingModel.user_id.equals(receiverId)) {
+                    if (typingModel.typing.equals("1")) {
+                        binding.ilHeader.txtStatus.visibility = View.GONE
+                        binding.ilHeader.txtTypingStatus.visibility = View.VISIBLE
+                    } else {
+                        binding.ilHeader.txtStatus.visibility = View.VISIBLE
+                        binding.ilHeader.txtTypingStatus.visibility = View.GONE
+                    }
+                }
+            }else{
+                if (!typingModel.user_id.equals(UtilsDefault.getSharedPreferenceString(Constants.USER_ID))) {
+                    if (typingModel.typing.equals("1")) {
+                        binding.ilHeader.txtStatus.visibility = View.GONE
+                        binding.ilHeader.txtTypingStatus.visibility = View.VISIBLE
+                        binding.ilHeader.txtTypingStatus.text = typingModel.name+" "+resources.getString(R.string.typing)
+                    } else {
+                        binding.ilHeader.txtStatus.visibility = View.VISIBLE
+                        binding.ilHeader.txtTypingStatus.visibility = View.GONE
+                    }
                 }
             }
         }

@@ -3,7 +3,9 @@ package com.application.smartstation.service
 import com.application.smartstation.ui.model.*
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
+import retrofit2.Call
 import retrofit2.http.*
+
 
 interface ApiService {
 
@@ -103,6 +105,21 @@ interface ApiService {
     @POST(ApiUrl.ADD_GRP_USER)
     suspend fun addGrpUser(@Body inputParams: InputParams): BaseResponse
 
+    @POST(ApiUrl.COMPOSE_MAIL)
+    suspend fun composeMailWithoutImage(@Body inputParams: InputParams): BaseResponse
+
+    @POST(ApiUrl.SEND_MAIL)
+    suspend fun sendMail(@Body inputParams: InputParams): SendMailRes
+
+    @POST(ApiUrl.GET_INBOX)
+    suspend fun getInbox(@Body inputParams: InputParams): InboxDetailsRes
+
+    @POST(ApiUrl.GET_SENT)
+    suspend fun getSent(@Body inputParams: InputParams): InboxDetailsRes
+
+    @POST(ApiUrl.DELETE_MAIL)
+    suspend fun deleteMail(@Body inputParams: InputParams): BaseResponse
+
     @Multipart
     @POST(ApiUrl.CREATE_GRP)
     suspend fun grpCreate(@Part("user_id") user_id:RequestBody, @Part("accessToken") accessToken:RequestBody, @Part("group_name") group_name:RequestBody, @Part("members") members: RequestBody, @Part group_profile: MultipartBody.Part): BaseResponse
@@ -110,5 +127,9 @@ interface ApiService {
     @Multipart
     @POST(ApiUrl.FILE_UPLOAD)
     suspend fun fileUpload(@Part("user_id")user_id:RequestBody,@Part("accessToken")accessToken:RequestBody,@Part file: MultipartBody.Part): BaseResponse
+
+    @Multipart
+    @POST(ApiUrl.COMPOSE_MAIL)
+    suspend fun composeMail(@Part("user_id") user_id:RequestBody, @Part("accessToken") accessToken:RequestBody, @Part("to_mail") to_mail:RequestBody, @Part("cc_mail") cc_mail:RequestBody, @Part("bcc_mail") bcc_mail:RequestBody, @Part("subject") subject:RequestBody, @Part("body") body:RequestBody, @Part attachment: List<MultipartBody.Part?>): BaseResponse
 
 }

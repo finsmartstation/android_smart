@@ -5,11 +5,15 @@ import android.annotation.SuppressLint
 import android.app.*
 import android.content.*
 import android.content.res.Configuration
+import android.database.Cursor
 import android.graphics.BitmapFactory
 import android.media.RingtoneManager
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
+import android.net.Uri
+import android.os.AsyncTask
 import android.os.Build
+import android.os.Environment
 import android.preference.PreferenceManager
 import android.provider.Settings
 import android.text.Html
@@ -22,19 +26,23 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.NotificationCompat
 import com.application.smartstation.R
 import com.application.smartstation.app.App
+import com.application.smartstation.service.MailCallback
 import com.application.smartstation.service.background.SocketService
 import com.application.smartstation.ui.activity.MainActivity
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
-import java.io.UnsupportedEncodingException
+import java.io.*
 import java.math.BigDecimal
+import java.net.URL
 import java.net.URLConnection
 import java.security.MessageDigest
 import java.security.NoSuchAlgorithmException
 import java.text.DateFormat
 import java.text.DecimalFormat
-import java.text.ParseException
 import java.text.SimpleDateFormat
+import java.time.OffsetDateTime
+import java.time.format.DateTimeFormatter
+import java.time.temporal.ChronoUnit
 import java.util.*
 import java.util.regex.Matcher
 import java.util.regex.Pattern
@@ -637,12 +645,27 @@ object UtilsDefault {
         return  ""
     }
 
-    fun ticketTime(time:String) : String{
+    fun viewTime(time:String) : String{
         try {
             var date = time
-            var spf = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss")
+            var spf = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
             val newDate = spf.parse(date)
-            spf = SimpleDateFormat("MMM dd yyyy")
+            spf = SimpleDateFormat("MMM dd")
+            date = spf.format(newDate)
+            return date
+        }
+        catch (e:Exception){
+            e.printStackTrace()
+        }
+        return  ""
+    }
+
+    fun replyTime(time:String) : String{
+        try {
+            var date = time
+            var spf = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
+            val newDate = spf.parse(date)
+            spf = SimpleDateFormat("MMM dd, yyyy")
             date = spf.format(newDate)
             return date
         }
@@ -840,6 +863,11 @@ object UtilsDefault {
         return mimeType != null && mimeType.startsWith("image")
     }
 
+    fun isPdfFile(path:String):Boolean{
+        val mimeType: String = URLConnection.guessContentTypeFromName(path)
+        return mimeType != null && mimeType.startsWith("application/pdf")
+    }
+
     fun localTimeConvert(date:String):String?{
         val df = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH)
         df.setTimeZone(TimeZone.getTimeZone("GMT")) // missing line
@@ -850,6 +878,17 @@ object UtilsDefault {
         writeDate.timeZone = TimeZone.getTimeZone(tz.id)
         val s = writeDate.format(date)
         return s
+    }
+
+    @SuppressLint("NewApi")
+    fun localTimeConvertMail(date:String):String?{
+
+        val odt: OffsetDateTime = OffsetDateTime.parse(date)
+        val odtTruncatedToWholeSecond = odt.truncatedTo(ChronoUnit.SECONDS)
+        val output = odtTruncatedToWholeSecond.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME)
+            .replace("T", " ")
+
+        return output
     }
 
     fun dateLastSeen(date:String):String{
@@ -889,6 +928,69 @@ object UtilsDefault {
         }
     }
 
+    fun dateMail(date:String):String{
+        val dateTime = SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(date)
+        val calendar = Calendar.getInstance()
+        calendar.time = dateTime
+        val today = Calendar.getInstance()
+        val yesterday = Calendar.getInstance()
+        yesterday.add(Calendar.DATE, -1)
+        val one = Calendar.getInstance()
+        one.add(Calendar.DATE, -2)
+        val two = Calendar.getInstance()
+        two.add(Calendar.DATE, -3)
+        val three = Calendar.getInstance()
+        three.add(Calendar.DATE, -4)
+        val four = Calendar.getInstance()
+        four.add(Calendar.DATE, -5)
+        val five = Calendar.getInstance()
+        five.add(Calendar.DATE, -6)
+
+        return if (calendar[Calendar.YEAR] == today[Calendar.YEAR] && calendar[Calendar.DAY_OF_YEAR] == today[Calendar.DAY_OF_YEAR]) {
+           "Today - "+dateConvert(date)
+        } else if (calendar[Calendar.YEAR] == yesterday[Calendar.YEAR] && calendar[Calendar.DAY_OF_YEAR] == yesterday[Calendar.DAY_OF_YEAR]) {
+            "Yesterday - "+dateConvert(date)
+        } else if (calendar[Calendar.YEAR] == one[Calendar.YEAR] && calendar[Calendar.DAY_OF_YEAR] == one[Calendar.DAY_OF_YEAR]) {
+            dayNameMail(date)+" - "+dateConvert(date)
+        } else if (calendar[Calendar.YEAR] == two[Calendar.YEAR] && calendar[Calendar.DAY_OF_YEAR] == two[Calendar.DAY_OF_YEAR]) {
+            dayNameMail(date)+" - "+dateConvert(date)
+        } else if (calendar[Calendar.YEAR] == three[Calendar.YEAR] && calendar[Calendar.DAY_OF_YEAR] == three[Calendar.DAY_OF_YEAR]) {
+            dayNameMail(date)+" - "+dateConvert(date)
+        }else if (calendar[Calendar.YEAR] == four[Calendar.YEAR] && calendar[Calendar.DAY_OF_YEAR] == four[Calendar.DAY_OF_YEAR]) {
+            dayNameMail(date)+" - "+dateConvert(date)
+        }else if (calendar[Calendar.YEAR] == five[Calendar.YEAR] && calendar[Calendar.DAY_OF_YEAR] == five[Calendar.DAY_OF_YEAR]) {
+            dayNameMail(date)+" - "+dateConvert(date)
+        } else {
+            dateConvert(date)
+        }
+    }
+
+    fun dayNameMail(dates:String):String?{
+        val sdf = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
+        var date: Date? = null
+        try {
+            date = sdf.parse(dates)
+        } catch (ex: java.lang.Exception) {
+            ex.printStackTrace()
+        }
+        val formatter = SimpleDateFormat("EEEE")
+        val newFormat = formatter.format(date)
+        return newFormat
+    }
+
+    fun replyDayMail(dates:String):String?{
+        val sdf = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
+        var date: Date? = null
+        try {
+            date = sdf.parse(dates)
+        } catch (ex: java.lang.Exception) {
+            ex.printStackTrace()
+        }
+        val formatter = SimpleDateFormat("EEE")
+        val newFormat = formatter.format(date)
+        return newFormat
+    }
+
     fun dayName(dates:String):String?{
         val sdf = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
         var date: Date? = null
@@ -913,6 +1015,158 @@ object UtilsDefault {
         val formatter = SimpleDateFormat("dd-MMM-yyyy")
         val newFormat = formatter.format(date)
         return newFormat
+    }
+
+//    fun downloadFile(url: String) {
+//        try {
+//            val u = URL(url)
+//            val conn: URLConnection = u.openConnection()
+//            val contentLength = conn.contentLength
+//            val stream = DataInputStream(u.openStream())
+//            val buffer = ByteArray(contentLength)
+//            stream.readFully(buffer)
+//            stream.close()
+//            val myStuff =
+//                File(
+//                    Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM),
+//                    "com.smartstation"+"/Smart Station/Media/Smart Station Download"
+//                )
+//            if (!myStuff.exists())
+//                myStuff.mkdirs()
+//            val fos = DataOutputStream(FileOutputStream(myStuff))
+//            fos.write(buffer)
+//            fos.flush()
+//            fos.close()
+//            Log.d("TAG", "downloadFile: "+myStuff.absolutePath)
+//        } catch (e: FileNotFoundException) {
+//            return  // swallow a 404
+//        } catch (e: IOException) {
+//            return  // swallow a 404
+//        }
+//    }
+
+    class downloadFile() : AsyncTask<String, Void, String>() {
+        override fun doInBackground(vararg f_url: String): String? {
+            var count: Int
+            try {
+                val url = URL(f_url[0])
+                val uri: Uri = Uri.parse(url.toString())
+                val connection = url.openConnection()
+                connection.connect()
+
+                // this will be useful so that you can show a tipical 0-100%
+                // progress bar
+                val lenghtOfFile = connection.contentLength
+
+                // download the file
+                val input: InputStream = BufferedInputStream(url.openStream(),
+                    8192)
+                val file =
+                    File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).absolutePath,"com.smartstation"+"/Smart Station/Media/Smart Station Download")
+                if (!file.exists()) {
+                    file.mkdirs()
+                }
+                val file1 =
+                    File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).absolutePath,"com.smartstation"+"/Smart Station/Media/Smart Station Download/"+uri.lastPathSegment)
+
+                // Output stream
+                val output: OutputStream = FileOutputStream(file1)
+                val data = ByteArray(1024)
+                var total: Long = 0
+                while (input.read(data).also { count = it } != -1) {
+                    total += count.toLong()
+                    // publishing the progress....
+                    // After this onProgressUpdate will be called
+//                    publishProgress("" + (total * 100 / lenghtOfFile).toInt())
+
+                    // writing data to file
+                    output.write(data, 0, count)
+                }
+
+                // flushing output
+                output.flush()
+
+                // closing streams
+                output.close()
+                input.close()
+            } catch (e: java.lang.Exception) {
+                Log.e("Error: ", e.message!!)
+            }
+            return null
+        }
+
+        override fun onPreExecute() {
+            super.onPreExecute()
+            // ...
+        }
+
+        override fun onPostExecute(result: String?) {
+            super.onPostExecute(result)
+            // ...
+        }
+    }
+
+    fun downloadFile(context: Context,url: String,mailCallback: MailCallback){
+        val file =
+            File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM),"com.smartstation"+"/Smart Station/Media/Smart Station Download")
+        if (!file.exists()) {
+            file.mkdirs()
+        }
+
+
+        val mgr = context.getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
+        val downloadUri: Uri = Uri.parse(url)
+        val file1 =
+            File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).absolutePath+"/com.smartstation"+"/Smart Station/Media/Smart Station Download/"+downloadUri.lastPathSegment)
+
+        val request = DownloadManager.Request(
+            downloadUri
+        )
+        val dm = context.getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
+        request.setAllowedNetworkTypes(
+            DownloadManager.Request.NETWORK_WIFI
+                    or DownloadManager.Request.NETWORK_MOBILE
+        )
+            .setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE)
+            .setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
+            .setAllowedOverRoaming(false)
+            .setDestinationUri(Uri.fromFile(file1))
+        val s = mgr.enqueue(request)
+
+        val receiver: BroadcastReceiver = object : BroadcastReceiver() {
+            @SuppressLint("Range")
+            override fun onReceive(context: Context, intent: Intent) {
+                var intent = intent
+                val action = intent.action
+                if (DownloadManager.ACTION_DOWNLOAD_COMPLETE == action) {
+                    if (intent.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, 0) != s) {
+                        // Quick exit - its not our download!
+                        return
+                    }
+                    val query = DownloadManager.Query()
+                    query.setFilterById(s)
+                    val c: Cursor = dm.query(query)
+                    if (c.moveToFirst()) {
+                        val columnIndex: Int = c
+                            .getColumnIndex(DownloadManager.COLUMN_STATUS)
+                        if (DownloadManager.STATUS_SUCCESSFUL == c
+                                .getInt(columnIndex)
+                        ) {
+                           return mailCallback.success(file1.absolutePath,true)
+                        } else {
+                            return mailCallback.success("",false)
+                        }
+                    } else {
+                        return mailCallback.success("",false)
+                    }
+                    context.unregisterReceiver(this)
+                }
+            }
+        }
+
+        context.registerReceiver(receiver, IntentFilter(
+            DownloadManager.ACTION_DOWNLOAD_COMPLETE))
+
     }
 
 }

@@ -1,5 +1,6 @@
 package com.application.smartstation.util;
 
+import android.annotation.SuppressLint;
 import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.Context;
@@ -7,14 +8,21 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.database.DatabaseUtils;
 import android.graphics.Bitmap;
+import android.graphics.pdf.PdfRenderer;
+import android.media.ThumbnailUtils;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
+import android.os.ParcelFileDescriptor;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.util.Log;
 import android.webkit.MimeTypeMap;
+
+import androidx.core.content.FileProvider;
+
+import com.application.smartstation.BuildConfig;
 
 import java.io.File;
 import java.io.FileFilter;
@@ -33,6 +41,9 @@ public class FileUtils {
     public static final String MIME_TYPE_IMAGE = "image/*";
     public static final String MIME_TYPE_VIDEO = "video/*";
     public static final String MIME_TYPE_APP = "application/*";
+    public static ParcelFileDescriptor mFileDescriptor;
+    public static PdfRenderer mPdfRenderer;
+    private static PdfRenderer.Page mCurrentPage;
 
     public static final String HIDDEN_PREFIX = ".";
 
@@ -217,6 +228,38 @@ public class FileUtils {
         return null;
     }
 
+    private static String getDataColumns(Context context, Uri uri, String selection, String[] selectionArgs) {
+        Cursor cursor = null;
+        final String column = "_data";
+        final String column2 = "_id";
+        final String[] projection = {column,column2};
+        try {
+            cursor = context.getContentResolver().query(uri, projection, selection, selectionArgs, null);
+
+            //**The row as below. step debug to here. I found cursor != null while cursor.moveToFirst() == false! What's wrong?**
+            if (cursor != null && cursor.moveToFirst()) {
+
+                final int column_index = cursor.getColumnIndexOrThrow(column);
+
+                String strTest = "";
+                int nTest = 0;
+
+                strTest = cursor.getString(column_index);
+                nTest = cursor.getInt(1);
+
+                return strTest;
+            }
+        } catch(Exception e)
+        {
+            String strError = e.getMessage();
+        }
+        finally {
+            if (cursor != null)
+                cursor.close();
+        }
+        return null;
+    }
+
     /**
      * Get a file path from a Uri. This will get the the path for Storage Access
      * Framework Documents, as well as the _data field for the MediaStore and
@@ -231,6 +274,7 @@ public class FileUtils {
      * @see #getFile(Context, Uri)
      * @author paulburke
      */
+    @SuppressLint("NewApi")
     public static String getPath(final Context context, final Uri uri) {
 
         if (DEBUG)
@@ -323,6 +367,8 @@ public class FileUtils {
                     contentUri = MediaStore.Video.Media.EXTERNAL_CONTENT_URI;
                 } else if ("audio".equals(type)) {
                     contentUri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
+                }else {
+                    return DocPathUtils.Companion.getSourceDocPath(context, uri);
                 }
 
                 final String selection = "_id=?";
@@ -537,5 +583,52 @@ public class FileUtils {
         // Only return URIs that can be opened with ContentResolver
         intent.addCategory(Intent.CATEGORY_OPENABLE);
         return intent;
+    }
+
+    public static String getFileNameFromPath(String filePath) {
+        String fileName = "";
+        try {
+            fileName = filePath.substring(filePath.lastIndexOf('/') + 1);
+        } catch (Exception e) {
+            Log.d("getFileNameFromPath", "Exception-------->" + e.getMessage());
+        }
+        return fileName;
+    }
+
+    public static void openDocument(Context context, String filePath) {
+        try {
+            Uri uri = FileProvider.getUriForFile(context, BuildConfig.APPLICATION_ID+ ".provider", new File(filePath));
+            Intent intent = new Intent(Intent.ACTION_VIEW);
+            if (filePath.contains(".doc") || filePath.contains(".docx")) {
+                intent.setDataAndType(uri, "application/msword");
+            } else if (filePath.contains(".pdf")) {
+                intent.setDataAndType(uri, "application/pdf");
+            } else if (filePath.contains(".ppt") || filePath.contains(".pptx")) {
+                intent.setDataAndType(uri, "application/vnd.ms-powerpoint");
+            } else if (filePath.contains(".xls") || filePath.contains(".xlsx")) {
+                intent.setDataAndType(uri, "application/vnd.ms-excel");
+            } else if (filePath.contains(".zip") || filePath.contains(".rar")) {
+                intent.setDataAndType(uri, "application/x-wav");
+            } else if (filePath.contains(".rtf")) {
+                intent.setDataAndType(uri, "application/rtf");
+            } else if (filePath.contains(".wav") || filePath.contains(".mp3")) {
+                intent.setDataAndType(uri, "audio/x-wav");
+            } else if (filePath.contains(".gif")) {
+                intent.setDataAndType(uri, "image/gif");
+            } else if (filePath.contains(".jpg") || filePath.contains(".jpeg") || filePath.contains(".png")) {
+                intent.setDataAndType(uri, "image/jpeg");
+            } else if (filePath.contains(".txt")) {
+                intent.setDataAndType(uri, "text/plain");
+            } else if (filePath.contains(".3gp") || filePath.contains(".mpg") || filePath.contains(".mpeg") || filePath.contains(".mpe") || filePath.contains(".mp4") || filePath.contains(".avi")) {
+                intent.setDataAndType(uri, "video/*");
+            } else {
+                intent.setDataAndType(uri, "*/*");
+            }
+            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            context.startActivity(intent);
+        } catch (Exception e) {
+            Log.d("openDocument", "Exception-------->" + e.getMessage());
+        }
     }
 }

@@ -63,7 +63,7 @@ class CallActivity : BaseActivity() {
     var previousMicrophoneMute = false
     var localVideoView: VideoRenderer? = null
     var disconnectedFromOnDestroy = false
-    var isSpeakerPhoneEnabled = true
+    var isSpeakerPhoneEnabled = false
     var enableAutomaticSubscription = false
     var callerId: String? = null
     var callerName: String? = null
@@ -82,6 +82,7 @@ class CallActivity : BaseActivity() {
     var minutes = 0
     var countDownTimer: CountDownTimer? = null
 
+    @RequiresApi(Build.VERSION_CODES.M)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         window.addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED
@@ -107,10 +108,6 @@ class CallActivity : BaseActivity() {
         }
 
         binding.localVideoActionFab.setOnClickListener {
-/*
-                 * Enable/disable the local video track
-                 */
-
             /*
                  * Enable/disable the local video track
                  */if (localVideoTrack != null) {
@@ -179,9 +176,6 @@ class CallActivity : BaseActivity() {
         binding.pulsator.start()
 
         volumeControlStream = AudioManager.STREAM_VOICE_CALL
-
-        audioManager = getSystemService(AUDIO_SERVICE) as AudioManager
-        audioManager!!.isSpeakerphoneOn = isSpeakerPhoneEnabled
 
         val intent = intent
         onNewIntent(intent)
@@ -344,7 +338,7 @@ class CallActivity : BaseActivity() {
             override fun onConnected(room: Room) {
                 localParticipant = room.localParticipant
                 Log.d(TAG, "onConnected: "+room.remoteParticipants.count())
-                binding.videoView.videoStatusTextView.setText(getString(R.string.connected_to) + " " + callerName)
+//                binding.videoView.videoStatusTextView.setText(getString(R.string.connected_to) + " " + callerName)
                 binding.callingStatusText.setText(getString(R.string.connected))
                 title = room.name
 //                Start_limit_Timer()
@@ -355,19 +349,19 @@ class CallActivity : BaseActivity() {
             }
 
             override fun onReconnecting(room: Room, twilioException: TwilioException) {
-                binding.videoView.videoStatusTextView.setText(getString(R.string.reconnecting_to) + callerName)
+//                binding.videoView.videoStatusTextView.setText(getString(R.string.reconnecting_to) + callerName)
                 binding.callingStatusText.setText(R.string.reconnecting)
                 binding.videoView.reconnectingProgressBar.setVisibility(View.VISIBLE)
             }
 
             override fun onReconnected(room: Room) {
-                binding.videoView.videoStatusTextView.setText(getString(R.string.connected_to) + room.name)
+//                binding.videoView.videoStatusTextView.setText(getString(R.string.connected_to) + room.name)
                 binding.callingStatusText.setText(R.string.connected)
                 binding.videoView.reconnectingProgressBar.setVisibility(View.GONE)
             }
 
             override fun onConnectFailure(room: Room, e: TwilioException) {
-                binding.videoView.videoStatusTextView.setText(R.string.failed_to_connect)
+//                binding.videoView.videoStatusTextView.setText(R.string.failed_to_connect)
                 binding.callingStatusText.setText(R.string.disconnected)
                 configureAudio(false)
                 intializeUI()
@@ -375,7 +369,7 @@ class CallActivity : BaseActivity() {
 
             override fun onDisconnected(room: Room, e: TwilioException?) {
                 localParticipant = null
-                binding.videoView.videoStatusTextView.setText(getString(R.string.disconnected_from) + callerName)
+//                binding.videoView.videoStatusTextView.setText(getString(R.string.disconnected_from) + callerName)
                 binding.videoView.reconnectingProgressBar.setVisibility(View.GONE)
                 this@CallActivity.room = null
 
@@ -412,7 +406,7 @@ class CallActivity : BaseActivity() {
     }
 
     private fun removeRemoteParticipant(remoteParticipant: RemoteParticipant) {
-        binding.videoView.videoStatusTextView.setText("$callerName left.")
+//        binding.videoView.videoStatusTextView.setText("$callerName left.")
         if (remoteParticipant.identity != remoteParticipantIdentity) {
             return
         }
@@ -465,7 +459,7 @@ class CallActivity : BaseActivity() {
             return
         }
         remoteParticipantIdentity = remoteParticipant.identity
-        binding.videoView.videoStatusTextView.setText(callerName + " " + getString(R.string.joined))
+//        binding.videoView.videoStatusTextView.setText(callerName + " " + getString(R.string.joined))
 
         /*
          * Add remote participant renderer
@@ -615,6 +609,14 @@ class CallActivity : BaseActivity() {
 
         }
 
+        audioManager = getSystemService(AUDIO_SERVICE) as AudioManager
+        if (callType.equals("video_call")) {
+            isSpeakerPhoneEnabled = true
+            audioManager!!.isSpeakerphoneOn = isSpeakerPhoneEnabled
+        } else{
+            audioManager!!.isSpeakerphoneOn = isSpeakerPhoneEnabled
+        }
+
         if (!callerImage.isNullOrEmpty()){
             Glide.with(this).load(callerImage).placeholder(R.drawable.ic_default).error(R.drawable.ic_default).diskCacheStrategy(
                 DiskCacheStrategy.DATA)
@@ -629,7 +631,7 @@ class CallActivity : BaseActivity() {
         if (callStatus == callPick) {
             if (accessToken != null && binding.callingUserInfoLayout != null) {
                 Stop_timer()
-                if (callType == "video_call") binding.callingUserInfoLayout.setVisibility(View.GONE) else {
+                if (callType == "video_call") binding.callingUserInfoLayout.setVisibility(View.GONE)  else {
                     binding.switchCameraActionFab.setVisibility(View.GONE)
                     binding.localVideoActionFab.setVisibility(View.GONE)
                     binding.receiveDisconnectLayout.visibility = View.GONE
@@ -704,7 +706,7 @@ class CallActivity : BaseActivity() {
                         remoteAudioTrackPublication.isTrackEnabled,
                         remoteAudioTrackPublication.isTrackSubscribed,
                         remoteAudioTrackPublication.trackName))
-                binding.videoView.videoStatusTextView.setText(R.string.audio_connected)
+//                binding.videoView.videoStatusTextView.setText(R.string.audio_connected)
             }
 
             override fun onAudioTrackUnpublished(
@@ -721,7 +723,7 @@ class CallActivity : BaseActivity() {
                         remoteAudioTrackPublication.isTrackEnabled,
                         remoteAudioTrackPublication.isTrackSubscribed,
                         remoteAudioTrackPublication.trackName))
-                binding.videoView.videoStatusTextView.setText(R.string.audio_unpublished)
+//                binding.videoView.videoStatusTextView.setText(R.string.audio_unpublished)
             }
 
             override fun onDataTrackPublished(
@@ -770,7 +772,7 @@ class CallActivity : BaseActivity() {
                         remoteVideoTrackPublication.isTrackEnabled,
                         remoteVideoTrackPublication.isTrackSubscribed,
                         remoteVideoTrackPublication.trackName))
-                binding.videoView.videoStatusTextView.setText(R.string.video_connected)
+//                binding.videoView.videoStatusTextView.setText(R.string.video_connected)
             }
 
             override fun onVideoTrackUnpublished(
@@ -787,7 +789,7 @@ class CallActivity : BaseActivity() {
                         remoteVideoTrackPublication.isTrackEnabled,
                         remoteVideoTrackPublication.isTrackSubscribed,
                         remoteVideoTrackPublication.trackName))
-                binding.videoView.videoStatusTextView.setText(R.string.video_unpublished)
+//                binding.videoView.videoStatusTextView.setText(R.string.video_unpublished)
             }
 
             override fun onAudioTrackSubscribed(
@@ -803,7 +805,7 @@ class CallActivity : BaseActivity() {
                         remoteAudioTrack.isEnabled,
                         remoteAudioTrack.isPlaybackEnabled,
                         remoteAudioTrack.name))
-                binding.videoView.videoStatusTextView.setText(R.string.audio_subscribed)
+//                binding.videoView.videoStatusTextView.setText(R.string.audio_subscribed)
             }
 
             override fun onAudioTrackUnsubscribed(
@@ -819,7 +821,7 @@ class CallActivity : BaseActivity() {
                         remoteAudioTrack.isEnabled,
                         remoteAudioTrack.isPlaybackEnabled,
                         remoteAudioTrack.name))
-                binding.videoView.videoStatusTextView.setText(R.string.audio_unsubscribed)
+//                binding.videoView.videoStatusTextView.setText(R.string.audio_unsubscribed)
             }
 
             override fun onAudioTrackSubscriptionFailed(
@@ -837,7 +839,7 @@ class CallActivity : BaseActivity() {
                         remoteAudioTrackPublication.trackName,
                         twilioException.code,
                         twilioException.message))
-                binding.videoView.videoStatusTextView.setText(R.string.audio_subscription_failed)
+//                binding.videoView.videoStatusTextView.setText(R.string.audio_subscription_failed)
             }
 
             override fun onDataTrackSubscribed(
@@ -913,7 +915,7 @@ class CallActivity : BaseActivity() {
                         remoteParticipant.identity,
                         remoteVideoTrack.isEnabled,
                         remoteVideoTrack.name))
-                binding.videoView.videoStatusTextView.setText(R.string.video_unsubscribed)
+//                binding.videoView.videoStatusTextView.setText(R.string.video_unsubscribed)
                 removeParticipantVideo(remoteVideoTrack)
             }
 
@@ -932,7 +934,7 @@ class CallActivity : BaseActivity() {
                         remoteVideoTrackPublication.trackName,
                         twilioException.code,
                         twilioException.message))
-                binding.videoView.videoStatusTextView.setText(R.string.video_subscription_failed)
+//                binding.videoView.videoStatusTextView.setText(R.string.video_subscription_failed)
                 Snackbar.make(binding.connectActionFab,
                     String.format("Failed to subscribe to %s video track",
                         remoteParticipant.identity),

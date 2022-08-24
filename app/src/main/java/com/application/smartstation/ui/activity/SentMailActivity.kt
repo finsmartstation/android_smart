@@ -1,88 +1,88 @@
-package com.application.smartstation.ui.fragment
+package com.application.smartstation.ui.activity
 
-import android.content.Context
 import android.content.Intent
+import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
 import android.util.Log
-import android.view.View
+import androidx.activity.viewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.application.smartstation.R
-import com.application.smartstation.databinding.FragmentInboxBinding
+import com.application.smartstation.databinding.ActivityMainBinding
+import com.application.smartstation.databinding.ActivitySentMailBinding
 import com.application.smartstation.service.Status
 import com.application.smartstation.service.background.SocketService
-import com.application.smartstation.ui.activity.NewMailActivity
-import com.application.smartstation.ui.activity.ViewMailActivity
-import com.application.smartstation.ui.adapter.ChatAdapter
 import com.application.smartstation.ui.adapter.InboxAdapter
+import com.application.smartstation.ui.adapter.SentboxAdapter
 import com.application.smartstation.ui.model.*
 import com.application.smartstation.util.Constants
 import com.application.smartstation.util.UtilsDefault
 import com.application.smartstation.util.viewBinding
 import com.application.smartstation.viewmodel.ApiViewModel
 import com.application.smartstation.viewmodel.InboxEvent
-import com.application.smartstation.viewmodel.RecentChatEvent
+import com.application.smartstation.viewmodel.SentboxEvent
 import com.google.gson.Gson
 import dagger.hilt.android.AndroidEntryPoint
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 import org.json.JSONObject
+import java.util.*
+import kotlin.collections.ArrayList
 
 @AndroidEntryPoint
-class InboxFragment : BaseFragment(R.layout.fragment_inbox) {
+class SentMailActivity : BaseActivity() {
 
-    private val binding by viewBinding(FragmentInboxBinding::bind)
-
-    var list:ArrayList<DataMailList> = ArrayList()
-    var inboxAdapter: InboxAdapter? = null
+    val binding: ActivitySentMailBinding by viewBinding()
+    var list:ArrayList<SendMailListRes> = ArrayList()
+    var sentboxAdapter: SentboxAdapter? = null
     val apiViewModel: ApiViewModel by viewModels()
-    var emitters: SocketService.Emitters? = null
+    val emitters: SocketService.Emitters = SocketService.Emitters(this)
 
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        emitters = SocketService.Emitters(context)
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_sent_mail)
         initView()
         setOnClickListener()
     }
 
-    private fun setOnClickListener() {
-
-    }
-
     private fun initView() {
+        binding.ilHeader.txtHeader.text = resources.getString(R.string.sentbox)
+        binding.rvSentBox.layoutManager = LinearLayoutManager(this,
+            LinearLayoutManager.VERTICAL,false)
+        sentboxAdapter = SentboxAdapter(this)
+        binding.rvSentBox.adapter = sentboxAdapter
 
-        getMailList()
+        sentboxAdapter!!.onItemClick = { model ->
+            val intent = Intent(this,ViewMailActivity::class.java)
+            intent.putExtra("boxType",2)
+            intent.putExtra("id",model.id)
+            startActivity(intent)
+        }
 
-        emitInbox()
-
+        getSentBox()
+        emitSentBox()
     }
 
-    private fun emitInbox() {
+    private fun emitSentBox() {
         if (UtilsDefault.isOnline()) {
             val jsonObject = JSONObject()
             try {
                 jsonObject.put("user_id", UtilsDefault.getSharedPreferenceString(Constants.USER_ID))
                 jsonObject.put("accessToken", UtilsDefault.getSharedPreferenceString(Constants.ACCESS_TOKEN))
-                emitters!!.mailList(jsonObject)
+                emitters.sendMailList(jsonObject)
             } catch (e: java.lang.Exception) {
                 e.printStackTrace()
             }
         }
     }
 
-    private fun getMailList() {
+    private fun getSentBox() {
         val inputParams = InputParams()
         inputParams.user_id = UtilsDefault.getSharedPreferenceString(Constants.USER_ID)
         inputParams.accessToken = UtilsDefault.getSharedPreferenceString(Constants.ACCESS_TOKEN)
 
-        apiViewModel.getMaillist(inputParams).observe(requireActivity(), Observer {
+        apiViewModel.sendMail(inputParams).observe(this, Observer {
             it.let {
                 when(it.status){
                     Status.LOADING -> {
@@ -108,42 +108,18 @@ class InboxFragment : BaseFragment(R.layout.fragment_inbox) {
         })
     }
 
-    private fun setData(list: ArrayList<DataMailList>) {
-        binding.rvInbox.layoutManager = LinearLayoutManager(requireActivity(),
-            LinearLayoutManager.VERTICAL,false)
-        inboxAdapter = InboxAdapter(requireActivity())
-        binding.rvInbox.adapter = inboxAdapter
-        inboxAdapter!!.setMail(list.reversed())
-
-        inboxAdapter!!.onItemClick = { model ->
-            val intent = Intent(requireActivity(), ViewMailActivity::class.java)
-            intent.putExtra("boxType",1)
-            intent.putExtra("id",model.id)
-            startActivity(intent)
-        }
+    private fun setData(list: ArrayList<SendMailListRes>) {
+        sentboxAdapter!!.setMail(list)
     }
 
-    private fun filterList(txt: String) {
-        if (txt != "") {
-            val searchtext = txt.toLowerCase()
-            val templist: ArrayList<DataMailList> = ArrayList()
-
-            for (items in list) {
-                val coinsy = items.datetime.toLowerCase()
-                if (coinsy.contains(searchtext)) {
-                    templist.add(items)
-                }
-
-            }
-
-//            chatAdapter?.setChat(templist)
-        } else {
-//            chatAdapter?.setChat(list)
+    private fun setOnClickListener() {
+        binding.ilHeader.imgBack.setOnClickListener {
+            finish()
         }
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    fun onInboxEvent(event: InboxEvent) {
+    fun onSentboxEvent(event: SentboxEvent) {
         var jsonObject: JSONObject? = JSONObject()
         jsonObject = event.getJsonObject()
         setInboxEvent(jsonObject)
@@ -152,8 +128,8 @@ class InboxFragment : BaseFragment(R.layout.fragment_inbox) {
 
     fun setInboxEvent(jsonObject: JSONObject?) {
         val gson = Gson()
-        val mailSocketModel: GetMailListResponse = gson.fromJson(jsonObject.toString(),
-            GetMailListResponse::class.java)
+        val mailSocketModel: SendMailRes = gson.fromJson(jsonObject.toString(),
+            SendMailRes::class.java)
         if (mailSocketModel.status){
             if (mailSocketModel.data.isNotEmpty()){
                 setData(mailSocketModel.data)
@@ -162,5 +138,4 @@ class InboxFragment : BaseFragment(R.layout.fragment_inbox) {
             toast(mailSocketModel.message)
         }
     }
-
 }

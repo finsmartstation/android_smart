@@ -1033,6 +1033,7 @@
     <string name="contact">Contact</string>
     <string name="inbox">Inbox</string>
     <string name="sent">Sent</string>
+    <string name="sentbox">Sentbox</string>
     <string name="new_msg">New Message</string>
     <string name="to">To</string>
     <string name="to_address">To address</string>
@@ -1178,5 +1179,11 @@
     <string name="group">Group</string>
     <string name="show_more">Show more</string>
     <string name="group_info">Group Info</string>
+    <string name="please_enter_to">Please enter TO address</string>
+    <string name="please_enter_subject">Please enter subject</string>
+    <string name="please_enter_body">Please enter body</string>
+    <string name="reply">Reply</string>
+    <string name="reply_all">Reply All</string>
+    <string name="forward">Forward</string>
 
 </resources>

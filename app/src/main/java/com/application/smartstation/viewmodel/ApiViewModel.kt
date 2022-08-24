@@ -561,6 +561,96 @@ class ApiViewModel @Inject constructor(
 
     }
 
+    fun composeMailWithoutImage(inputParams: InputParams) = liveData<Resource<BaseResponse>> {
+        if (UtilsDefault.isOnline()) {
+            repository.composeMailWithoutImage(inputParams)
+                .onStart {
+                    emit(Resource.loading(data = null))
+                }
+                .catch {
+                    emit(Resource.error(data = null, msg = "Cannot reach server..try again"))
+                }
+                .collect {
+                    emit(Resource.success(it))
+                }
+        } else {
+            emit(Resource.error(data = null, msg = "No internet connection"))
+        }
+
+    }
+
+    fun sendMail(inputParams: InputParams) = liveData<Resource<SendMailRes>> {
+        if (UtilsDefault.isOnline()) {
+            repository.sendMail(inputParams)
+                .onStart {
+                    emit(Resource.loading(data = null))
+                }
+                .catch {
+                    emit(Resource.error(data = null, msg = "Cannot reach server..try again"))
+                }
+                .collect {
+                    emit(Resource.success(it))
+                }
+        } else {
+            emit(Resource.error(data = null, msg = "No internet connection"))
+        }
+
+    }
+
+    fun getInbox(inputParams: InputParams) = liveData<Resource<InboxDetailsRes>> {
+        if (UtilsDefault.isOnline()) {
+            repository.getInbox(inputParams)
+                .onStart {
+                    emit(Resource.loading(data = null))
+                }
+                .catch {
+                    emit(Resource.error(data = null, msg = "Cannot reach server..try again"))
+                }
+                .collect {
+                    emit(Resource.success(it))
+                }
+        } else {
+            emit(Resource.error(data = null, msg = "No internet connection"))
+        }
+
+    }
+
+    fun getSent(inputParams: InputParams) = liveData<Resource<InboxDetailsRes>> {
+        if (UtilsDefault.isOnline()) {
+            repository.getSent(inputParams)
+                .onStart {
+                    emit(Resource.loading(data = null))
+                }
+                .catch {
+                    emit(Resource.error(data = null, msg = "Cannot reach server..try again"))
+                }
+                .collect {
+                    emit(Resource.success(it))
+                }
+        } else {
+            emit(Resource.error(data = null, msg = "No internet connection"))
+        }
+
+    }
+
+    fun deleteMail(inputParams: InputParams) = liveData<Resource<BaseResponse>> {
+        if (UtilsDefault.isOnline()) {
+            repository.deleteMail(inputParams)
+                .onStart {
+                    emit(Resource.loading(data = null))
+                }
+                .catch {
+                    emit(Resource.error(data = null, msg = "Cannot reach server..try again"))
+                }
+                .collect {
+                    emit(Resource.success(it))
+                }
+        } else {
+            emit(Resource.error(data = null, msg = "No internet connection"))
+        }
+
+    }
+
     fun grpCreate(
         user_id:RequestBody,
         accessToken:RequestBody,
@@ -587,6 +677,33 @@ class ApiViewModel @Inject constructor(
     fun fileUpload(user_id:RequestBody,accessToken:RequestBody,file: MultipartBody.Part) = liveData<Resource<BaseResponse>> {
         if (UtilsDefault.isOnline()) {
             repository.fileUpload(user_id, accessToken, file)
+                .onStart {
+                    emit(Resource.loading(data = null))
+                }
+                .catch {
+                    emit(Resource.error(data = null, msg = "Cannot reach server..try again"))
+                }
+                .collect {
+                    emit(Resource.success(it))
+                }
+        } else {
+            emit(Resource.error(data = null, msg = "No internet connection"))
+        }
+
+    }
+
+    fun composeMail(
+        user_id:RequestBody,
+        accessToken:RequestBody,
+        to_mail:RequestBody,
+        cc_mail:RequestBody,
+        bcc_mail:RequestBody,
+        subject:RequestBody,
+        body:RequestBody,
+        attachment: List<MultipartBody.Part?>
+    ) = liveData<Resource<BaseResponse>> {
+        if (UtilsDefault.isOnline()) {
+            repository.composeMail(user_id, accessToken, to_mail, cc_mail, bcc_mail, subject, body, attachment)
                 .onStart {
                     emit(Resource.loading(data = null))
                 }

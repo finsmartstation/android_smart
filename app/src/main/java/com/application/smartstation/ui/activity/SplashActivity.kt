@@ -1,10 +1,10 @@
 package com.application.smartstation.ui.activity
 
 import android.content.Intent
-import android.graphics.Color
 import android.os.Bundle
+import android.text.TextUtils
+import android.util.Log
 import android.view.WindowManager
-import android.view.animation.AnimationUtils
 import androidx.appcompat.app.AppCompatActivity
 import com.application.smartstation.R
 import com.application.smartstation.databinding.ActivitySplashBinding
@@ -25,7 +25,6 @@ class SplashActivity : AppCompatActivity(){
     }
 
     private fun initView() {
-
         Thread(Runnable {
             Thread.sleep(4000)
             if(UtilsDefault.isLoggedIn(this)){
@@ -45,7 +44,6 @@ class SplashActivity : AppCompatActivity(){
                 finish()
             }
         }).start()
-
     }
 
 }

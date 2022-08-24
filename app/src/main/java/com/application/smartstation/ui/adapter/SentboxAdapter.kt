@@ -1,28 +1,22 @@
 package com.application.smartstation.ui.adapter
 
 import android.content.Context
-import android.os.Bundle
 import android.text.Html
+import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.application.smartstation.R
-import com.application.smartstation.databinding.ItemChatBinding
 import com.application.smartstation.databinding.ItemInboxBinding
-import com.application.smartstation.ui.model.ChatResponse
-import com.application.smartstation.ui.model.DataChatList
-import com.application.smartstation.ui.model.DataMailList
+import com.application.smartstation.ui.model.SendMailListRes
 import com.application.smartstation.util.UtilsDefault
-import com.application.smartstation.view.ViewBinderHelper
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.engine.DiskCacheStrategy
 
 
-class InboxAdapter(val context: Context) : RecyclerView.Adapter<InboxAdapter.ViewHolder>() {
+class SentboxAdapter(val context: Context) : RecyclerView.Adapter<SentboxAdapter.ViewHolder>() {
 
-    private var list = emptyList<DataMailList>()
-    var onItemClick: ((model: DataMailList) -> Unit)? = null
+    private var list = emptyList<SendMailListRes>()
+    var onItemClick: ((model: SendMailListRes) -> Unit)? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
 
@@ -38,7 +32,8 @@ class InboxAdapter(val context: Context) : RecyclerView.Adapter<InboxAdapter.Vie
         val model = list[position]
 
         with(holder) {
-            binding.txtTitle.text = model.from
+            val str: String = TextUtils.join(",", model.to)
+            binding.txtTitle.text = str
             binding.txtDate.text = UtilsDefault.dateMail(UtilsDefault.localTimeConvert(model.createdAt)!!)
             binding.txtTime.text = UtilsDefault.todayDate(UtilsDefault.localTimeConvert(model.createdAt))
             binding.txtSub.text = model.subject
@@ -54,15 +49,13 @@ class InboxAdapter(val context: Context) : RecyclerView.Adapter<InboxAdapter.Vie
                 binding.imgAttach.visibility = View.GONE
             }
 
-            Glide.with(context).load(model.profile_pic).placeholder(R.drawable.ic_default).error(R.drawable.ic_default).diskCacheStrategy(DiskCacheStrategy.DATA).into(binding.imgMailProfile)
+//            Glide.with(context).load(model.profile_pic).placeholder(R.drawable.ic_default).error(R.drawable.ic_default).diskCacheStrategy(DiskCacheStrategy.DATA).into(binding.imgMailProfile)
 
-            if (model.mail_read_status == 0){
-                binding.txtSub.setTextColor(context.resources.getColor(R.color.color_chat_popup_gray))
-                binding.txtBody.setTextColor(context.resources.getColor(R.color.color_chat_popup_gray))
-            }else{
-                binding.txtSub.setTextColor(context.resources.getColor(R.color.black))
-                binding.txtBody.setTextColor(context.resources.getColor(R.color.black))
-            }
+//            if (model.mail_read_status == "1"){
+                binding.txtTitle.setTextColor(context.resources.getColor(R.color.black))
+//            }else{
+//                binding.txtTitle.setTextColor(context.resources.getColor(R.color.mail_date_coloe))
+//            }
 
             itemView.setOnClickListener {
                 onItemClick!!.invoke(model)
@@ -71,7 +64,7 @@ class InboxAdapter(val context: Context) : RecyclerView.Adapter<InboxAdapter.Vie
         }
     }
 
-    internal fun setMail(mail: List<DataMailList>) {
+    internal fun setMail(mail: List<SendMailListRes>) {
         this.list = mail
         notifyDataSetChanged()
     }

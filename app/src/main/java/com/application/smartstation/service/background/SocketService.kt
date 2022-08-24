@@ -80,6 +80,27 @@ class SocketService: Service() {
             Log.d("TAG", "typing_ind: "+jsonObject)
             EventBus.getDefault().post(TypingEvent(jsonObject))
         }
+
+        socket!!.on("typing_group") { args ->
+            var jsonObject = JSONObject()
+            jsonObject = args[0] as JSONObject
+            Log.d("TAG", "typing_ind: "+jsonObject)
+            EventBus.getDefault().post(TypingEvent(jsonObject))
+        }
+
+        socket!!.on("mail_inboxlist") { args ->
+            var jsonObject = JSONObject()
+//            jsonObject = args[0] as JSONObject
+//            Log.d("TAG", "inbox: "+args)
+//            EventBus.getDefault().post(InboxEvent(jsonObject))
+        }
+
+        socket!!.on("send_mail_list") { args ->
+            var jsonObject = JSONObject()
+            jsonObject = args[0] as JSONObject
+            Log.d("TAG", "send: "+jsonObject)
+            EventBus.getDefault().post(SentboxEvent(jsonObject))
+        }
         
         return START_STICKY
     }
@@ -104,6 +125,18 @@ class SocketService: Service() {
 
         fun typingStatus(jsonObject: JSONObject) {
             socket!!.emit("typing_individual", jsonObject)
+        }
+
+        fun typingGrpStatus(jsonObject: JSONObject) {
+            socket!!.emit("type_group", jsonObject)
+        }
+
+        fun mailList(jsonObject: JSONObject) {
+            socket!!.emit("mail_inboxlist", jsonObject)
+        }
+
+        fun sendMailList(jsonObject: JSONObject) {
+            socket!!.emit("send_mail_list", jsonObject)
         }
 
     }

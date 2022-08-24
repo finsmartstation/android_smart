@@ -222,6 +222,41 @@ class ApiRepository @Inject constructor(val apiService: ApiService) {
         }.flowOn(Dispatchers.IO)
     }
 
+    fun composeMailWithoutImage(inputParams: InputParams): Flow<BaseResponse> {
+        return flow {
+            val response = apiService.composeMailWithoutImage(inputParams)
+            emit(response)
+        }.flowOn(Dispatchers.IO)
+    }
+
+    fun sendMail(inputParams: InputParams): Flow<SendMailRes> {
+        return flow {
+            val response = apiService.sendMail(inputParams)
+            emit(response)
+        }.flowOn(Dispatchers.IO)
+    }
+
+    fun getInbox(inputParams: InputParams): Flow<InboxDetailsRes> {
+        return flow {
+            val response = apiService.getInbox(inputParams)
+            emit(response)
+        }.flowOn(Dispatchers.IO)
+    }
+
+    fun getSent(inputParams: InputParams): Flow<InboxDetailsRes> {
+        return flow {
+            val response = apiService.getSent(inputParams)
+            emit(response)
+        }.flowOn(Dispatchers.IO)
+    }
+
+    fun deleteMail(inputParams: InputParams): Flow<BaseResponse> {
+        return flow {
+            val response = apiService.deleteMail(inputParams)
+            emit(response)
+        }.flowOn(Dispatchers.IO)
+    }
+
     fun grpCreate(
         user_id:RequestBody,
         accessToken:RequestBody,
@@ -237,6 +272,22 @@ class ApiRepository @Inject constructor(val apiService: ApiService) {
     fun fileUpload(user_id:RequestBody,accessToken:RequestBody,file: MultipartBody.Part): Flow<BaseResponse> {
         return flow {
             val response = apiService.fileUpload(user_id,accessToken, file)
+            emit(response)
+        }.flowOn(Dispatchers.IO)
+    }
+
+    fun composeMail(
+        user_id:RequestBody,
+        accessToken:RequestBody,
+        to_mail:RequestBody,
+        cc_mail:RequestBody,
+        bcc_mail:RequestBody,
+        subject:RequestBody,
+        body:RequestBody,
+        attachment: List<MultipartBody.Part?>
+    ): Flow<BaseResponse> {
+        return flow {
+            val response = apiService.composeMail(user_id,accessToken, to_mail, cc_mail, bcc_mail, subject, body, attachment)
             emit(response)
         }.flowOn(Dispatchers.IO)
     }

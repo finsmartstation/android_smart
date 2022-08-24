@@ -37,6 +37,7 @@
         android:layout_height="0dp"
         android:layout_weight="1"
         android:scrollbars="none"
+        android:id="@+id/svLayout"
         >
 
         <LinearLayout
@@ -50,6 +51,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:layout_marginTop="26dp"
+                android:visibility="gone"
                 android:gravity="center"
                 >
                 <com.application.smartstation.view.CustomTextViewBold
@@ -90,6 +92,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:layout_marginTop="10dp"
+                android:visibility="gone"
                 android:background="@color/color_chat_popup_gray"
                 />
 
@@ -97,7 +100,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="26dp"
                 android:gravity="center"
                 >
                 <com.application.smartstation.view.CustomTextViewBold
@@ -115,14 +118,12 @@
                     <com.application.smartstation.view.ContactsCompletionView
                         android:id="@+id/edtTo"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="80dp"
                         android:background="@null"
                         android:hint="@string/to"
-                        android:minHeight="50dp"
                         android:layout_weight="1"
                         android:layout_marginStart="16dp"
                         android:layout_marginEnd="8dp"
-                        android:maxHeight="100dp"
                         android:imeOptions="actionDone"
                         android:textCursorDrawable="@drawable/cusor_bg"
                         android:fontFamily="@font/dinregular"
@@ -221,10 +222,11 @@
                 <com.application.smartstation.view.ContactsCompletionView
                     android:id="@+id/edtCc"
                     android:layout_width="match_parent"
-                    android:layout_height="50dp"
+                    android:layout_height="80dp"
                     android:background="@null"
                     android:hint="@string/cc"
                     android:textCursorDrawable="@drawable/cusor_bg"
+                    android:imeOptions="actionDone"
                     android:fontFamily="@font/dinregular"
                     android:inputType="textEmailAddress"
                     android:singleLine="true"
@@ -271,11 +273,12 @@
             <com.application.smartstation.view.ContactsCompletionView
                 android:id="@+id/edtBcc"
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
+                android:layout_height="80dp"
                 android:background="@null"
                 android:hint="@string/bcc"
                 android:textCursorDrawable="@drawable/cusor_bg"
                 android:fontFamily="@font/dinregular"
+                android:imeOptions="actionDone"
                 android:inputType="textEmailAddress"
                 android:singleLine="true"
                 android:layout_marginStart="16dp"
@@ -323,6 +326,7 @@
                 android:textCursorDrawable="@drawable/cusor_bg"
                 android:fontFamily="@font/dinregular"
                 android:inputType="textMultiLine"
+                android:imeOptions="actionNext"
                 android:singleLine="true"
                 android:layout_marginStart="16dp"
                 android:layout_marginEnd="26dp"
@@ -357,20 +361,35 @@
                 <com.application.smartstation.view.CustomEditText
                     android:id="@+id/edtBody"
                     android:layout_width="match_parent"
-                    android:layout_height="180dp"
+                    android:layout_height="wrap_content"
                     android:background="@null"
                     android:layout_marginTop="16dp"
                     android:hint="@string/body"
                     android:textCursorDrawable="@drawable/cusor_bg"
                     android:fontFamily="@font/dinregular"
+                    android:focusable="true"
                     android:inputType="textMultiLine"
+                    android:imeOptions="actionDone"
                     android:layout_marginStart="26dp"
                     android:layout_marginEnd="26dp"
                     android:textColor="@color/black"
                     android:textColorHint="@color/viewgrey"
                     android:textSize="18sp" />
 
+            <androidx.recyclerview.widget.RecyclerView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:layout_marginStart="26dp"
+                android:layout_marginEnd="26dp"
+                android:layout_marginBottom="12dp"
+                android:visibility="gone"
+                android:nestedScrollingEnabled="true"
+                android:id="@+id/rvMailList"
+                />
+
         </LinearLayout>
+
 
     </ScrollView>
 
