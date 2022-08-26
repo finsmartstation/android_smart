@@ -22,7 +22,7 @@ public class ContactsCompletionView  extends TokenCompleteTextView<Person> {
     @Override
     protected View getViewForObject(Person person) {
 
-        LayoutInflater l = (LayoutInflater) getContext().getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
+        LayoutInflater l = (LayoutInflater) LayoutInflater.from(getContext());
         LinearLayout view = (LinearLayout)l.inflate(R.layout.contact_token, (ViewGroup)ContactsCompletionView.this.getParent(), false);
         ((TextView)view.findViewById(R.id.name)).setText(person.getEmail());
 
@@ -34,7 +34,7 @@ public class ContactsCompletionView  extends TokenCompleteTextView<Person> {
         //Oversimplified example of guessing if we have an email or not
         int index = completionText.indexOf('@');
         if (index == -1) {
-            return new Person(completionText, completionText.replace(" ", "") + "@smartstation.com");
+            return new Person(completionText, completionText.replace(" ", "") + "@fsmartstation.com");
         } else {
             return new Person(completionText.substring(0, index), completionText);
         }

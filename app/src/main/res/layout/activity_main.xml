@@ -333,6 +333,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="end"
+                        android:id="@+id/llUnread"
+                        android:visibility="invisible"
                         android:background="@drawable/chat_unread_bg"
                         android:backgroundTint="@color/red"
                         android:padding="2dp">

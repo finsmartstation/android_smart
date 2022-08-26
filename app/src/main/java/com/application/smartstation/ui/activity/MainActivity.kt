@@ -29,6 +29,7 @@ import com.application.smartstation.ui.adapter.ChatAdapter
 import com.application.smartstation.ui.adapter.ContactAdapter
 import com.application.smartstation.ui.fragment.ChatMainFragment
 import com.application.smartstation.ui.fragment.EmailMainFragment
+import com.application.smartstation.ui.fragment.InboxFragment
 import com.application.smartstation.ui.fragment.LetterMainFragment
 import com.application.smartstation.ui.helper.FragmentHelper
 import com.application.smartstation.ui.model.DataChatList
@@ -47,7 +48,7 @@ import org.json.JSONObject
 
 
 @AndroidEntryPoint
-class MainActivity : BaseActivity() {
+class MainActivity : BaseActivity(), InboxFragment.OnUnreadMailCountListener {
 
     val binding: ActivityMainBinding by viewBinding()
     val apiViewModel: ApiViewModel by viewModels()
@@ -547,6 +548,18 @@ class MainActivity : BaseActivity() {
             emitters.offline(jsonObject)
         } catch (e: java.lang.Exception) {
             e.printStackTrace()
+        }
+    }
+
+    override fun onUnreadMail(count: String) {
+        if (count.toInt() == 0) {
+            binding.llUnread.visibility = View.INVISIBLE
+        }else if (count.toInt() < 100) {
+            binding.llUnread.visibility = View.VISIBLE
+            binding.txtUnreadCount.text = count
+        }else{
+            binding.llUnread.visibility = View.VISIBLE
+            binding.txtUnreadCount.text = "99+"
         }
     }
 }

@@ -5,12 +5,14 @@ import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.text.Editable
 import android.text.Html
 import android.text.TextUtils
+import android.text.TextWatcher
 import android.util.Log
 import android.view.View
 import android.view.View.OnFocusChangeListener
-import android.widget.Toast
+import android.widget.ArrayAdapter
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
@@ -28,6 +30,7 @@ import com.application.smartstation.util.FileUtils
 import com.application.smartstation.util.UtilsDefault
 import com.application.smartstation.util.viewBinding
 import com.application.smartstation.viewmodel.ApiViewModel
+import com.tokenautocomplete.CharacterTokenizer
 import com.tokenautocomplete.TokenCompleteTextView
 import dagger.hilt.android.AndroidEntryPoint
 import id.zelory.compressor.Compressor
@@ -35,6 +38,8 @@ import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import java.io.File
+import java.util.*
+import java.util.Arrays.asList
 
 
 @AndroidEntryPoint
@@ -47,6 +52,8 @@ class NewMailActivity : BaseActivity(),
     var toMail = ""
     var ccMail = ""
     var bccMail = ""
+    var body = ""
+    var body1 = 0
     var status = 0
     var toList = ArrayList<String>()
     var ccList = ArrayList<String>()
@@ -169,12 +176,16 @@ class NewMailActivity : BaseActivity(),
             }
 
             val subject = binding.edtSubject.text.toString().trim()
-            val body = binding.edtBody.text.toString().trim()
+
+            var bodys = binding.edtBody.text.toString().trim()
+
+            bodys = bodys.removeRange(body1,bodys.length)
+            bodys = bodys+"<br>"+body
 
             when {
                 TextUtils.isEmpty(toMail) -> toast(resources.getString(R.string.please_enter_to))
                 TextUtils.isEmpty(subject) -> toast(resources.getString(R.string.please_enter_subject))
-                TextUtils.isEmpty(body) -> toast(resources.getString(R.string.please_enter_body))
+                TextUtils.isEmpty(bodys) -> toast(resources.getString(R.string.please_enter_body))
 
                 else -> {
                     if (imageParts.isEmpty()) {
@@ -187,7 +198,7 @@ class NewMailActivity : BaseActivity(),
                         inputParams.cc_mail = ccMail
                         inputParams.bcc_mail = bccMail
                         inputParams.subject = subject
-                        inputParams.body = body
+                        inputParams.body = bodys
                         composeMailWithoutImage(inputParams)
                     }else{
                         val user_id: RequestBody = RequestBody.create("text/plain".toMediaTypeOrNull(), UtilsDefault.getSharedPreferenceString(
@@ -208,7 +219,7 @@ class NewMailActivity : BaseActivity(),
                             subject
                         )
                         val body: RequestBody = RequestBody.create("text/plain".toMediaTypeOrNull(),
-                            body
+                            bodys
                         )
                         
                         composeMail(user_id,accessToken,to_mail,cc_mail,bcc_mail,subject,body,imageParts)
@@ -327,7 +338,7 @@ class NewMailActivity : BaseActivity(),
     @SuppressLint("Range")
     private fun prepareFilePart(s: String, uri: Uri?): MultipartBody.Part {
         val path = FileUtils.getPath(this,uri)
-        var file = File(path)
+        val file = File(path)
         if (UtilsDefault.isImageFile(path)){
             val compressedImageFile = Compressor(this).setQuality(100).compressToFile(file)
             val requestFile: RequestBody = RequestBody.create(
@@ -369,12 +380,42 @@ class NewMailActivity : BaseActivity(),
 
     private fun initView() {
         binding.edtTo.setTokenListener(this)
+        binding.edtTo.setTokenizer(CharacterTokenizer(asList(' ', ','), ","))
         binding.edtCc.setTokenListener(this)
         binding.edtBcc.setTokenListener(this)
 
         if (intent != null){
+            if (intent.getStringExtra("from") != null){
+                val from = intent.getStringExtra("from")!!
+                toList = stringToWords(from)
+                for (a in toList){
+                    binding.edtTo.setText(a)
+                }
+            }
+
+            if (intent.getStringExtra("bcc") != null){
+                val from = intent.getStringExtra("bcc")!!
+                bccList = stringToWords(from)
+                for (a in bccList){
+                    binding.edtBcc.setText(a)
+                }
+            }
+
             if (intent.getStringExtra("to") != null){
-                toMail = intent.getStringExtra("to")!!
+                val to = intent.getStringExtra("to")!!
+                ccList.addAll(stringToWords(to))
+
+            }
+
+            if (intent.getStringExtra("cc") != null){
+                val to = intent.getStringExtra("cc")!!
+                ccList.addAll(stringToWords(to))
+            }
+
+            if (!ccList.isNullOrEmpty()) {
+                for (a in ccList) {
+                    binding.edtCc.setText(a)
+                }
             }
 
             if (intent.getStringExtra("sub") != null){
@@ -383,7 +424,7 @@ class NewMailActivity : BaseActivity(),
             }
 
             if (intent.getStringExtra("body") != null) {
-                val body = intent.getStringExtra("body")!!
+                body = intent.getStringExtra("body")!!
                 binding.edtBody.setText(Html.fromHtml("<br>" + body))
                 binding.edtBody.requestFocus()
                 binding.edtBody.setSelection(0)
@@ -412,6 +453,26 @@ class NewMailActivity : BaseActivity(),
                 binding.svLayout.smoothScrollTo(0, binding.edtSubject.bottom)
             }
         })
+
+        binding.edtBody.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable) {
+
+            }
+            override fun beforeTextChanged(
+                s: CharSequence, start: Int,
+                count: Int, after: Int,
+            ) {
+
+            }
+
+            override fun onTextChanged(
+                s: CharSequence, start: Int,
+                before: Int, count: Int,
+            ) {
+                body1 = start+count
+            }
+        })
+
     }
 
     override fun onTokenAdded(token: Person?) {
@@ -444,6 +505,16 @@ class NewMailActivity : BaseActivity(),
                 }
             }
         }
+    }
+
+    private fun stringToWords(mnemonic: String): ArrayList<String> {
+        val words = ArrayList<String>()
+        for (w in mnemonic.trim(' ').split(",")) {
+            if (w.isNotEmpty()) {
+                words.add(w)
+            }
+        }
+        return words
     }
 
     override fun onTokenIgnored(token: Person?) {

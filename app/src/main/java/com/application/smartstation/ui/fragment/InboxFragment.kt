@@ -41,9 +41,20 @@ class InboxFragment : BaseFragment(R.layout.fragment_inbox) {
     val apiViewModel: ApiViewModel by viewModels()
     var emitters: SocketService.Emitters? = null
 
+    var mCallback: OnUnreadMailCountListener? = null
+
+    interface OnUnreadMailCountListener {
+        fun onUnreadMail(count: String)
+    }
+
     override fun onAttach(context: Context) {
         super.onAttach(context)
         emitters = SocketService.Emitters(context)
+        try {
+            mCallback = activity as OnUnreadMailCountListener
+        } catch (e: ClassCastException) {
+            throw ClassCastException(context.toString() + " must implement OnHeadlineSelectedListener")
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -57,8 +68,6 @@ class InboxFragment : BaseFragment(R.layout.fragment_inbox) {
     }
 
     private fun initView() {
-
-        getMailList()
 
         emitInbox()
 
@@ -115,6 +124,20 @@ class InboxFragment : BaseFragment(R.layout.fragment_inbox) {
         binding.rvInbox.adapter = inboxAdapter
         inboxAdapter!!.setMail(list.reversed())
 
+        if (list.isNullOrEmpty()){
+            unreadMail("0")
+        }else{
+            var count = 0
+            for (i in 0 until list.size){
+                if (list[i].mail_read_status.equals(0)){
+                    unreadMail(count.toString())
+                }else{
+                    count = +1
+                }
+            }
+            unreadMail(count.toString())
+        }
+
         inboxAdapter!!.onItemClick = { model ->
             val intent = Intent(requireActivity(), ViewMailActivity::class.java)
             intent.putExtra("boxType",1)
@@ -161,6 +184,15 @@ class InboxFragment : BaseFragment(R.layout.fragment_inbox) {
         }else{
             toast(mailSocketModel.message)
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        getMailList()
+    }
+
+    fun unreadMail(count:String){
+        mCallback!!.onUnreadMail(count)
     }
 
 }

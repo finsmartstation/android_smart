@@ -23,6 +23,7 @@ import com.application.smartstation.util.UtilsDefault
 import com.application.smartstation.util.viewBinding
 import com.application.smartstation.viewmodel.ApiViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import org.apache.commons.lang3.StringUtils.startsWith
 
 @AndroidEntryPoint
 class ViewMailActivity : BaseActivity() {
@@ -36,6 +37,7 @@ class ViewMailActivity : BaseActivity() {
     var body = ""
     var id = ""
     var to:Array<String>? = null
+    var to1:Array<String>? = null
     var cc:Array<String>? = null
     var bcc:Array<String>? = null
     var attachmentList:ArrayList<String>? = ArrayList()
@@ -215,9 +217,27 @@ class ViewMailActivity : BaseActivity() {
 
         binding.btnReply.setOnClickListener {
             val intent = Intent(this,NewMailActivity::class.java)
-            intent.putExtra("to",from)
+            intent.putExtra("from",from)
             intent.putExtra("sub",subjectVal(sub))
             intent.putExtra("body",bodyMsg(body,date))
+            startActivity(intent)
+        }
+
+        binding.btnReplyAll.setOnClickListener {
+            val intent = Intent(this,NewMailActivity::class.java)
+            intent.putExtra("from",from)
+            intent.putExtra("cc",cc)
+            intent.putExtra("to",to)
+            intent.putExtra("bcc",bcc)
+            intent.putExtra("sub",subjectVal(sub))
+            intent.putExtra("body",bodyMsg(body,date))
+            startActivity(intent)
+        }
+        
+        binding.btnForward.setOnClickListener {
+            val intent = Intent(this,NewMailActivity::class.java)
+            intent.putExtra("sub",subjectFwdVal(sub))
+            intent.putExtra("body",bodyMsgFwd(body,date))
             startActivity(intent)
         }
 
@@ -248,6 +268,24 @@ class ViewMailActivity : BaseActivity() {
             }
 
         }
+    }
+
+    private fun bodyMsgFwd(body: String, date: String): String? {
+        val s = "<br>"+
+                "<div class=\"gmail_quote\">"+
+                "<div dir=\"ltr\" class=\"gmail_attr\">---------- Forwarded message ---------<br>From: <span dir=\"auto\">&lt;<a href=\"mailto:$from\">$from</a>&gt;</span><br>Date: "+
+                "On ${UtilsDefault.replyDayMail(date)}, ${UtilsDefault.replyTime(date)} at ${UtilsDefault.todayDate(UtilsDefault.localTimeConvert(date))}<br>Subject: $sub<br>To: &lt;<a href=\"$to\">$to</a>&gt;<br></div><br><br>"+
+                "$body<br></div></div>\r\n"
+        return s
+    }
+
+    private fun subjectFwdVal(sub: String): String? {
+        if (sub.startsWith("Fwd:")){
+            return sub
+        }else if (sub.startsWith("Re:")){
+            return sub.replace("Re:","Fwd:")
+        }
+        return "Fwd: "+sub
     }
 
     private fun deleteMail() {
@@ -288,9 +326,12 @@ class ViewMailActivity : BaseActivity() {
     fun subjectVal(values: String):String {
         if (values.startsWith("Re:")){
             return sub
+        }else if (sub.startsWith("Fwd:")){
+            return sub.replace("Fwd:","Re:")
         }
         return "Re: "+sub
     }
+
 
     fun bodyMsg(values: String, date: String):String {
         val s = "<br>"+
