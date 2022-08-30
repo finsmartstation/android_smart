@@ -27,6 +27,25 @@
         app:layout_constraintEnd_toEndOf="parent"
         />
 
+    <com.application.smartstation.view.CustomTextViewNormal
+        android:id="@+id/txtNoFound"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:gravity="center"
+        app:layout_constraintTop_toBottomOf="@+id/ilHeader"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/rlBottom"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:text="@string/no_sendbox"
+        android:textColor="@color/black"
+        android:textSize="18sp"
+        android:visibility="gone">
+
+    </com.application.smartstation.view.CustomTextViewNormal>
+
+
     <RelativeLayout
         android:id="@+id/rlBottom"
         android:layout_width="match_parent"

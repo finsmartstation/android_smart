@@ -22,11 +22,9 @@ object ApiUrl {
     const val SECURITY_PIN =API+"securityupdate"
     const val CHECK_SECURITY_PIN =API+"checksecuritypin"
     const val REMOVE_SECURITY_PIN =API+"removesecuritypin"
-    //incomplete
     const val SIGNATURE_UPLOAD =API+"signatureupload"
     const val GET_SIGNATURE =API+"getsignature"
     const val REMOVE_SIGNATURE =API+"removesignature"
-
     const val CHECK_MAIL_OTP =API+"checkemailotp"
     const val RESEND_MAIL_OTP =API+"resendemailotp"
     const val GET_TFA =API+"google_authenticator"
@@ -45,5 +43,11 @@ object ApiUrl {
     const val GET_INBOX =API+"get_inbox_mail_details"
     const val GET_SENT =API+"get_sent_mail_details"
     const val DELETE_MAIL =API+"deleteEmail"
+    const val GET_STAMP =API+"getstamp"
+    const val REMOVE_STAMP =API+"removestamp"
+    const val STAMP_UPLOAD =API+"stamp_upload"
+    const val GET_SIGNATURE_STAMP =API+"get_default_signature_and_stamp"
+    const val SET_SIGNATURE =API+"set_default_signature"
+    const val SET_STAMP =API+"set_default_stamp"
 
 }

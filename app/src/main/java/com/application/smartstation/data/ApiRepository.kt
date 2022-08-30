@@ -124,9 +124,16 @@ class ApiRepository @Inject constructor(val apiService: ApiService) {
         }.flowOn(Dispatchers.IO)
     }
 
-    fun uploadSignature(inputParams: InputParams): Flow<BaseResponse> {
+    fun uploadSignature(user_id:RequestBody,accessToken:RequestBody,name:RequestBody,signature: MultipartBody.Part): Flow<BaseResponse> {
         return flow {
-            val response = apiService.uploadSignature(inputParams)
+            val response = apiService.uploadSignature(user_id,accessToken,name,signature)
+            emit(response)
+        }.flowOn(Dispatchers.IO)
+    }
+
+    fun stampUpload(user_id:RequestBody,accessToken:RequestBody,name:RequestBody,stamp: MultipartBody.Part): Flow<BaseResponse> {
+        return flow {
+            val response = apiService.stampUpload(user_id,accessToken,name,stamp)
             emit(response)
         }.flowOn(Dispatchers.IO)
     }
@@ -253,6 +260,41 @@ class ApiRepository @Inject constructor(val apiService: ApiService) {
     fun deleteMail(inputParams: InputParams): Flow<BaseResponse> {
         return flow {
             val response = apiService.deleteMail(inputParams)
+            emit(response)
+        }.flowOn(Dispatchers.IO)
+    }
+
+    fun getStamp(inputParams: InputParams): Flow<GetStampRes> {
+        return flow {
+            val response = apiService.getStamp(inputParams)
+            emit(response)
+        }.flowOn(Dispatchers.IO)
+    }
+
+    fun removeStamp(inputParams: InputParams): Flow<BaseResponse> {
+        return flow {
+            val response = apiService.removeStamp(inputParams)
+            emit(response)
+        }.flowOn(Dispatchers.IO)
+    }
+
+    fun setSignature(inputParams: InputParams): Flow<BaseResponse> {
+        return flow {
+            val response = apiService.setSignature(inputParams)
+            emit(response)
+        }.flowOn(Dispatchers.IO)
+    }
+
+    fun setStamp(inputParams: InputParams): Flow<BaseResponse> {
+        return flow {
+            val response = apiService.setStamp(inputParams)
+            emit(response)
+        }.flowOn(Dispatchers.IO)
+    }
+
+    fun getStampSignature(inputParams: InputParams): Flow<GetStampSignature> {
+        return flow {
+            val response = apiService.getStampSignature(inputParams)
             emit(response)
         }.flowOn(Dispatchers.IO)
     }

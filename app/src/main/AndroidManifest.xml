@@ -22,7 +22,7 @@
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
-    <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE" />
 
     <uses-feature android:name="android.hardware.camera2" />
     <uses-feature android:name="android.hardware.camera.front" />
@@ -49,6 +49,9 @@
         android:roundIcon="@mipmap/app_logo"
         android:supportsRtl="true"
         android:theme="@style/Theme.SmartStation">
+        <activity
+            android:name=".UploadSignatureActivity"
+            android:exported="false" />
         <activity
             android:name=".ui.activity.ViewMailActivity"
             android:exported="false" />

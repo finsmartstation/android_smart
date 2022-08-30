@@ -21,6 +21,8 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.application.smartstation.R
 import com.application.smartstation.databinding.ActivityNewMailBinding
 import com.application.smartstation.service.Status
+import com.application.smartstation.tokenautocomplete.CharacterTokenizer
+import com.application.smartstation.tokenautocomplete.TokenCompleteTextView
 import com.application.smartstation.ui.adapter.MailFilesAdapter
 import com.application.smartstation.ui.model.InputParams
 import com.application.smartstation.ui.model.MailImageSelect
@@ -30,8 +32,6 @@ import com.application.smartstation.util.FileUtils
 import com.application.smartstation.util.UtilsDefault
 import com.application.smartstation.util.viewBinding
 import com.application.smartstation.viewmodel.ApiViewModel
-import com.tokenautocomplete.CharacterTokenizer
-import com.tokenautocomplete.TokenCompleteTextView
 import dagger.hilt.android.AndroidEntryPoint
 import id.zelory.compressor.Compressor
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
@@ -66,16 +66,12 @@ class NewMailActivity : BaseActivity(),
         "image/jpeg", // jpeg or jpg
         "image/png", // png
         "application/pdf", // pdf
-        "application/msword", // doc
-        "application/vnd.openxmlformats-officedocument.wordprocessingml.document", // docx
-        "application/vnd.ms-excel", // xls
-        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", // xlsx
-        "video/mp4", // mp4
+//        "application/msword", // doc
+//        "application/vnd.openxmlformats-officedocument.wordprocessingml.document", // docx
+//        "application/vnd.ms-excel", // xls
+//        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", // xlsx
+//        "video/mp4", // mp4
     )
-
-    private val IMAGE_DIRECTORY = "/demonuts_upload_gallery"
-    private val BUFFER_SIZE = 1024 * 2
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -151,12 +147,16 @@ class NewMailActivity : BaseActivity(),
         binding.ilHeader.imgSend.setOnClickListener {
             UtilsDefault.hideKeyboardForFocusedView(this)
 
-            for (s in 0 until toList.size) {
-                if (s.equals(0)){
-                    toMail = toList[s]
-                }else{
-                    toMail = toMail+", "+toList[s]
+            if (!toList.isNullOrEmpty()) {
+                for (s in 0 until toList.size) {
+                    if (s.equals(0)) {
+                        toMail = toList[s]
+                    } else {
+                        toMail = toMail + ", " + toList[s]
+                    }
                 }
+            }else{
+                toMail = binding.edtTo.text.toString().trim()
             }
 
             for (s in 0 until ccList.size) {
@@ -381,8 +381,11 @@ class NewMailActivity : BaseActivity(),
     private fun initView() {
         binding.edtTo.setTokenListener(this)
         binding.edtTo.setTokenizer(CharacterTokenizer(asList(' ', ','), ","))
+//        binding.edtTo.performCollapse(false)
         binding.edtCc.setTokenListener(this)
+        binding.edtCc.setTokenizer(CharacterTokenizer(asList(' ', ','), ","))
         binding.edtBcc.setTokenListener(this)
+        binding.edtBcc.setTokenizer(CharacterTokenizer(asList(' ', ','), ","))
 
         if (intent != null){
             if (intent.getStringExtra("from") != null){
@@ -435,7 +438,7 @@ class NewMailActivity : BaseActivity(),
 
         binding.ilHeader.txtHeader.text = resources.getString(R.string.compose)
 
-        binding.rvMailList.layoutManager = GridLayoutManager(this,2)
+        binding.rvMailList.layoutManager = GridLayoutManager(this,3)
         mailFilesAdapter = MailFilesAdapter(this)
         binding.rvMailList.adapter = mailFilesAdapter
 
@@ -475,38 +478,6 @@ class NewMailActivity : BaseActivity(),
 
     }
 
-    override fun onTokenAdded(token: Person?) {
-        if (status.equals(0)) {
-            toList.add(token!!.email)
-        }else if (status.equals(1)) {
-            ccList.add(token!!.email)
-        }else if (status.equals(2)) {
-            bccList.add(token!!.email)
-        }
-    }
-
-    override fun onTokenRemoved(token: Person?) {
-        if (status.equals(0)) {
-            for (i in 0 until toList.size) {
-                if (token!!.email.equals(toList[i])) {
-                    toList.remove(toList[i])
-                }
-            }
-        } else if (status.equals(1)) {
-            for (i in 0 until ccList.size) {
-                if (token!!.email.equals(ccList[i])) {
-                    ccList.remove(ccList[i])
-                }
-            }
-        }else if (status.equals(2)) {
-            for (i in 0 until bccList.size) {
-                if (token!!.email.equals(bccList[i])) {
-                    bccList.remove(bccList[i])
-                }
-            }
-        }
-    }
-
     private fun stringToWords(mnemonic: String): ArrayList<String> {
         val words = ArrayList<String>()
         for (w in mnemonic.trim(' ').split(",")) {
@@ -517,7 +488,45 @@ class NewMailActivity : BaseActivity(),
         return words
     }
 
-    override fun onTokenIgnored(token: Person?) {
 
+    override fun onTokenAdded(token: Person) {
+        if (status.equals(0)) {
+            toList.add(token.email)
+        }else if (status.equals(1)) {
+            ccList.add(token.email)
+        }else if (status.equals(2)) {
+            bccList.add(token.email)
+        }
+    }
+
+    override fun onTokenRemoved(token: Person) {
+        try {
+            if (status.equals(0)) {
+                for (i in 0 until toList.size) {
+                    if (token.email.equals(toList[i])) {
+                        toList.remove(toList[i])
+                    }
+                }
+            } else if (status.equals(1)) {
+                for (i in 0 until ccList.size) {
+                    if (token.email.equals(ccList[i])) {
+                        ccList.remove(ccList[i])
+                    }
+                }
+            }else if (status.equals(2)) {
+                for (i in 0 until bccList.size) {
+                    if (token.email.equals(bccList[i])) {
+                        bccList.remove(bccList[i])
+                    }
+                }
+            }
+        }catch (e:Exception){
+            Log.d("TAG", "onTokenRemoved: "+e)
+        }
+
+    }
+
+    override fun onTokenIgnored(token: Person) {
+        TODO("Not yet implemented")
     }
 }

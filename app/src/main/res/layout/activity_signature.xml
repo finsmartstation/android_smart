@@ -7,6 +7,13 @@
     android:background="@color/white"
     tools:context=".ui.activity.SignatureActivity">
 
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:alpha="0.4"
+        android:scaleType="centerCrop"
+        android:src="@drawable/ic_splash_bg_use" />
+
     <include
         android:id="@+id/ilHeader"
         layout="@layout/header_layout"
@@ -24,15 +31,40 @@
         app:layout_constraintBottom_toBottomOf="parent"
         >
 
+        <androidx.recyclerview.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/rvSignatureList"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginTop="10dp"
+            />
 
+        <com.application.smartstation.view.CustomTextViewNormal
+            android:id="@+id/txtNoFound"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:gravity="center"
+            android:text="@string/no_signature"
+            android:textColor="@color/black"
+            android:textSize="18sp"
+            android:visibility="gone">
+
+        </com.application.smartstation.view.CustomTextViewNormal>
 
     </LinearLayout>
 
     <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:alpha="0.4"
-        android:scaleType="centerCrop"
-        android:src="@drawable/ic_splash_bg_use" />
+        android:layout_width="60dp"
+        android:layout_height="30dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="20dp"
+        android:src="@drawable/login_logo_use"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

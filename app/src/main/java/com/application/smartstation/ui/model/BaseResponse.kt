@@ -29,12 +29,15 @@ class TypingRes(var status:Boolean, var message:String,var statuscode:String, va
 class GrpUserListRes(var status:Boolean, var message:String,var statuscode:String,var group_name:String, var group_profile:String, var number_of_members:String, var data:ArrayList<UserListGrp>)
 class UserListGrp(var user_id: String, var username:String, var type:String, var about:String, var profile_pic:String)
 class SendMailRes(var status:Boolean, var message:String,var statuscode:String, var data: ArrayList<SendMailListRes>)
-class SendMailListRes(var id: String, var from:String, var userId:String, var attachments:ArrayList<MailAttachmentList>, var createdAt:String, var body: String, var subject: String, var inboxId:String, var to:Array<String>, var datetime: String, var bcc:Array<String>, var cc:Array<String>, var bodyMD5Hash:String, var virtualSend:String)
+class SendMailListRes(var id: String, var from:String, var userId:String, var attachments:ArrayList<MailAttachmentList>, var createdAt:String, var body: String, var subject: String, var inboxId:String, var to:Array<String>, var datetime: String, var bcc:Array<String>, var cc:Array<String>, var bodyMD5Hash:String, var virtualSend:String, var profile_pic:String)
 class MailImageSelect(var imagePath:String,var type:String)
 class MailAttachmentList(var attachment:String)
 class InboxDetailsRes(var status: Boolean, var statuscode: Int,var message: String, var data:DataInbox)
 class DataInbox(var from:String, var to:Array<String>, var cc:Array<String>, var bcc:Array<String>, var replyTo:String, var created_datetime:String, var subject: String, var body: String, var attachments: Array<String>, var sent_datetime:String)
-
+class GetStampRes(var status: Boolean, var statuscode: Int,var message: String, var data:ArrayList<StampList>)
+class StampList(var id: String, var user_id:String, var name:String, var stamp:String, var status: String)
+class GetStampSignature(var status: Boolean, var statuscode: Int,var message: String, var data:SignatureStampRes)
+class SignatureStampRes(var default_signature:String, var default_stamp:String)
 
 class SendMsgResponse(var status:Boolean, var message:String)
 class PostResponse(var ip:String)

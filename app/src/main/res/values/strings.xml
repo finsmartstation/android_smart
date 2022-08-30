@@ -29,11 +29,15 @@
     <string name="ceo">CEO or Owner name</string>
     <string name="company_add">Company address</string>
     <string name="please_ceo">Please enter name</string>
+    <string name="please_upload_sign">Please choose image</string>
     <string name="please_name_min">Name atleast 3 letters</string>
     <string name="please_company">Please enter company name</string>
     <string name="please_company_address">Please enter company Email ID</string>
     <string name="call">Call</string>
     <string name="no_found">Not Found</string>
+    <string name="no_inbox">No Inbox</string>
+    <string name="no_signature">No Signature</string>
+    <string name="no_sendbox">No Sentbox</string>
     <string name="no_chat_found">No Chats</string>
     <string name="no_letter_found">No letter found</string>
     <string name="type_your_message">Type a message</string>
@@ -1185,5 +1189,11 @@
     <string name="reply">Reply</string>
     <string name="reply_all">Reply All</string>
     <string name="forward">Forward</string>
+    <string name="no_stamp">No Stamp</string>
+    <string name="from_address">From Address</string>
+    <string name="date">Date</string>
+    <string name="place">Place</string>
+    <string name="primary">Primary</string>
+    <string name="set_as_primary">Set as primary</string>
 
 </resources>

@@ -33,7 +33,11 @@ class AccountActivity : BaseActivity() {
         }
 
         binding.llSignature.setOnClickListener {
-            startActivity(Intent(this,SignatureActivity::class.java))
+            startActivity(Intent(this,SignatureActivity::class.java).putExtra("type",1))
+        }
+
+        binding.llStamp.setOnClickListener {
+            startActivity(Intent(this,SignatureActivity::class.java).putExtra("type",2))
         }
     }
 }

@@ -309,9 +309,27 @@ class ApiViewModel @Inject constructor(
 
     }
 
-    fun uploadSignature(inputParams: InputParams) = liveData<Resource<BaseResponse>> {
+    fun uploadSignature(user_id:RequestBody,accessToken:RequestBody,name:RequestBody,signature: MultipartBody.Part) = liveData<Resource<BaseResponse>> {
         if (UtilsDefault.isOnline()) {
-            repository.uploadSignature(inputParams)
+            repository.uploadSignature(user_id,accessToken,name, signature)
+                .onStart {
+                    emit(Resource.loading(data = null))
+                }
+                .catch {
+                    emit(Resource.error(data = null, msg = "Cannot reach server..try again"))
+                }
+                .collect {
+                    emit(Resource.success(it))
+                }
+        } else {
+            emit(Resource.error(data = null, msg = "No internet connection"))
+        }
+
+    }
+
+    fun stampUpload(user_id:RequestBody,accessToken:RequestBody,name:RequestBody,stamp: MultipartBody.Part) = liveData<Resource<BaseResponse>> {
+        if (UtilsDefault.isOnline()) {
+            repository.stampUpload(user_id,accessToken,name, stamp)
                 .onStart {
                     emit(Resource.loading(data = null))
                 }
@@ -636,6 +654,96 @@ class ApiViewModel @Inject constructor(
     fun deleteMail(inputParams: InputParams) = liveData<Resource<BaseResponse>> {
         if (UtilsDefault.isOnline()) {
             repository.deleteMail(inputParams)
+                .onStart {
+                    emit(Resource.loading(data = null))
+                }
+                .catch {
+                    emit(Resource.error(data = null, msg = "Cannot reach server..try again"))
+                }
+                .collect {
+                    emit(Resource.success(it))
+                }
+        } else {
+            emit(Resource.error(data = null, msg = "No internet connection"))
+        }
+
+    }
+
+    fun getStamp(inputParams: InputParams) = liveData<Resource<GetStampRes>> {
+        if (UtilsDefault.isOnline()) {
+            repository.getStamp(inputParams)
+                .onStart {
+                    emit(Resource.loading(data = null))
+                }
+                .catch {
+                    emit(Resource.error(data = null, msg = "Cannot reach server..try again"))
+                }
+                .collect {
+                    emit(Resource.success(it))
+                }
+        } else {
+            emit(Resource.error(data = null, msg = "No internet connection"))
+        }
+
+    }
+
+    fun removeStamp(inputParams: InputParams) = liveData<Resource<BaseResponse>> {
+        if (UtilsDefault.isOnline()) {
+            repository.removeStamp(inputParams)
+                .onStart {
+                    emit(Resource.loading(data = null))
+                }
+                .catch {
+                    emit(Resource.error(data = null, msg = "Cannot reach server..try again"))
+                }
+                .collect {
+                    emit(Resource.success(it))
+                }
+        } else {
+            emit(Resource.error(data = null, msg = "No internet connection"))
+        }
+
+    }
+
+    fun setSignature(inputParams: InputParams) = liveData<Resource<BaseResponse>> {
+        if (UtilsDefault.isOnline()) {
+            repository.setSignature(inputParams)
+                .onStart {
+                    emit(Resource.loading(data = null))
+                }
+                .catch {
+                    emit(Resource.error(data = null, msg = "Cannot reach server..try again"))
+                }
+                .collect {
+                    emit(Resource.success(it))
+                }
+        } else {
+            emit(Resource.error(data = null, msg = "No internet connection"))
+        }
+
+    }
+
+    fun setStamp(inputParams: InputParams) = liveData<Resource<BaseResponse>> {
+        if (UtilsDefault.isOnline()) {
+            repository.setStamp(inputParams)
+                .onStart {
+                    emit(Resource.loading(data = null))
+                }
+                .catch {
+                    emit(Resource.error(data = null, msg = "Cannot reach server..try again"))
+                }
+                .collect {
+                    emit(Resource.success(it))
+                }
+        } else {
+            emit(Resource.error(data = null, msg = "No internet connection"))
+        }
+
+    }
+
+    fun getStampSignature(inputParams: InputParams) = liveData<Resource<GetStampSignature>> {
+        if (UtilsDefault.isOnline()) {
+            repository.getStampSignature(inputParams)
                 .onStart {
                     emit(Resource.loading(data = null))
                 }

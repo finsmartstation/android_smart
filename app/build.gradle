@@ -168,8 +168,8 @@ dependencies {
     //emoji keyboard
     implementation "com.vanniktech:emoji-ios:0.8.0"
 
-    //email edittext
-    implementation "com.splitwise:tokenautocomplete:3.0.1@aar"
+//    //email edittext
+//    implementation "com.splitwise:tokenautocomplete:3.0.1@aar"
 
     //sim num
     implementation "com.google.android.gms:play-services-auth:20.1.0"

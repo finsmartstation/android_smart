@@ -102,7 +102,12 @@ class InboxFragment : BaseFragment(R.layout.fragment_inbox) {
                         if (it.data!!.status){
                             list = it.data.data
                             if(list.isNotEmpty()) {
+                                binding.rvInbox.visibility = View.VISIBLE
+                                binding.txtNoFound.visibility = View.GONE
                                 setData(list)
+                            }else{
+                                binding.rvInbox.visibility = View.GONE
+                                binding.txtNoFound.visibility = View.VISIBLE
                             }
                         }else{
                             toast(it.data.message)
@@ -129,9 +134,7 @@ class InboxFragment : BaseFragment(R.layout.fragment_inbox) {
         }else{
             var count = 0
             for (i in 0 until list.size){
-                if (list[i].mail_read_status.equals(0)){
-                    unreadMail(count.toString())
-                }else{
+                if (list[i].mail_read_status.equals(1)){
                     count = +1
                 }
             }

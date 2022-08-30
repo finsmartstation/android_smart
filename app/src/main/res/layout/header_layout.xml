@@ -66,11 +66,12 @@
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_gravity="center"
+            android:padding="4dp"
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
             android:layout_marginEnd="16dp"
             android:layout_marginBottom="16dp"
-            android:src="@drawable/call"
+            android:src="@drawable/ic_plus_use"
             android:visibility="gone"
             app:tint="@color/white" />
 

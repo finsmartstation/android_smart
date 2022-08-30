@@ -67,4 +67,10 @@ class InputParams {
     var id:String? = null
     var type:String? = null
 
+    //signature details
+    var image_id:String? = null
+
+    //stamp details
+    var stamp_id:String? = null
+
 }

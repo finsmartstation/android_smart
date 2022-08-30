@@ -63,9 +63,6 @@ interface ApiService {
     @POST(ApiUrl.REMOVE_SECURITY_PIN)
     suspend fun passcodeRemove(@Body inputParams: InputParams): BaseResponse
 
-    @POST(ApiUrl.SIGNATURE_UPLOAD)
-    suspend fun uploadSignature(@Body inputParams: InputParams): BaseResponse
-
     @POST(ApiUrl.GET_SIGNATURE)
     suspend fun getSignature(@Body inputParams: InputParams): GetSignatureResponse
 
@@ -119,6 +116,29 @@ interface ApiService {
 
     @POST(ApiUrl.DELETE_MAIL)
     suspend fun deleteMail(@Body inputParams: InputParams): BaseResponse
+
+    @POST(ApiUrl.GET_STAMP)
+    suspend fun getStamp(@Body inputParams: InputParams): GetStampRes
+
+    @POST(ApiUrl.REMOVE_STAMP)
+    suspend fun removeStamp(@Body inputParams: InputParams): BaseResponse
+
+    @POST(ApiUrl.SET_SIGNATURE)
+    suspend fun setSignature(@Body inputParams: InputParams): BaseResponse
+
+    @POST(ApiUrl.SET_STAMP)
+    suspend fun setStamp(@Body inputParams: InputParams): BaseResponse
+
+    @POST(ApiUrl.GET_SIGNATURE_STAMP)
+    suspend fun getStampSignature(@Body inputParams: InputParams): GetStampSignature
+
+    @Multipart
+    @POST(ApiUrl.SIGNATURE_UPLOAD)
+    suspend fun uploadSignature(@Part("user_id") user_id:RequestBody, @Part("accessToken") accessToken:RequestBody,@Part("name") group_name:RequestBody,@Part signature: MultipartBody.Part): BaseResponse
+
+    @Multipart
+    @POST(ApiUrl.STAMP_UPLOAD)
+    suspend fun stampUpload(@Part("user_id") user_id:RequestBody, @Part("accessToken") accessToken:RequestBody,@Part("name") group_name:RequestBody,@Part stamp: MultipartBody.Part): BaseResponse
 
     @Multipart
     @POST(ApiUrl.CREATE_GRP)

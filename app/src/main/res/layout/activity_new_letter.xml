@@ -43,6 +43,7 @@
             >
 
             <LinearLayout
+                android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
@@ -76,6 +77,7 @@
                     android:fontFamily="@font/dinmedium"
                     android:inputType="textEmailAddress"
                     android:singleLine="true"
+
                     android:textColor="@color/black"
                     android:textColorHint="@color/viewgrey"
                     android:textSize="18sp" />
@@ -84,6 +86,7 @@
             </LinearLayout>
 
             <View
+                android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:layout_marginTop="10dp"
@@ -94,7 +97,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="26dp"
                 android:gravity="center"
                 >
                 <com.application.smartstation.view.CustomTextViewBold
@@ -114,17 +117,16 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@null"
-                    android:hint="@string/to"
                     android:minHeight="50dp"
+                    android:hint="@string/to"
                     android:layout_weight="1"
+                    android:bufferType="spannable"
                     android:layout_marginStart="16dp"
                     android:layout_marginEnd="8dp"
-                    android:maxHeight="100dp"
                     android:imeOptions="actionDone"
                     android:textCursorDrawable="@drawable/cusor_bg"
                     android:fontFamily="@font/dinregular"
-                    android:inputType="textEmailAddress"
-                    android:singleLine="true"
+                    android:inputType="textMultiLine"
                     android:textColor="@color/black"
                     android:textColorHint="@color/viewgrey"
                     android:textSize="18sp" />
@@ -218,12 +220,14 @@
                 <com.application.smartstation.view.ContactsCompletionView
                     android:id="@+id/edtCc"
                     android:layout_width="match_parent"
-                    android:layout_height="50dp"
+                    android:layout_height="wrap_content"
+                    android:minHeight="50dp"
                     android:background="@null"
                     android:hint="@string/cc"
                     android:textCursorDrawable="@drawable/cusor_bg"
+                    android:imeOptions="actionDone"
                     android:fontFamily="@font/dinregular"
-                    android:inputType="textEmailAddress"
+                    android:inputType="textMultiLine"
                     android:singleLine="true"
                     android:layout_marginStart="16dp"
                     android:layout_marginEnd="26dp"
@@ -268,12 +272,14 @@
                 <com.application.smartstation.view.ContactsCompletionView
                     android:id="@+id/edtBcc"
                     android:layout_width="match_parent"
-                    android:layout_height="50dp"
+                    android:layout_height="wrap_content"
                     android:background="@null"
                     android:hint="@string/bcc"
+                    android:minHeight="50dp"
                     android:textCursorDrawable="@drawable/cusor_bg"
                     android:fontFamily="@font/dinregular"
-                    android:inputType="textEmailAddress"
+                    android:imeOptions="actionDone"
+                    android:inputType="textMultiLine"
                     android:singleLine="true"
                     android:layout_marginStart="16dp"
                     android:layout_marginEnd="26dp"
@@ -303,6 +309,94 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/black"
+                    android:text="@string/from_address"
+                    android:textSize="18sp"
+                    android:layout_marginStart="26dp"
+                    >
+
+                </com.application.smartstation.view.CustomTextViewBold>
+
+                <com.application.smartstation.view.CustomEditText
+                    android:id="@+id/edtFromAddress"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:minHeight="50dp"
+                    android:background="@null"
+                    android:hint="@string/from_address"
+                    android:textCursorDrawable="@drawable/cusor_bg"
+                    android:fontFamily="@font/dinregular"
+                    android:inputType="textMultiLine"
+                    android:imeOptions="actionNext"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="26dp"
+                    android:textColor="@color/black"
+                    android:textColorHint="@color/viewgrey"
+                    android:textSize="18sp" />
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="10dp"
+                android:background="@color/color_chat_popup_gray"
+                />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_gravity="center"
+                android:layout_marginTop="10dp">
+
+                <com.application.smartstation.view.CustomTextViewBold
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
+                    android:text="@string/to_address"
+                    android:textSize="18sp"
+                    android:layout_marginStart="26dp"
+                    >
+
+                </com.application.smartstation.view.CustomTextViewBold>
+
+                <com.application.smartstation.view.CustomEditText
+                    android:id="@+id/edtToAddress"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:minHeight="50dp"
+                    android:background="@null"
+                    android:hint="@string/to_address"
+                    android:textCursorDrawable="@drawable/cusor_bg"
+                    android:fontFamily="@font/dinregular"
+                    android:inputType="textMultiLine"
+                    android:imeOptions="actionNext"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="26dp"
+                    android:textColor="@color/black"
+                    android:textColorHint="@color/viewgrey"
+                    android:textSize="18sp" />
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="10dp"
+                android:background="@color/color_chat_popup_gray"
+                />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_gravity="center"
+                android:layout_marginTop="10dp">
+
+                <com.application.smartstation.view.CustomTextViewBold
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
                     android:text="@string/subject"
                     android:textSize="18sp"
                     android:layout_marginStart="26dp"
@@ -313,13 +407,103 @@
                 <com.application.smartstation.view.CustomEditText
                     android:id="@+id/edtSubject"
                     android:layout_width="match_parent"
-                    android:layout_height="80dp"
+                    android:layout_height="wrap_content"
+                    android:minHeight="50dp"
                     android:background="@null"
                     android:hint="@string/subject"
                     android:textCursorDrawable="@drawable/cusor_bg"
                     android:fontFamily="@font/dinregular"
                     android:inputType="textMultiLine"
-                    android:singleLine="true"
+                    android:imeOptions="actionNext"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="26dp"
+                    android:textColor="@color/black"
+                    android:textColorHint="@color/viewgrey"
+                    android:textSize="18sp" />
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="10dp"
+                android:background="@color/color_chat_popup_gray"
+                />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_gravity="center"
+                android:layout_marginTop="10dp">
+
+                <com.application.smartstation.view.CustomTextViewBold
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
+                    android:text="@string/date"
+                    android:textSize="18sp"
+                    android:layout_marginStart="26dp"
+                    >
+
+                </com.application.smartstation.view.CustomTextViewBold>
+
+                <com.application.smartstation.view.CustomEditText
+                    android:id="@+id/edtDate"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:minHeight="50dp"
+                    android:background="@null"
+                    android:hint="@string/date"
+                    android:textCursorDrawable="@drawable/cusor_bg"
+                    android:fontFamily="@font/dinregular"
+                    android:inputType="textMultiLine"
+                    android:imeOptions="actionNext"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="26dp"
+                    android:textColor="@color/black"
+                    android:textColorHint="@color/viewgrey"
+                    android:textSize="18sp" />
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="10dp"
+                android:background="@color/color_chat_popup_gray"
+                />
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_gravity="center"
+                android:layout_marginTop="10dp">
+
+                <com.application.smartstation.view.CustomTextViewBold
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
+                    android:text="@string/place"
+                    android:textSize="18sp"
+                    android:layout_marginStart="26dp"
+                    >
+
+                </com.application.smartstation.view.CustomTextViewBold>
+
+                <com.application.smartstation.view.CustomEditText
+                    android:id="@+id/edtPlace"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:minHeight="50dp"
+                    android:background="@null"
+                    android:hint="@string/place"
+                    android:textCursorDrawable="@drawable/cusor_bg"
+                    android:fontFamily="@font/dinregular"
+                    android:inputType="textMultiLine"
+                    android:imeOptions="actionNext"
                     android:layout_marginStart="16dp"
                     android:layout_marginEnd="26dp"
                     android:textColor="@color/black"
@@ -353,20 +537,101 @@
             <com.application.smartstation.view.CustomEditText
                 android:id="@+id/edtBody"
                 android:layout_width="match_parent"
-                android:layout_height="180dp"
+                android:layout_height="wrap_content"
                 android:background="@null"
                 android:layout_marginTop="16dp"
                 android:hint="@string/body"
+                android:overScrollMode="always"
+                android:minHeight="50dp"
                 android:textCursorDrawable="@drawable/cusor_bg"
                 android:fontFamily="@font/dinregular"
+                android:focusable="true"
                 android:inputType="textMultiLine"
+                android:imeOptions="actionDone"
                 android:layout_marginStart="26dp"
                 android:layout_marginEnd="26dp"
+                android:layout_marginBottom="20dp"
                 android:textColor="@color/black"
                 android:textColorHint="@color/viewgrey"
                 android:textSize="18sp" />
 
+            <LinearLayout
+                android:id="@+id/llAttach"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginStart="26dp"
+                android:visibility="gone"
+                android:layout_marginEnd="26dp"
+                android:layout_marginBottom="26dp"
+                >
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/clSignature"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:visibility="gone"
+                    android:layout_marginEnd="4dp"
+                    >
+
+                <ImageView
+                    android:id="@+id/imgSignature"
+                    android:layout_width="match_parent"
+                    android:layout_height="100dp"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    />
+
+                    <ImageView
+                        android:id="@+id/imgSignatureClose"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:src="@drawable/close"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:tint="@color/color_green" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/clStamp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:visibility="gone"
+                    android:layout_marginStart="4dp"
+                    >
+
+                <ImageView
+                    android:id="@+id/imgStamp"
+                    android:layout_width="match_parent"
+                    android:layout_height="100dp"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    />
+
+                    <ImageView
+                        android:id="@+id/imgStampClose"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:src="@drawable/close"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:tint="@color/color_green" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </LinearLayout>
+
+
+
         </LinearLayout>
+
 
     </ScrollView>
 

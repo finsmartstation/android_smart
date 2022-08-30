@@ -10,8 +10,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.application.smartstation.R;
+import com.application.smartstation.tokenautocomplete.TokenCompleteTextView;
 import com.application.smartstation.ui.model.Person;
-import com.tokenautocomplete.TokenCompleteTextView;
 
 public class ContactsCompletionView  extends TokenCompleteTextView<Person> {
 

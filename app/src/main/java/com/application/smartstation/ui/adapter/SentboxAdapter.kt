@@ -11,6 +11,8 @@ import com.application.smartstation.R
 import com.application.smartstation.databinding.ItemInboxBinding
 import com.application.smartstation.ui.model.SendMailListRes
 import com.application.smartstation.util.UtilsDefault
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 
 
 class SentboxAdapter(val context: Context) : RecyclerView.Adapter<SentboxAdapter.ViewHolder>() {
@@ -49,7 +51,8 @@ class SentboxAdapter(val context: Context) : RecyclerView.Adapter<SentboxAdapter
                 binding.imgAttach.visibility = View.GONE
             }
 
-//            Glide.with(context).load(model.profile_pic).placeholder(R.drawable.ic_default).error(R.drawable.ic_default).diskCacheStrategy(DiskCacheStrategy.DATA).into(binding.imgMailProfile)
+            Glide.with(context).load(model.profile_pic).placeholder(R.drawable.ic_default).error(R.drawable.ic_default).diskCacheStrategy(
+                DiskCacheStrategy.DATA).into(binding.imgMailProfile)
 
 //            if (model.mail_read_status == "1"){
                 binding.txtTitle.setTextColor(context.resources.getColor(R.color.black))
