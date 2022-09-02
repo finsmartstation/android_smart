@@ -254,6 +254,18 @@ class ChatActivity : BaseActivity(),ImageVideoSelectorDialog.Action {
             popupWindow.dismiss()
         }
 
+        bind.txtViewContact.setOnClickListener {
+            if (!chatType.equals("private")) {
+                startActivity(Intent(this, ChatInfoActivity::class.java)
+                    .putExtra(Constants.NAME, receiverName)
+                    .putExtra(Constants.PROFILE_PIC, receiverProfile)
+                    .putExtra(Constants.CHAT_TYPE, chatType).putExtra(Constants.ROOM, room))
+            }
+            popupWindow.dismiss()
+        }
+
+
+
         popupWindow.setOnDismissListener(PopupWindow.OnDismissListener {
             if (i == 0){
                 binding.ilHeader.imgMenu.visibility = View.VISIBLE

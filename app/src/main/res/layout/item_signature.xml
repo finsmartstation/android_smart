@@ -67,7 +67,6 @@
             android:paddingEnd="8dp"
             android:paddingTop="4dp"
             android:paddingBottom="4dp"
-            android:layout_marginEnd="16dp"
             android:background="@drawable/dot_bg"
             >
 
@@ -83,6 +82,7 @@
             android:id="@+id/imgDelete"
             android:layout_width="30dp"
             android:layout_height="30dp"
+            android:layout_marginStart="16dp"
             android:src="@drawable/ic_delete"
             android:layout_gravity="center"
             />

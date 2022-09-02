@@ -129,6 +129,9 @@ interface ApiService {
     @POST(ApiUrl.SET_STAMP)
     suspend fun setStamp(@Body inputParams: InputParams): BaseResponse
 
+    @POST(ApiUrl.NEW_LETTER_SENT)
+    suspend fun newLetter(@Body inputParams: InputParams): BaseResponse
+
     @POST(ApiUrl.GET_SIGNATURE_STAMP)
     suspend fun getStampSignature(@Body inputParams: InputParams): GetStampSignature
 

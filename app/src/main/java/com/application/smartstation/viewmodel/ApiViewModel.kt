@@ -741,6 +741,24 @@ class ApiViewModel @Inject constructor(
 
     }
 
+    fun newLetter(inputParams: InputParams) = liveData<Resource<BaseResponse>> {
+        if (UtilsDefault.isOnline()) {
+            repository.newLetter(inputParams)
+                .onStart {
+                    emit(Resource.loading(data = null))
+                }
+                .catch {
+                    emit(Resource.error(data = null, msg = "Cannot reach server..try again"))
+                }
+                .collect {
+                    emit(Resource.success(it))
+                }
+        } else {
+            emit(Resource.error(data = null, msg = "No internet connection"))
+        }
+
+    }
+
     fun getStampSignature(inputParams: InputParams) = liveData<Resource<GetStampSignature>> {
         if (UtilsDefault.isOnline()) {
             repository.getStampSignature(inputParams)

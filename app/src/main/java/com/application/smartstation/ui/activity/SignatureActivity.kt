@@ -125,7 +125,7 @@ class SignatureActivity : BaseActivity() {
     private fun setData(list: ArrayList<SignatureListData>) {
         binding.rvSignatureList.layoutManager = LinearLayoutManager(this,
             LinearLayoutManager.VERTICAL,false)
-        signatureAdapter = SignatureAdapter(this)
+        signatureAdapter = SignatureAdapter(this,1)
         binding.rvSignatureList.adapter = signatureAdapter
 
         signatureAdapter!!.onItemDeleteClick = { model ->
@@ -228,7 +228,7 @@ class SignatureActivity : BaseActivity() {
     private fun setDataStamp(listStamp: ArrayList<StampList>) {
         binding.rvSignatureList.layoutManager = LinearLayoutManager(this,
             LinearLayoutManager.VERTICAL,false)
-        stampAdapter = StampAdapter(this)
+        stampAdapter = StampAdapter(this,2)
         binding.rvSignatureList.adapter = stampAdapter
 
         stampAdapter!!.onItemDeleteClick = { model ->

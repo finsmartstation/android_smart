@@ -36,6 +36,7 @@
                 android:layout_height="40dp"
                 android:layout_marginStart="36dp"
                 android:layout_marginTop="16dp"
+                android:padding="3dp"
                 android:layout_marginBottom="16dp"
                 android:src="@drawable/profile"
                 app:tint="@color/color_green" />
@@ -86,6 +87,7 @@
             <ImageView
                 android:layout_width="40dp"
                 android:layout_height="40dp"
+                android:padding="4dp"
                 android:layout_marginStart="36dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginBottom="16dp"
@@ -139,6 +141,7 @@
             <ImageView
                 android:layout_width="40dp"
                 android:layout_height="40dp"
+                android:padding="4dp"
                 android:layout_marginStart="36dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginBottom="16dp"
@@ -193,6 +196,7 @@
             <ImageView
                 android:layout_width="40dp"
                 android:layout_height="40dp"
+                android:padding="4dp"
                 android:layout_marginStart="36dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginBottom="16dp"

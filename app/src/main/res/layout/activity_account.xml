@@ -180,8 +180,8 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginBottom="16dp"
-                android:src="@drawable/ic_stamp_use"
-                />
+                android:src="@drawable/ic_stamp_icon_use"/>
+
 
             <com.application.smartstation.view.CustomTextViewBold
                 android:layout_width="match_parent"
@@ -231,8 +231,5 @@
         </LinearLayout>
 
     </LinearLayout>
-
-
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

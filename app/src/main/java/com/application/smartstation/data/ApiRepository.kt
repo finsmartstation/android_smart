@@ -292,6 +292,13 @@ class ApiRepository @Inject constructor(val apiService: ApiService) {
         }.flowOn(Dispatchers.IO)
     }
 
+    fun newLetter(inputParams: InputParams): Flow<BaseResponse> {
+        return flow {
+            val response = apiService.newLetter(inputParams)
+            emit(response)
+        }.flowOn(Dispatchers.IO)
+    }
+
     fun getStampSignature(inputParams: InputParams): Flow<GetStampSignature> {
         return flow {
             val response = apiService.getStampSignature(inputParams)

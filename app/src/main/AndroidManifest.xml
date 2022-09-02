@@ -50,7 +50,16 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.SmartStation">
         <activity
-            android:name=".UploadSignatureActivity"
+            android:name=".ui.activity.product.ProductActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.activity.CloudViewActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.activity.CloudActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.activity.UploadSignatureActivity"
             android:exported="false" />
         <activity
             android:name=".ui.activity.ViewMailActivity"
@@ -141,7 +150,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ui.activity.MainActivity"
+            android:name=".MainActivity"
             android:exported="false" /> <!-- image pick -->
         <provider
             android:name="androidx.core.content.FileProvider"

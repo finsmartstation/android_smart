@@ -12,16 +12,18 @@ import com.application.smartstation.databinding.ItemInboxBinding
 import com.application.smartstation.databinding.ItemSignatureBinding
 import com.application.smartstation.ui.model.SendMailListRes
 import com.application.smartstation.ui.model.SignatureListData
+import com.application.smartstation.ui.model.StampList
 import com.application.smartstation.util.UtilsDefault
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 
 
-class SignatureAdapter(val context: Context) : RecyclerView.Adapter<SignatureAdapter.ViewHolder>() {
+class SignatureAdapter(val context: Context,val type:Int) : RecyclerView.Adapter<SignatureAdapter.ViewHolder>() {
 
     private var list = emptyList<SignatureListData>()
     var onItemDeleteClick: ((model: SignatureListData) -> Unit)? = null
     var onItemClick: ((model: SignatureListData) -> Unit)? = null
+    var onItemSelectClick: ((model: SignatureListData) -> Unit)? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
 
@@ -40,6 +42,26 @@ class SignatureAdapter(val context: Context) : RecyclerView.Adapter<SignatureAda
             binding.txtTitle.text = model.name
             Glide.with(context).load(model.image).placeholder(R.drawable.ic_default).error(R.drawable.ic_default).diskCacheStrategy(
                 DiskCacheStrategy.DATA).into(binding.imgSignature)
+
+            if (model.default){
+                binding.txtPrimary.visibility = View.VISIBLE
+                binding.txtSetPrimary.visibility = View.GONE
+            }else{
+                binding.txtPrimary.visibility = View.GONE
+                binding.txtSetPrimary.visibility = View.VISIBLE
+            }
+
+            if (type.equals(2)){
+                binding.imgDelete.visibility = View.GONE
+                binding.txtSetPrimary.visibility = View.GONE
+            }else{
+                binding.imgDelete.visibility = View.VISIBLE
+                binding.txtSetPrimary.visibility = View.VISIBLE
+            }
+
+            itemView.setOnClickListener {
+                onItemSelectClick!!.invoke(model)
+            }
 
             binding.imgDelete.setOnClickListener {
                 onItemDeleteClick!!.invoke(model)

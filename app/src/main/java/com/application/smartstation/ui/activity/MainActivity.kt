@@ -1,6 +1,7 @@
 package com.application.smartstation.ui.activity
 
 import android.app.Dialog
+import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
@@ -20,11 +21,10 @@ import androidx.drawerlayout.widget.DrawerLayout.SimpleDrawerListener
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.application.smartstation.R
-import com.application.smartstation.databinding.ActivityMainBinding
-import com.application.smartstation.databinding.DialogLogoutBinding
-import com.application.smartstation.databinding.MenuPopupBinding
+import com.application.smartstation.databinding.*
 import com.application.smartstation.service.Status
 import com.application.smartstation.service.background.SocketService
+import com.application.smartstation.ui.activity.product.ProductActivity
 import com.application.smartstation.ui.adapter.ChatAdapter
 import com.application.smartstation.ui.adapter.ContactAdapter
 import com.application.smartstation.ui.fragment.ChatMainFragment
@@ -39,6 +39,7 @@ import com.application.smartstation.util.Constants
 import com.application.smartstation.util.UtilsDefault
 import com.application.smartstation.util.viewBinding
 import com.application.smartstation.viewmodel.ApiViewModel
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
@@ -236,6 +237,10 @@ class MainActivity : BaseActivity(), InboxFragment.OnUnreadMailCountListener {
             type = "chat"
         }
 
+        binding.imgPlus.setOnClickListener {
+            bottomDialog()
+        }
+
         binding.rlMail.setOnClickListener {
             binding.rlMail.background = getDrawable(R.color.color_tab_select_bg)
             binding.rlChat.background = null
@@ -248,7 +253,11 @@ class MainActivity : BaseActivity(), InboxFragment.OnUnreadMailCountListener {
         }
 
         binding.imgNewMail.setOnClickListener {
-            startActivity(Intent(this,NewMailActivity::class.java))
+            if (type.equals("mail")) {
+                startActivity(Intent(this, NewMailActivity::class.java))
+            }else{
+                startActivity(Intent(this, NewLetterActivity::class.java))
+            }
         }
 
         binding.rlLetter.setOnClickListener {
@@ -256,6 +265,9 @@ class MainActivity : BaseActivity(), InboxFragment.OnUnreadMailCountListener {
             binding.rlMail.background = null
             binding.rlChat.background = null
             fragmentHelper?.push(LetterMainFragment())
+            binding.imgNewMail.visibility = View.VISIBLE
+            binding.imgPlus.visibility = View.INVISIBLE
+            binding.llMail.visibility = View.INVISIBLE
             type = "letter"
         }
 
@@ -309,20 +321,34 @@ class MainActivity : BaseActivity(), InboxFragment.OnUnreadMailCountListener {
         }
 
         binding.imgMenu.setOnClickListener {v ->
-//            if (binding.dlView.isDrawerOpen(binding.nvMenu)) {
-//                binding.dlView.closeDrawer(binding.nvMenu)
-//            } else {
-//                binding.dlView.openDrawer(binding.nvMenu)
-//            }
-//            binding.imgMenu.visibility = View.INVISIBLE
             menuPopup(v)
         }
+    }
 
-//        binding.nvMenu.getHeaderView(0).imgNavBack.setOnClickListener {
-//            if (binding.dlView.isDrawerOpen(binding.nvMenu)) {
-//                binding.dlView.closeDrawer(binding.nvMenu)
-//            }
-//        }
+    private fun bottomDialog() {
+        val dialog = BottomSheetDialog(this)
+        val view = layoutInflater.inflate(R.layout.bottom_sheet_dialog_main, null)
+        dialog.setContentView(view)
+        dialog.setCancelable(true)
+        dialog.setOnShowListener { setupBottomSheet(it) }
+        val bind = BottomSheetDialogMainBinding.bind(view)
+        bind.llCloud.setOnClickListener {
+            startActivity(Intent(this,CloudActivity::class.java))
+            dialog.dismiss()
+        }
+        bind.llProduct.setOnClickListener {
+            startActivity(Intent(this,ProductActivity::class.java))
+            dialog.dismiss()
+        }
+        dialog.show()
+    }
+
+    private fun setupBottomSheet(it: DialogInterface?) {
+        val bottomSheetDialog = it as BottomSheetDialog
+        val bottomSheet = bottomSheetDialog.findViewById<View>(
+            com.google.android.material.R.id.design_bottom_sheet)
+            ?: return
+        bottomSheet.setBackgroundColor(Color.TRANSPARENT)
     }
 
     fun menuPopup(v: View) {

@@ -73,4 +73,12 @@ class InputParams {
     //stamp details
     var stamp_id:String? = null
 
+    //letter
+    var mail_body:String? = null
+    var cc:String? = null
+    var bcc:String? = null
+    var letter_body:String? = null
+    var signature_url_path:String? = null
+    var stamp_url_path:String? = null
+
 }

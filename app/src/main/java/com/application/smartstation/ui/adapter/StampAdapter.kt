@@ -18,11 +18,12 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 
 
-class StampAdapter(val context: Context) : RecyclerView.Adapter<StampAdapter.ViewHolder>() {
+class StampAdapter(val context: Context,var type:Int) : RecyclerView.Adapter<StampAdapter.ViewHolder>() {
 
     private var list = emptyList<StampList>()
     var onItemDeleteClick: ((model: StampList) -> Unit)? = null
     var onItemClick: ((model: StampList) -> Unit)? = null
+    var onItemSelectClick: ((model: StampList) -> Unit)? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
 
@@ -39,8 +40,28 @@ class StampAdapter(val context: Context) : RecyclerView.Adapter<StampAdapter.Vie
 
         with(holder) {
             binding.txtTitle.text = model.name
-            Glide.with(context).load(model.stamp).placeholder(R.drawable.ic_default).error(R.drawable.ic_default).diskCacheStrategy(
+            Glide.with(context).load(model.image).placeholder(R.drawable.ic_default).error(R.drawable.ic_default).diskCacheStrategy(
                 DiskCacheStrategy.DATA).into(binding.imgSignature)
+
+            if (model.default){
+                binding.txtPrimary.visibility = View.VISIBLE
+                binding.txtSetPrimary.visibility = View.GONE
+            }else{
+                binding.txtPrimary.visibility = View.GONE
+                binding.txtSetPrimary.visibility = View.VISIBLE
+            }
+
+            if (type.equals(2)){
+                binding.imgDelete.visibility = View.GONE
+                binding.txtSetPrimary.visibility = View.GONE
+            }else{
+                binding.imgDelete.visibility = View.VISIBLE
+                binding.txtSetPrimary.visibility = View.VISIBLE
+            }
+
+            itemView.setOnClickListener {
+                onItemSelectClick!!.invoke(model)
+            }
 
             binding.imgDelete.setOnClickListener {
                 onItemDeleteClick!!.invoke(model)

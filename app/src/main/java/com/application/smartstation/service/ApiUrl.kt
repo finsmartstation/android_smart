@@ -49,5 +49,6 @@ object ApiUrl {
     const val GET_SIGNATURE_STAMP =API+"get_default_signature_and_stamp"
     const val SET_SIGNATURE =API+"set_default_signature"
     const val SET_STAMP =API+"set_default_stamp"
+    const val NEW_LETTER_SENT =API+"create_letter"
 
 }

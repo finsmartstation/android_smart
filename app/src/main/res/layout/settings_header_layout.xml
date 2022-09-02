@@ -63,7 +63,6 @@
         android:layout_toEndOf="@+id/imgProfilePic"
         android:ellipsize="end"
         android:singleLine="true"
-        android:text="Bala BI"
         android:textColor="@color/white"
         android:textSize="18sp">
 
@@ -80,7 +79,6 @@
         android:layout_toEndOf="@+id/imgProfilePic"
         android:ellipsize="end"
         android:singleLine="true"
-        android:text="Hello, I'm using Smart Station ..."
         android:textColor="@color/color_settings_gray"
         android:textSize="16sp">
 

@@ -159,20 +159,28 @@ class NewMailActivity : BaseActivity(),
                 toMail = binding.edtTo.text.toString().trim()
             }
 
-            for (s in 0 until ccList.size) {
-                if (s.equals(0)){
-                    ccMail = ccList[s]
-                }else{
-                    ccMail = ccMail+", "+ccList[s]
+            if (!ccList.isNullOrEmpty()) {
+                for (s in 0 until ccList.size) {
+                    if (s.equals(0)) {
+                        ccMail = ccList[s]
+                    } else {
+                        ccMail = ccMail + ", " + ccList[s]
+                    }
                 }
+            }else{
+                ccMail = binding.edtCc.text.toString().trim()
             }
 
-            for (s in 0 until bccList.size) {
-                if (s.equals(0)){
-                    bccMail = bccList[s]
-                }else{
-                    bccMail = bccMail+", "+bccList[s]
+            if (!bccList.isNullOrEmpty()) {
+                for (s in 0 until bccList.size) {
+                    if (s.equals(0)) {
+                        bccMail = bccList[s]
+                    } else {
+                        bccMail = bccMail + ", " + bccList[s]
+                    }
                 }
+            }else{
+                bccMail = binding.edtBcc.text.toString().trim()
             }
 
             val subject = binding.edtSubject.text.toString().trim()
