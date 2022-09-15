@@ -44,19 +44,21 @@ class SignatureAdapter(val context: Context,val type:Int) : RecyclerView.Adapter
                 DiskCacheStrategy.DATA).into(binding.imgSignature)
 
             if (model.default){
+                binding.llView.setBackgroundResource(R.drawable.dot_bg_green)
                 binding.txtPrimary.visibility = View.VISIBLE
                 binding.txtSetPrimary.visibility = View.GONE
             }else{
+                binding.llView.setBackgroundResource(R.drawable.dot_bg)
                 binding.txtPrimary.visibility = View.GONE
                 binding.txtSetPrimary.visibility = View.VISIBLE
             }
 
             if (type.equals(2)){
                 binding.imgDelete.visibility = View.GONE
-                binding.txtSetPrimary.visibility = View.GONE
+                binding.llView.visibility = View.GONE
             }else{
                 binding.imgDelete.visibility = View.VISIBLE
-                binding.txtSetPrimary.visibility = View.VISIBLE
+                binding.llView.visibility = View.VISIBLE
             }
 
             itemView.setOnClickListener {

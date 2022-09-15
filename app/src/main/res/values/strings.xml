@@ -38,6 +38,7 @@
     <string name="no_inbox">No Inbox</string>
     <string name="no_signature">No Signature</string>
     <string name="no_sendbox">No Sentbox</string>
+    <string name="no_sendbox_letter">No Sentbox Letter</string>
     <string name="no_chat_found">No Chats</string>
     <string name="no_letter_found">No letter found</string>
     <string name="type_your_message">Type a message</string>
@@ -1189,6 +1190,7 @@
     <string name="reply">Reply</string>
     <string name="reply_all">Reply All</string>
     <string name="forward">Forward</string>
+    <string name="forward_mail">Forward Mail</string>
     <string name="no_stamp">No Stamp</string>
     <string name="from_address">From Address</string>
     <string name="date">Date</string>
@@ -1197,5 +1199,20 @@
     <string name="set_as_primary">Set as primary</string>
     <string name="cloud">Cloud</string>
     <string name="product">Product</string>
+    <string name="title_activity_sent_letter">SentLetterActivity</string>
+    <!-- Strings used for fragments for navigation -->
+    <string name="first_fragment_label">First Fragment</string>
+    <string name="second_fragment_label">Second Fragment</string>
+    <string name="next">Next</string>
+    <string name="previous">Previous</string>
+
+    <string name="hello_first_fragment">Hello first fragment</string>
+    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+    <string name="forward_letter">Forward Letter</string>
+    <string name="e_shop">eShop</string>
+    <string name="no_cloud">No Cloud List</string>
+    <string name="no_rec_cloud">No Receive Cloud</string>
+    <string name="category">Categories</string>
+    <string name="ACCOUNT_TYPE">com.application.smartstation.account</string>
 
 </resources>

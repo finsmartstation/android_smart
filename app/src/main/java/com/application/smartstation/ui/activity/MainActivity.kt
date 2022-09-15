@@ -1,36 +1,34 @@
 package com.application.smartstation.ui.activity
 
+import android.annotation.SuppressLint
 import android.app.Dialog
 import android.content.DialogInterface
 import android.content.Intent
+import android.database.Cursor
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
+import android.provider.ContactsContract
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.view.*
 import android.widget.LinearLayout
 import android.widget.PopupWindow
-import android.widget.RelativeLayout
-import android.widget.Toast
 import androidx.activity.viewModels
-import androidx.drawerlayout.widget.DrawerLayout.SimpleDrawerListener
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.application.smartstation.R
-import com.application.smartstation.databinding.*
+import com.application.smartstation.databinding.ActivityMainBinding
+import com.application.smartstation.databinding.BottomSheetDialogMainBinding
+import com.application.smartstation.databinding.DialogLogoutBinding
+import com.application.smartstation.databinding.MenuPopupBinding
 import com.application.smartstation.service.Status
 import com.application.smartstation.service.background.SocketService
 import com.application.smartstation.ui.activity.product.ProductActivity
 import com.application.smartstation.ui.adapter.ChatAdapter
 import com.application.smartstation.ui.adapter.ContactAdapter
-import com.application.smartstation.ui.fragment.ChatMainFragment
-import com.application.smartstation.ui.fragment.EmailMainFragment
-import com.application.smartstation.ui.fragment.InboxFragment
-import com.application.smartstation.ui.fragment.LetterMainFragment
+import com.application.smartstation.ui.fragment.*
 import com.application.smartstation.ui.helper.FragmentHelper
 import com.application.smartstation.ui.model.DataChatList
 import com.application.smartstation.ui.model.DataUserList
@@ -44,12 +42,11 @@ import com.google.android.material.navigation.NavigationView
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.android.synthetic.main.nav_header_main.view.*
 import org.json.JSONObject
 
 
 @AndroidEntryPoint
-class MainActivity : BaseActivity(), InboxFragment.OnUnreadMailCountListener {
+class MainActivity : BaseActivity(), InboxFragment.OnUnreadMailCountListener,LetterInboxFragment.OnUnreadLetterCountListener {
 
     val binding: ActivityMainBinding by viewBinding()
     val apiViewModel: ApiViewModel by viewModels()
@@ -64,6 +61,8 @@ class MainActivity : BaseActivity(), InboxFragment.OnUnreadMailCountListener {
     var listChat: ArrayList<DataChatList> = java.util.ArrayList()
     var chatAdapter: ChatAdapter? = null
     val emitters: SocketService.Emitters = SocketService.Emitters(this)
+
+    val REQUEST_READ_CONTACTS = 79
 
     interface SearchInterface {
         fun searchData(searchTxt:String,type:String)
@@ -89,6 +88,10 @@ class MainActivity : BaseActivity(), InboxFragment.OnUnreadMailCountListener {
     }
 
     private fun initView() {
+
+        phnPermission{
+            getContactList()
+        }
 
         binding.rvSearch.layoutManager = LinearLayoutManager(this,
             LinearLayoutManager.VERTICAL,false)
@@ -187,7 +190,7 @@ class MainActivity : BaseActivity(), InboxFragment.OnUnreadMailCountListener {
                     startActivity(Intent(this,SettingsActivity::class.java))
                 }
                 R.id.logout -> {
-                    var inputParams = InputParams()
+                    val inputParams = InputParams()
                     inputParams.accessToken = UtilsDefault.getSharedPreferenceString(Constants.ACCESS_TOKEN)
                     inputParams.user_id = UtilsDefault.getSharedPreferenceString(Constants.USER_ID)
                     logout(inputParams)
@@ -249,6 +252,7 @@ class MainActivity : BaseActivity(), InboxFragment.OnUnreadMailCountListener {
             binding.imgNewMail.visibility = View.VISIBLE
             binding.imgPlus.visibility = View.INVISIBLE
             binding.llMail.visibility = View.VISIBLE
+            binding.imgBack.setImageResource(R.drawable.ic_mail_main_use)
             type = "mail"
         }
 
@@ -267,7 +271,8 @@ class MainActivity : BaseActivity(), InboxFragment.OnUnreadMailCountListener {
             fragmentHelper?.push(LetterMainFragment())
             binding.imgNewMail.visibility = View.VISIBLE
             binding.imgPlus.visibility = View.INVISIBLE
-            binding.llMail.visibility = View.INVISIBLE
+            binding.llMail.visibility = View.VISIBLE
+            binding.imgBack.setImageResource(R.drawable.ic_letter_24)
             type = "letter"
         }
 
@@ -321,6 +326,7 @@ class MainActivity : BaseActivity(), InboxFragment.OnUnreadMailCountListener {
         }
 
         binding.imgMenu.setOnClickListener {v ->
+            binding.imgMenu.visibility = View.GONE
             menuPopup(v)
         }
     }
@@ -371,7 +377,7 @@ class MainActivity : BaseActivity(), InboxFragment.OnUnreadMailCountListener {
             bind.imgStarMsg.visibility = View.VISIBLE
             bind.txtSendMail.visibility = View.GONE
             bind.imgSent.visibility = View.GONE
-        }else if (type.equals("mail")){
+        }else {
             bind.txtNewGrp.visibility = View.GONE
             bind.imgNewGrp.visibility = View.GONE
             bind.txtStarMsg.visibility = View.GONE
@@ -399,7 +405,11 @@ class MainActivity : BaseActivity(), InboxFragment.OnUnreadMailCountListener {
         }
 
         bind.txtSendMail.setOnClickListener {
-            startActivity(Intent(this,SentMailActivity::class.java))
+            if (type.equals("mail")){
+                startActivity(Intent(this,SentMailActivity::class.java))
+            }else{
+                startActivity(Intent(this,SentLetterActivity::class.java))
+            }
             binding.imgMenu.visibility = View.VISIBLE
             popupWindow.dismiss()
         }
@@ -577,6 +587,7 @@ class MainActivity : BaseActivity(), InboxFragment.OnUnreadMailCountListener {
         }
     }
 
+
     override fun onUnreadMail(count: String) {
         if (count.toInt() == 0) {
             binding.llUnread.visibility = View.INVISIBLE
@@ -586,6 +597,52 @@ class MainActivity : BaseActivity(), InboxFragment.OnUnreadMailCountListener {
         }else{
             binding.llUnread.visibility = View.VISIBLE
             binding.txtUnreadCount.text = "99+"
+        }
+    }
+
+    override fun onUnreadLetter(count: String) {
+        if (count.toInt() == 0) {
+            binding.llUnread.visibility = View.INVISIBLE
+        }else if (count.toInt() < 100) {
+            binding.llUnread.visibility = View.VISIBLE
+            binding.txtUnreadCount.text = count
+        }else{
+            binding.llUnread.visibility = View.VISIBLE
+            binding.txtUnreadCount.text = "99+"
+        }
+    }
+
+    @SuppressLint("Range")
+    private fun getContactList() {
+        val cr = contentResolver
+        val cur: Cursor? = cr.query(ContactsContract.Contacts.CONTENT_URI,
+            null, null, null, null)
+        if ((if (cur != null) cur.getCount() else 0) > 0) {
+            while (cur != null && cur.moveToNext()) {
+                val id: String = cur.getString(
+                    cur.getColumnIndex(ContactsContract.Contacts._ID))
+                val name: String = cur.getString(cur.getColumnIndex(
+                    ContactsContract.Contacts.DISPLAY_NAME))
+                if (cur.getInt(cur.getColumnIndex(
+                        ContactsContract.Contacts.HAS_PHONE_NUMBER)) > 0
+                ) {
+                    val pCur: Cursor? = cr.query(
+                        ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
+                        null,
+                        ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = ?",
+                        arrayOf(id),
+                        null)
+                    while (pCur!!.moveToNext()) {
+                        val phoneNo: String = pCur.getString(pCur.getColumnIndex(
+                            ContactsContract.CommonDataKinds.Phone.NUMBER))
+
+                    }
+                    pCur.close()
+                }
+            }
+        }
+        if (cur != null) {
+            cur.close()
         }
     }
 }

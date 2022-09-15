@@ -5,6 +5,7 @@ import android.content.res.Resources
 import android.graphics.Color
 import android.os.Bundle
 import android.text.TextUtils
+import android.util.Log
 import android.view.View
 import androidx.activity.viewModels
 import androidx.lifecycle.Observer
@@ -64,7 +65,6 @@ class NewLetterActivity : BaseActivity(), TokenCompleteTextView.TokenListener<Pe
     private fun initView() {
         binding.ilHeader.imgAttach.visibility = View.GONE
         binding.ilHeader.txtHeader.text = resources.getString(R.string.new_letter)
-
         binding.edtTo.setTokenListener(this)
         binding.edtTo.setTokenizer(CharacterTokenizer(Arrays.asList(' ', ','), ","))
         binding.edtCc.setTokenListener(this)
@@ -303,10 +303,21 @@ class NewLetterActivity : BaseActivity(), TokenCompleteTextView.TokenListener<Pe
            bind.rvSignStamp.adapter = signatureAdapter
            signatureAdapter!!.setSignature(signatureList)
 
-           signatureAdapter!!.onItemSelectClick = {model ->
+           signatureAdapter!!.onItemDeleteClick = { model ->
+
+           }
+
+           signatureAdapter!!.onItemClick = { model ->
+
+           }
+
+           signatureAdapter!!.onItemSelectClick = { model ->
+               dialog.dismiss()
+               Log.d("TAG", "showSignatureBottomDialog:"+model.image)
+               binding.llAttach.visibility = View.VISIBLE
                binding.clSignature.visibility = View.VISIBLE
                signature = model.image
-               Glide.with(this).load(signature).placeholder(R.drawable.ic_default).error(R.drawable.ic_default).diskCacheStrategy(DiskCacheStrategy.DATA).into(binding.imgSignature)
+               Glide.with(this).load(model.image).placeholder(R.drawable.ic_default).error(R.drawable.ic_default).diskCacheStrategy(DiskCacheStrategy.DATA).into(binding.imgSignature)
            }
 
        }else{
@@ -314,7 +325,18 @@ class NewLetterActivity : BaseActivity(), TokenCompleteTextView.TokenListener<Pe
            bind.rvSignStamp.adapter = stampAdapter
            stampAdapter!!.setStamp(stampList)
 
-           stampAdapter!!.onItemSelectClick = {model ->
+           stampAdapter!!.onItemDeleteClick = { model ->
+
+           }
+
+           stampAdapter!!.onItemClick = { model ->
+
+           }
+
+
+           stampAdapter!!.onItemSelectClick = { model ->
+               dialog.dismiss()
+               binding.llAttach.visibility = View.VISIBLE
                binding.clStamp.visibility = View.VISIBLE
                stamp = model.image
                Glide.with(this).load(stamp).placeholder(R.drawable.ic_default).error(R.drawable.ic_default).diskCacheStrategy(DiskCacheStrategy.DATA).into(binding.imgStamp)

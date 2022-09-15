@@ -61,7 +61,6 @@ class SentMailActivity : BaseActivity() {
             startActivity(intent)
         }
 
-        getSentBox()
         emitSentBox()
     }
 
@@ -143,5 +142,10 @@ class SentMailActivity : BaseActivity() {
         }else{
             toast(mailSocketModel.message)
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        getSentBox()
     }
 }

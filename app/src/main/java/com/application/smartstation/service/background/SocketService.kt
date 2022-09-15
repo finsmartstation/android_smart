@@ -36,6 +36,7 @@ class SocketService: Service() {
         } catch (e: URISyntaxException) {
             e.printStackTrace()
         }
+        socket!!.connect()
 
         socket!!.on(Socket.EVENT_CONNECT){
             Log.d("TAG", "connect: "+socket!!.connected().toString())
@@ -77,14 +78,14 @@ class SocketService: Service() {
             var jsonObject = JSONObject()
             jsonObject = args[0] as JSONObject
             Log.d("TAG", "typing_ind: "+jsonObject)
-            EventBus.getDefault().post(TypingEvent(jsonObject))
+            EventBus.getDefault().post(TypingUserIdEvent(jsonObject))
         }
 
         socket!!.on("typing_group") { args ->
             var jsonObject = JSONObject()
             jsonObject = args[0] as JSONObject
             Log.d("TAG", "typing_ind: "+jsonObject)
-            EventBus.getDefault().post(TypingEvent(jsonObject))
+            EventBus.getDefault().post(TypingEventGrp(jsonObject))
         }
 
         socket!!.on("mail_inboxlist") { args ->

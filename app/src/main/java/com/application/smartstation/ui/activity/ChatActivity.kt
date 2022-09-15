@@ -44,10 +44,7 @@ import com.application.smartstation.ui.model.*
 import com.application.smartstation.util.*
 import com.application.smartstation.view.ImageVideoSelectorDialog
 import com.application.smartstation.view.MessageSwipeReplyView
-import com.application.smartstation.viewmodel.ApiViewModel
-import com.application.smartstation.viewmodel.ChatEvent
-import com.application.smartstation.viewmodel.OnlineChatEvent
-import com.application.smartstation.viewmodel.TypingEvent
+import com.application.smartstation.viewmodel.*
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.google.android.gms.tasks.OnCompleteListener
@@ -483,15 +480,15 @@ class ChatActivity : BaseActivity(),ImageVideoSelectorDialog.Action {
         layoutManager!!.scrollToPosition(chatHistoryAdapter!!.getItemCount() - 1)
 
         //reply msg
-        val messageSwipeController = MessageSwipeReplyView(this,list ,object : SwipeControllerActions {
-            override fun showReplyUI(position: Int) {
-                quotedMessagePos = position
-                showQuotedMessage(list[position])
-            }
-        })
+//        val messageSwipeController = MessageSwipeReplyView(this,list ,object : SwipeControllerActions {
+//            override fun showReplyUI(position: Int) {
+//                quotedMessagePos = position
+//                showQuotedMessage(list[position])
+//            }
+//        })
 
-        val itemTouchHelper = ItemTouchHelper(messageSwipeController)
-        itemTouchHelper.attachToRecyclerView(binding.rvChatRoom)
+//        val itemTouchHelper = ItemTouchHelper(messageSwipeController)
+//        itemTouchHelper.attachToRecyclerView(binding.rvChatRoom)
     }
 
     private fun roomEmit(receiverId: String) {
@@ -512,7 +509,8 @@ class ChatActivity : BaseActivity(),ImageVideoSelectorDialog.Action {
         if (UtilsDefault.isOnline()) {
             val jsonObject = JSONObject()
             try {
-                jsonObject.put("userid", UtilsDefault.getSharedPreferenceString(Constants.USER_ID))
+                jsonObject.put("sid", UtilsDefault.getSharedPreferenceString(Constants.USER_ID))
+                jsonObject.put("rid", receiverId)
                 jsonObject.put("room", receiverId)
                 Log.d("TAG", "room: "+jsonObject)
                 emitters.room(jsonObject)
@@ -842,6 +840,14 @@ class ChatActivity : BaseActivity(),ImageVideoSelectorDialog.Action {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onTypingEvent(event: TypingEvent) {
+        var jsonObject: JSONObject? = JSONObject()
+        jsonObject = event.getJsonObject()
+        setTypingEvent(jsonObject)
+        Log.d("TAG", "TYPINGEVENT: "+jsonObject)
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun onTypingEventGrp(event: TypingEventGrp) {
         var jsonObject: JSONObject? = JSONObject()
         jsonObject = event.getJsonObject()
         setTypingEvent(jsonObject)

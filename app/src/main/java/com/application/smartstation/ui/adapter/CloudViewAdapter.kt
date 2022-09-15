@@ -10,10 +10,8 @@ import com.application.smartstation.R
 import com.application.smartstation.databinding.ItemChatBinding
 import com.application.smartstation.databinding.ItemCloudBinding
 import com.application.smartstation.databinding.ItemCloudViewBinding
-import com.application.smartstation.ui.model.ChatResponse
-import com.application.smartstation.ui.model.CloudListRes
-import com.application.smartstation.ui.model.DataChatList
-import com.application.smartstation.ui.model.DataUserList
+import com.application.smartstation.ui.model.*
+import com.application.smartstation.util.FileUtils
 import com.application.smartstation.util.UtilsDefault
 import com.application.smartstation.view.ViewBinderHelper
 import com.bumptech.glide.Glide
@@ -22,8 +20,8 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy
 
 class CloudViewAdapter(val context: Context) : RecyclerView.Adapter<CloudViewAdapter.ViewHolder>() {
 
-    private var list = emptyList<CloudListRes>()
-    var onItemClick: ((model: CloudListRes) -> Unit)? = null
+    private var list = emptyList<CloudDetailListRes>()
+    var onItemClick: ((model: CloudDetailListRes) -> Unit)? = null
     private val viewBinderHelper = ViewBinderHelper()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -40,16 +38,32 @@ class CloudViewAdapter(val context: Context) : RecyclerView.Adapter<CloudViewAda
         val model = list[position]
 
         with(holder) {
-//            binding.txtNum.text = model.name
-            Glide.with(context).load(model.profile_pic).placeholder(R.drawable.ic_default).error(R.drawable.ic_default).diskCacheStrategy(DiskCacheStrategy.DATA).into(binding.imgProfile)
+            val fileName = FileUtils.getFileNameFromPath(model.filepath).replace("/","")
+            if (UtilsDefault.isImageFile(model.filepath)){
+                model.type = "img"
+            }else if (UtilsDefault.isPdfFile(model.filepath)){
+                model.type = "pdf"
+            }else{
+                model.type = ""
+            }
+            if (model.type.equals("img")){
+                binding.llFileName.visibility = View.GONE
+                Glide.with(context).load(model.filepath).placeholder(R.drawable.ic_default).error(R.drawable.ic_default).diskCacheStrategy(DiskCacheStrategy.DATA).into(binding.imgPath)
+            }else if (model.type.equals("pdf")){
+                binding.llFileName.visibility = View.VISIBLE
+                binding.txtFileName.text = fileName
+                Glide.with(context).load(R.drawable.pdf_icon).placeholder(R.drawable.ic_default).error(R.drawable.ic_default).diskCacheStrategy(DiskCacheStrategy.DATA).into(binding.imgPath)
+            }else{
+                binding.llFileName.visibility = View.GONE
+            }
 
-//            itemView.setOnClickListener {
-//                onItemClick!!.invoke(model)
-//            }
+            itemView.setOnClickListener {
+                onItemClick!!.invoke(model)
+            }
         }
     }
 
-    internal fun setCloud(cloud: List<CloudListRes>) {
+    internal fun setCloud(cloud: List<CloudDetailListRes>) {
         this.list = cloud
         notifyDataSetChanged()
     }

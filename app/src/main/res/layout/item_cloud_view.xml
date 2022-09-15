@@ -8,15 +8,41 @@
     android:layout_marginEnd="8dp">
 
     <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:id="@+id/imgProfile"
-        android:scaleType="centerCrop"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:id="@+id/imgPath"
+        android:layout_width="0dp"
+        android:layout_height="130dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginEnd="4dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="4dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
+    <LinearLayout
+        android:id="@+id/llFileName"
+        android:layout_width="0dp"
+        android:layout_height="30dp"
+        android:background="#80000000"
+        android:gravity="center"
+        app:layout_constraintStart_toStartOf="@+id/imgPath"
+        app:layout_constraintEnd_toEndOf="@+id/imgPath"
+        app:layout_constraintBottom_toBottomOf="@+id/imgPath">
+
+        <com.application.smartstation.view.CustomTextViewMedium
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/txtFileName"
+            android:singleLine="true"
+            android:maxLines="1"
+            android:paddingStart="4dp"
+            android:paddingEnd="4dp"
+            android:textSize="16sp"
+            android:textColor="@color/white"
+            />
+
+
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

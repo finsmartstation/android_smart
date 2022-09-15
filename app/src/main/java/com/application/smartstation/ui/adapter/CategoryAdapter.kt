@@ -38,7 +38,8 @@ class CategoryAdapter(val context: Context) : RecyclerView.Adapter<CategoryAdapt
         val model = list[position]
 
         with(holder) {
-            binding.txtCateName.text = model.productName
+            binding.txtCategory.text = model.category_name
+            Glide.with(context).load(model.category_image).placeholder(R.drawable.ic_default).error(R.drawable.ic_default).diskCacheStrategy(DiskCacheStrategy.DATA).into(binding.imgCategory)
 
 //            itemView.setOnClickListener {
 //                onItemClick!!.invoke(model)

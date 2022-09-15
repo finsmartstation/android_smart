@@ -187,8 +187,13 @@ class NewMailActivity : BaseActivity(),
 
             var bodys = binding.edtBody.text.toString().trim()
 
-            bodys = bodys.removeRange(body1,bodys.length)
-            bodys = bodys+"<br>"+body
+            try {
+                bodys = bodys.removeRange(body1,bodys.length)
+                bodys = bodys+"<br>"+body
+            }catch (e:Exception){
+                Log.d("TAG", "setOnClickListener: "+e)
+            }
+
 
             when {
                 TextUtils.isEmpty(toMail) -> toast(resources.getString(R.string.please_enter_to))
@@ -434,6 +439,11 @@ class NewMailActivity : BaseActivity(),
                 binding.edtSubject.setText(sub)
             }
 
+            if (intent.getStringExtra("attach") != null){
+               val sub = intent.getStringExtra("attach")!!
+                setPdf(sub)
+            }
+
             if (intent.getStringExtra("body") != null) {
                 body = intent.getStringExtra("body")!!
                 binding.edtBody.setText(Html.fromHtml("<br>" + body))
@@ -484,6 +494,28 @@ class NewMailActivity : BaseActivity(),
             }
         })
 
+    }
+
+    private fun setPdf(sub: String) {
+        val uri = Uri.fromFile(File(sub))
+        try {
+            val imageRequest: MultipartBody.Part = prepareFilePart("attachment[]", uri)
+            imageParts.add(imageRequest)
+            val path = FileUtils.getPath(this, uri)
+            if (UtilsDefault.isImageFile(path)) {
+                pathList.add(MailImageSelect(path, "img"))
+            }else if (UtilsDefault.isPdfFile(path)){
+                pathList.add(MailImageSelect(path,"pdf"))
+            }
+            if (!pathList.isNullOrEmpty()){
+                binding.rvMailList.visibility = View.VISIBLE
+                mailFilesAdapter!!.setMail(pathList)
+            }else{
+                binding.rvMailList.visibility = View.GONE
+            }
+        }catch (e:Exception){
+            Log.d("TAG", "onFilePickerResult: "+e)
+        }
     }
 
     private fun stringToWords(mnemonic: String): ArrayList<String> {

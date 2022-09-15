@@ -6,6 +6,7 @@ import com.application.smartstation.R
 import com.application.smartstation.databinding.FragmentLetterMainBinding
 import com.application.smartstation.ui.helper.FragmentHelper
 import com.application.smartstation.util.viewBinding
+import dagger.hilt.android.AndroidEntryPoint
 
 class LetterMainFragment : BaseFragment(R.layout.fragment_letter_main) {
 
@@ -16,17 +17,16 @@ class LetterMainFragment : BaseFragment(R.layout.fragment_letter_main) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initView()
-        setUpFragments()
         setOnClickListener()
     }
 
     private fun initView() {
-
+        setUpFragments()
     }
 
     private fun setUpFragments() {
         fragmentHelper = FragmentHelper(childFragmentManager)
-        fragmentHelper?.setUpFrame(ReceivedLetterFragment(), binding.flLetter)
+        fragmentHelper?.setUpFrame(LetterInboxFragment(), binding.flLetter)
     }
 
     private fun setOnClickListener() {

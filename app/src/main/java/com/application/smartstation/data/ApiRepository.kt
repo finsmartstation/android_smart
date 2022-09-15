@@ -264,6 +264,13 @@ class ApiRepository @Inject constructor(val apiService: ApiService) {
         }.flowOn(Dispatchers.IO)
     }
 
+    fun deleteLetter(inputParams: InputParams): Flow<BaseResponse> {
+        return flow {
+            val response = apiService.deleteLetter(inputParams)
+            emit(response)
+        }.flowOn(Dispatchers.IO)
+    }
+
     fun getStamp(inputParams: InputParams): Flow<GetStampRes> {
         return flow {
             val response = apiService.getStamp(inputParams)
@@ -302,6 +309,55 @@ class ApiRepository @Inject constructor(val apiService: ApiService) {
     fun getStampSignature(inputParams: InputParams): Flow<GetStampSignature> {
         return flow {
             val response = apiService.getStampSignature(inputParams)
+            emit(response)
+        }.flowOn(Dispatchers.IO)
+    }
+
+    fun getLetter(inputParams: InputParams): Flow<LetterDetailsRes> {
+        return flow {
+            val response = apiService.getLetter(inputParams)
+            emit(response)
+        }.flowOn(Dispatchers.IO)
+    }
+
+    fun getLetterSent(inputParams: InputParams): Flow<SentLetterDetailsRes> {
+        return flow {
+            val response = apiService.getLetterSent(inputParams)
+            emit(response)
+        }.flowOn(Dispatchers.IO)
+    }
+
+    fun viewLetter(inputParams: InputParams): Flow<ViewLetterDetails> {
+        return flow {
+            val response = apiService.viewLetter(inputParams)
+            emit(response)
+        }.flowOn(Dispatchers.IO)
+    }
+
+    fun getCategory(inputParams: InputParams): Flow<ProductCateRes> {
+        return flow {
+            val response = apiService.getCategory(inputParams)
+            emit(response)
+        }.flowOn(Dispatchers.IO)
+    }
+
+    fun getCloud(inputParams: InputParams): Flow<CloudRes> {
+        return flow {
+            val response = apiService.getCloud(inputParams)
+            emit(response)
+        }.flowOn(Dispatchers.IO)
+    }
+
+    fun forwardLetter(inputParams: InputParams): Flow<BaseResponse> {
+        return flow {
+            val response = apiService.forwardLetter(inputParams)
+            emit(response)
+        }.flowOn(Dispatchers.IO)
+    }
+
+    fun getCloudDetails(inputParams: InputParams): Flow<CloudDetailsRes> {
+        return flow {
+            val response = apiService.getCloudDetails(inputParams)
             emit(response)
         }.flowOn(Dispatchers.IO)
     }

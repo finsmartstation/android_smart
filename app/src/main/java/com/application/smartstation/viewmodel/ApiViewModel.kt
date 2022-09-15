@@ -669,6 +669,24 @@ class ApiViewModel @Inject constructor(
 
     }
 
+    fun deleteLetter(inputParams: InputParams) = liveData<Resource<BaseResponse>> {
+        if (UtilsDefault.isOnline()) {
+            repository.deleteLetter(inputParams)
+                .onStart {
+                    emit(Resource.loading(data = null))
+                }
+                .catch {
+                    emit(Resource.error(data = null, msg = "Cannot reach server..try again"))
+                }
+                .collect {
+                    emit(Resource.success(it))
+                }
+        } else {
+            emit(Resource.error(data = null, msg = "No internet connection"))
+        }
+
+    }
+
     fun getStamp(inputParams: InputParams) = liveData<Resource<GetStampRes>> {
         if (UtilsDefault.isOnline()) {
             repository.getStamp(inputParams)
@@ -762,6 +780,132 @@ class ApiViewModel @Inject constructor(
     fun getStampSignature(inputParams: InputParams) = liveData<Resource<GetStampSignature>> {
         if (UtilsDefault.isOnline()) {
             repository.getStampSignature(inputParams)
+                .onStart {
+                    emit(Resource.loading(data = null))
+                }
+                .catch {
+                    emit(Resource.error(data = null, msg = "Cannot reach server..try again"))
+                }
+                .collect {
+                    emit(Resource.success(it))
+                }
+        } else {
+            emit(Resource.error(data = null, msg = "No internet connection"))
+        }
+
+    }
+
+    fun getLetter(inputParams: InputParams) = liveData<Resource<LetterDetailsRes>> {
+        if (UtilsDefault.isOnline()) {
+            repository.getLetter(inputParams)
+                .onStart {
+                    emit(Resource.loading(data = null))
+                }
+                .catch {
+                    emit(Resource.error(data = null, msg = "Cannot reach server..try again"))
+                }
+                .collect {
+                    emit(Resource.success(it))
+                }
+        } else {
+            emit(Resource.error(data = null, msg = "No internet connection"))
+        }
+
+    }
+
+    fun getLetterSent(inputParams: InputParams) = liveData<Resource<SentLetterDetailsRes>> {
+        if (UtilsDefault.isOnline()) {
+            repository.getLetterSent(inputParams)
+                .onStart {
+                    emit(Resource.loading(data = null))
+                }
+                .catch {
+                    emit(Resource.error(data = null, msg = "Cannot reach server..try again"))
+                }
+                .collect {
+                    emit(Resource.success(it))
+                }
+        } else {
+            emit(Resource.error(data = null, msg = "No internet connection"))
+        }
+
+    }
+
+    fun viewLetter(inputParams: InputParams) = liveData<Resource<ViewLetterDetails>> {
+        if (UtilsDefault.isOnline()) {
+            repository.viewLetter(inputParams)
+                .onStart {
+                    emit(Resource.loading(data = null))
+                }
+                .catch {
+                    emit(Resource.error(data = null, msg = "Cannot reach server..try again"))
+                }
+                .collect {
+                    emit(Resource.success(it))
+                }
+        } else {
+            emit(Resource.error(data = null, msg = "No internet connection"))
+        }
+
+    }
+
+    fun getCategory(inputParams: InputParams) = liveData<Resource<ProductCateRes>> {
+        if (UtilsDefault.isOnline()) {
+            repository.getCategory(inputParams)
+                .onStart {
+                    emit(Resource.loading(data = null))
+                }
+                .catch {
+                    emit(Resource.error(data = null, msg = "Cannot reach server..try again"))
+                }
+                .collect {
+                    emit(Resource.success(it))
+                }
+        } else {
+            emit(Resource.error(data = null, msg = "No internet connection"))
+        }
+
+    }
+
+    fun getCloud(inputParams: InputParams) = liveData<Resource<CloudRes>> {
+        if (UtilsDefault.isOnline()) {
+            repository.getCloud(inputParams)
+                .onStart {
+                    emit(Resource.loading(data = null))
+                }
+                .catch {
+                    emit(Resource.error(data = null, msg = "Cannot reach server..try again"))
+                }
+                .collect {
+                    emit(Resource.success(it))
+                }
+        } else {
+            emit(Resource.error(data = null, msg = "No internet connection"))
+        }
+
+    }
+
+    fun forwardLetter(inputParams: InputParams) = liveData<Resource<BaseResponse>> {
+        if (UtilsDefault.isOnline()) {
+            repository.forwardLetter(inputParams)
+                .onStart {
+                    emit(Resource.loading(data = null))
+                }
+                .catch {
+                    emit(Resource.error(data = null, msg = "Cannot reach server..try again"))
+                }
+                .collect {
+                    emit(Resource.success(it))
+                }
+        } else {
+            emit(Resource.error(data = null, msg = "No internet connection"))
+        }
+
+    }
+
+    fun getCloudDetails(inputParams: InputParams) = liveData<Resource<CloudDetailsRes>> {
+        if (UtilsDefault.isOnline()) {
+            repository.getCloudDetails(inputParams)
                 .onStart {
                     emit(Resource.loading(data = null))
                 }

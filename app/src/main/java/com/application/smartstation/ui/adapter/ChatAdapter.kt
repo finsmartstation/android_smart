@@ -38,27 +38,24 @@ class ChatAdapter(val context: Context) : RecyclerView.Adapter<ChatAdapter.ViewH
 
         with(holder) {
             binding.txtName.text = model.name
-            binding.txtTime.text = UtilsDefault.dateChatList(model.date)
+            binding.txtTime.text = UtilsDefault.dateChatList(UtilsDefault.localTimeConvert(model.date))
 
             Glide.with(context).load(model.profile).placeholder(R.drawable.ic_default).error(R.drawable.ic_default).diskCacheStrategy(DiskCacheStrategy.DATA).into(binding.imgProfile)
 
             if (typingStatus.equals(1)){
-                binding.imgPht.visibility = View.GONE
-                binding.txtMsg.visibility = View.GONE
+                binding.llView.visibility = View.GONE
                 binding.txtTyping.visibility = View.VISIBLE
-                if (model.unread_message.equals("0")) {
-                    binding.llRead.visibility = View.GONE
-                }else{
-                    binding.llRead.visibility = View.VISIBLE
-                    if (model.unread_message > "9"){
-                        binding.txtUnread.text = "9+"
-                    }else {
-                        binding.txtUnread.text = model.unread_message
-                    }
-                }
             }else{
-                binding.txtMsg.visibility = View.VISIBLE
+                binding.llView.visibility = View.VISIBLE
                 binding.txtTyping.visibility = View.GONE
+
+            }
+
+
+            binding.flChat.setOnClickListener {
+                onItemClick!!.invoke(model)
+            }
+
             if (model.unread_message.equals("0")){
                 binding.llRead.visibility = View.GONE
                 if(!model.message_type.equals("")) {
@@ -70,6 +67,8 @@ class ChatAdapter(val context: Context) : RecyclerView.Adapter<ChatAdapter.ViewH
                         binding.imgPht.visibility = View.VISIBLE
                     }
                     binding.txtMsg.setTextColor(context.resources.getColor(R.color.color_gray_2))
+                }else{
+                    binding.txtMsg.text = model.message
                 }
             }else{
                 binding.llRead.visibility = View.VISIBLE
@@ -87,17 +86,10 @@ class ChatAdapter(val context: Context) : RecyclerView.Adapter<ChatAdapter.ViewH
                         binding.imgPht.visibility = View.VISIBLE
                     }
                     binding.txtMsg.setTextColor(context.resources.getColor(R.color.black))
+                }else{
+                    binding.txtMsg.text = UtilsDefault.chatBold(model.message)
                 }
             }
-            }
-            binding.flChat.setOnClickListener {
-                onItemClick!!.invoke(model)
-//                viewBinderHelper.closeLayout(model.name)
-            }
-
-//            viewBinderHelper.setOpenOnlyOne(true)
-//            viewBinderHelper.bind(binding.svLayout, model.name)
-//            viewBinderHelper.closeLayout(model.name)
 
         }
     }

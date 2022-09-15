@@ -117,6 +117,9 @@ interface ApiService {
     @POST(ApiUrl.DELETE_MAIL)
     suspend fun deleteMail(@Body inputParams: InputParams): BaseResponse
 
+    @POST(ApiUrl.DELETE_LETTER)
+    suspend fun deleteLetter(@Body inputParams: InputParams): BaseResponse
+
     @POST(ApiUrl.GET_STAMP)
     suspend fun getStamp(@Body inputParams: InputParams): GetStampRes
 
@@ -134,6 +137,27 @@ interface ApiService {
 
     @POST(ApiUrl.GET_SIGNATURE_STAMP)
     suspend fun getStampSignature(@Body inputParams: InputParams): GetStampSignature
+
+    @POST(ApiUrl.GET_LETTER)
+    suspend fun getLetter(@Body inputParams: InputParams): LetterDetailsRes
+
+    @POST(ApiUrl.GET_LETTER_SENT)
+    suspend fun getLetterSent(@Body inputParams: InputParams): SentLetterDetailsRes
+
+    @POST(ApiUrl.VIEW_LETTER)
+    suspend fun viewLetter(@Body inputParams: InputParams): ViewLetterDetails
+
+    @POST(ApiUrl.GET_CATEGORY)
+    suspend fun getCategory(@Body inputParams: InputParams): ProductCateRes
+
+    @POST(ApiUrl.GET_CLOUD)
+    suspend fun getCloud(@Body inputParams: InputParams): CloudRes
+
+    @POST(ApiUrl.FORWARD_LETTER)
+    suspend fun forwardLetter(@Body inputParams: InputParams): BaseResponse
+
+    @POST(ApiUrl.GET_CLOUD_DETAILS)
+    suspend fun getCloudDetails(@Body inputParams: InputParams): CloudDetailsRes
 
     @Multipart
     @POST(ApiUrl.SIGNATURE_UPLOAD)

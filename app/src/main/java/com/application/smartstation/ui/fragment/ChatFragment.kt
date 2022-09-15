@@ -63,7 +63,7 @@ class ChatFragment : BaseFragment(R.layout.fragment_chat){
             startActivity(Intent(requireActivity(), ChatActivity::class.java).putExtra(Constants.REC_ID,model.userid).putExtra(Constants.NAME,model.name).putExtra(Constants.PROFILE,model.profile).putExtra(Constants.CHAT_TYPE,model.chat_type).putExtra(Constants.ROOM,model.room))
         }
 
-        getChatList()
+
 
         emitRecentChat()
 
@@ -132,6 +132,11 @@ class ChatFragment : BaseFragment(R.layout.fragment_chat){
         chatAdapter!!.setChat(list)
     }
 
+    override fun onResume() {
+        super.onResume()
+        getChatList()
+    }
+
     private fun filterList(txt: String) {
         if (txt != "") {
             val searchtext = txt.toLowerCase()
@@ -198,12 +203,20 @@ class ChatFragment : BaseFragment(R.layout.fragment_chat){
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    fun onTypingEvent(event: TypingEvent) {
+    fun onTypingUserIdEvent(event: TypingUserIdEvent) {
         var jsonObject: JSONObject? = JSONObject()
         jsonObject = event.getJsonObject()
         setTypingEvent(jsonObject)
         Log.d("TAG", "TYPINGEVENT: "+jsonObject)
     }
+
+//    @Subscribe(threadMode = ThreadMode.MAIN)
+//    fun onTypingEventGrp(event: TypingEventGrp) {
+//        var jsonObject: JSONObject? = JSONObject()
+//        jsonObject = event.getJsonObject()
+//        setTypingEvent(jsonObject)
+//        Log.d("TAG", "TYPINGEVENT: "+jsonObject)
+//    }
 
     fun setTypingEvent(jsonObject: JSONObject?) {
         val gson = Gson()
@@ -211,7 +224,7 @@ class ChatFragment : BaseFragment(R.layout.fragment_chat){
             TypingRes::class.java)
         if(typingModel.status){
             for (i in 0 until list.size){
-                if (typingModel.user_id.equals(list[i].userid)){
+                if (list[i].userid.equals(typingModel.user_id)){
                     if(typingModel.typing.equals("1")){
                         chatAdapter?.setChats(1,i)
                     } else{

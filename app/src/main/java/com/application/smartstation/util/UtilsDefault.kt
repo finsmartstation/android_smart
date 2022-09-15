@@ -54,41 +54,8 @@ import javax.crypto.spec.SecretKeySpec
 
 object UtilsDefault {
 
-    val STATUS_SUCCESS = true
-    val STATUS_TFA = 2
-    val STATUS_FAILURE = 0
-    val STATUS_TOKENEXPIRE = 401
-    val STATUS_ERROR = 402
-    val NORESULT = 400
-    val TOKEN_NOT_PROVIDED = 404
-
     internal var letter = Pattern.compile("[a-zA-z]")
     internal var digit = Pattern.compile("[0-9]")
-
-    val SHOULD_PRINT_LOG = false
-
-    val sBuildType = BuildType.PROD
-
-    fun debugLog(tag: String, message: String) {
-        if (SHOULD_PRINT_LOG) {
-            Log.d(tag, message)
-        }
-    }
-
-    fun errorLog(tag: String, message: String) {
-        if (SHOULD_PRINT_LOG) {
-            //
-        }
-        Log.e(tag, message)
-    }
-
-    fun infoLog(tag: String, message: String) {
-        if (SHOULD_PRINT_LOG) {
-            Log.i(tag, message)
-        }
-    }
-
-
 
     fun sendNotification(context: Context,title:String,message:String) {
         val channelId = "SMART_STATION_CHANNEL_ID"
@@ -126,78 +93,6 @@ object UtilsDefault {
     }
 
 
-
-    fun formatDecimal(text: String): String {
-        if (text.toDouble() == 0.0){
-            return "0.00"
-        }
-        val format = DecimalFormat("#0.00")
-        var bd = BigDecimal(text.toDouble())
-        bd = bd.setScale(3, BigDecimal.ROUND_HALF_UP)
-        val data = format.format(bd.toDouble())
-        val value = BigDecimal(data)
-        val amount =  value.stripTrailingZeros().toPlainString()
-
-        if (amount.toDouble() == 0.0){
-            return "0.00"
-        }
-
-        return amount
-
-    }
-
-
-    fun formatvalues(text: String):String{
-
-        try {
-            val data = formatCryptoCurrency(text)
-            val number = BigDecimal(data.replace(",","."))
-            var amount =  number.stripTrailingZeros().toPlainString()
-
-            if (amount.toDouble() == 0.0){
-                return "0.00"
-            }
-
-            return amount
-        }
-        catch (e:NumberFormatException){
-            return  "0.00"
-        }
-
-    }
-    fun formatToken(text: String): String {
-        /* val format = DecimalFormat("#0.000")
-         return format.format(java.lang.Double.parseDouble(text.trim { it <= ' ' }))
-      */
-        val format = DecimalFormat("#0.000")
-        var bd = BigDecimal(text.toDouble())
-        bd = bd.setScale(4, BigDecimal.ROUND_HALF_UP)
-        return format.format(bd.toDouble())
-    }
-
-    fun formatMarket(text: String): String {
-        /* val format = DecimalFormat("#0.000")
-         return format.format(java.lang.Double.parseDouble(text.trim { it <= ' ' }))
-      */
-        val format = DecimalFormat("#0.0000")
-        var bd = BigDecimal(text.toDouble())
-        bd = bd.setScale(5, BigDecimal.ROUND_HALF_UP)
-        return format.format(bd.toDouble())
-    }
-
-
-    fun formatCryptoCurrency(text: String): String {
-
-        if (text == "" || text == null){
-            return  ""
-        }
-
-        val format = DecimalFormat("#0.00000000")
-        var bd = BigDecimal(text.replace(",",".").toDouble())
-        bd = bd.setScale(9, BigDecimal.ROUND_HALF_UP)
-        return format.format(bd.toDouble())
-    }
-
     fun copyToClipboard(context: Context,text: CharSequence) {
         var clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
         val clip = ClipData.newPlainText("label", text)
@@ -211,15 +106,7 @@ object UtilsDefault {
     }
 
 
-    fun getJsonParser():Gson{
-        val builder = GsonBuilder()
-        return builder.create()
-    }
-
-
-
-
-    private val SHARED_PREFERENCE_UTILS = "novoexchange"
+    private val SHARED_PREFERENCE_UTILS = "smartstation"
     private val FCMKEYSHAREDPERFRENCES = "Fcmpreference"
 
     private var sharedPreferences: SharedPreferences? = null
@@ -357,14 +244,6 @@ object UtilsDefault {
         return data ?: ""
     }
 
-//    public static int checkIntNull(int data){
-//        if (data==null){
-//            return 0;
-//        }else {
-//            return data;
-//        }
-//    }
-
     fun ok(password: String): Boolean {
         val hasLetter = letter.matcher(password)
         val hasDigit = digit.matcher(password)
@@ -402,13 +281,6 @@ object UtilsDefault {
 
         return haveConnectedWifi || haveConnectedMobile
     }
-
-    /*fun isOnline(): Boolean {
-        val cm = RewardApplication.instance.getSystemService(
-                Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-        val netInfo = cm.activeNetworkInfo
-        return netInfo != null && netInfo.isConnected
-    }*/
 
     enum class BuildType {
         QA, PROD
@@ -680,7 +552,7 @@ object UtilsDefault {
             var date = time
             var spf = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss")
             val newDate = spf.parse(date)
-            spf = SimpleDateFormat("dd MMM hh:mm")
+            spf = SimpleDateFormat("dd MMM HH:mm")
             date = spf.format(newDate)
             return date
         }
@@ -695,7 +567,7 @@ object UtilsDefault {
             var date = time
             var spf = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.ENGLISH)
             val newDate = spf.parse(date)
-            spf = SimpleDateFormat("hh:mm:ss",Locale.ENGLISH)
+            spf = SimpleDateFormat("HH:mm:ss",Locale.ENGLISH)
             date = spf.format(newDate!!)
             return date
         }
@@ -809,7 +681,7 @@ object UtilsDefault {
     }
 
      fun dateConvert(date: String?): String {
-        val readFormat: DateFormat = SimpleDateFormat("yyyy-MM-dd hh:mm:ss")
+        val readFormat: DateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
         val writeFormat: DateFormat = SimpleDateFormat("dd-MM-yyyy")
         var dateVal: Date? = null
         try {
@@ -825,8 +697,8 @@ object UtilsDefault {
     }
 
      fun todayDate(date: String?): String? {
-        val readFormat: DateFormat = SimpleDateFormat("yyyy-MM-dd hh:mm:ss")
-        val writeFormat: DateFormat = SimpleDateFormat("hh:mm aa")
+        val readFormat: DateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
+        val writeFormat: DateFormat = SimpleDateFormat("HH:mm aa")
         var dateVal: Date? = null
         try {
             dateVal = readFormat.parse(date)
@@ -877,6 +749,7 @@ object UtilsDefault {
         val writeDate = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
         writeDate.timeZone = TimeZone.getTimeZone(tz.id)
         val s = writeDate.format(date)
+        Log.d("TAG", "localTimeConvert: "+s)
         return s
     }
 
@@ -1017,94 +890,6 @@ object UtilsDefault {
         return newFormat
     }
 
-//    fun downloadFile(url: String) {
-//        try {
-//            val u = URL(url)
-//            val conn: URLConnection = u.openConnection()
-//            val contentLength = conn.contentLength
-//            val stream = DataInputStream(u.openStream())
-//            val buffer = ByteArray(contentLength)
-//            stream.readFully(buffer)
-//            stream.close()
-//            val myStuff =
-//                File(
-//                    Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM),
-//                    "com.smartstation"+"/Smart Station/Media/Smart Station Download"
-//                )
-//            if (!myStuff.exists())
-//                myStuff.mkdirs()
-//            val fos = DataOutputStream(FileOutputStream(myStuff))
-//            fos.write(buffer)
-//            fos.flush()
-//            fos.close()
-//            Log.d("TAG", "downloadFile: "+myStuff.absolutePath)
-//        } catch (e: FileNotFoundException) {
-//            return  // swallow a 404
-//        } catch (e: IOException) {
-//            return  // swallow a 404
-//        }
-//    }
-
-    class downloadFile() : AsyncTask<String, Void, String>() {
-        override fun doInBackground(vararg f_url: String): String? {
-            var count: Int
-            try {
-                val url = URL(f_url[0])
-                val uri: Uri = Uri.parse(url.toString())
-                val connection = url.openConnection()
-                connection.connect()
-
-                // this will be useful so that you can show a tipical 0-100%
-                // progress bar
-                val lenghtOfFile = connection.contentLength
-
-                // download the file
-                val input: InputStream = BufferedInputStream(url.openStream(),
-                    8192)
-                val file =
-                    File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).absolutePath,"com.smartstation"+"/Smart Station/Media/Smart Station Download")
-                if (!file.exists()) {
-                    file.mkdirs()
-                }
-                val file1 =
-                    File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).absolutePath,"com.smartstation"+"/Smart Station/Media/Smart Station Download/"+uri.lastPathSegment)
-
-                // Output stream
-                val output: OutputStream = FileOutputStream(file1)
-                val data = ByteArray(1024)
-                var total: Long = 0
-                while (input.read(data).also { count = it } != -1) {
-                    total += count.toLong()
-                    // publishing the progress....
-                    // After this onProgressUpdate will be called
-//                    publishProgress("" + (total * 100 / lenghtOfFile).toInt())
-
-                    // writing data to file
-                    output.write(data, 0, count)
-                }
-
-                // flushing output
-                output.flush()
-
-                // closing streams
-                output.close()
-                input.close()
-            } catch (e: java.lang.Exception) {
-                Log.e("Error: ", e.message!!)
-            }
-            return null
-        }
-
-        override fun onPreExecute() {
-            super.onPreExecute()
-            // ...
-        }
-
-        override fun onPostExecute(result: String?) {
-            super.onPostExecute(result)
-            // ...
-        }
-    }
 
     fun downloadFile(context: Context,url: String,mailCallback: MailCallback){
         val file =
@@ -1118,6 +903,10 @@ object UtilsDefault {
         val downloadUri: Uri = Uri.parse(url)
         val file1 =
             File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).absolutePath+"/com.smartstation"+"/Smart Station/Media/Smart Station Download/"+downloadUri.lastPathSegment)
+
+        if (file1.isFile){
+            return mailCallback.success(file1.absolutePath,true)
+        }
 
         val request = DownloadManager.Request(
             downloadUri

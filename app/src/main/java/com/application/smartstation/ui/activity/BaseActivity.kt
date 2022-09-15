@@ -86,7 +86,7 @@ open class BaseActivity: AppCompatActivity(), UtilInterface {
     fun phnPermission(action: () -> Unit){
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             requestPermission(
-                Manifest.permission.READ_PHONE_STATE){
+                Manifest.permission.READ_CONTACTS,Manifest.permission.WRITE_CONTACTS){
                 if(it){
                     action()
                 }else{

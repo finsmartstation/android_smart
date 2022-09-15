@@ -5,13 +5,6 @@
     android:background="@color/color_chat_popup_gray"
     android:layout_height="80dp">
 
-<!--    <ImageView-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="match_parent"-->
-<!--        android:scaleType="centerCrop"-->
-<!--        android:alpha="0.5"-->
-<!--        android:src="@drawable/ic_splash_bg_use" />-->
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"

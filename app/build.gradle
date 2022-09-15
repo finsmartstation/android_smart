@@ -211,6 +211,9 @@ dependencies {
     //compressor image
     implementation 'id.zelory:compressor:2.1.0'
 
+    //pdf viewer
+    implementation 'com.github.barteksc:android-pdf-viewer:2.8.2'
+
 
 }
 kapt {

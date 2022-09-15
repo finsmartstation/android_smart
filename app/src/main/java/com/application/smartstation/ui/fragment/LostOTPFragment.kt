@@ -147,7 +147,7 @@ class LostOTPFragment : BaseFragment(R.layout.fragment_lost_o_t_p) {
 
     private fun completeOTP(otp: String) {
         UtilsDefault.hideKeyboardForFocusedView(requireActivity())
-        var inputParams = InputParams()
+        val inputParams = InputParams()
         inputParams.otp = otp
         verifyOTP(inputParams)
     }

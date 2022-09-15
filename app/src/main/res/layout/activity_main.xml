@@ -309,8 +309,8 @@
 
                 <ImageView
                     android:id="@+id/imgPlus"
-                    android:layout_width="15dp"
-                    android:layout_height="15dp"
+                    android:layout_width="22dp"
+                    android:layout_height="22dp"
                     android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"
                     android:layout_gravity="center_vertical"
@@ -356,7 +356,8 @@
                         android:layout_height="30dp"
                         android:layout_marginTop="-4dp"
                         android:layout_marginEnd="2dp"
-                        android:src="@drawable/ic_mail_main_use" />
+                        android:src="@drawable/ic_mail_main_use"
+                        app:tint="#727270" />
 
                 </LinearLayout>
 

@@ -1,16 +1,20 @@
 package com.application.smartstation.ui.activity.product
 
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.View
 import androidx.activity.viewModels
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
+import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.GridLayoutManager
 import com.application.smartstation.R
 import com.application.smartstation.databinding.ActivityProductBinding
+import com.application.smartstation.service.Status
 import com.application.smartstation.ui.activity.BaseActivity
 import com.application.smartstation.ui.adapter.CategoryAdapter
-import com.application.smartstation.ui.adapter.ProductsAdapter
+import com.application.smartstation.ui.model.InputParams
 import com.application.smartstation.ui.model.ProductCateListRes
+import com.application.smartstation.util.Constants
 import com.application.smartstation.util.UtilsDefault
 import com.application.smartstation.util.viewBinding
 import com.application.smartstation.viewmodel.ApiViewModel
@@ -22,9 +26,7 @@ class ProductActivity : BaseActivity() {
     val binding: ActivityProductBinding by viewBinding()
     val apiViewModel: ApiViewModel by viewModels()
     var list:ArrayList<ProductCateListRes> = ArrayList()
-    var listproduct:ArrayList<ProductCateListRes> = ArrayList()
-    var categoryAdapter:CategoryAdapter? = null
-    var productsAdapter: ProductsAdapter? = null
+    var categoryAdapter: CategoryAdapter? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,57 +37,79 @@ class ProductActivity : BaseActivity() {
 
     private fun initView() {
 
-        binding.rvCat.layoutManager = LinearLayoutManager(this, RecyclerView.HORIZONTAL,false)
+        binding.rvCat.layoutManager = GridLayoutManager(this, 2)
         categoryAdapter = CategoryAdapter(this)
         binding.rvCat.adapter = categoryAdapter
 
-        binding.rvProducts.layoutManager = LinearLayoutManager(this, RecyclerView.HORIZONTAL,false)
-        productsAdapter = ProductsAdapter(this)
-        binding.rvProducts.adapter = productsAdapter
+        getCategory()
 
-        list.add(ProductCateListRes(1, "Trending","","",0))
-        list.add(ProductCateListRes(2, "Most Popular","","",0))
-        list.add(ProductCateListRes(3, "All Body Products","","",0))
-        list.add(ProductCateListRes(4, "Skin Care","","",0))
-        list.add(ProductCateListRes(5, "Hair Care","","",0))
-        list.add(ProductCateListRes(6, "Make Up","","",0))
-        list.add(ProductCateListRes(7, "Fragrance","","",0))
+        binding.edtSearch.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable?) {
+            }
 
-        categoryAdapter!!.setCloud(list)
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+            }
 
-        listproduct.add(ProductCateListRes(1,
-            "Japanese Cherry Blossom",
-            "250 ml",
-            "$ 17.00",
-            R.drawable.prod2))
-        listproduct.add(ProductCateListRes(2,
-            "African Mango Shower Gel",
-            "350 ml",
-            "$ 25.00",
-            R.drawable.prod1))
-        listproduct.add(ProductCateListRes(1,
-            "Japanese Cherry Blossom",
-            "250 ml",
-            "$ 17.00",
-            R.drawable.prod2))
-        listproduct.add(ProductCateListRes(2,
-            "African Mango Shower Gel",
-            "350 ml",
-            "$ 25.00",
-            R.drawable.prod1))
-        listproduct.add(ProductCateListRes(1,
-            "Japanese Cherry Blossom",
-            "250 ml",
-            "$ 17.00",
-            R.drawable.prod2))
-        listproduct.add(ProductCateListRes(2,
-            "African Mango Shower Gel",
-            "350 ml",
-            "$ 25.00",
-            R.drawable.prod1))
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                val txt = s.toString()
+                filterCatgoryList(txt)
 
-        productsAdapter!!.setCloud(listproduct)
+            }
+        })
+    }
 
+    private fun filterCatgoryList(txt: String) {
+        if (txt != "") {
+            val searchtext = txt.toLowerCase()
+            val templist: ArrayList<ProductCateListRes> = ArrayList()
+
+            for (items in list) {
+                val chat = items.category_name.toLowerCase()
+                if (chat.contains(searchtext)) {
+                    templist.add(items)
+                }
+            }
+
+            categoryAdapter?.setCloud(templist)
+        } else {
+            categoryAdapter?.setCloud(list)
+        }
+    }
+
+    private fun getCategory() {
+        val inputParams = InputParams()
+        inputParams.user_id = UtilsDefault.getSharedPreferenceString(Constants.USER_ID)
+        inputParams.accessToken = UtilsDefault.getSharedPreferenceString(Constants.ACCESS_TOKEN)
+
+        apiViewModel.getCategory(inputParams).observe(this, Observer {
+            it.let {
+                when(it.status){
+                    Status.LOADING -> {
+                        showProgress()
+                    }
+                    Status.SUCCESS -> {
+                        dismissProgress()
+                        if (it.data!!.status){
+                            list = it.data.data
+                            if (!list.isNullOrEmpty()){
+                                setData(list)
+                            }
+
+                        }else{
+                            toast(it.data.message)
+                        }
+                    }
+                    Status.ERROR -> {
+                        dismissProgress()
+                        toast(it.message!!)
+                    }
+                }
+            }
+        })
+    }
+
+    private fun setData(data: ArrayList<ProductCateListRes>) {
+        categoryAdapter!!.setCloud(data)
     }
 
     private fun setOnClickListener() {

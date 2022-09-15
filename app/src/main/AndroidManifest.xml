@@ -23,6 +23,8 @@
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE" />
+    <uses-permission android:name = "android.permission.READ_CONTACTS" />
+    <uses-permission android:name = "android.permission.WRITE_CONTACTS" />
 
     <uses-feature android:name="android.hardware.camera2" />
     <uses-feature android:name="android.hardware.camera.front" />
@@ -49,6 +51,20 @@
         android:roundIcon="@mipmap/app_logo"
         android:supportsRtl="true"
         android:theme="@style/Theme.SmartStation">
+        <activity
+            android:name=".ui.activity.ForwardLetterActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.activity.PdfViewActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.activity.ViewLetterActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.activity.SentLetterActivity"
+            android:exported="false"
+            android:label="@string/title_activity_sent_letter"
+            android:theme="@style/Theme.SmartStation.NoActionBar" />
         <activity
             android:name=".ui.activity.product.ProductActivity"
             android:exported="false" />
@@ -121,9 +137,6 @@
             android:name=".ui.activity.TermAndConditionActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.activity.LetterViewActivity"
-            android:exported="false" />
-        <activity
             android:name=".ui.activity.NewLetterActivity"
             android:exported="false" />
         <activity
@@ -150,7 +163,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".MainActivity"
+            android:name=".ui.activity.MainActivity"
             android:exported="false" /> <!-- image pick -->
         <provider
             android:name="androidx.core.content.FileProvider"

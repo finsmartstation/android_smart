@@ -39,7 +39,7 @@ class CloudAdapter(val context: Context) : RecyclerView.Adapter<CloudAdapter.Vie
         val model = list[position]
 
         with(holder) {
-            binding.txtNum.text = model.name
+            binding.txtNum.text = model.phone
             Glide.with(context).load(model.profile_pic).placeholder(R.drawable.ic_default).error(R.drawable.ic_default).diskCacheStrategy(DiskCacheStrategy.DATA).into(binding.imgProfile)
 
             itemView.setOnClickListener {

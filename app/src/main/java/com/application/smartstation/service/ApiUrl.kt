@@ -43,6 +43,7 @@ object ApiUrl {
     const val GET_INBOX =API+"get_inbox_mail_details"
     const val GET_SENT =API+"get_sent_mail_details"
     const val DELETE_MAIL =API+"deleteEmail"
+    const val DELETE_LETTER =API+"delete_letter_mail"
     const val GET_STAMP =API+"getstamp"
     const val REMOVE_STAMP =API+"removestamp"
     const val STAMP_UPLOAD =API+"stamp_upload"
@@ -50,5 +51,12 @@ object ApiUrl {
     const val SET_SIGNATURE =API+"set_default_signature"
     const val SET_STAMP =API+"set_default_stamp"
     const val NEW_LETTER_SENT =API+"create_letter"
+    const val GET_LETTER =API+"getletter_list"
+    const val GET_LETTER_SENT =API+"get_letter_sent_list"
+    const val VIEW_LETTER =API+"view_letter_list_details"
+    const val GET_CATEGORY =API+"get_category"
+    const val GET_CLOUD =API+"get_cloud_datas"
+    const val FORWARD_LETTER =API+"forward_letter"
+    const val GET_CLOUD_DETAILS =API+"get_cloud_details"
 
 }

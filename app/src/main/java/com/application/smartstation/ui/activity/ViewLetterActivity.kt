@@ -4,49 +4,45 @@ import android.content.Intent
 import android.os.Bundle
 import android.text.Html
 import android.text.TextUtils
-import android.util.Log
 import android.view.View
 import androidx.activity.viewModels
 import androidx.lifecycle.Observer
-import androidx.recyclerview.widget.GridLayoutManager
 import com.application.smartstation.R
-import com.application.smartstation.databinding.ActivityViewMailBinding
+import com.application.smartstation.databinding.ActivityViewLetterBinding
 import com.application.smartstation.service.MailCallback
 import com.application.smartstation.service.Status
-import com.application.smartstation.service.background.SocketService
-import com.application.smartstation.ui.adapter.MailAttachAdapter
-import com.application.smartstation.ui.model.DataInbox
+import com.application.smartstation.ui.model.DataSentLetter
 import com.application.smartstation.ui.model.InputParams
 import com.application.smartstation.util.Constants
 import com.application.smartstation.util.FileUtils
 import com.application.smartstation.util.UtilsDefault
 import com.application.smartstation.util.viewBinding
 import com.application.smartstation.viewmodel.ApiViewModel
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import dagger.hilt.android.AndroidEntryPoint
-import org.apache.commons.lang3.StringUtils.startsWith
 
 @AndroidEntryPoint
-class ViewMailActivity : BaseActivity() {
+class ViewLetterActivity : BaseActivity() {
 
-    val binding: ActivityViewMailBinding by viewBinding()
+    val binding: ActivityViewLetterBinding by viewBinding()
     val apiViewModel: ApiViewModel by viewModels()
     var type = 0
     var sub = ""
     var from = ""
     var date = ""
     var body = ""
-    var profile_pic = ""
     var id = ""
+    var path = ""
+    var profile_pic = ""
     var to:Array<String>? = null
     var to1:Array<String>? = null
     var cc:Array<String>? = null
     var bcc:Array<String>? = null
-    var attachmentList:ArrayList<String>? = ArrayList()
-    var mailFilesAdapter: MailAttachAdapter? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_view_mail)
+        setContentView(R.layout.activity_view_letter)
         initView()
         setOnClickListener()
     }
@@ -59,40 +55,20 @@ class ViewMailActivity : BaseActivity() {
 
         if (type.equals(1)){
             binding.ilHeader.txtHeader.text = resources.getString(R.string.inbox)
-            getInboxDetails(id)
         }else{
             binding.ilHeader.txtHeader.text = resources.getString(R.string.sentbox)
-            getSentDetails(id)
         }
-
-
-        binding.rvMailList.layoutManager = GridLayoutManager(this,3)
-        mailFilesAdapter = MailAttachAdapter(this)
-        binding.rvMailList.adapter = mailFilesAdapter
-        mailFilesAdapter!!.onItemClick = { model ->
-
-            UtilsDefault.downloadFile(this, attachmentList!![model],object :MailCallback{
-                override fun success(resp: String?, status: Boolean?) {
-                    if (status!!){
-                        if (resp!!.contains(".pdf")){
-                            startActivity(Intent(this@ViewMailActivity,PdfViewActivity::class.java).putExtra("path",resp))
-                        }else {
-                            FileUtils.openDocument(this@ViewMailActivity, resp)
-                        }
-                    }
-                }
-
-            })
-        }
+        
+        viewLetterDetails(id)
     }
 
-    private fun getSentDetails(id: String) {
+    private fun viewLetterDetails(id: String) {
         val inputParams = InputParams()
         inputParams.user_id = UtilsDefault.getSharedPreferenceString(Constants.USER_ID)
         inputParams.accessToken = UtilsDefault.getSharedPreferenceString(Constants.ACCESS_TOKEN)
         inputParams.id = id
 
-        apiViewModel.getSent(inputParams).observe(this, Observer {
+        apiViewModel.viewLetter(inputParams).observe(this, Observer {
             it.let {
                 when(it.status){
                     Status.LOADING -> {
@@ -115,72 +91,39 @@ class ViewMailActivity : BaseActivity() {
         })
     }
 
-    private fun getInboxDetails(id: String) {
-        val inputParams = InputParams()
-        inputParams.user_id = UtilsDefault.getSharedPreferenceString(Constants.USER_ID)
-        inputParams.accessToken = UtilsDefault.getSharedPreferenceString(Constants.ACCESS_TOKEN)
-        inputParams.id = id
-
-        apiViewModel.getInbox(inputParams).observe(this, Observer {
-            it.let {
-                when(it.status){
-                    Status.LOADING -> {
-                        showProgress()
-                    }
-                    Status.SUCCESS -> {
-                        dismissProgress()
-                        if (it.data!!.status){
-                            setData(it.data.data)
-                        }else{
-                            toast(it.data.message)
-                        }
-                    }
-                    Status.ERROR -> {
-                        dismissProgress()
-                        toast(it.message!!)
-                    }
-                }
-            }
-        })
-    }
-
-    private fun setData(data: DataInbox) {
+    private fun setData(data: DataSentLetter) {
         from = data.from
         to = data.to
         sub = data.subject
         cc = data.cc
         bcc = data.bcc
-        if (type.equals(1)){
-            date = data.created_datetime
-        }else{
-            date = data.sent_datetime
-        }
-
         body = data.body
+        date = data.datetime
+        profile_pic = data.profile_pic
 
-        attachmentList!!.clear()
-        if (!data.attachments.isNullOrEmpty()){
-            for (i in 0 until data.attachments.size){
-                attachmentList!!.add(data.attachments[i])
-            }
+        if (!data.letter_path.isNullOrEmpty()){
+            binding.clPdf.visibility = View.VISIBLE
+            path = data.letter_path
+            val fileName = FileUtils.getFileNameFromPath(data.letter_path).replace("/","")
+            binding.txtFileName.text = fileName
         }
 
-        if (attachmentList!!.isNotEmpty()){
-            binding.rvMailList.visibility = View.VISIBLE
-            mailFilesAdapter!!.setMail(attachmentList!!)
-        }else{
-            binding.rvMailList.visibility = View.GONE
+        if (!profile_pic.isNullOrEmpty()){
+            Glide.with(this).load(profile_pic).placeholder(R.drawable.ic_default).error(R.drawable.ic_default).diskCacheStrategy(
+                DiskCacheStrategy.DATA).into(binding.imgProfile)
         }
-        
+
         setValue()
+
     }
 
     private fun setValue() {
         binding.txtSub.text = sub
         binding.txtFrom.text = from
-        
+
         binding.txtBody.text = Html.fromHtml(body)
         binding.txtDate.text = UtilsDefault.viewTime(date)
+
         for (i in 0 until to!!.size){
             if (i.equals(0)){
                 if (to!!.size > 1) {
@@ -217,41 +160,26 @@ class ViewMailActivity : BaseActivity() {
             finish()
         }
 
-        binding.ilHeader.imgDelete.setOnClickListener {
-            deleteMail()
-        }
-
-        binding.btnReply.setOnClickListener {
-            val intent = Intent(this,NewMailActivity::class.java)
-            intent.putExtra("from",from)
-            intent.putExtra("sub",subjectVal(sub))
-            intent.putExtra("body",bodyMsg(body,date))
-            startActivity(intent)
-        }
-
-        binding.btnReplyAll.setOnClickListener {
-            val intent = Intent(this,NewMailActivity::class.java)
-            intent.putExtra("from",from)
-            intent.putExtra("cc",cc)
-            intent.putExtra("to",to)
-            intent.putExtra("bcc",bcc)
-            intent.putExtra("sub",subjectVal(sub))
-            intent.putExtra("body",bodyMsg(body,date))
-            startActivity(intent)
-        }
-        
         binding.btnForward.setOnClickListener {
-            val intent = Intent(this,NewMailActivity::class.java)
-            intent.putExtra("sub",subjectFwdVal(sub))
-            intent.putExtra("body",bodyMsgFwd(body,date))
-            startActivity(intent)
+            startActivity(Intent(this,ForwardLetterActivity::class.java)
+                .putExtra("sub",subjectFwdVal(sub))
+                .putExtra("attach",path)
+                .putExtra("id",id))
         }
 
-        binding.btnForward.setOnClickListener {
-            val intent = Intent(this,NewMailActivity::class.java)
-            intent.putExtra("sub",subjectFwdVal(sub))
-            intent.putExtra("body",bodyMsgFwd(body,date))
-            startActivity(intent)
+
+        binding.btnForwardMail.setOnClickListener {
+            UtilsDefault.downloadFile(this, path,object : MailCallback {
+                override fun success(resp: String?, status: Boolean?) {
+                    if (status!!){
+                        startActivity(Intent(this@ViewLetterActivity,NewMailActivity::class.java)
+                            .putExtra("sub",subjectFwdVal(sub))
+                            .putExtra("attach",resp))
+                    }
+                }
+
+            })
+
         }
 
         binding.txtTo.setOnClickListener {
@@ -281,18 +209,29 @@ class ViewMailActivity : BaseActivity() {
             }
 
         }
+
+        binding.ilHeader.imgDelete.setOnClickListener {
+            deleteLetter()
+        }
+
+
+        binding.clPdf.setOnClickListener {
+            UtilsDefault.downloadFile(this, path,object : MailCallback {
+                override fun success(resp: String?, status: Boolean?) {
+                    if (status!!){
+                        if (resp!!.contains(".pdf")){
+                            startActivity(Intent(this@ViewLetterActivity,PdfViewActivity::class.java).putExtra("path",resp))
+                        }else {
+                            FileUtils.openDocument(this@ViewLetterActivity, resp)
+                        }
+                    }
+                }
+
+            })
+        }
     }
 
-    private fun bodyMsgFwd(body: String, date: String): String? {
-        val s = "<br>"+
-                "<div class=\"gmail_quote\">"+
-                "<div dir=\"ltr\" class=\"gmail_attr\">---------- Forwarded message ---------<br>From: <span dir=\"auto\">&lt;<a href=\"mailto:$from\">$from</a>&gt;</span><br>Date: "+
-                "On ${UtilsDefault.replyDayMail(date)}, ${UtilsDefault.replyTime(date)} at ${UtilsDefault.todayDate(UtilsDefault.localTimeConvert(date))}<br>Subject: $sub<br>To: &lt;<a href=\"$to\">$to</a>&gt;<br></div><br><br>"+
-                "$body<br></div></div>\r\n"
-        return s
-    }
-
-    private fun subjectFwdVal(sub: String): String? {
+    private fun subjectFwdVal(sub: String): String {
         if (sub.startsWith("Fwd:")){
             return sub
         }else if (sub.startsWith("Re:")){
@@ -301,18 +240,13 @@ class ViewMailActivity : BaseActivity() {
         return "Fwd: "+sub
     }
 
-    private fun deleteMail() {
+    private fun deleteLetter() {
         val inputParams = InputParams()
         inputParams.user_id = UtilsDefault.getSharedPreferenceString(Constants.USER_ID)
         inputParams.accessToken = UtilsDefault.getSharedPreferenceString(Constants.ACCESS_TOKEN)
         inputParams.id = id
-        if (type.equals(1)) {
-            inputParams.type = "inbox"
-        }else{
-            inputParams.type = "send"
-        }
 
-        apiViewModel.deleteMail(inputParams).observe(this, Observer {
+        apiViewModel.deleteLetter(inputParams).observe(this, Observer {
             it.let {
                 when(it.status){
                     Status.LOADING -> {
@@ -334,24 +268,5 @@ class ViewMailActivity : BaseActivity() {
                 }
             }
         })
-    }
-
-    fun subjectVal(values: String):String {
-        if (values.startsWith("Re:")){
-            return sub
-        }else if (sub.startsWith("Fwd:")){
-            return sub.replace("Fwd:","Re:")
-        }
-        return "Re: "+sub
-    }
-
-
-    fun bodyMsg(values: String, date: String):String {
-        val s = "<br>"+
-        "<div class=\"gmail_quote\">"+
-        "<div dir=\"ltr\" class=\"gmail_attr\">On ${UtilsDefault.replyDayMail(date)}, ${UtilsDefault.replyTime(date)} at ${UtilsDefault.todayDate(UtilsDefault.localTimeConvert(date))} &lt;<a href=\"mailto:$from\">$from</a>&gt; wrote:<br></div>"+
-        "<blockquote class=\"gmail_quote\" style=\"margin:0px 0px 0px 0.8ex;border-left:1px solid"+
-        "rgb(204,204,204);padding-left:1ex\">$values</blockquote> </div>\r\n"
-        return s
     }
 }

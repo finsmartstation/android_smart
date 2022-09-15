@@ -7,16 +7,20 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
 import androidx.activity.viewModels
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.application.smartstation.R
 import com.application.smartstation.databinding.ActivityCloudBinding
 import com.application.smartstation.databinding.ActivityEditProfileBinding
+import com.application.smartstation.service.Status
 import com.application.smartstation.ui.adapter.CloudAdapter
 import com.application.smartstation.ui.adapter.SentboxAdapter
 import com.application.smartstation.ui.model.CloudListRes
 import com.application.smartstation.ui.model.DataUserList
+import com.application.smartstation.ui.model.InputParams
 import com.application.smartstation.ui.model.SendMailListRes
+import com.application.smartstation.util.Constants
 import com.application.smartstation.util.UtilsDefault
 import com.application.smartstation.util.viewBinding
 import com.application.smartstation.viewmodel.ApiViewModel
@@ -43,21 +47,8 @@ class CloudActivity : BaseActivity() {
         binding.rvCloud.adapter = cloudAdapter
 
         cloudAdapter!!.onItemClick = { model ->
-            startActivity(Intent(this, CloudViewActivity::class.java).putExtra("name",model.name))
+            startActivity(Intent(this, CloudViewActivity::class.java).putExtra("name",model.phone))
         }
-
-        list.add(CloudListRes("+91 8122335880",R.drawable.pht))
-        list.add(CloudListRes("+91 9995330811",R.drawable.akhil))
-        list.add(CloudListRes("+91 8122335808",R.drawable.pht1))
-        list.add(CloudListRes("+91 8122335000",R.drawable.pht2))
-        list.add(CloudListRes("+91 8122335801",R.drawable.pht3))
-        list.add(CloudListRes("+91 8122332380",R.drawable.pht4))
-        list.add(CloudListRes("+91 8122334180",R.drawable.pht5))
-        list.add(CloudListRes("+91 8122337680",R.drawable.pht6))
-        list.add(CloudListRes("+91 8122334780",R.drawable.pht))
-        list.add(CloudListRes("+91 8122330080",R.drawable.pht2))
-
-        cloudAdapter!!.setCloud(list)
 
         binding.edtSearch.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
@@ -71,6 +62,48 @@ class CloudActivity : BaseActivity() {
                 filterList(txt)
             }
         })
+
+        getCloud()
+    }
+
+    private fun getCloud() {
+        val inputParams = InputParams()
+        inputParams.user_id = UtilsDefault.getSharedPreferenceString(Constants.USER_ID)
+        inputParams.accessToken = UtilsDefault.getSharedPreferenceString(Constants.ACCESS_TOKEN)
+
+        apiViewModel.getCloud(inputParams).observe(this, Observer {
+            it.let {
+                when(it.status){
+                    Status.LOADING -> {
+                        showProgress()
+                    }
+                    Status.SUCCESS -> {
+                        dismissProgress()
+                        if (it.data!!.status){
+                            list = it.data.cloud_numbers
+                            if(list.isNotEmpty()) {
+                                binding.rvCloud.visibility = View.VISIBLE
+                                binding.txtNoFound.visibility = View.GONE
+                                setData(list)
+                            }else{
+                                binding.rvCloud.visibility = View.GONE
+                                binding.txtNoFound.visibility = View.VISIBLE
+                            }
+                        }else{
+                            toast(it.data.message)
+                        }
+                    }
+                    Status.ERROR -> {
+                        dismissProgress()
+                        toast(it.message!!)
+                    }
+                }
+            }
+        })
+    }
+
+    private fun setData(list: ArrayList<CloudListRes>) {
+        cloudAdapter!!.setCloud(list)
     }
 
     private fun filterList(txt: String) {
@@ -79,7 +112,7 @@ class CloudActivity : BaseActivity() {
             val templist: ArrayList<CloudListRes> = ArrayList()
 
             for (items in list) {
-                val chat = items.name.toLowerCase()
+                val chat = items.phone.toLowerCase()
                 if (chat.contains(searchtext)) {
                     templist.add(items)
                 }

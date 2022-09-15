@@ -10,14 +10,15 @@
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scaleType="centerCrop"
-        android:alpha="0.4"
-        android:src="@drawable/ic_splash_bg_use" />
+        android:scaleType="fitXY"
+        android:visibility="gone"
+        android:src="@drawable/product_test_page" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
+        android:visibility="visible"
         >
         <LinearLayout
             android:layout_width="match_parent"
@@ -39,7 +40,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginStart="16dp"
-                android:text="@string/product"
+                android:text="@string/e_shop"
                 android:singleLine="true"
                 android:textColor="@color/white"
                 android:textSize="18sp" />
@@ -113,38 +114,70 @@
 
         </LinearLayout>
 
+        <com.application.smartstation.view.CustomTextViewBold
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="16dp"
+            android:text="@string/category"
+            android:singleLine="true"
+            android:textColor="@color/black"
+            android:textSize="18sp" />
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvCat"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="8dp"
             android:layout_marginStart="8dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-             />
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rvProducts"
-            android:layout_marginTop="16dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
             android:layout_weight="1"
-            android:layout_marginStart="8dp"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
              />
 
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/btnCart"
+        <RelativeLayout
+            android:id="@+id/rlBottom"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_margin="16dp"
-            android:background="@drawable/cart_btn_bg"
-            android:drawableRight="@drawable/ic_cart"
-            android:fontFamily="@font/dinbold"
-            android:padding="8dp"
-            android:paddingEnd="24dp"
-            android:text="Your Cart is empty"
-            android:textAllCaps="false"
-            android:textSize="16sp"
-            android:textColor="@color/white"
-            />
+            android:layout_height="80dp"
+            android:background="@color/bg">
+
+            <ImageView
+                android:id="@+id/imgNewMail"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="16dp"
+                android:padding="3dp"
+                android:src="@drawable/ic_menu_use"
+                android:visibility="visible" />
+
+            <ImageView
+                android:layout_width="90dp"
+                android:layout_height="25dp"
+                android:layout_centerInParent="true"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="8dp"
+                android:alpha="0.7"
+                android:src="@drawable/login_logo_use"></ImageView>
+
+            <ImageView
+                android:id="@+id/imgCart"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_gravity="center_vertical"
+                android:layout_marginEnd="16dp"
+                android:src="@drawable/ic_cart"
+                android:visibility="visible"
+                app:tint="@color/color_green" />
+
+
+        </RelativeLayout>
 
     </LinearLayout>
 

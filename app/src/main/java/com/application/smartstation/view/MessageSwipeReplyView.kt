@@ -37,10 +37,14 @@ class MessageSwipeReplyView(private val context: Context, private val list:Array
     override fun getMovementFlags(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder): Int {
         if (!list.isNullOrEmpty()) {
             if (!list[viewHolder.adapterPosition].type.equals("date")) {
-                mView = viewHolder.itemView
-                imageDrawable = context.getDrawable(R.drawable.ic_reply_black_24dp)!!
-                shareRound = context.getDrawable(R.drawable.ic_round_shape)!!
-                return ItemTouchHelper.Callback.makeMovementFlags(ACTION_STATE_IDLE, RIGHT)
+                if (!list[viewHolder.adapterPosition].type.equals("notification")) {
+                    mView = viewHolder.itemView
+                    imageDrawable = context.getDrawable(R.drawable.ic_reply_black_24dp)!!
+                    shareRound = context.getDrawable(R.drawable.ic_round_shape)!!
+                    return ItemTouchHelper.Callback.makeMovementFlags(ACTION_STATE_IDLE, RIGHT)
+                }else{
+                    return makeMovementFlags(0, 0)
+                }
             }else{
                 return makeMovementFlags(0, 0)
             }

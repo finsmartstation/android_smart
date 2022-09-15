@@ -17,6 +17,7 @@ import com.application.smartstation.util.UtilsDefault
 import com.application.smartstation.util.viewBinding
 import com.application.smartstation.view.ImageSelectorDialog
 import com.application.smartstation.viewmodel.ApiViewModel
+import com.bumptech.glide.Glide
 import com.theartofdev.edmodo.cropper.CropImage
 import dagger.hilt.android.AndroidEntryPoint
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
@@ -169,7 +170,7 @@ class UploadSignatureActivity : BaseActivity(), ImageSelectorDialog.Action {
 
     override fun onImageSelected(imagePath: String, filename: String) {
         pics = imagePath
-
+        Glide.with(this).load(imagePath).into(binding.imgUpload)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

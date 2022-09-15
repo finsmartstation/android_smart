@@ -123,6 +123,20 @@
         android:layout_marginEnd="8dp"
         />
 
+        <com.application.smartstation.view.CustomTextViewBold
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="@string/no_cloud"
+            android:id="@+id/txtNoFound"
+            android:textSize="30sp"
+            android:visibility="gone"
+            android:gravity="center"
+            android:textColor="@color/colorE"
+            android:layout_margin="16dp"
+            >
+
+        </com.application.smartstation.view.CustomTextViewBold>
+
     </LinearLayout>
 
     <ImageView
