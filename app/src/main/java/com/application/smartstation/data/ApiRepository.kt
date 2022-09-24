@@ -355,6 +355,20 @@ class ApiRepository @Inject constructor(val apiService: ApiService) {
         }.flowOn(Dispatchers.IO)
     }
 
+    fun createCloudFolder(inputParams: InputParams): Flow<BaseResponse> {
+        return flow {
+            val response = apiService.createCloudFolder(inputParams)
+            emit(response)
+        }.flowOn(Dispatchers.IO)
+    }
+
+    fun createCloudSubFolder(inputParams: InputParams): Flow<BaseResponse> {
+        return flow {
+            val response = apiService.createCloudSubFolder(inputParams)
+            emit(response)
+        }.flowOn(Dispatchers.IO)
+    }
+
     fun getCloudDetails(inputParams: InputParams): Flow<CloudDetailsRes> {
         return flow {
             val response = apiService.getCloudDetails(inputParams)
@@ -393,6 +407,21 @@ class ApiRepository @Inject constructor(val apiService: ApiService) {
     ): Flow<BaseResponse> {
         return flow {
             val response = apiService.composeMail(user_id,accessToken, to_mail, cc_mail, bcc_mail, subject, body, attachment)
+            emit(response)
+        }.flowOn(Dispatchers.IO)
+    }
+
+    fun fileUploadCloud(
+        user_id:RequestBody,
+        accessToken:RequestBody,
+        parent_folder_id:RequestBody,
+        access_period:RequestBody,
+        period_limit:RequestBody,
+        file_type:RequestBody,
+        file:MultipartBody.Part
+    ): Flow<BaseResponse> {
+        return flow {
+            val response = apiService.fileUploadCloud(user_id,accessToken, parent_folder_id, access_period, period_limit, file_type, file)
             emit(response)
         }.flowOn(Dispatchers.IO)
     }

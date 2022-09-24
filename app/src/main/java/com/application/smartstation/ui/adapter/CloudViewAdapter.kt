@@ -38,23 +38,37 @@ class CloudViewAdapter(val context: Context) : RecyclerView.Adapter<CloudViewAda
         val model = list[position]
 
         with(holder) {
-            val fileName = FileUtils.getFileNameFromPath(model.filepath).replace("/","")
-            if (UtilsDefault.isImageFile(model.filepath)){
-                model.type = "img"
-            }else if (UtilsDefault.isPdfFile(model.filepath)){
-                model.type = "pdf"
-            }else{
-                model.type = ""
-            }
-            if (model.type.equals("img")){
-                binding.llFileName.visibility = View.GONE
-                Glide.with(context).load(model.filepath).placeholder(R.drawable.ic_default).error(R.drawable.ic_default).diskCacheStrategy(DiskCacheStrategy.DATA).into(binding.imgPath)
-            }else if (model.type.equals("pdf")){
-                binding.llFileName.visibility = View.VISIBLE
-                binding.txtFileName.text = fileName
-                Glide.with(context).load(R.drawable.pdf_icon).placeholder(R.drawable.ic_default).error(R.drawable.ic_default).diskCacheStrategy(DiskCacheStrategy.DATA).into(binding.imgPath)
-            }else{
-                binding.llFileName.visibility = View.GONE
+
+            if (model.file_type.equals("folder")){
+                binding.llView.visibility = View.VISIBLE
+                binding.clView.visibility = View.GONE
+                binding.txtFolderName.text = model.name
+            }else {
+                val fileName = FileUtils.getFileNameFromPath(model.file_path).replace("/","")
+                var type = ""
+                if (UtilsDefault.isImageFile(model.file_path)){
+                    type = "img"
+                }else if (UtilsDefault.isPdfFile(model.file_path)){
+                    type = "pdf"
+                }else{
+                    type = ""
+                }
+                binding.llView.visibility = View.GONE
+                binding.clView.visibility = View.VISIBLE
+                if (type.equals("img")) {
+                    binding.llFileName.visibility = View.GONE
+                    Glide.with(context).load(model.file_path).placeholder(R.drawable.ic_default)
+                        .error(R.drawable.ic_default).diskCacheStrategy(DiskCacheStrategy.DATA)
+                        .into(binding.imgPath)
+                } else if (type.equals("pdf")) {
+                    binding.llFileName.visibility = View.VISIBLE
+                    binding.txtFileName.text = fileName
+                    Glide.with(context).load(R.drawable.pdf_icon).placeholder(R.drawable.ic_default)
+                        .error(R.drawable.ic_default).diskCacheStrategy(DiskCacheStrategy.DATA)
+                        .into(binding.imgPath)
+                } else {
+                    binding.llFileName.visibility = View.GONE
+                }
             }
 
             itemView.setOnClickListener {

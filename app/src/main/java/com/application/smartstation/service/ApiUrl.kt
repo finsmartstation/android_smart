@@ -2,8 +2,8 @@ package com.application.smartstation.service
 
 object ApiUrl {
 
-    const val API ="/api/"
-//    const val API ="/"
+//    const val API ="/api/"
+    const val API ="/otp/backend/"
 
     const val LOGIN =API+"login"
     const val OTP_VERIFY =API+"checkotp"
@@ -57,6 +57,9 @@ object ApiUrl {
     const val GET_CATEGORY =API+"get_category"
     const val GET_CLOUD =API+"get_cloud_datas"
     const val FORWARD_LETTER =API+"forward_letter"
-    const val GET_CLOUD_DETAILS =API+"get_cloud_details"
+    const val GET_CLOUD_DETAILS =API+"get_cloud_subfolders"
+    const val CREATE_FOLDER_CREATE_CLOUD =API+"create_cloud_parent_folder"
+    const val CREATE_SUB_FOLDER_CREATE_CLOUD =API+"create_cloud_sub_folder"
+    const val UPLOAD_FILE_CLOUD =API+"upload_cloud_files"
 
 }

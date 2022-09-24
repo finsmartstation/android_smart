@@ -41,7 +41,7 @@ class SentLetterActivity : BaseActivity() {
         binding.rvSentBox.adapter = sentboxLetterAdapter
 
         sentboxLetterAdapter!!.onItemClick = { model ->
-            val intent = Intent(this,ViewMailActivity::class.java)
+            val intent = Intent(this,ViewLetterActivity::class.java)
             intent.putExtra("boxType",2)
             intent.putExtra("id",model.id)
             startActivity(intent)

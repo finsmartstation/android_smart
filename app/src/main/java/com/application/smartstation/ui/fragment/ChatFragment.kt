@@ -1,10 +1,14 @@
 package com.application.smartstation.ui.fragment
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
+import android.database.Cursor
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.provider.ContactsContract
+import android.telephony.PhoneNumberUtils
 import android.util.Log
 import android.view.View
 import androidx.fragment.app.viewModels
@@ -29,6 +33,7 @@ import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 import org.json.JSONObject
 import java.util.*
+import kotlin.collections.ArrayList
 
 
 @AndroidEntryPoint
@@ -41,6 +46,7 @@ class ChatFragment : BaseFragment(R.layout.fragment_chat){
     val apiViewModel: ApiViewModel by viewModels()
     val mainHandler = Handler(Looper.getMainLooper())
     var emitters: SocketService.Emitters? = null
+    var contactList:ArrayList<ContactListRes> = ArrayList()
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -63,7 +69,9 @@ class ChatFragment : BaseFragment(R.layout.fragment_chat){
             startActivity(Intent(requireActivity(), ChatActivity::class.java).putExtra(Constants.REC_ID,model.userid).putExtra(Constants.NAME,model.name).putExtra(Constants.PROFILE,model.profile).putExtra(Constants.CHAT_TYPE,model.chat_type).putExtra(Constants.ROOM,model.room))
         }
 
-
+        phnPermission{
+            getContactList()
+        }
 
         emitRecentChat()
 
@@ -89,6 +97,45 @@ class ChatFragment : BaseFragment(R.layout.fragment_chat){
             }
 
         })
+
+    }
+
+    @SuppressLint("Range")
+    private fun getContactList() {
+        try {
+            val cr = requireActivity().contentResolver
+            val cur: Cursor? = cr.query(ContactsContract.Contacts.CONTENT_URI,
+                null, null, null, null)
+            if ((if (cur != null) cur.getCount() else 0) > 0) {
+                while (cur != null && cur.moveToNext()) {
+                    val id: String = cur.getString(
+                        cur.getColumnIndex(ContactsContract.Contacts._ID))
+                    val name: String = cur.getString(cur.getColumnIndex(
+                        ContactsContract.Contacts.DISPLAY_NAME))
+                    if (cur.getInt(cur.getColumnIndex(
+                            ContactsContract.Contacts.HAS_PHONE_NUMBER)) > 0
+                    ) {
+                        val pCur: Cursor? = cr.query(
+                            ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
+                            null,
+                            ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = ?",
+                            arrayOf(id),
+                            null)
+                        while (pCur!!.moveToNext()) {
+                            val phoneNo: String = pCur.getString(pCur.getColumnIndex(
+                                ContactsContract.CommonDataKinds.Phone.NUMBER))
+                            contactList.add(ContactListRes(name,phoneNo))
+                        }
+                        pCur.close()
+                    }
+                }
+            }
+            if (cur != null) {
+                cur.close()
+            }
+        }catch (e:Exception){
+            Log.d("TAG", "getContactList: "+e)
+        }
 
     }
 
@@ -129,7 +176,24 @@ class ChatFragment : BaseFragment(R.layout.fragment_chat){
     }
 
     private fun setData(list: ArrayList<DataChatList>) {
-        chatAdapter!!.setChat(list)
+            for (a in contactList) {
+                for (b in 0 until list.size) {
+                    if (PhoneNumberUtils.compare(a.Phn, list[b].phone)) {
+                        list.set(b,DataChatList(list[b].id,
+                            list[b].date,
+                            list[b].message,
+                            list[b].phone,
+                            list[b].message_type,
+                            list[b].unread_message,
+                            list[b].userid
+                            ,a.name
+                            ,list[b].profile
+                            ,list[b].room
+                            ,list[b].chat_type))
+                    }
+                }
+            }
+            chatAdapter!!.setChat(list)
     }
 
     override fun onResume() {
@@ -235,5 +299,6 @@ class ChatFragment : BaseFragment(R.layout.fragment_chat){
 
         }
     }
+
 
 }

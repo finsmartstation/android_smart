@@ -7,6 +7,17 @@
     android:layout_marginStart="8dp"
     android:layout_marginEnd="8dp">
 
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/clView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        >
+
     <ImageView
         android:id="@+id/imgPath"
         android:layout_width="0dp"
@@ -35,6 +46,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/txtFileName"
             android:singleLine="true"
+            android:textAlignment="center"
             android:maxLines="1"
             android:paddingStart="4dp"
             android:paddingEnd="4dp"
@@ -44,5 +56,52 @@
 
 
     </LinearLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/llView"
+        android:visibility="gone"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        >
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:src="@drawable/ic_folder_icon"
+            />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:background="@color/white"
+            android:layout_marginTop="4dp"
+            android:gravity="center"
+            app:layout_constraintStart_toStartOf="@+id/imgPath"
+            app:layout_constraintEnd_toEndOf="@+id/imgPath"
+            app:layout_constraintBottom_toBottomOf="@+id/imgPath">
+
+            <com.application.smartstation.view.CustomTextViewMedium
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/txtFolderName"
+                android:singleLine="true"
+                android:maxLines="1"
+                android:textAlignment="center"
+                android:paddingStart="4dp"
+                android:paddingEnd="4dp"
+                android:textSize="16sp"
+                android:textColor="@color/black"
+                />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

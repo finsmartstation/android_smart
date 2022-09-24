@@ -1214,5 +1214,15 @@
     <string name="no_rec_cloud">No Receive Cloud</string>
     <string name="category">Categories</string>
     <string name="ACCOUNT_TYPE">com.application.smartstation.account</string>
+    <string name="upload_folder">Upload Folder</string>
+    <string name="upload_file">Upload File</string>
+    <string name="time_period">Time Period</string>
+    <string name="free">Free</string>
+    <string name="please_select_time_per">Please select time period</string>
+    <string name="folder_name">Floder name</string>
+    <string name="please_enter_folder">Please enter folder name</string>
+    <string name="no_send_cloud">No Sent Cloud</string>
+    <string name="please_upload">Please upload</string>
+    <string name="folder_is_empty">Floder is empty</string>
 
 </resources>

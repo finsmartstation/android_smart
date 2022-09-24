@@ -23,8 +23,8 @@
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE" />
-    <uses-permission android:name = "android.permission.READ_CONTACTS" />
-    <uses-permission android:name = "android.permission.WRITE_CONTACTS" />
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
+    <uses-permission android:name="android.permission.WRITE_CONTACTS" />
 
     <uses-feature android:name="android.hardware.camera2" />
     <uses-feature android:name="android.hardware.camera.front" />
@@ -51,6 +51,9 @@
         android:roundIcon="@mipmap/app_logo"
         android:supportsRtl="true"
         android:theme="@style/Theme.SmartStation">
+        <activity
+            android:name=".ui.activity.CloudFolderActivity"
+            android:exported="false" />
         <activity
             android:name=".ui.activity.ForwardLetterActivity"
             android:exported="false" />

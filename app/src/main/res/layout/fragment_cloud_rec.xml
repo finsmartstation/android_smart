@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -13,10 +13,6 @@
         android:layout_marginTop="6dp"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
         />
 
     <com.application.smartstation.view.CustomTextViewBold
@@ -28,13 +24,108 @@
         android:visibility="gone"
         android:gravity="center"
         android:layout_margin="16dp"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
         android:textColor="@color/colorE"
         >
 
     </com.application.smartstation.view.CustomTextViewBold>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <LinearLayout
+        android:id="@+id/llFab"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:visibility="gone"
+        android:layout_gravity="bottom|end|right"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:id="@+id/llFolder"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:visibility="gone"
+            >
+
+            <com.application.smartstation.view.CustomTextViewBold
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/upload_folder"
+                android:textSize="18sp"
+                android:layout_gravity="center"
+                android:visibility="visible"
+                android:gravity="center"
+                android:layout_marginEnd="16dp"
+                android:textColor="@color/black"
+                >
+
+            </com.application.smartstation.view.CustomTextViewBold>
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/fabFolder"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:layout_marginEnd="22dp"
+                android:src="@drawable/ic_folder_icon"
+                app:tint="@color/white"
+                app:backgroundTint="@color/color_green"
+                app:fabSize="mini"
+                app:rippleColor="@color/white" />
+
+        </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/llFile"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:visibility="gone"
+        >
+
+        <com.application.smartstation.view.CustomTextViewBold
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/upload_file"
+            android:textSize="18sp"
+            android:layout_gravity="center"
+            android:visibility="visible"
+            android:gravity="center"
+            android:layout_marginEnd="16dp"
+            android:textColor="@color/black"
+            >
+
+        </com.application.smartstation.view.CustomTextViewBold>
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fabFile"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:src="@drawable/ic_letter_use"
+            app:tint="@color/white"
+            app:backgroundTint="@color/color_green"
+            app:fabSize="mini"
+            app:rippleColor="@color/white" />
+
+    </LinearLayout>
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fabAdd"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="18dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="18dp"
+            android:layout_gravity="bottom|end|right"
+            android:layout_marginBottom="18dp"
+            android:src="@drawable/ic_add"
+            app:tint="@android:color/white"
+            android:backgroundTint="@color/color_green"
+            app:fabSize="normal"
+            app:rippleColor="@color/white" />
+
+    </LinearLayout>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

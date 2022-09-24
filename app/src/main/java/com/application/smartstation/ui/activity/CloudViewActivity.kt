@@ -14,6 +14,7 @@ class CloudViewActivity : BaseActivity() {
 
     val binding: ActivityCloudViewBinding by viewBinding()
     var name = ""
+    var id = ""
     var fragmentHelper: FragmentHelper? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -26,6 +27,7 @@ class CloudViewActivity : BaseActivity() {
     private fun initView() {
         if (intent != null){
             name = intent.getStringExtra("name")!!
+            id = intent.getStringExtra("id")!!
             binding.ilHeader.txtHeader.text = name
         }
 
@@ -35,7 +37,7 @@ class CloudViewActivity : BaseActivity() {
 
     private fun setUpFragments() {
         fragmentHelper = FragmentHelper(supportFragmentManager)
-        fragmentHelper?.setUpFrame(CloudRecFragment(name), binding.cloudFrameContainer)
+        fragmentHelper?.setUpFrame(CloudRecFragment(id), binding.cloudFrameContainer)
     }
 
     private fun setOnClickListener() {
@@ -46,13 +48,13 @@ class CloudViewActivity : BaseActivity() {
         binding.rlRec.setOnClickListener {
             binding.rlRec.background = getDrawable(R.color.color_tab_select_bg)
             binding.rlSent.background = null
-            fragmentHelper?.push(CloudRecFragment(name))
+            fragmentHelper?.push(CloudRecFragment(id))
         }
 
         binding.rlSent.setOnClickListener {
             binding.rlRec.background = null
             binding.rlSent.background = getDrawable(R.color.color_tab_select_bg)
-            fragmentHelper?.push(CloudSendFragment(name))
+            fragmentHelper?.push(CloudSendFragment(id))
         }
     }
 }

@@ -111,4 +111,14 @@
 
     <style name="Theme.SmartStation.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
+    <style name="MyRadioButton" parent="Widget.AppCompat.CompoundButton.RadioButton">
+        <item name="buttonTint">@drawable/radio_bg_btn</item>
+        <item name="android:textColor">@drawable/radio_bg_btn</item>
+    </style>
+
+    <style name="mySpinnerItemStyle" parent="@android:style/Widget.Holo.DropDownItem.Spinner">
+        <item name="android:textColor">@color/black</item>
+        <item name="android:backgroundTint">@color/grey</item>
+    </style>
+
 </resources>

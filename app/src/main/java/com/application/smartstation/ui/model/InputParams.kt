@@ -81,4 +81,11 @@ class InputParams {
     var signature_url_path:String? = null
     var stamp_url_path:String? = null
 
+    //cloud
+    var parent_folder_id:String? = null
+    var folder_name:String? = null
+    var access_period:String? = null
+    var period_limit:String? = null
+//    var parent_folder_id:String? = null
+
 }

@@ -903,6 +903,43 @@ class ApiViewModel @Inject constructor(
 
     }
 
+    fun createCloudFolder(inputParams: InputParams) = liveData<Resource<BaseResponse>> {
+        if (UtilsDefault.isOnline()) {
+            repository.createCloudFolder(inputParams)
+                .onStart {
+                    emit(Resource.loading(data = null))
+                }
+                .catch {
+                    emit(Resource.error(data = null, msg = "Cannot reach server..try again"))
+                }
+                .collect {
+                    emit(Resource.success(it))
+                }
+        } else {
+            emit(Resource.error(data = null, msg = "No internet connection"))
+        }
+
+    }
+
+
+    fun createCloudSubFolder(inputParams: InputParams) = liveData<Resource<BaseResponse>> {
+        if (UtilsDefault.isOnline()) {
+            repository.createCloudSubFolder(inputParams)
+                .onStart {
+                    emit(Resource.loading(data = null))
+                }
+                .catch {
+                    emit(Resource.error(data = null, msg = "Cannot reach server..try again"))
+                }
+                .collect {
+                    emit(Resource.success(it))
+                }
+        } else {
+            emit(Resource.error(data = null, msg = "No internet connection"))
+        }
+
+    }
+
     fun getCloudDetails(inputParams: InputParams) = liveData<Resource<CloudDetailsRes>> {
         if (UtilsDefault.isOnline()) {
             repository.getCloudDetails(inputParams)
@@ -974,6 +1011,32 @@ class ApiViewModel @Inject constructor(
     ) = liveData<Resource<BaseResponse>> {
         if (UtilsDefault.isOnline()) {
             repository.composeMail(user_id, accessToken, to_mail, cc_mail, bcc_mail, subject, body, attachment)
+                .onStart {
+                    emit(Resource.loading(data = null))
+                }
+                .catch {
+                    emit(Resource.error(data = null, msg = "Cannot reach server..try again"))
+                }
+                .collect {
+                    emit(Resource.success(it))
+                }
+        } else {
+            emit(Resource.error(data = null, msg = "No internet connection"))
+        }
+
+    }
+
+    fun fileUploadCloud(
+        user_id:RequestBody,
+        accessToken:RequestBody,
+        parent_folder_id:RequestBody,
+        access_period:RequestBody,
+        period_limit:RequestBody,
+        file_type:RequestBody,
+        file:MultipartBody.Part
+    ) = liveData<Resource<BaseResponse>> {
+        if (UtilsDefault.isOnline()) {
+            repository.fileUploadCloud(user_id,accessToken, parent_folder_id, access_period, period_limit, file_type, file)
                 .onStart {
                     emit(Resource.loading(data = null))
                 }

@@ -62,7 +62,7 @@ open class BaseFragment (layoutId:Int) : Fragment(layoutId), UtilInterface {
     fun phnPermission(action: () -> Unit){
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             requestPermission(
-                Manifest.permission.READ_PHONE_STATE){
+                Manifest.permission.READ_CONTACTS,Manifest.permission.WRITE_CONTACTS){
                 if(it){
                     action()
                 }else{

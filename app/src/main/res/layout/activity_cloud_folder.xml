@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    tools:context=".ui.activity.CloudFolderActivity">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        android:alpha="0.4"
+        android:src="@drawable/ic_splash_bg_use" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        >
+
+        <include
+            android:id="@+id/ilHeader"
+            layout="@layout/header_layout"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/rvCloudView"
+            android:layout_marginTop="6dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            />
+
+        <com.application.smartstation.view.CustomTextViewBold
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="@string/folder_is_empty"
+            android:id="@+id/txtNoFound"
+            android:textSize="30sp"
+            android:visibility="gone"
+            android:gravity="center"
+            android:layout_margin="16dp"
+            android:textColor="@color/colorE"
+            >
+
+        </com.application.smartstation.view.CustomTextViewBold>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/llFab"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:visibility="gone"
+        android:layout_gravity="bottom|end|right"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:id="@+id/llFile"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:visibility="gone"
+        >
+
+        <com.application.smartstation.view.CustomTextViewBold
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/upload_file"
+            android:textSize="18sp"
+            android:layout_gravity="center"
+            android:visibility="visible"
+            android:gravity="center"
+            android:layout_marginEnd="16dp"
+            android:textColor="@color/black"
+            >
+
+        </com.application.smartstation.view.CustomTextViewBold>
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fabFile"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:src="@drawable/ic_letter_use"
+            app:tint="@color/white"
+            app:backgroundTint="@color/color_green"
+            app:fabSize="mini"
+            app:rippleColor="@color/white" />
+
+    </LinearLayout>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fabAdd"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="18dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="18dp"
+        android:layout_gravity="bottom|end|right"
+        android:layout_marginBottom="18dp"
+        android:src="@drawable/ic_add"
+        app:tint="@android:color/white"
+        android:backgroundTint="@color/color_green"
+        app:fabSize="normal"
+        app:rippleColor="@color/white" />
+
+    </LinearLayout>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

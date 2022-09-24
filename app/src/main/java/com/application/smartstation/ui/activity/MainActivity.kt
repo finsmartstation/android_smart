@@ -9,6 +9,7 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.provider.ContactsContract
+import android.telephony.PhoneNumberUtils
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
@@ -30,6 +31,7 @@ import com.application.smartstation.ui.adapter.ChatAdapter
 import com.application.smartstation.ui.adapter.ContactAdapter
 import com.application.smartstation.ui.fragment.*
 import com.application.smartstation.ui.helper.FragmentHelper
+import com.application.smartstation.ui.model.ContactListRes
 import com.application.smartstation.ui.model.DataChatList
 import com.application.smartstation.ui.model.DataUserList
 import com.application.smartstation.ui.model.InputParams
@@ -57,6 +59,7 @@ class MainActivity : BaseActivity(), InboxFragment.OnUnreadMailCountListener,Let
     var searchInterface:SearchInterface? = null
     val chatMainFragment = ChatMainFragment()
     var list:ArrayList<DataUserList> = ArrayList()
+    var contactList:ArrayList<ContactListRes> = ArrayList()
     var contactAdapter: ContactAdapter? = null
     var listChat: ArrayList<DataChatList> = java.util.ArrayList()
     var chatAdapter: ChatAdapter? = null
@@ -473,8 +476,16 @@ class MainActivity : BaseActivity(), InboxFragment.OnUnreadMailCountListener,Let
                     Status.SUCCESS -> {
 //                        dismissProgress()
                         if (it.data!!.status){
-                            list = it.data.data
-                            if(list.isNotEmpty()) {
+                            var list1 = it.data.data
+                            if(list1.isNotEmpty()) {
+                                list.clear()
+                                for (a in contactList){
+                                    for (b in list1){
+                                        if (PhoneNumberUtils.compare(a.Phn,b.phone)){
+                                            list.add(DataUserList(b.user_id,a.name,b.profile_pic,b.phone,b.country,b.about))
+                                        }
+                                    }
+                                }
                                 setData(list)
                             }
                         }else{
@@ -614,6 +625,7 @@ class MainActivity : BaseActivity(), InboxFragment.OnUnreadMailCountListener,Let
 
     @SuppressLint("Range")
     private fun getContactList() {
+        try {
         val cr = contentResolver
         val cur: Cursor? = cr.query(ContactsContract.Contacts.CONTENT_URI,
             null, null, null, null)
@@ -635,7 +647,7 @@ class MainActivity : BaseActivity(), InboxFragment.OnUnreadMailCountListener,Let
                     while (pCur!!.moveToNext()) {
                         val phoneNo: String = pCur.getString(pCur.getColumnIndex(
                             ContactsContract.CommonDataKinds.Phone.NUMBER))
-
+                        contactList.add(ContactListRes(name,phoneNo))
                     }
                     pCur.close()
                 }
@@ -644,5 +656,9 @@ class MainActivity : BaseActivity(), InboxFragment.OnUnreadMailCountListener,Let
         if (cur != null) {
             cur.close()
         }
+    }catch (e:Exception){
+        Log.d("TAG", "getContactList: "+e)
     }
+    }
+
 }

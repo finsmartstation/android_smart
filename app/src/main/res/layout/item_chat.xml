@@ -15,7 +15,6 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:visibility="gone"
-        android:background="@color/color_gray_2"
         >
         <LinearLayout
             android:id="@+id/llMore"
@@ -57,7 +56,6 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
-            android:background="@color/white"
             >
 
     <LinearLayout

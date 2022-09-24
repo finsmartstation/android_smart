@@ -156,6 +156,12 @@ interface ApiService {
     @POST(ApiUrl.FORWARD_LETTER)
     suspend fun forwardLetter(@Body inputParams: InputParams): BaseResponse
 
+    @POST(ApiUrl.CREATE_FOLDER_CREATE_CLOUD)
+    suspend fun createCloudFolder(@Body inputParams: InputParams): BaseResponse
+
+    @POST(ApiUrl.CREATE_SUB_FOLDER_CREATE_CLOUD)
+    suspend fun createCloudSubFolder(@Body inputParams: InputParams): BaseResponse
+
     @POST(ApiUrl.GET_CLOUD_DETAILS)
     suspend fun getCloudDetails(@Body inputParams: InputParams): CloudDetailsRes
 
@@ -178,5 +184,10 @@ interface ApiService {
     @Multipart
     @POST(ApiUrl.COMPOSE_MAIL)
     suspend fun composeMail(@Part("user_id") user_id:RequestBody, @Part("accessToken") accessToken:RequestBody, @Part("to_mail") to_mail:RequestBody, @Part("cc_mail") cc_mail:RequestBody, @Part("bcc_mail") bcc_mail:RequestBody, @Part("subject") subject:RequestBody, @Part("body") body:RequestBody, @Part attachment: List<MultipartBody.Part?>): BaseResponse
+
+    @Multipart
+    @POST(ApiUrl.UPLOAD_FILE_CLOUD)
+    suspend fun fileUploadCloud(@Part("user_id")user_id:RequestBody,@Part("accessToken")accessToken:RequestBody,@Part("parent_folder_id")parent_folder_id:RequestBody,@Part("access_period")access_period:RequestBody,@Part("period_limit")period_limit:RequestBody,@Part("file_type")file_type:RequestBody,@Part file: MultipartBody.Part): BaseResponse
+
 
 }

@@ -400,6 +400,20 @@ class NewMailActivity : BaseActivity(),
         binding.edtBcc.setTokenListener(this)
         binding.edtBcc.setTokenizer(CharacterTokenizer(asList(' ', ','), ","))
 
+        binding.rvMailList.layoutManager = GridLayoutManager(this,3)
+        mailFilesAdapter = MailFilesAdapter(this)
+        binding.rvMailList.adapter = mailFilesAdapter
+
+        mailFilesAdapter!!.onItemClick = { model ->
+            pathList.removeAt(model)
+            imageParts.removeAt(model)
+            if (pathList.isEmpty()){
+                binding.rvMailList.visibility = View.GONE
+            }
+            mailFilesAdapter!!.notifyDataSetChanged()
+        }
+
+
         if (intent != null){
             if (intent.getStringExtra("from") != null){
                 val from = intent.getStringExtra("from")!!
@@ -455,19 +469,6 @@ class NewMailActivity : BaseActivity(),
         binding.svLayout.smoothScrollTo(0, binding.edtTo.top)
 
         binding.ilHeader.txtHeader.text = resources.getString(R.string.compose)
-
-        binding.rvMailList.layoutManager = GridLayoutManager(this,3)
-        mailFilesAdapter = MailFilesAdapter(this)
-        binding.rvMailList.adapter = mailFilesAdapter
-
-        mailFilesAdapter!!.onItemClick = { model ->
-            pathList.removeAt(model)
-            imageParts.removeAt(model)
-            if (pathList.isEmpty()){
-                binding.rvMailList.visibility = View.GONE
-            }
-            mailFilesAdapter!!.notifyDataSetChanged()
-        }
 
         binding.edtBody.setOnFocusChangeListener(OnFocusChangeListener { view, hasFocus ->
             if (hasFocus) {

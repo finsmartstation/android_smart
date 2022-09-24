@@ -48,18 +48,25 @@ class CloudRecFragment(var phn: String) : BaseFragment(R.layout.fragment_cloud_r
         binding.rvCloudView.adapter = cloudViewAdapter
 
         cloudViewAdapter!!.onItemClick = { model ->
-            UtilsDefault.downloadFile(requireActivity(), model.filepath,object : MailCallback {
-                override fun success(resp: String?, status: Boolean?) {
-                    if (status!!){
-                        if (resp!!.contains(".pdf")){
-                            startActivity(Intent(requireActivity(), PdfViewActivity::class.java).putExtra("path",resp))
-                        }else {
-                            FileUtils.openDocument(requireActivity(), resp)
-                        }
-                    }
-                }
+            if (model.file_type.equals("folder")){
 
-            })
+            }else {
+                UtilsDefault.downloadFile(requireActivity(),
+                    model.file_path,
+                    object : MailCallback {
+                        override fun success(resp: String?, status: Boolean?) {
+                            if (status!!) {
+                                if (resp!!.contains(".pdf")) {
+                                    startActivity(Intent(requireActivity(),
+                                        PdfViewActivity::class.java).putExtra("path", resp))
+                                } else {
+                                    FileUtils.openDocument(requireActivity(), resp)
+                                }
+                            }
+                        }
+
+                    })
+            }
         }
     }
 
@@ -76,7 +83,7 @@ class CloudRecFragment(var phn: String) : BaseFragment(R.layout.fragment_cloud_r
         val inputParams = InputParams()
         inputParams.accessToken = UtilsDefault.getSharedPreferenceString(Constants.ACCESS_TOKEN)
         inputParams.user_id = UtilsDefault.getSharedPreferenceString(Constants.USER_ID)
-        inputParams.phone = phn
+        inputParams.parent_folder_id = phn
 
         apiViewModel.getCloudDetails(inputParams).observe(requireActivity(), Observer {
             it.let {
@@ -87,7 +94,7 @@ class CloudRecFragment(var phn: String) : BaseFragment(R.layout.fragment_cloud_r
                     Status.SUCCESS -> {
                         dismissProgress()
                         if (it.data!!.status){
-                            list = it.data.receiveddatas
+                            list = it.data.received_datas
                             if (!list.isNullOrEmpty()){
                                 binding.rvCloudView.visibility = View.VISIBLE
                                 binding.txtNoFound.visibility = View.GONE

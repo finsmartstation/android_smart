@@ -610,6 +610,7 @@ class ChatActivity : BaseActivity(),ImageVideoSelectorDialog.Action {
         val messageSocketModel: GetChatDetailsListResponse = gson.fromJson(jsonObject.toString(),
             GetChatDetailsListResponse::class.java)
         if (messageSocketModel.status){
+//            if (messageSocketModel)
             if (!messageSocketModel.data.list.isNullOrEmpty()){
                 setData(messageSocketModel.data.list,false)
             }

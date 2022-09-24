@@ -55,10 +55,10 @@ class StampAdapter(val context: Context,var type:Int) : RecyclerView.Adapter<Sta
 
             if (type.equals(2)){
                 binding.imgDelete.visibility = View.GONE
-                binding.llView.visibility = View.GONE
+                binding.llViews.visibility = View.GONE
             }else{
                 binding.imgDelete.visibility = View.VISIBLE
-                binding.llView.visibility = View.VISIBLE
+                binding.llViews.visibility = View.VISIBLE
             }
 
             itemView.setOnClickListener {

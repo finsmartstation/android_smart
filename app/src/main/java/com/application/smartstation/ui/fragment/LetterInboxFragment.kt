@@ -61,6 +61,7 @@ class LetterInboxFragment : BaseFragment(R.layout.fragment_letter_inbox) {
             val intent = Intent(requireActivity(),ViewLetterActivity::class.java)
             intent.putExtra("boxType",1)
             intent.putExtra("id",model.id)
+            requireActivity().startActivity(intent)
         }
     }
 
@@ -87,7 +88,7 @@ class LetterInboxFragment : BaseFragment(R.layout.fragment_letter_inbox) {
                     Status.SUCCESS -> {
                         dismissProgress()
                         if (it.data!!.status){
-                            list = it.data.data.data
+                            list = it.data.data.letter_list
                             unreadLetter(it.data.data.unread.toString())
                             if(list.isNotEmpty()) {
                                 binding.rvReceivedLetter.visibility = View.VISIBLE

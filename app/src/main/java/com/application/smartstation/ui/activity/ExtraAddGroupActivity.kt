@@ -79,7 +79,7 @@ class ExtraAddGroupActivity : BaseActivity() {
             for (i in 0 until list.size){
                 if (model.user_id.equals(list[i].user_id)){
                     list.set(i,
-                        DataUserList(model.user_id, model.name, model.profile_pic, model.about, false))
+                        DataUserList(model.user_id, model.name, model.profile_pic, model.phone,model.country, model.about, false))
                     contactAdapter!!.setChats(i)
                     break
                 }
@@ -94,8 +94,8 @@ class ExtraAddGroupActivity : BaseActivity() {
     private fun addGrp(model: DataUserList, pos: Int) {
         if (!model.statusSelected) {
             list.set(pos,
-                DataUserList(model.user_id, model.name, model.profile_pic, model.about, true))
-            listAdd.add(DataUserList(model.user_id, model.name, model.profile_pic, model.about,true))
+                DataUserList(model.user_id, model.name, model.profile_pic, model.phone,model.country, model.about, true))
+            listAdd.add(DataUserList(model.user_id, model.name, model.profile_pic, model.phone,model.country, model.about,true))
             user = user+","+model.user_id
             Log.d("TAG", "addGrp: "+user)
         }else{
@@ -106,7 +106,7 @@ class ExtraAddGroupActivity : BaseActivity() {
                 }
             }
             list.set(pos,
-                DataUserList(model.user_id, model.name, model.profile_pic, model.about, false))
+                DataUserList(model.user_id, model.name, model.profile_pic, model.phone,model.country, model.about, false))
             user = user.replace(","+model.user_id,"")
             Log.d("TAG", "addGrp: "+user)
         }
@@ -187,7 +187,7 @@ class ExtraAddGroupActivity : BaseActivity() {
                                     for (j in 0 until list.size){
                                         if (ChatInfoActivity.list[i].user_id.equals(list[j].user_id)){
                                             list.set(j,
-                                                DataUserList(list[j].user_id, list[j].name, list[j].profile_pic, list[j].about, false,true))
+                                                DataUserList(list[j].user_id, list[j].name, list[j].profile_pic, list[j].phone, list[j].country, list[j].about, false,true))
                                         }
                                     }
                                 }
