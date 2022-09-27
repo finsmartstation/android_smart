@@ -14,9 +14,9 @@ import org.json.JSONObject
 import java.net.URISyntaxException
 
 
-class SocketService: Service() {
+class SocketService : Service() {
 
-    val SOCKET_URL = BuildConfig.SOCKET_BASE_URL+"/"
+    val SOCKET_URL = BuildConfig.SOCKET_BASE_URL + "/"
 
     companion object {
         var socket: Socket? = null
@@ -38,70 +38,70 @@ class SocketService: Service() {
         }
         socket!!.connect()
 
-        socket!!.on(Socket.EVENT_CONNECT){
-            Log.d("TAG", "connect: "+socket!!.connected().toString())
+        socket!!.on(Socket.EVENT_CONNECT) {
+            Log.d("TAG", "connect: " + socket!!.connected().toString())
         }
 
-        socket!!.on(Socket.EVENT_DISCONNECT){
-            Log.d("TAG", "connect: "+socket!!.connected().toString())
+        socket!!.on(Socket.EVENT_DISCONNECT) {
+            Log.d("TAG", "connect: " + socket!!.connected().toString())
         }
 
         socket!!.on("message") { args ->
             var jsonObject = JSONObject()
             jsonObject = args[0] as JSONObject
-            Log.d("TAG", "msg: "+jsonObject)
+            Log.d("TAG", "msg: " + jsonObject)
             EventBus.getDefault().post(ChatEvent(jsonObject))
         }
 
         socket!!.on("chat_list") { args ->
             var jsonObject = JSONObject()
             jsonObject = args[0] as JSONObject
-            Log.d("TAG", "recent: "+jsonObject)
+            Log.d("TAG", "recent: " + jsonObject)
             EventBus.getDefault().post(RecentChatEvent(jsonObject))
         }
 
         socket!!.on("online_users") { args ->
             var jsonObject = JSONObject()
             jsonObject = args[0] as JSONObject
-            Log.d("TAG", "online: "+jsonObject)
+            Log.d("TAG", "online: " + jsonObject)
             EventBus.getDefault().post(OnlineChatEvent(jsonObject))
         }
 
         socket!!.on("typing_individual_room") { args ->
             var jsonObject = JSONObject()
             jsonObject = args[0] as JSONObject
-            Log.d("TAG", "typing: "+jsonObject)
+            Log.d("TAG", "typing: " + jsonObject)
             EventBus.getDefault().post(TypingEvent(jsonObject))
         }
 
         socket!!.on("typing_individual_chatlist") { args ->
             var jsonObject = JSONObject()
             jsonObject = args[0] as JSONObject
-            Log.d("TAG", "typing_ind: "+jsonObject)
+            Log.d("TAG", "typing_ind: " + jsonObject)
             EventBus.getDefault().post(TypingUserIdEvent(jsonObject))
         }
 
         socket!!.on("typing_group") { args ->
             var jsonObject = JSONObject()
             jsonObject = args[0] as JSONObject
-            Log.d("TAG", "typing_ind: "+jsonObject)
+            Log.d("TAG", "typing_ind: " + jsonObject)
             EventBus.getDefault().post(TypingEventGrp(jsonObject))
         }
 
         socket!!.on("mail_inboxlist") { args ->
             var jsonObject = JSONObject()
             jsonObject = args[0] as JSONObject
-            Log.d("TAG", "inbox: "+args)
+            Log.d("TAG", "inbox: " + args)
             EventBus.getDefault().post(InboxEvent(jsonObject))
         }
 
         socket!!.on("send_mail_list") { args ->
             var jsonObject = JSONObject()
             jsonObject = args[0] as JSONObject
-            Log.d("TAG", "send: "+jsonObject)
+            Log.d("TAG", "send: " + jsonObject)
             EventBus.getDefault().post(SentboxEvent(jsonObject))
         }
-        
+
         return START_STICKY
     }
 

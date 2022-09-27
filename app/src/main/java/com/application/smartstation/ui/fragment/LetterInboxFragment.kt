@@ -10,7 +10,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.application.smartstation.R
 import com.application.smartstation.databinding.FragmentLetterInboxBinding
 import com.application.smartstation.service.Status
-import com.application.smartstation.service.background.SocketService
 import com.application.smartstation.ui.activity.ViewLetterActivity
 import com.application.smartstation.ui.adapter.ReceivedLetterAdapter
 import com.application.smartstation.ui.model.DataLetter
@@ -26,7 +25,7 @@ class LetterInboxFragment : BaseFragment(R.layout.fragment_letter_inbox) {
 
     private val binding by viewBinding(FragmentLetterInboxBinding::bind)
 
-    var list:ArrayList<DataLetter> = ArrayList()
+    var list: ArrayList<DataLetter> = ArrayList()
     var receivedLetterAdapter: ReceivedLetterAdapter? = null
     val apiViewModel: ApiViewModel by viewModels()
 
@@ -53,14 +52,14 @@ class LetterInboxFragment : BaseFragment(R.layout.fragment_letter_inbox) {
 
     private fun initView() {
         binding.rvReceivedLetter.layoutManager = LinearLayoutManager(requireActivity(),
-            LinearLayoutManager.VERTICAL,false)
+            LinearLayoutManager.VERTICAL, false)
         receivedLetterAdapter = ReceivedLetterAdapter(requireActivity())
         binding.rvReceivedLetter.adapter = receivedLetterAdapter
 
         receivedLetterAdapter!!.onItemClick = { model ->
-            val intent = Intent(requireActivity(),ViewLetterActivity::class.java)
-            intent.putExtra("boxType",1)
-            intent.putExtra("id",model.id)
+            val intent = Intent(requireActivity(), ViewLetterActivity::class.java)
+            intent.putExtra("boxType", 1)
+            intent.putExtra("id", model.id)
             requireActivity().startActivity(intent)
         }
     }
@@ -81,24 +80,24 @@ class LetterInboxFragment : BaseFragment(R.layout.fragment_letter_inbox) {
 
         apiViewModel.getLetter(inputParams).observe(requireActivity(), Observer {
             it.let {
-                when(it.status){
+                when (it.status) {
                     Status.LOADING -> {
                         showProgress()
                     }
                     Status.SUCCESS -> {
                         dismissProgress()
-                        if (it.data!!.status){
+                        if (it.data!!.status) {
                             list = it.data.data.letter_list
                             unreadLetter(it.data.data.unread.toString())
-                            if(list.isNotEmpty()) {
+                            if (list.isNotEmpty()) {
                                 binding.rvReceivedLetter.visibility = View.VISIBLE
                                 binding.txtNoFound.visibility = View.GONE
                                 setData(list)
-                            }else{
+                            } else {
                                 binding.rvReceivedLetter.visibility = View.GONE
                                 binding.txtNoFound.visibility = View.VISIBLE
                             }
-                        }else{
+                        } else {
                             toast(it.data.message)
                         }
                     }
@@ -115,7 +114,7 @@ class LetterInboxFragment : BaseFragment(R.layout.fragment_letter_inbox) {
         receivedLetterAdapter!!.setReceivedLetter(list.reversed())
     }
 
-    fun unreadLetter(count:String){
+    fun unreadLetter(count: String) {
         mCallback!!.onUnreadLetter(count)
     }
 }

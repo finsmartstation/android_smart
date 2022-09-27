@@ -1,101 +1,94 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:orientation="vertical"
-    android:backgroundTint="@color/bg"
+    android:layout_height="wrap_content"
     android:background="@drawable/login_bg"
-    android:layout_height="wrap_content">
+    android:backgroundTint="@color/bg"
+    android:orientation="vertical">
 
     <com.application.smartstation.view.CustomTextViewNormal
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="26dp"
         android:layout_marginStart="16dp"
+        android:layout_marginTop="26dp"
         android:layout_marginEnd="16dp"
-        android:textSize="16sp"
-        android:textColor="@color/black"
         android:text="@string/you_entered_the_phn_number"
-        >
+        android:textColor="@color/black"
+        android:textSize="16sp">
 
     </com.application.smartstation.view.CustomTextViewNormal>
 
     <com.application.smartstation.view.CustomTextViewBold
+        android:id="@+id/txtNumber"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="26dp"
         android:layout_marginStart="16dp"
+        android:layout_marginTop="26dp"
         android:layout_marginEnd="16dp"
-        android:textSize="18sp"
-        android:id="@+id/txtNumber"
         android:textColor="@color/black"
-        >
+        android:textSize="18sp">
 
     </com.application.smartstation.view.CustomTextViewBold>
 
     <com.application.smartstation.view.CustomTextViewNormal
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="26dp"
         android:layout_marginStart="16dp"
+        android:layout_marginTop="26dp"
         android:layout_marginEnd="16dp"
-        android:textSize="16sp"
-        android:textColor="@color/black"
         android:text="@string/is_this_ok_or_would_you_like"
-        >
+        android:textColor="@color/black"
+        android:textSize="16sp">
 
     </com.application.smartstation.view.CustomTextViewNormal>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginTop="26dp"
         android:layout_marginStart="16dp"
+        android:layout_marginTop="26dp"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="26dp"
-        >
+        android:orientation="horizontal">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="start"
             android:layout_weight="1"
-            >
-        <com.application.smartstation.view.CustomTextViewBold
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="16sp"
-            android:id="@+id/txtEdit"
-            android:textColor="@color/color_dark_green"
-            android:text="@string/edit"
-            >
+            android:gravity="start">
 
-        </com.application.smartstation.view.CustomTextViewBold>
+            <com.application.smartstation.view.CustomTextViewBold
+                android:id="@+id/txtEdit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/edit"
+                android:textColor="@color/color_dark_green"
+                android:textSize="16sp">
+
+            </com.application.smartstation.view.CustomTextViewBold>
 
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="end"
             android:layout_weight="1"
-            >
-        <com.application.smartstation.view.CustomTextViewBold
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="16sp"
-            android:id="@+id/txtOk"
-            android:textColor="@color/color_dark_green"
-            android:text="@string/ok"
-            >
+            android:gravity="end">
 
-        </com.application.smartstation.view.CustomTextViewBold>
+            <com.application.smartstation.view.CustomTextViewBold
+                android:id="@+id/txtOk"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/ok"
+                android:textColor="@color/color_dark_green"
+                android:textSize="16sp">
+
+            </com.application.smartstation.view.CustomTextViewBold>
 
         </LinearLayout>
 
 
     </LinearLayout>
-
 
 
 </LinearLayout>

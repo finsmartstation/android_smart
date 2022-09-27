@@ -1,11 +1,9 @@
 package com.application.smartstation.ui.activity
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.application.smartstation.R
 import com.application.smartstation.databinding.ActivityAccountBinding
-import com.application.smartstation.databinding.ActivitySettingsBinding
 import com.application.smartstation.util.viewBinding
 
 class AccountActivity : BaseActivity() {
@@ -29,15 +27,15 @@ class AccountActivity : BaseActivity() {
         }
 
         binding.llSecurity.setOnClickListener {
-            startActivity(Intent(this,SecurityActivity::class.java))
+            startActivity(Intent(this, SecurityActivity::class.java))
         }
 
         binding.llSignature.setOnClickListener {
-            startActivity(Intent(this,SignatureActivity::class.java).putExtra("type",1))
+            startActivity(Intent(this, SignatureActivity::class.java).putExtra("type", 1))
         }
 
         binding.llStamp.setOnClickListener {
-            startActivity(Intent(this,SignatureActivity::class.java).putExtra("type",2))
+            startActivity(Intent(this, SignatureActivity::class.java).putExtra("type", 2))
         }
     }
 }

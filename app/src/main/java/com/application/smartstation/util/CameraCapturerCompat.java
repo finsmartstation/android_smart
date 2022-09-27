@@ -12,11 +12,6 @@ import tvi.webrtc.Camera2Enumerator;
 
 public class CameraCapturerCompat {
     private static final String TAG = "CameraCapturerCompat";
-
-    private CameraCapturer camera1Capturer;
-    private Camera2Capturer camera2Capturer;
-    private Pair<CameraCapturer.CameraSource, String> frontCameraPair;
-    private Pair<CameraCapturer.CameraSource, String> backCameraPair;
     private final Camera2Capturer.Listener camera2Listener = new Camera2Capturer.Listener() {
         @Override
         public void onFirstFrameAvailable() {
@@ -33,6 +28,10 @@ public class CameraCapturerCompat {
             Log.e(TAG, camera2CapturerException.getMessage());
         }
     };
+    private CameraCapturer camera1Capturer;
+    private Camera2Capturer camera2Capturer;
+    private Pair<CameraCapturer.CameraSource, String> frontCameraPair;
+    private Pair<CameraCapturer.CameraSource, String> backCameraPair;
 
     public CameraCapturerCompat(Context context,
                                 CameraCapturer.CameraSource cameraSource) {

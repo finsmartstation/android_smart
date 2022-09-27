@@ -33,7 +33,7 @@ open class ViewSpan(var view: View, private val layout: Layout) : ReplacementSpa
 
     override fun draw(
         canvas: Canvas, text: CharSequence, @IntRange(from = 0) start: Int,
-        @IntRange(from = 0) end: Int, x: Float, top: Int, y: Int, bottom: Int, paint: Paint
+        @IntRange(from = 0) end: Int, x: Float, top: Int, y: Int, bottom: Int, paint: Paint,
     ) {
         prepView()
         canvas.save()
@@ -44,7 +44,7 @@ open class ViewSpan(var view: View, private val layout: Layout) : ReplacementSpa
 
     override fun getSize(
         paint: Paint, charSequence: CharSequence, @IntRange(from = 0) start: Int,
-        @IntRange(from = 0) end: Int, fontMetricsInt: FontMetricsInt?
+        @IntRange(from = 0) end: Int, fontMetricsInt: FontMetricsInt?,
     ): Int {
         prepView()
         if (fontMetricsInt != null) {

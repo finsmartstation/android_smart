@@ -19,9 +19,9 @@ import dagger.hilt.android.AndroidEntryPoint
 class NotificationActivity : BaseActivity() {
 
     val binding: ActivityNotificationBinding by viewBinding()
-    var notifyStatus:Int = 1
-    var sound:Int = 1
-    var vibrate:Int = 1
+    var notifyStatus: Int = 1
+    var sound: Int = 1
+    var vibrate: Int = 1
     val apiViewModel: ApiViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -59,7 +59,7 @@ class NotificationActivity : BaseActivity() {
         binding.scSound.setOnCheckedChangeListener(CompoundButton.OnCheckedChangeListener { buttonView, isChecked ->
             if (isChecked && binding.scSound.isClickable) {
                 sound = 1
-            }else if(!isChecked && binding.scSound.isClickable) {
+            } else if (!isChecked && binding.scSound.isClickable) {
                 sound = 0
             }
         })
@@ -67,7 +67,7 @@ class NotificationActivity : BaseActivity() {
         binding.scVibrate.setOnCheckedChangeListener(CompoundButton.OnCheckedChangeListener { buttonView, isChecked ->
             if (isChecked && binding.scVibrate.isClickable) {
                 vibrate = 1
-            }else if(!isChecked && binding.scVibrate.isClickable) {
+            } else if (!isChecked && binding.scVibrate.isClickable) {
                 vibrate = 0
             }
         })
@@ -87,43 +87,45 @@ class NotificationActivity : BaseActivity() {
     fun setNotification(inputParams: InputParams) {
         apiViewModel.changeNotification(inputParams).observe(this, Observer {
             it?.let {
-                when(it.status){
+                when (it.status) {
                     Status.LOADING -> {
                         showProgress()
                     }
                     Status.SUCCESS -> {
                         dismissProgress()
-                        if (it.data!!.status){
-                            if(it.data.notification_status.equals("1")){
+                        if (it.data!!.status) {
+                            if (it.data.notification_status.equals("1")) {
                                 notifyStatus = 1
-                                UtilsDefault.updateSharedPreferenceBoolean(Constants.NOTIFICATION_SHOW,true)
+                                UtilsDefault.updateSharedPreferenceBoolean(Constants.NOTIFICATION_SHOW,
+                                    true)
                                 binding.scNotification.isChecked = true
-                            }else{
+                            } else {
                                 notifyStatus = 0
-                                UtilsDefault.updateSharedPreferenceBoolean(Constants.NOTIFICATION_SHOW,false)
+                                UtilsDefault.updateSharedPreferenceBoolean(Constants.NOTIFICATION_SHOW,
+                                    false)
                                 binding.scNotification.isChecked = false
                             }
 
-                            if (it.data.sound.equals("1")){
+                            if (it.data.sound.equals("1")) {
                                 sound = 1
-                                UtilsDefault.updateSharedPreferenceBoolean(Constants.SOUND,true)
+                                UtilsDefault.updateSharedPreferenceBoolean(Constants.SOUND, true)
                                 binding.scSound.isChecked = true
-                            }else{
+                            } else {
                                 sound = 0
-                                UtilsDefault.updateSharedPreferenceBoolean(Constants.SOUND,false)
+                                UtilsDefault.updateSharedPreferenceBoolean(Constants.SOUND, false)
                                 binding.scSound.isChecked = false
                             }
 
-                            if (it.data.vibration.equals("1")){
+                            if (it.data.vibration.equals("1")) {
                                 vibrate = 1
-                                UtilsDefault.updateSharedPreferenceBoolean(Constants.VIBRATE,true)
+                                UtilsDefault.updateSharedPreferenceBoolean(Constants.VIBRATE, true)
                                 binding.scVibrate.isChecked = true
-                            }else{
+                            } else {
                                 vibrate = 0
-                                UtilsDefault.updateSharedPreferenceBoolean(Constants.VIBRATE,false)
+                                UtilsDefault.updateSharedPreferenceBoolean(Constants.VIBRATE, false)
                                 binding.scVibrate.isChecked = false
                             }
-                        }else{
+                        } else {
                             toast(it.data.message)
                         }
                     }
@@ -136,46 +138,48 @@ class NotificationActivity : BaseActivity() {
         })
     }
 
-    fun getNotification(inputParams: InputParams){
+    fun getNotification(inputParams: InputParams) {
         apiViewModel.getNotification(inputParams).observe(this, Observer {
             it?.let {
-                when(it.status){
+                when (it.status) {
                     Status.LOADING -> {
                         showProgress()
                     }
                     Status.SUCCESS -> {
                         dismissProgress()
-                        if (it.data!!.status){
-                            if(it.data.notification_status.equals("1")){
+                        if (it.data!!.status) {
+                            if (it.data.notification_status.equals("1")) {
                                 notifyStatus = 1
-                                UtilsDefault.updateSharedPreferenceBoolean(Constants.NOTIFICATION_SHOW,true)
+                                UtilsDefault.updateSharedPreferenceBoolean(Constants.NOTIFICATION_SHOW,
+                                    true)
                                 binding.scNotification.isChecked = true
-                            }else{
+                            } else {
                                 notifyStatus = 0
-                                UtilsDefault.updateSharedPreferenceBoolean(Constants.NOTIFICATION_SHOW,false)
+                                UtilsDefault.updateSharedPreferenceBoolean(Constants.NOTIFICATION_SHOW,
+                                    false)
                                 binding.scNotification.isChecked = false
                             }
 
-                            if (it.data.sound.equals("1")){
+                            if (it.data.sound.equals("1")) {
                                 sound = 1
-                                UtilsDefault.updateSharedPreferenceBoolean(Constants.SOUND,true)
+                                UtilsDefault.updateSharedPreferenceBoolean(Constants.SOUND, true)
                                 binding.scSound.isChecked = true
-                            }else{
+                            } else {
                                 sound = 0
-                                UtilsDefault.updateSharedPreferenceBoolean(Constants.SOUND,false)
+                                UtilsDefault.updateSharedPreferenceBoolean(Constants.SOUND, false)
                                 binding.scSound.isChecked = false
                             }
 
-                            if (it.data.vibration.equals("1")){
+                            if (it.data.vibration.equals("1")) {
                                 vibrate = 1
-                                UtilsDefault.updateSharedPreferenceBoolean(Constants.VIBRATE,true)
+                                UtilsDefault.updateSharedPreferenceBoolean(Constants.VIBRATE, true)
                                 binding.scVibrate.isChecked = true
-                            }else{
+                            } else {
                                 vibrate = 0
-                                UtilsDefault.updateSharedPreferenceBoolean(Constants.VIBRATE,false)
+                                UtilsDefault.updateSharedPreferenceBoolean(Constants.VIBRATE, false)
                                 binding.scVibrate.isChecked = false
                             }
-                        }else{
+                        } else {
                             toast(it.data.message)
                         }
                     }

@@ -25,7 +25,7 @@ class ProductActivity : BaseActivity() {
 
     val binding: ActivityProductBinding by viewBinding()
     val apiViewModel: ApiViewModel by viewModels()
-    var list:ArrayList<ProductCateListRes> = ArrayList()
+    var list: ArrayList<ProductCateListRes> = ArrayList()
     var categoryAdapter: CategoryAdapter? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -83,19 +83,19 @@ class ProductActivity : BaseActivity() {
 
         apiViewModel.getCategory(inputParams).observe(this, Observer {
             it.let {
-                when(it.status){
+                when (it.status) {
                     Status.LOADING -> {
                         showProgress()
                     }
                     Status.SUCCESS -> {
                         dismissProgress()
-                        if (it.data!!.status){
+                        if (it.data!!.status) {
                             list = it.data.data
-                            if (!list.isNullOrEmpty()){
+                            if (!list.isNullOrEmpty()) {
                                 setData(list)
                             }
 
-                        }else{
+                        } else {
                             toast(it.data.message)
                         }
                     }

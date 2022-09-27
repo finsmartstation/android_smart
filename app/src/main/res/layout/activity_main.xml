@@ -330,14 +330,14 @@
                     android:visibility="invisible">
 
                     <LinearLayout
+                        android:id="@+id/llUnread"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="end"
-                        android:id="@+id/llUnread"
-                        android:visibility="invisible"
                         android:background="@drawable/chat_unread_bg"
                         android:backgroundTint="@color/red"
-                        android:padding="2dp">
+                        android:padding="2dp"
+                        android:visibility="invisible">
 
                         <com.application.smartstation.view.CustomTextViewMedium
                             android:id="@+id/txtUnreadCount"
@@ -366,10 +366,10 @@
 
             <LinearLayout
                 android:id="@+id/llSearchView"
-                android:layout_marginTop="16dp"
-                android:visibility="gone"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:layout_marginTop="16dp"
+                android:visibility="gone">
 
                 <androidx.core.widget.NestedScrollView
                     android:layout_width="match_parent"
@@ -391,14 +391,13 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="16dp"
-                            android:visibility="gone"
-                            android:orientation="vertical">
+                            android:orientation="vertical"
+                            android:visibility="gone">
 
                             <RelativeLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:background="@color/bg"
-                                >
+                                android:background="@color/bg">
 
                                 <com.application.smartstation.view.CustomTextViewBold
                                     android:layout_width="wrap_content"
@@ -416,9 +415,9 @@
 
                             <androidx.recyclerview.widget.RecyclerView
                                 android:id="@+id/rvMessage"
-                                android:layout_marginTop="16dp"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
+                                android:layout_marginTop="16dp"
                                 android:nestedScrollingEnabled="false" />
 
                         </LinearLayout>
@@ -438,8 +437,8 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="start"
-        android:visibility="gone"
         android:background="@color/white"
+        android:visibility="gone"
         app:headerLayout="@layout/nav_header_main"
         app:itemIconTint="@color/color_green"
         app:itemTextColor="@color/black"

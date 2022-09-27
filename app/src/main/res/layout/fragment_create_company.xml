@@ -1,38 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
     android:background="@color/white"
+    android:orientation="vertical"
     tools:context=".ui.fragment.CreateCompanyFragment">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        >
+        android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1"
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
             android:layout_marginEnd="16dp"
+            android:layout_weight="1"
             android:orientation="vertical">
 
-    <com.application.smartstation.view.CustomTextViewBold
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:lineSpacingExtra="5dp"
-        android:text="@string/create_company"
-        android:textAlignment="center"
-        android:textColor="@color/button_blue"
-        android:textSize="20sp">
+            <com.application.smartstation.view.CustomTextViewBold
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:lineSpacingExtra="5dp"
+                android:text="@string/create_company"
+                android:textAlignment="center"
+                android:textColor="@color/button_blue"
+                android:textSize="20sp">
 
-    </com.application.smartstation.view.CustomTextViewBold>
+            </com.application.smartstation.view.CustomTextViewBold>
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -66,12 +65,12 @@
                     android:layout_height="40dp"
                     android:background="@null"
                     android:hint="@string/ceo"
-                    android:textCursorDrawable="@drawable/cusor_bg"
                     android:imeOptions="actionNext"
                     android:inputType="text"
                     android:singleLine="true"
                     android:textColor="@color/black"
                     android:textColorHint="@color/viewgrey"
+                    android:textCursorDrawable="@drawable/cusor_bg"
                     android:textSize="18sp" />
 
             </LinearLayout>
@@ -91,12 +90,12 @@
                     android:layout_height="40dp"
                     android:background="@null"
                     android:hint="@string/company_name"
-                    android:textCursorDrawable="@drawable/cusor_bg"
                     android:imeOptions="actionNext"
                     android:inputType="text"
                     android:singleLine="true"
                     android:textColor="@color/black"
                     android:textColorHint="@color/viewgrey"
+                    android:textCursorDrawable="@drawable/cusor_bg"
                     android:textSize="18sp" />
 
             </LinearLayout>
@@ -116,12 +115,12 @@
                     android:layout_height="40dp"
                     android:background="@null"
                     android:hint="@string/company_mail"
-                    android:textCursorDrawable="@drawable/cusor_bg"
                     android:imeOptions="actionDone"
                     android:inputType="textEmailAddress"
                     android:singleLine="true"
                     android:textColor="@color/black"
                     android:textColorHint="@color/viewgrey"
+                    android:textCursorDrawable="@drawable/cusor_bg"
                     android:textSize="18sp" />
 
             </LinearLayout>
@@ -132,35 +131,33 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="26dp"
                 android:layout_marginBottom="16dp"
-                android:orientation="vertical"
-                >
+                android:orientation="vertical">
 
                 <com.application.smartstation.view.CustomTextViewBold
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="4dp"
                     android:text="@string/submit"
-                    android:visibility="gone"
                     android:textAlignment="center"
                     android:textColor="@color/button_blue"
-                    android:textSize="18sp">
+                    android:textSize="18sp"
+                    android:visibility="gone">
 
                 </com.application.smartstation.view.CustomTextViewBold>
 
                 <com.google.android.material.floatingactionbutton.FloatingActionButton
+                    android:id="@+id/fabProfile"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    app:fabSize="normal"
-                    android:id="@+id/fabProfile"
-                    app:tint="@color/white"
-                    app:fabCustomSize="50dp"
-                    app:borderWidth="0dp"
-                    app:rippleColor="@color/button_blue"
-                    android:layout_margin="8dp"
                     android:layout_gravity="end"
-                    android:src="@drawable/ic_arrow_forward"
+                    android:layout_margin="8dp"
                     android:backgroundTint="@color/statusbar_color"
-                    />
+                    android:src="@drawable/ic_arrow_forward"
+                    app:borderWidth="0dp"
+                    app:fabCustomSize="50dp"
+                    app:fabSize="normal"
+                    app:rippleColor="@color/button_blue"
+                    app:tint="@color/white" />
 
             </LinearLayout>
 
@@ -169,10 +166,9 @@
         <ImageView
             android:layout_width="@dimen/_80sdp"
             android:layout_height="wrap_content"
-            android:src="@drawable/login_bg_img"
             android:layout_gravity="end"
             android:scaleType="fitXY"
-            />
+            android:src="@drawable/login_bg_img" />
 
     </LinearLayout>
 

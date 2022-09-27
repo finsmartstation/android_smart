@@ -6,16 +6,16 @@
     android:layout_height="match_parent"
     android:background="@android:color/black"
     tools:context=".ui.activity.CameraActivity">
-    
+
     <FrameLayout
         android:id="@+id/cameraView"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:background="@android:color/black"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent">
+        app:layout_constraintTop_toTopOf="parent">
 
         <SurfaceView
             android:id="@+id/imgSurface"
@@ -55,9 +55,9 @@
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
             android:layout_alignParentBottom="true"
+            android:layout_marginStart="16dp"
             android:contentDescription="@string/app_name"
             android:padding="8dp"
-            android:layout_marginStart="16dp"
             android:src="@drawable/ic_back"
             android:visibility="visible"
             app:tint="@color/color_green" />
@@ -68,29 +68,29 @@
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_alignParentTop="true"
-            android:layout_alignParentBottom="true"
             android:layout_alignParentEnd="true"
-            android:contentDescription="@string/app_name"
-            android:padding="8dp"
+            android:layout_alignParentBottom="true"
             android:layout_marginStart="32dp"
             android:layout_marginEnd="32dp"
-            app:tint="@color/color_green"
-            android:src="@drawable/ic_flash_off" />
+            android:contentDescription="@string/app_name"
+            android:padding="8dp"
+            android:src="@drawable/ic_flash_off"
+            app:tint="@color/color_green" />
 
         <ImageView
             android:id="@+id/ivCameraFlashOn"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentEnd="true"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            app:tint="@color/color_green"
-            android:contentDescription="@string/app_name"
-            android:padding="8dp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
             android:layout_marginStart="32dp"
             android:layout_marginEnd="32dp"
+            android:contentDescription="@string/app_name"
+            android:padding="8dp"
+            android:src="@drawable/ic_flash_on"
             android:visibility="invisible"
-            android:src="@drawable/ic_flash_on"/>
+            app:tint="@color/color_green" />
 
         <ImageView
             android:id="@+id/ivCameraFlashAuto"

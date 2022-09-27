@@ -25,7 +25,7 @@ class CloudViewActivity : BaseActivity() {
     }
 
     private fun initView() {
-        if (intent != null){
+        if (intent != null) {
             name = intent.getStringExtra("name")!!
             id = intent.getStringExtra("id")!!
             binding.ilHeader.txtHeader.text = name

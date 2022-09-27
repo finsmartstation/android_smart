@@ -4,16 +4,11 @@ import android.os.Bundle
 import android.os.Handler
 import android.util.Log
 import android.view.KeyEvent
-import android.view.inputmethod.CompletionInfo
-import android.view.inputmethod.CorrectionInfo
-import android.view.inputmethod.ExtractedText
-import android.view.inputmethod.ExtractedTextRequest
-import android.view.inputmethod.InputConnection
-import android.view.inputmethod.InputConnectionWrapper
-import android.view.inputmethod.InputContentInfo
+import android.view.inputmethod.*
 
-class LoggedInputConnectionWrapper(target: InputConnection?,
-                                   mutable: Boolean
+class LoggedInputConnectionWrapper(
+    target: InputConnection?,
+    mutable: Boolean,
 ) : InputConnectionWrapper(target, mutable) {
     override fun getTextBeforeCursor(n: Int, flags: Int): CharSequence? {
         Log.d("TOKEN_INPUT", "getTextBeforeCursor($n, $flags))")
@@ -143,7 +138,7 @@ class LoggedInputConnectionWrapper(target: InputConnection?,
     override fun commitContent(
         inputContentInfo: InputContentInfo,
         flags: Int,
-        opts: Bundle?
+        opts: Bundle?,
     ): Boolean {
         Log.d("TOKEN_INPUT", "commitContent($inputContentInfo, $flags, $opts)")
         return super.commitContent(inputContentInfo, flags, opts)

@@ -1,24 +1,19 @@
 package com.application.smartstation.ui.adapter
 
 import android.content.Context
-import android.text.Html
-import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.application.smartstation.R
-import com.application.smartstation.databinding.ItemInboxBinding
 import com.application.smartstation.databinding.ItemSignatureBinding
-import com.application.smartstation.ui.model.SendMailListRes
 import com.application.smartstation.ui.model.SignatureListData
-import com.application.smartstation.ui.model.StampList
-import com.application.smartstation.util.UtilsDefault
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 
 
-class SignatureAdapter(val context: Context,val type:Int) : RecyclerView.Adapter<SignatureAdapter.ViewHolder>() {
+class SignatureAdapter(val context: Context, val type: Int) :
+    RecyclerView.Adapter<SignatureAdapter.ViewHolder>() {
 
     private var list = emptyList<SignatureListData>()
     var onItemDeleteClick: ((model: SignatureListData) -> Unit)? = null
@@ -27,7 +22,8 @@ class SignatureAdapter(val context: Context,val type:Int) : RecyclerView.Adapter
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
 
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_signature, parent, false)
+        val view =
+            LayoutInflater.from(parent.context).inflate(R.layout.item_signature, parent, false)
         return ViewHolder(view)
     }
 
@@ -40,23 +36,24 @@ class SignatureAdapter(val context: Context,val type:Int) : RecyclerView.Adapter
 
         with(holder) {
             binding.txtTitle.text = model.name
-            Glide.with(context).load(model.image).placeholder(R.drawable.ic_default).error(R.drawable.ic_default).diskCacheStrategy(
+            Glide.with(context).load(model.image).placeholder(R.drawable.ic_default)
+                .error(R.drawable.ic_default).diskCacheStrategy(
                 DiskCacheStrategy.DATA).into(binding.imgSignature)
 
-            if (model.default){
+            if (model.default) {
                 binding.llView.setBackgroundResource(R.drawable.dot_bg_green)
                 binding.txtPrimary.visibility = View.VISIBLE
                 binding.txtSetPrimary.visibility = View.GONE
-            }else{
+            } else {
                 binding.llView.setBackgroundResource(R.drawable.dot_bg)
                 binding.txtPrimary.visibility = View.GONE
                 binding.txtSetPrimary.visibility = View.VISIBLE
             }
 
-            if (type.equals(2)){
+            if (type.equals(2)) {
                 binding.imgDelete.visibility = View.GONE
                 binding.llViews.visibility = View.GONE
-            }else{
+            } else {
                 binding.imgDelete.visibility = View.VISIBLE
                 binding.llViews.visibility = View.VISIBLE
             }

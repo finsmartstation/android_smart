@@ -8,44 +8,41 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scrollbars="none"
-        >
+        android:scrollbars="none">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical"
-            >
+            android:orientation="vertical">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="35dp"
-                android:layout_marginTop="16dp"
                 android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
+                android:background="@drawable/num_bg"
+                android:backgroundTint="@color/phn_bg_color"
                 android:orientation="horizontal"
                 android:paddingStart="4dp"
-                android:paddingEnd="4dp"
-                android:backgroundTint="@color/phn_bg_color"
-                android:background="@drawable/num_bg"
-                >
+                android:paddingEnd="4dp">
 
                 <com.application.smartstation.view.CustomEditText
+                    android:id="@+id/edtSearch"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:textColor="@color/black"
-                    android:background="@null"
-                    android:id="@+id/edtSearch"
-                    android:textCursorDrawable="@drawable/cusor_bg"
-                    android:textSize="16sp"
                     android:layout_marginStart="8dp"
                     android:layout_marginEnd="8dp"
-                    android:drawablePadding="8dp"
+                    android:background="@null"
                     android:drawableStart="@drawable/ic_search"
-                    android:imeOptions="actionDone"
-                    android:textColorHint="@color/grey"
+                    android:drawablePadding="8dp"
                     android:hint="@string/search"
-                    android:inputType="text">
+                    android:imeOptions="actionDone"
+                    android:inputType="text"
+                    android:textColor="@color/black"
+                    android:textColorHint="@color/grey"
+                    android:textCursorDrawable="@drawable/cusor_bg"
+                    android:textSize="16sp">
 
 
                 </com.application.smartstation.view.CustomEditText>
@@ -54,33 +51,31 @@
             </LinearLayout>
 
             <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvContact"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/rvContact"
-                android:visibility="visible"
-                android:nestedScrollingEnabled="true"
                 android:layout_marginStart="16dp"
                 android:layout_marginEnd="16dp"
-                />
+                android:nestedScrollingEnabled="true"
+                android:visibility="visible" />
 
         </LinearLayout>
 
     </ScrollView>
 
     <com.application.smartstation.view.CustomTextViewNormal
+        android:id="@+id/txtNoFound"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="@string/no_chat_found"
-        android:id="@+id/txtNoFound"
-        android:textSize="18sp"
-        android:visibility="gone"
-        android:textColor="@color/black"
-        android:layout_marginTop="@dimen/_60sdp"
-        android:layout_marginBottom="@dimen/_60sdp"
         android:layout_marginStart="16dp"
+        android:layout_marginTop="@dimen/_60sdp"
         android:layout_marginEnd="16dp"
+        android:layout_marginBottom="@dimen/_60sdp"
         android:gravity="center"
-        >
+        android:text="@string/no_chat_found"
+        android:textColor="@color/black"
+        android:textSize="18sp"
+        android:visibility="gone">
 
     </com.application.smartstation.view.CustomTextViewNormal>
 

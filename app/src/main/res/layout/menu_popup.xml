@@ -1,31 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
-    android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:layout_height="match_parent">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignTop="@+id/imgBtn"
-        android:background="@drawable/popup_bg"
-        android:layout_marginTop="14dp"
         android:layout_marginStart="32dp"
+        android:layout_marginTop="14dp"
         android:layout_marginEnd="16dp"
+        android:background="@drawable/popup_bg"
         android:orientation="vertical">
 
         <com.application.smartstation.view.CustomTextViewMedium
             android:id="@+id/txtSendMail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:visibility="gone"
             android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
             android:layout_marginEnd="16dp"
-            android:textSize="16sp"
-            android:textColor="@color/white"
             android:text="@string/sentbox"
-            >
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            android:visibility="gone">
 
         </com.application.smartstation.view.CustomTextViewMedium>
 
@@ -33,25 +31,23 @@
             android:id="@+id/imgSent"
             android:layout_width="match_parent"
             android:layout_height="5dp"
-            android:visibility="gone"
-            android:src="@drawable/dot_view_use"
-            android:layout_marginTop="10dp"
             android:layout_marginStart="16dp"
+            android:layout_marginTop="10dp"
             android:layout_marginEnd="16dp"
-            />
+            android:src="@drawable/dot_view_use"
+            android:visibility="gone" />
 
         <com.application.smartstation.view.CustomTextViewMedium
             android:id="@+id/txtNewGrp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:visibility="visible"
             android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
             android:layout_marginEnd="16dp"
-            android:textSize="16sp"
-            android:textColor="@color/white"
             android:text="@string/new_group"
-            >
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            android:visibility="visible">
 
         </com.application.smartstation.view.CustomTextViewMedium>
 
@@ -59,24 +55,22 @@
             android:id="@+id/imgNewGrp"
             android:layout_width="match_parent"
             android:layout_height="5dp"
-            android:src="@drawable/dot_view_use"
-            android:visibility="visible"
-            android:layout_marginTop="10dp"
             android:layout_marginStart="16dp"
+            android:layout_marginTop="10dp"
             android:layout_marginEnd="16dp"
-            />
+            android:src="@drawable/dot_view_use"
+            android:visibility="visible" />
 
         <com.application.smartstation.view.CustomTextViewMedium
             android:id="@+id/txtStarMsg"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
             android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
             android:layout_marginEnd="16dp"
-            android:textSize="16sp"
-            android:textColor="@color/white"
             android:text="@string/star_msg"
-            >
+            android:textColor="@color/white"
+            android:textSize="16sp">
 
         </com.application.smartstation.view.CustomTextViewMedium>
 
@@ -84,70 +78,64 @@
             android:id="@+id/imgStarMsg"
             android:layout_width="match_parent"
             android:layout_height="5dp"
-            android:src="@drawable/dot_view_use"
-            android:layout_marginTop="10dp"
             android:layout_marginStart="16dp"
+            android:layout_marginTop="10dp"
             android:layout_marginEnd="16dp"
-            />
+            android:src="@drawable/dot_view_use" />
 
         <com.application.smartstation.view.CustomTextViewMedium
             android:id="@+id/txtPayment"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
             android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
             android:layout_marginEnd="16dp"
-            android:textSize="16sp"
-            android:textColor="@color/white"
             android:text="@string/payment"
-            >
+            android:textColor="@color/white"
+            android:textSize="16sp">
 
         </com.application.smartstation.view.CustomTextViewMedium>
 
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="5dp"
-            android:src="@drawable/dot_view_use"
-            android:layout_marginTop="10dp"
             android:layout_marginStart="16dp"
+            android:layout_marginTop="10dp"
             android:layout_marginEnd="16dp"
-            />
+            android:src="@drawable/dot_view_use" />
 
         <com.application.smartstation.view.CustomTextViewMedium
             android:id="@+id/txtSettings"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
             android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
             android:layout_marginEnd="16dp"
-            android:textSize="16sp"
-            android:textColor="@color/white"
             android:text="@string/settings"
-            >
+            android:textColor="@color/white"
+            android:textSize="16sp">
 
         </com.application.smartstation.view.CustomTextViewMedium>
 
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="5dp"
-            android:src="@drawable/dot_view_use"
-            android:layout_marginTop="10dp"
             android:layout_marginStart="16dp"
+            android:layout_marginTop="10dp"
             android:layout_marginEnd="16dp"
-            />
+            android:src="@drawable/dot_view_use" />
 
         <com.application.smartstation.view.CustomTextViewMedium
             android:id="@+id/txtLogout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
             android:layout_marginStart="16dp"
-            android:layout_marginBottom="16dp"
+            android:layout_marginTop="16dp"
             android:layout_marginEnd="16dp"
-            android:textSize="16sp"
-            android:textColor="@color/white"
+            android:layout_marginBottom="16dp"
             android:text="@string/logout"
-            >
+            android:textColor="@color/white"
+            android:textSize="16sp">
 
         </com.application.smartstation.view.CustomTextViewMedium>
 
@@ -162,7 +150,6 @@
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="16dp"
-        android:src="@drawable/ic_menu_logo_use"
-        />
+        android:src="@drawable/ic_menu_logo_use" />
 
 </RelativeLayout>

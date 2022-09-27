@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
-    android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:layout_height="match_parent">
 
     <LinearLayout
 
@@ -129,18 +128,18 @@
             android:layout_marginEnd="16dp"
             android:layout_marginBottom="20dp">
 
-        <com.application.smartstation.view.CustomTextViewMedium
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/more"
-            android:drawableEnd="@drawable/ic_arrow_more_chat"
-            android:drawableTint="@color/white"
-            android:textColor="@color/white"
-            android:textSize="16sp">
+            <com.application.smartstation.view.CustomTextViewMedium
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawableEnd="@drawable/ic_arrow_more_chat"
+                android:drawableTint="@color/white"
+                android:text="@string/more"
+                android:textColor="@color/white"
+                android:textSize="16sp">
 
-        </com.application.smartstation.view.CustomTextViewMedium>
+            </com.application.smartstation.view.CustomTextViewMedium>
 
-    </LinearLayout>
+        </LinearLayout>
 
     </LinearLayout>
 

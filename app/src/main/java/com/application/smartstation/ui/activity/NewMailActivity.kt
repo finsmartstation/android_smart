@@ -12,7 +12,6 @@ import android.text.TextWatcher
 import android.util.Log
 import android.view.View
 import android.view.View.OnFocusChangeListener
-import android.widget.ArrayAdapter
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
@@ -37,8 +36,9 @@ import id.zelory.compressor.Compressor
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
+import okhttp3.RequestBody.Companion.asRequestBody
+import okhttp3.RequestBody.Companion.toRequestBody
 import java.io.File
-import java.util.*
 import java.util.Arrays.asList
 
 
@@ -46,7 +46,7 @@ import java.util.Arrays.asList
 class NewMailActivity : BaseActivity(),
     TokenCompleteTextView.TokenListener<Person> {
 
-    private val binding:ActivityNewMailBinding by viewBinding()
+    private val binding: ActivityNewMailBinding by viewBinding()
     var clickB = true
     val apiViewModel: ApiViewModel by viewModels()
     var toMail = ""
@@ -60,7 +60,7 @@ class NewMailActivity : BaseActivity(),
     var bccList = ArrayList<String>()
     var imageParts: ArrayList<MultipartBody.Part?> = ArrayList()
     var pathList: ArrayList<MailImageSelect> = ArrayList()
-    var mailFilesAdapter:MailFilesAdapter? = null
+    var mailFilesAdapter: MailFilesAdapter? = null
 
     val mimeTypes = arrayOf(
         "image/jpeg", // jpeg or jpg
@@ -108,7 +108,9 @@ class NewMailActivity : BaseActivity(),
             binding.llCc.visibility = View.VISIBLE
             binding.ivCc.visibility = View.VISIBLE
             binding.txtCcVisible.visibility = View.GONE
-            if (binding.txtCcVisible.visibility.equals(View.GONE) && binding.txtBccVisible.visibility.equals(View.GONE)){
+            if (binding.txtCcVisible.visibility.equals(View.GONE) && binding.txtBccVisible.visibility.equals(
+                    View.GONE)
+            ) {
                 binding.ivTo.visibility = View.GONE
             }
         }
@@ -117,20 +119,22 @@ class NewMailActivity : BaseActivity(),
             binding.llBcc.visibility = View.VISIBLE
             binding.ivBcc.visibility = View.VISIBLE
             binding.txtBccVisible.visibility = View.GONE
-            if (binding.txtCcVisible.visibility.equals(View.GONE) && binding.txtBccVisible.visibility.equals(View.GONE)){
+            if (binding.txtCcVisible.visibility.equals(View.GONE) && binding.txtBccVisible.visibility.equals(
+                    View.GONE)
+            ) {
                 binding.ivTo.visibility = View.GONE
             }
         }
 
         binding.imgToArrow.setOnClickListener {
-            if (clickB){
+            if (clickB) {
                 clickB = false
                 binding.llTo.visibility = View.VISIBLE
                 binding.ivTo.visibility = View.VISIBLE
                 binding.txtBccVisible.visibility = View.VISIBLE
                 binding.txtCcVisible.visibility = View.VISIBLE
                 binding.imgToArrow.setImageResource(R.drawable.ic_up_arrow)
-            }else{
+            } else {
                 clickB = true
                 binding.llTo.visibility = View.GONE
                 binding.ivTo.visibility = View.GONE
@@ -155,7 +159,7 @@ class NewMailActivity : BaseActivity(),
                         toMail = toMail + ", " + toList[s]
                     }
                 }
-            }else{
+            } else {
                 toMail = binding.edtTo.text.toString().trim()
             }
 
@@ -167,7 +171,7 @@ class NewMailActivity : BaseActivity(),
                         ccMail = ccMail + ", " + ccList[s]
                     }
                 }
-            }else{
+            } else {
                 ccMail = binding.edtCc.text.toString().trim()
             }
 
@@ -179,7 +183,7 @@ class NewMailActivity : BaseActivity(),
                         bccMail = bccMail + ", " + bccList[s]
                     }
                 }
-            }else{
+            } else {
                 bccMail = binding.edtBcc.text.toString().trim()
             }
 
@@ -188,10 +192,10 @@ class NewMailActivity : BaseActivity(),
             var bodys = binding.edtBody.text.toString().trim()
 
             try {
-                bodys = bodys.removeRange(body1,bodys.length)
-                bodys = bodys+"<br>"+body
-            }catch (e:Exception){
-                Log.d("TAG", "setOnClickListener: "+e)
+                bodys = bodys.removeRange(body1, bodys.length)
+                bodys = bodys + "<br>" + body
+            } catch (e: Exception) {
+                Log.d("TAG", "setOnClickListener: " + e)
             }
 
 
@@ -213,29 +217,37 @@ class NewMailActivity : BaseActivity(),
                         inputParams.subject = subject
                         inputParams.body = bodys
                         composeMailWithoutImage(inputParams)
-                    }else{
-                        val user_id: RequestBody = RequestBody.create("text/plain".toMediaTypeOrNull(), UtilsDefault.getSharedPreferenceString(
-                            Constants.USER_ID)!!)
-                        val accessToken: RequestBody = RequestBody.create("text/plain".toMediaTypeOrNull(),
+                    } else {
+                        val user_id: RequestBody =
+                            UtilsDefault.getSharedPreferenceString(
+                                Constants.USER_ID)!!
+                                .toRequestBody("text/plain".toMediaTypeOrNull())
+                        val accessToken: RequestBody =
                             UtilsDefault.getSharedPreferenceString(Constants.ACCESS_TOKEN)!!
-                        )
-                        val to_mail: RequestBody = RequestBody.create("text/plain".toMediaTypeOrNull(),
+                                .toRequestBody("text/plain".toMediaTypeOrNull())
+                        val to_mail: RequestBody =
                             toMail
-                        )
-                        val cc_mail: RequestBody = RequestBody.create("text/plain".toMediaTypeOrNull(),
+                                .toRequestBody("text/plain".toMediaTypeOrNull())
+                        val cc_mail: RequestBody =
                             ccMail
-                        )
-                        val bcc_mail: RequestBody = RequestBody.create("text/plain".toMediaTypeOrNull(),
+                                .toRequestBody("text/plain".toMediaTypeOrNull())
+                        val bcc_mail: RequestBody =
                             bccMail
-                        )
-                        val subject: RequestBody = RequestBody.create("text/plain".toMediaTypeOrNull(),
+                                .toRequestBody("text/plain".toMediaTypeOrNull())
+                        val subject: RequestBody =
                             subject
-                        )
-                        val body: RequestBody = RequestBody.create("text/plain".toMediaTypeOrNull(),
-                            bodys
-                        )
-                        
-                        composeMail(user_id,accessToken,to_mail,cc_mail,bcc_mail,subject,body,imageParts)
+                                .toRequestBody("text/plain".toMediaTypeOrNull())
+                        val body: RequestBody = bodys
+                            .toRequestBody("text/plain".toMediaTypeOrNull())
+
+                        composeMail(user_id,
+                            accessToken,
+                            to_mail,
+                            cc_mail,
+                            bcc_mail,
+                            subject,
+                            body,
+                            imageParts)
                     }
                 }
             }
@@ -253,18 +265,25 @@ class NewMailActivity : BaseActivity(),
         body: RequestBody,
         imageParts: List<MultipartBody.Part?>,
     ) {
-        apiViewModel.composeMail(userId,accessToken,toMail,ccMail,bccMail,subject,body,imageParts).observe(this, Observer {
+        apiViewModel.composeMail(userId,
+            accessToken,
+            toMail,
+            ccMail,
+            bccMail,
+            subject,
+            body,
+            imageParts).observe(this, Observer {
             it.let {
-                when(it.status){
+                when (it.status) {
                     Status.LOADING -> {
                         showProgress()
                     }
                     Status.SUCCESS -> {
                         dismissProgress()
-                        if (it.data!!.status){
+                        if (it.data!!.status) {
                             finish()
                             toast(it.data.message)
-                        }else{
+                        } else {
                             toast(it.data.message)
                         }
                     }
@@ -308,17 +327,17 @@ class NewMailActivity : BaseActivity(),
                         val path = FileUtils.getPath(this, uri)
                         if (UtilsDefault.isImageFile(path)) {
                             pathList.add(MailImageSelect(path, "img"))
-                        }else if (UtilsDefault.isPdfFile(path)){
-                            pathList.add(MailImageSelect(path,"pdf"))
+                        } else if (UtilsDefault.isPdfFile(path)) {
+                            pathList.add(MailImageSelect(path, "pdf"))
                         }
-                        if (!pathList.isNullOrEmpty()){
+                        if (!pathList.isNullOrEmpty()) {
                             binding.rvMailList.visibility = View.VISIBLE
                             mailFilesAdapter!!.setMail(pathList)
-                        }else{
+                        } else {
                             binding.rvMailList.visibility = View.GONE
                         }
-                    }catch (e:Exception){
-                        Log.d("TAG", "onFilePickerResult: "+e)
+                    } catch (e: Exception) {
+                        Log.d("TAG", "onFilePickerResult: " + e)
                     }
 
                 }
@@ -331,17 +350,17 @@ class NewMailActivity : BaseActivity(),
                     val path = FileUtils.getPath(this, uri)
                     if (UtilsDefault.isImageFile(path)) {
                         pathList.add(MailImageSelect(path, "img"))
-                    }else if (UtilsDefault.isPdfFile(path)){
-                        pathList.add(MailImageSelect(path,"pdf"))
+                    } else if (UtilsDefault.isPdfFile(path)) {
+                        pathList.add(MailImageSelect(path, "pdf"))
                     }
-                    if (!pathList.isNullOrEmpty()){
+                    if (!pathList.isNullOrEmpty()) {
                         binding.rvMailList.visibility = View.VISIBLE
                         mailFilesAdapter!!.setMail(pathList)
-                    }else{
+                    } else {
                         binding.rvMailList.visibility = View.GONE
                     }
-                }catch (e:Exception){
-                    Log.d("TAG", "onFilePickerResult: "+e)
+                } catch (e: Exception) {
+                    Log.d("TAG", "onFilePickerResult: " + e)
                 }
             }
             else -> return
@@ -350,35 +369,32 @@ class NewMailActivity : BaseActivity(),
 
     @SuppressLint("Range")
     private fun prepareFilePart(s: String, uri: Uri?): MultipartBody.Part {
-        val path = FileUtils.getPath(this,uri)
+        val path = FileUtils.getPath(this, uri)
         val file = File(path)
-        if (UtilsDefault.isImageFile(path)){
+        if (UtilsDefault.isImageFile(path)) {
             val compressedImageFile = Compressor(this).setQuality(100).compressToFile(file)
-            val requestFile: RequestBody = RequestBody.create(
-                "*/*".toMediaTypeOrNull(),
-                compressedImageFile)
+            val requestFile: RequestBody =
+                compressedImageFile.asRequestBody("*/*".toMediaTypeOrNull())
             return MultipartBody.Part.createFormData(s, compressedImageFile.name, requestFile)
         }
 
-        val requestFile: RequestBody = RequestBody.create(
-            "*/*".toMediaTypeOrNull(),
-            file)
+        val requestFile: RequestBody = file.asRequestBody("*/*".toMediaTypeOrNull())
         return MultipartBody.Part.createFormData(s, file.name, requestFile)
     }
 
     private fun composeMailWithoutImage(inputParams: InputParams) {
         apiViewModel.composeMailWithoutImage(inputParams).observe(this, Observer {
             it.let {
-                when(it.status){
+                when (it.status) {
                     Status.LOADING -> {
                         showProgress()
                     }
                     Status.SUCCESS -> {
                         dismissProgress()
-                        if (it.data!!.status){
+                        if (it.data!!.status) {
                             finish()
                             toast(it.data.message)
-                        }else{
+                        } else {
                             toast(it.data.message)
                         }
                     }
@@ -400,44 +416,44 @@ class NewMailActivity : BaseActivity(),
         binding.edtBcc.setTokenListener(this)
         binding.edtBcc.setTokenizer(CharacterTokenizer(asList(' ', ','), ","))
 
-        binding.rvMailList.layoutManager = GridLayoutManager(this,3)
+        binding.rvMailList.layoutManager = GridLayoutManager(this, 3)
         mailFilesAdapter = MailFilesAdapter(this)
         binding.rvMailList.adapter = mailFilesAdapter
 
         mailFilesAdapter!!.onItemClick = { model ->
             pathList.removeAt(model)
             imageParts.removeAt(model)
-            if (pathList.isEmpty()){
+            if (pathList.isEmpty()) {
                 binding.rvMailList.visibility = View.GONE
             }
             mailFilesAdapter!!.notifyDataSetChanged()
         }
 
 
-        if (intent != null){
-            if (intent.getStringExtra("from") != null){
+        if (intent != null) {
+            if (intent.getStringExtra("from") != null) {
                 val from = intent.getStringExtra("from")!!
                 toList = stringToWords(from)
-                for (a in toList){
+                for (a in toList) {
                     binding.edtTo.setText(a)
                 }
             }
 
-            if (intent.getStringExtra("bcc") != null){
+            if (intent.getStringExtra("bcc") != null) {
                 val from = intent.getStringExtra("bcc")!!
                 bccList = stringToWords(from)
-                for (a in bccList){
+                for (a in bccList) {
                     binding.edtBcc.setText(a)
                 }
             }
 
-            if (intent.getStringExtra("to") != null){
+            if (intent.getStringExtra("to") != null) {
                 val to = intent.getStringExtra("to")!!
                 ccList.addAll(stringToWords(to))
 
             }
 
-            if (intent.getStringExtra("cc") != null){
+            if (intent.getStringExtra("cc") != null) {
                 val to = intent.getStringExtra("cc")!!
                 ccList.addAll(stringToWords(to))
             }
@@ -448,13 +464,13 @@ class NewMailActivity : BaseActivity(),
                 }
             }
 
-            if (intent.getStringExtra("sub") != null){
-               val sub = intent.getStringExtra("sub")!!
+            if (intent.getStringExtra("sub") != null) {
+                val sub = intent.getStringExtra("sub")!!
                 binding.edtSubject.setText(sub)
             }
 
-            if (intent.getStringExtra("attach") != null){
-               val sub = intent.getStringExtra("attach")!!
+            if (intent.getStringExtra("attach") != null) {
+                val sub = intent.getStringExtra("attach")!!
                 setPdf(sub)
             }
 
@@ -470,16 +486,17 @@ class NewMailActivity : BaseActivity(),
 
         binding.ilHeader.txtHeader.text = resources.getString(R.string.compose)
 
-        binding.edtBody.setOnFocusChangeListener(OnFocusChangeListener { view, hasFocus ->
+        binding.edtBody.onFocusChangeListener = OnFocusChangeListener { view, hasFocus ->
             if (hasFocus) {
                 binding.svLayout.smoothScrollTo(0, binding.edtSubject.bottom)
             }
-        })
+        }
 
         binding.edtBody.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable) {
 
             }
+
             override fun beforeTextChanged(
                 s: CharSequence, start: Int,
                 count: Int, after: Int,
@@ -491,7 +508,7 @@ class NewMailActivity : BaseActivity(),
                 s: CharSequence, start: Int,
                 before: Int, count: Int,
             ) {
-                body1 = start+count
+                body1 = start + count
             }
         })
 
@@ -505,17 +522,17 @@ class NewMailActivity : BaseActivity(),
             val path = FileUtils.getPath(this, uri)
             if (UtilsDefault.isImageFile(path)) {
                 pathList.add(MailImageSelect(path, "img"))
-            }else if (UtilsDefault.isPdfFile(path)){
-                pathList.add(MailImageSelect(path,"pdf"))
+            } else if (UtilsDefault.isPdfFile(path)) {
+                pathList.add(MailImageSelect(path, "pdf"))
             }
-            if (!pathList.isNullOrEmpty()){
+            if (!pathList.isNullOrEmpty()) {
                 binding.rvMailList.visibility = View.VISIBLE
                 mailFilesAdapter!!.setMail(pathList)
-            }else{
+            } else {
                 binding.rvMailList.visibility = View.GONE
             }
-        }catch (e:Exception){
-            Log.d("TAG", "onFilePickerResult: "+e)
+        } catch (e: Exception) {
+            Log.d("TAG", "onFilePickerResult: " + e)
         }
     }
 
@@ -533,9 +550,9 @@ class NewMailActivity : BaseActivity(),
     override fun onTokenAdded(token: Person) {
         if (status.equals(0)) {
             toList.add(token.email)
-        }else if (status.equals(1)) {
+        } else if (status.equals(1)) {
             ccList.add(token.email)
-        }else if (status.equals(2)) {
+        } else if (status.equals(2)) {
             bccList.add(token.email)
         }
     }
@@ -554,15 +571,15 @@ class NewMailActivity : BaseActivity(),
                         ccList.remove(ccList[i])
                     }
                 }
-            }else if (status.equals(2)) {
+            } else if (status.equals(2)) {
                 for (i in 0 until bccList.size) {
                     if (token.email.equals(bccList[i])) {
                         bccList.remove(bccList[i])
                     }
                 }
             }
-        }catch (e:Exception){
-            Log.d("TAG", "onTokenRemoved: "+e)
+        } catch (e: Exception) {
+            Log.d("TAG", "onTokenRemoved: " + e)
         }
 
     }

@@ -11,7 +11,6 @@ import android.media.RingtoneManager
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.net.Uri
-import android.os.AsyncTask
 import android.os.Build
 import android.os.Environment
 import android.preference.PreferenceManager
@@ -29,16 +28,12 @@ import com.application.smartstation.app.App
 import com.application.smartstation.service.MailCallback
 import com.application.smartstation.service.background.SocketService
 import com.application.smartstation.ui.activity.MainActivity
-import com.google.gson.Gson
-import com.google.gson.GsonBuilder
-import java.io.*
-import java.math.BigDecimal
-import java.net.URL
+import java.io.File
+import java.io.UnsupportedEncodingException
 import java.net.URLConnection
 import java.security.MessageDigest
 import java.security.NoSuchAlgorithmException
 import java.text.DateFormat
-import java.text.DecimalFormat
 import java.text.SimpleDateFormat
 import java.time.OffsetDateTime
 import java.time.format.DateTimeFormatter
@@ -57,14 +52,15 @@ object UtilsDefault {
     internal var letter = Pattern.compile("[a-zA-z]")
     internal var digit = Pattern.compile("[0-9]")
 
-    fun sendNotification(context: Context,title:String,message:String) {
+    fun sendNotification(context: Context, title: String, message: String) {
         val channelId = "SMART_STATION_CHANNEL_ID"
         val channelName = "SMART_STATION"
 
 
         val intent = Intent(context, MainActivity::class.java)
 
-        val pendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_ONE_SHOT)
+        val pendingIntent =
+            PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_ONE_SHOT)
         val defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
         val notificationBuilder = NotificationCompat.Builder(context, channelId)
             .setLargeIcon(BitmapFactory.decodeResource(context.resources, R.mipmap.ic_launcher))
@@ -77,7 +73,8 @@ object UtilsDefault {
             .setDefaults(Notification.DEFAULT_SOUND or Notification.DEFAULT_LIGHTS or Notification.DEFAULT_VIBRATE)
             .setContentIntent(pendingIntent)
 
-        val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        val notificationManager =
+            context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val channel = NotificationChannel(channelId, channelName,
@@ -93,14 +90,15 @@ object UtilsDefault {
     }
 
 
-    fun copyToClipboard(context: Context,text: CharSequence) {
+    fun copyToClipboard(context: Context, text: CharSequence) {
         var clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
         val clip = ClipData.newPlainText("label", text)
         clipboard.setPrimaryClip(clip)
     }
 
-    fun pastefromClipboard(context: Context) : String{
-        val clipBoardManager = context.getSystemService(AppCompatActivity.CLIPBOARD_SERVICE) as ClipboardManager
+    fun pastefromClipboard(context: Context): String {
+        val clipBoardManager =
+            context.getSystemService(AppCompatActivity.CLIPBOARD_SERVICE) as ClipboardManager
         val text = clipBoardManager.primaryClip?.getItemAt(0)?.text.toString()
         return text
     }
@@ -207,15 +205,14 @@ object UtilsDefault {
         }
     }
 
-    fun isAppInstalled(context: Context,packagename:String):Boolean {
+    fun isAppInstalled(context: Context, packagename: String): Boolean {
 
         val pm = context.packageManager
         try {
-            val ps = pm.getPackageInfo(packagename,0)
-            Log.d("TAG", "isAppInstalled: "+ps.versionName)
+            val ps = pm.getPackageInfo(packagename, 0)
+            Log.d("TAG", "isAppInstalled: " + ps.versionName)
             return true
-        }
-        catch (e:Exception){
+        } catch (e: Exception) {
             e.printStackTrace()
             return false
         }
@@ -265,16 +262,16 @@ object UtilsDefault {
             if (Build.VERSION.SDK_INT < 23) {
                 val netInfo = cm.activeNetworkInfo
                 if (netInfo != null) {
-                    return (netInfo.isConnected() && (netInfo.getType() == ConnectivityManager.TYPE_WIFI || netInfo.getType() == ConnectivityManager.TYPE_MOBILE));
+                    return (netInfo.isConnected && (netInfo.type == ConnectivityManager.TYPE_WIFI || netInfo.type == ConnectivityManager.TYPE_MOBILE))
                 }
             } else {
                 val netInfo = cm.activeNetwork
                 if (netInfo != null) {
-                    val nc = cm.getNetworkCapabilities(netInfo);
+                    val nc = cm.getNetworkCapabilities(netInfo)
 
-                    return (nc!!.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) || nc!!.hasTransport(
+                    return (nc!!.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) || nc.hasTransport(
                         NetworkCapabilities.TRANSPORT_WIFI
-                    ));
+                    ))
                 }
             }
         }
@@ -286,12 +283,12 @@ object UtilsDefault {
         QA, PROD
     }
 
-    fun convertDecimal(decimal:String) : String{
+    fun convertDecimal(decimal: String): String {
 
         val numner = decimal
         val add = numner.toDouble()
-        val add2= add.toInt()
-        val nu = add2+1
+        val add2 = add.toInt()
+        val nu = add2 + 1
         val formatted = String.format("%1$-" + nu + "s", "1").replace(' ', '0')
 
         return formatted
@@ -303,7 +300,8 @@ object UtilsDefault {
 
     fun isEmailValid(email: String): Boolean {
 
-        val ePattern = "^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\])|(([a-zA-Z\\-0-9]+\\.)+[a-zA-Z]{2,}))$"
+        val ePattern =
+            "^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\])|(([a-zA-Z\\-0-9]+\\.)+[a-zA-Z]{2,}))$"
         val p = Pattern.compile(ePattern)
         val m = p.matcher(email)
         return m.matches()
@@ -334,8 +332,9 @@ object UtilsDefault {
         val matcher: Matcher
 
         val specialCharacters = "-@%\\[\\}+'!/#$^?:;,\\(\"\\)~`.*=&\\{>\\]<_"
-        val PASSWORD_PATTERN = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[$specialCharacters])(?=\\S+$).{8,20}$"
-       // val PASSWORD_PATTERN = "^(?=.*[0-9])(?=.*[A-Z][a-z])(?=.*[@#$%^&+=!])(?=\\S+$).{8,20}$"
+        val PASSWORD_PATTERN =
+            "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[$specialCharacters])(?=\\S+$).{8,20}$"
+        // val PASSWORD_PATTERN = "^(?=.*[0-9])(?=.*[A-Z][a-z])(?=.*[@#$%^&+=!])(?=\\S+$).{8,20}$"
         pattern = Pattern.compile(PASSWORD_PATTERN)
         matcher = pattern.matcher(password)
         return matcher.matches()
@@ -358,7 +357,6 @@ object UtilsDefault {
     fun validUrl(str: String): Boolean {
         return Patterns.WEB_URL.matcher(str).matches()
     }
-
 
 
     fun isEmailPassword(email: String): Boolean {
@@ -452,7 +450,6 @@ object UtilsDefault {
     }
 
 
-
     fun hideKeyboardForFocusedView(activity: Activity) {
         val inputManager = activity
             .getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
@@ -474,20 +471,21 @@ object UtilsDefault {
         return df.format(c.time)
     }
 
-    fun epochTime(time:String) : String{
+    fun epochTime(time: String): String {
         val epoch = time.toLong()
-        val date = Date(epoch*1000L)
-        val format = SimpleDateFormat("dd-MMM-yyyy HH:mm:ss",Locale.ENGLISH)
+        val date = Date(epoch * 1000L)
+        val format = SimpleDateFormat("dd-MMM-yyyy HH:mm:ss", Locale.ENGLISH)
         val formatted = format.format(date)
         return formatted
     }
-    fun epochTime2(time:String) : String{
+
+    fun epochTime2(time: String): String {
         val d = Date((time.toLong() / 1000) * 1000L)
         val formatted: String = SimpleDateFormat("dd-MMM-yyyy HH:mm:ss").format(d)
         return formatted
     }
 
-    fun voteTime(time:String) : String{
+    fun voteTime(time: String): String {
         try {
             var date = time
             var spf = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss")
@@ -495,14 +493,13 @@ object UtilsDefault {
             spf = SimpleDateFormat("dd-mm-yyyy HH:mm")
             date = spf.format(newDate)
             return date
-        }
-        catch (e:Exception){
+        } catch (e: Exception) {
             e.printStackTrace()
         }
-        return  ""
+        return ""
     }
 
-    fun apiTime(time:String) : String{
+    fun apiTime(time: String): String {
         try {
             var date = time
             var spf = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss")
@@ -510,14 +507,13 @@ object UtilsDefault {
             spf = SimpleDateFormat("dd-MMM-yyyy HH:mm:ss")
             date = spf.format(newDate)
             return date
-        }
-        catch (e:Exception){
+        } catch (e: Exception) {
             e.printStackTrace()
         }
-        return  ""
+        return ""
     }
 
-    fun viewTime(time:String) : String{
+    fun viewTime(time: String): String {
         try {
             var date = time
             var spf = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
@@ -525,14 +521,13 @@ object UtilsDefault {
             spf = SimpleDateFormat("MMM dd")
             date = spf.format(newDate)
             return date
-        }
-        catch (e:Exception){
+        } catch (e: Exception) {
             e.printStackTrace()
         }
-        return  ""
+        return ""
     }
 
-    fun replyTime(time:String) : String{
+    fun replyTime(time: String): String {
         try {
             var date = time
             var spf = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
@@ -540,14 +535,13 @@ object UtilsDefault {
             spf = SimpleDateFormat("MMM dd, yyyy")
             date = spf.format(newDate)
             return date
-        }
-        catch (e:Exception){
+        } catch (e: Exception) {
             e.printStackTrace()
         }
-        return  ""
+        return ""
     }
 
-    fun chatTime(time:String) : String{
+    fun chatTime(time: String): String {
         try {
             var date = time
             var spf = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss")
@@ -555,26 +549,24 @@ object UtilsDefault {
             spf = SimpleDateFormat("dd MMM HH:mm")
             date = spf.format(newDate)
             return date
-        }
-        catch (e:Exception){
+        } catch (e: Exception) {
             e.printStackTrace()
         }
-        return  ""
+        return ""
     }
 
-    fun ordertime(time:String) : String{
+    fun ordertime(time: String): String {
         try {
             var date = time
             var spf = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.ENGLISH)
             val newDate = spf.parse(date)
-            spf = SimpleDateFormat("HH:mm:ss",Locale.ENGLISH)
+            spf = SimpleDateFormat("HH:mm:ss", Locale.ENGLISH)
             date = spf.format(newDate!!)
             return date
-        }
-        catch (e:Exception){
+        } catch (e: Exception) {
             e.printStackTrace()
         }
-        return  ""
+        return ""
     }
 
     @Throws(Exception::class)
@@ -608,7 +600,7 @@ object UtilsDefault {
         return Base64.decode(enval, Base64.DEFAULT)
     }
 
-    fun countryImg(countryCode:String):String {
+    fun countryImg(countryCode: String): String {
         val flagOffset = 0x1F1E6
         val asciiOffset = 0x41
 
@@ -627,7 +619,7 @@ object UtilsDefault {
         val compile = Pattern.compile(
             "\\+(?:998|996|995|994|993|992|977|976|975|974|973|972|971|970|968|967|966|965|964|963|962|961|960|886|880|856|855|853|852|850|692|691|690|689|688|687|686|685|683|682|681|680|679|678|677|676|675|674|673|672|670|599|598|597|595|593|592|591|590|509|508|507|506|505|504|503|502|501|500|423|421|420|389|387|386|385|383|382|381|380|379|378|377|376|375|374|373|372|371|370|359|358|357|356|355|354|353|352|351|350|299|298|297|291|290|269|268|267|266|265|264|263|262|261|260|258|257|256|255|254|253|252|251|250|249|248|246|245|244|243|242|241|240|239|238|237|236|235|234|233|232|231|230|229|228|227|226|225|224|223|222|221|220|218|216|213|212|211|98|95|94|93|92|91|90|86|84|82|81|66|65|64|63|62|61|60|58|57|56|55|54|53|52|51|49|48|47|46|45|44\\D?1624|44\\D?1534|44\\D?1481|44|43|41|40|39|36|34|33|32|31|30|27|20|7|1\\D?939|1\\D?876|1\\D?869|1\\D?868|1\\D?849|1\\D?829|1\\D?809|1\\D?787|1\\D?784|1\\D?767|1\\D?758|1\\D?721|1\\D?684|1\\D?671|1\\D?670|1\\D?664|1\\D?649|1\\D?473|1\\D?441|1\\D?345|1\\D?340|1\\D?284|1\\D?268|1\\D?264|1\\D?246|1\\D?242|1)\\D?"
         )
-        Log.d("tag", "number::_>" +  compile.pattern().toRegex()) //OutPut::7698989898
+        Log.d("tag", "number::_>" + compile.pattern().toRegex()) //OutPut::7698989898
         return phoneNumberWithCountryCode.replace(compile.pattern().toRegex(), "")
     }
 
@@ -636,6 +628,7 @@ object UtilsDefault {
             activity.startService(Intent(activity, SocketService::class.java))
         }
     }
+
     private fun isMyServiceRunning(socketService: Class<*>, activity: Activity): Boolean {
         val manager = activity.getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
         for (service in manager.getRunningServices(Int.MAX_VALUE)) {
@@ -680,7 +673,7 @@ object UtilsDefault {
         }
     }
 
-     fun dateConvert(date: String?): String {
+    fun dateConvert(date: String?): String {
         val readFormat: DateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
         val writeFormat: DateFormat = SimpleDateFormat("dd-MM-yyyy")
         var dateVal: Date? = null
@@ -696,7 +689,7 @@ object UtilsDefault {
         return ""
     }
 
-     fun todayDate(date: String?): String? {
+    fun todayDate(date: String?): String? {
         val readFormat: DateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
         val writeFormat: DateFormat = SimpleDateFormat("HH:mm aa")
         var dateVal: Date? = null
@@ -712,8 +705,8 @@ object UtilsDefault {
         return ""
     }
 
-    fun chatBold(msg:String?):String{
-        val dataMsg = "<b>"+msg+"</b>"
+    fun chatBold(msg: String?): String {
+        val dataMsg = "<b>" + msg + "</b>"
         val msgVal = Html.fromHtml(dataMsg)
         return msgVal.toString()
     }
@@ -730,31 +723,31 @@ object UtilsDefault {
         return sb.toString()
     }
 
-    fun isImageFile(path:String):Boolean{
+    fun isImageFile(path: String): Boolean {
         val mimeType: String = URLConnection.guessContentTypeFromName(path)
         return mimeType != null && mimeType.startsWith("image")
     }
 
-    fun isPdfFile(path:String):Boolean{
+    fun isPdfFile(path: String): Boolean {
         val mimeType: String = URLConnection.guessContentTypeFromName(path)
         return mimeType != null && mimeType.startsWith("application/pdf")
     }
 
-    fun localTimeConvert(date:String):String?{
+    fun localTimeConvert(date: String): String? {
         val df = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH)
-        df.setTimeZone(TimeZone.getTimeZone("GMT")) // missing line
+        df.timeZone = TimeZone.getTimeZone("GMT") // missing line
 
         val date: Date = df.parse(date)
         val tz = TimeZone.getDefault()
         val writeDate = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
         writeDate.timeZone = TimeZone.getTimeZone(tz.id)
         val s = writeDate.format(date)
-        Log.d("TAG", "localTimeConvert: "+s)
+        Log.d("TAG", "localTimeConvert: " + s)
         return s
     }
 
     @SuppressLint("NewApi")
-    fun localTimeConvertMail(date:String):String?{
+    fun localTimeConvertMail(date: String): String? {
 
         val odt: OffsetDateTime = OffsetDateTime.parse(date)
         val odtTruncatedToWholeSecond = odt.truncatedTo(ChronoUnit.SECONDS)
@@ -764,7 +757,7 @@ object UtilsDefault {
         return output
     }
 
-    fun dateLastSeen(date:String):String{
+    fun dateLastSeen(date: String): String {
         val dateTime = SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(date)
         val calendar = Calendar.getInstance()
         calendar.time = dateTime
@@ -783,25 +776,26 @@ object UtilsDefault {
         five.add(Calendar.DATE, -6)
 
         return if (calendar[Calendar.YEAR] == today[Calendar.YEAR] && calendar[Calendar.DAY_OF_YEAR] == today[Calendar.DAY_OF_YEAR]) {
-           "Last seen today @ "+todayDate(localTimeConvert(date))
+            "Last seen today @ " + todayDate(localTimeConvert(date))
         } else if (calendar[Calendar.YEAR] == yesterday[Calendar.YEAR] && calendar[Calendar.DAY_OF_YEAR] == yesterday[Calendar.DAY_OF_YEAR]) {
-            "Last seen yesterday @ "+todayDate(localTimeConvert(date))
+            "Last seen yesterday @ " + todayDate(localTimeConvert(date))
         } else if (calendar[Calendar.YEAR] == one[Calendar.YEAR] && calendar[Calendar.DAY_OF_YEAR] == one[Calendar.DAY_OF_YEAR]) {
-            "Last seen "+ dayName(localTimeConvert(date)!!)+" "+todayDate(localTimeConvert(date))
+            "Last seen " + dayName(localTimeConvert(date)!!) + " " + todayDate(localTimeConvert(date))
         } else if (calendar[Calendar.YEAR] == two[Calendar.YEAR] && calendar[Calendar.DAY_OF_YEAR] == two[Calendar.DAY_OF_YEAR]) {
-            "Last seen "+ dayName(localTimeConvert(date)!!)+" "+todayDate(localTimeConvert(date))
+            "Last seen " + dayName(localTimeConvert(date)!!) + " " + todayDate(localTimeConvert(date))
         } else if (calendar[Calendar.YEAR] == three[Calendar.YEAR] && calendar[Calendar.DAY_OF_YEAR] == three[Calendar.DAY_OF_YEAR]) {
-            "Last seen "+ dayName(localTimeConvert(date)!!)+" "+todayDate(localTimeConvert(date))
-        }else if (calendar[Calendar.YEAR] == four[Calendar.YEAR] && calendar[Calendar.DAY_OF_YEAR] == four[Calendar.DAY_OF_YEAR]) {
-            "Last seen "+ dayName(localTimeConvert(date)!!)+" "+todayDate(localTimeConvert(date))
-        }else if (calendar[Calendar.YEAR] == five[Calendar.YEAR] && calendar[Calendar.DAY_OF_YEAR] == five[Calendar.DAY_OF_YEAR]) {
-            "Last seen "+ dayName(localTimeConvert(date)!!)+" "+todayDate(localTimeConvert(date))
+            "Last seen " + dayName(localTimeConvert(date)!!) + " " + todayDate(localTimeConvert(date))
+        } else if (calendar[Calendar.YEAR] == four[Calendar.YEAR] && calendar[Calendar.DAY_OF_YEAR] == four[Calendar.DAY_OF_YEAR]) {
+            "Last seen " + dayName(localTimeConvert(date)!!) + " " + todayDate(localTimeConvert(date))
+        } else if (calendar[Calendar.YEAR] == five[Calendar.YEAR] && calendar[Calendar.DAY_OF_YEAR] == five[Calendar.DAY_OF_YEAR]) {
+            "Last seen " + dayName(localTimeConvert(date)!!) + " " + todayDate(localTimeConvert(date))
         } else {
-            "Last seen "+ monthName(localTimeConvert(date)!!)+" "+todayDate(localTimeConvert(date))
+            "Last seen " + monthName(localTimeConvert(date)!!) + " " + todayDate(localTimeConvert(
+                date))
         }
     }
 
-    fun dateMail(date:String):String{
+    fun dateMail(date: String): String {
         val dateTime = SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(date)
         val calendar = Calendar.getInstance()
         calendar.time = dateTime
@@ -820,25 +814,25 @@ object UtilsDefault {
         five.add(Calendar.DATE, -6)
 
         return if (calendar[Calendar.YEAR] == today[Calendar.YEAR] && calendar[Calendar.DAY_OF_YEAR] == today[Calendar.DAY_OF_YEAR]) {
-           "Today - "+dateConvert(date)
+            "Today - " + dateConvert(date)
         } else if (calendar[Calendar.YEAR] == yesterday[Calendar.YEAR] && calendar[Calendar.DAY_OF_YEAR] == yesterday[Calendar.DAY_OF_YEAR]) {
-            "Yesterday - "+dateConvert(date)
+            "Yesterday - " + dateConvert(date)
         } else if (calendar[Calendar.YEAR] == one[Calendar.YEAR] && calendar[Calendar.DAY_OF_YEAR] == one[Calendar.DAY_OF_YEAR]) {
-            dayNameMail(date)+" - "+dateConvert(date)
+            dayNameMail(date) + " - " + dateConvert(date)
         } else if (calendar[Calendar.YEAR] == two[Calendar.YEAR] && calendar[Calendar.DAY_OF_YEAR] == two[Calendar.DAY_OF_YEAR]) {
-            dayNameMail(date)+" - "+dateConvert(date)
+            dayNameMail(date) + " - " + dateConvert(date)
         } else if (calendar[Calendar.YEAR] == three[Calendar.YEAR] && calendar[Calendar.DAY_OF_YEAR] == three[Calendar.DAY_OF_YEAR]) {
-            dayNameMail(date)+" - "+dateConvert(date)
-        }else if (calendar[Calendar.YEAR] == four[Calendar.YEAR] && calendar[Calendar.DAY_OF_YEAR] == four[Calendar.DAY_OF_YEAR]) {
-            dayNameMail(date)+" - "+dateConvert(date)
-        }else if (calendar[Calendar.YEAR] == five[Calendar.YEAR] && calendar[Calendar.DAY_OF_YEAR] == five[Calendar.DAY_OF_YEAR]) {
-            dayNameMail(date)+" - "+dateConvert(date)
+            dayNameMail(date) + " - " + dateConvert(date)
+        } else if (calendar[Calendar.YEAR] == four[Calendar.YEAR] && calendar[Calendar.DAY_OF_YEAR] == four[Calendar.DAY_OF_YEAR]) {
+            dayNameMail(date) + " - " + dateConvert(date)
+        } else if (calendar[Calendar.YEAR] == five[Calendar.YEAR] && calendar[Calendar.DAY_OF_YEAR] == five[Calendar.DAY_OF_YEAR]) {
+            dayNameMail(date) + " - " + dateConvert(date)
         } else {
             dateConvert(date)
         }
     }
 
-    fun dayNameMail(dates:String):String?{
+    fun dayNameMail(dates: String): String? {
         val sdf = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
         var date: Date? = null
         try {
@@ -851,7 +845,7 @@ object UtilsDefault {
         return newFormat
     }
 
-    fun replyDayMail(dates:String):String?{
+    fun replyDayMail(dates: String): String? {
         val sdf = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
         var date: Date? = null
         try {
@@ -864,7 +858,7 @@ object UtilsDefault {
         return newFormat
     }
 
-    fun dayName(dates:String):String?{
+    fun dayName(dates: String): String? {
         val sdf = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
         var date: Date? = null
         try {
@@ -877,7 +871,7 @@ object UtilsDefault {
         return newFormat
     }
 
-    fun monthName(dates:String):String?{
+    fun monthName(dates: String): String? {
         val sdf = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
         var date: Date? = null
         try {
@@ -891,9 +885,10 @@ object UtilsDefault {
     }
 
 
-    fun downloadFile(context: Context,url: String,value: String,mailCallback: MailCallback){
+    fun downloadFile(context: Context, url: String, value: String, mailCallback: MailCallback) {
         val file =
-            File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM),"com.smartstation"+"/Smart Station/Media/Smart Station Download/+$value")
+            File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM),
+                "com.smartstation" + "/Smart Station/Media/Smart Station Download/+$value")
         if (!file.exists()) {
             file.mkdirs()
         }
@@ -902,10 +897,10 @@ object UtilsDefault {
         val mgr = context.getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
         val downloadUri: Uri = Uri.parse(url)
         val file1 =
-            File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).absolutePath+"/com.smartstation"+"/Smart Station/Media/Smart Station Download/+$value"+downloadUri.lastPathSegment)
+            File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).absolutePath + "/com.smartstation" + "/Smart Station/Media/Smart Station Download/+$value" + downloadUri.lastPathSegment)
 
-        if (file1.isFile){
-            return mailCallback.success(file1.absolutePath,true)
+        if (file1.isFile) {
+            return mailCallback.success(file1.absolutePath, true)
         }
 
         val request = DownloadManager.Request(
@@ -941,12 +936,12 @@ object UtilsDefault {
                         if (DownloadManager.STATUS_SUCCESSFUL == c
                                 .getInt(columnIndex)
                         ) {
-                           return mailCallback.success(file1.absolutePath,true)
+                            return mailCallback.success(file1.absolutePath, true)
                         } else {
-                            return mailCallback.success("",false)
+                            return mailCallback.success("", false)
                         }
                     } else {
-                        return mailCallback.success("",false)
+                        return mailCallback.success("", false)
                     }
                     context.unregisterReceiver(this)
                 }

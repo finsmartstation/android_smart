@@ -3,8 +3,6 @@ package com.application.smartstation.ui.fragment
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
 import android.util.Log
 import android.view.View
 import androidx.fragment.app.viewModels
@@ -14,17 +12,16 @@ import com.application.smartstation.R
 import com.application.smartstation.databinding.FragmentInboxBinding
 import com.application.smartstation.service.Status
 import com.application.smartstation.service.background.SocketService
-import com.application.smartstation.ui.activity.NewMailActivity
 import com.application.smartstation.ui.activity.ViewMailActivity
-import com.application.smartstation.ui.adapter.ChatAdapter
 import com.application.smartstation.ui.adapter.InboxAdapter
-import com.application.smartstation.ui.model.*
+import com.application.smartstation.ui.model.DataMailList
+import com.application.smartstation.ui.model.GetMailListResponse
+import com.application.smartstation.ui.model.InputParams
 import com.application.smartstation.util.Constants
 import com.application.smartstation.util.UtilsDefault
 import com.application.smartstation.util.viewBinding
 import com.application.smartstation.viewmodel.ApiViewModel
 import com.application.smartstation.viewmodel.InboxEvent
-import com.application.smartstation.viewmodel.RecentChatEvent
 import com.google.gson.Gson
 import dagger.hilt.android.AndroidEntryPoint
 import org.greenrobot.eventbus.Subscribe
@@ -36,7 +33,7 @@ class InboxFragment : BaseFragment(R.layout.fragment_inbox) {
 
     private val binding by viewBinding(FragmentInboxBinding::bind)
 
-    var list:ArrayList<DataMailList> = ArrayList()
+    var list: ArrayList<DataMailList> = ArrayList()
     var inboxAdapter: InboxAdapter? = null
     val apiViewModel: ApiViewModel by viewModels()
     var emitters: SocketService.Emitters? = null
@@ -78,7 +75,8 @@ class InboxFragment : BaseFragment(R.layout.fragment_inbox) {
             val jsonObject = JSONObject()
             try {
                 jsonObject.put("user_id", UtilsDefault.getSharedPreferenceString(Constants.USER_ID))
-                jsonObject.put("accessToken", UtilsDefault.getSharedPreferenceString(Constants.ACCESS_TOKEN))
+                jsonObject.put("accessToken",
+                    UtilsDefault.getSharedPreferenceString(Constants.ACCESS_TOKEN))
                 emitters!!.mailList(jsonObject)
             } catch (e: java.lang.Exception) {
                 e.printStackTrace()
@@ -93,23 +91,23 @@ class InboxFragment : BaseFragment(R.layout.fragment_inbox) {
 
         apiViewModel.getMaillist(inputParams).observe(requireActivity(), Observer {
             it.let {
-                when(it.status){
+                when (it.status) {
                     Status.LOADING -> {
                         showProgress()
                     }
                     Status.SUCCESS -> {
                         dismissProgress()
-                        if (it.data!!.status){
+                        if (it.data!!.status) {
                             list = it.data.data
-                            if(list.isNotEmpty()) {
+                            if (list.isNotEmpty()) {
                                 binding.rvInbox.visibility = View.VISIBLE
                                 binding.txtNoFound.visibility = View.GONE
                                 setData(list)
-                            }else{
+                            } else {
                                 binding.rvInbox.visibility = View.GONE
                                 binding.txtNoFound.visibility = View.VISIBLE
                             }
-                        }else{
+                        } else {
                             toast(it.data.message)
                         }
                     }
@@ -124,17 +122,17 @@ class InboxFragment : BaseFragment(R.layout.fragment_inbox) {
 
     private fun setData(list: ArrayList<DataMailList>) {
         binding.rvInbox.layoutManager = LinearLayoutManager(requireActivity(),
-            LinearLayoutManager.VERTICAL,false)
+            LinearLayoutManager.VERTICAL, false)
         inboxAdapter = InboxAdapter(requireActivity())
         binding.rvInbox.adapter = inboxAdapter
         inboxAdapter!!.setMail(list.reversed())
 
-        if (list.isNullOrEmpty()){
+        if (list.isNullOrEmpty()) {
             unreadMail("0")
-        }else{
+        } else {
             var count = 0
-            for (i in 0 until list.size){
-                if (list[i].mail_read_status.equals(1)){
+            for (i in 0 until list.size) {
+                if (list[i].mail_read_status.equals(1)) {
                     count = +1
                 }
             }
@@ -143,8 +141,8 @@ class InboxFragment : BaseFragment(R.layout.fragment_inbox) {
 
         inboxAdapter!!.onItemClick = { model ->
             val intent = Intent(requireActivity(), ViewMailActivity::class.java)
-            intent.putExtra("boxType",1)
-            intent.putExtra("id",model.id)
+            intent.putExtra("boxType", 1)
+            intent.putExtra("id", model.id)
             startActivity(intent)
         }
     }
@@ -173,18 +171,18 @@ class InboxFragment : BaseFragment(R.layout.fragment_inbox) {
         var jsonObject: JSONObject? = JSONObject()
         jsonObject = event.getJsonObject()
         setInboxEvent(jsonObject)
-        Log.d("TAG", "ONCHATEVENT: "+jsonObject)
+        Log.d("TAG", "ONCHATEVENT: " + jsonObject)
     }
 
     fun setInboxEvent(jsonObject: JSONObject?) {
         val gson = Gson()
         val mailSocketModel: GetMailListResponse = gson.fromJson(jsonObject.toString(),
             GetMailListResponse::class.java)
-        if (mailSocketModel.status){
-            if (mailSocketModel.data.isNotEmpty()){
+        if (mailSocketModel.status) {
+            if (mailSocketModel.data.isNotEmpty()) {
                 setData(mailSocketModel.data)
             }
-        }else{
+        } else {
             toast(mailSocketModel.message)
         }
     }
@@ -194,7 +192,7 @@ class InboxFragment : BaseFragment(R.layout.fragment_inbox) {
         getMailList()
     }
 
-    fun unreadMail(count:String){
+    fun unreadMail(count: String) {
         mCallback!!.onUnreadMail(count)
     }
 

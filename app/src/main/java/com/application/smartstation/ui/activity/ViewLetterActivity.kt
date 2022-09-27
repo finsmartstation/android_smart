@@ -35,10 +35,10 @@ class ViewLetterActivity : BaseActivity() {
     var id = ""
     var path = ""
     var profile_pic = ""
-    var to:Array<String>? = null
-    var to1:Array<String>? = null
-    var cc:Array<String>? = null
-    var bcc:Array<String>? = null
+    var to: Array<String>? = null
+    var to1: Array<String>? = null
+    var cc: Array<String>? = null
+    var bcc: Array<String>? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,17 +48,17 @@ class ViewLetterActivity : BaseActivity() {
     }
 
     private fun initView() {
-        if (intent != null){
-            type = intent.getIntExtra("boxType",0)
+        if (intent != null) {
+            type = intent.getIntExtra("boxType", 0)
             id = intent.getStringExtra("id")!!
         }
 
-        if (type.equals(1)){
+        if (type.equals(1)) {
             binding.ilHeader.txtHeader.text = resources.getString(R.string.inbox)
-        }else{
+        } else {
             binding.ilHeader.txtHeader.text = resources.getString(R.string.sentbox)
         }
-        
+
         viewLetterDetails(id)
     }
 
@@ -70,15 +70,15 @@ class ViewLetterActivity : BaseActivity() {
 
         apiViewModel.viewLetter(inputParams).observe(this, Observer {
             it.let {
-                when(it.status){
+                when (it.status) {
                     Status.LOADING -> {
                         showProgress()
                     }
                     Status.SUCCESS -> {
                         dismissProgress()
-                        if (it.data!!.status){
+                        if (it.data!!.status) {
                             setData(it.data.data)
-                        }else{
+                        } else {
                             toast(it.data.message)
                         }
                     }
@@ -101,15 +101,16 @@ class ViewLetterActivity : BaseActivity() {
         date = data.datetime
         profile_pic = data.profile_pic
 
-        if (!data.letter_path.isNullOrEmpty()){
+        if (!data.letter_path.isNullOrEmpty()) {
             binding.clPdf.visibility = View.VISIBLE
             path = data.letter_path
-            val fileName = FileUtils.getFileNameFromPath(data.letter_path).replace("/","")
+            val fileName = FileUtils.getFileNameFromPath(data.letter_path).replace("/", "")
             binding.txtFileName.text = fileName
         }
 
-        if (!profile_pic.isNullOrEmpty()){
-            Glide.with(this).load(profile_pic).placeholder(R.drawable.ic_default).error(R.drawable.ic_default).diskCacheStrategy(
+        if (!profile_pic.isNullOrEmpty()) {
+            Glide.with(this).load(profile_pic).placeholder(R.drawable.ic_default)
+                .error(R.drawable.ic_default).diskCacheStrategy(
                 DiskCacheStrategy.DATA).into(binding.imgProfile)
         }
 
@@ -124,30 +125,36 @@ class ViewLetterActivity : BaseActivity() {
         binding.txtBody.text = Html.fromHtml(body)
         binding.txtDate.text = UtilsDefault.viewTime(date)
 
-        for (i in 0 until to!!.size){
-            if (i.equals(0)){
+        for (i in 0 until to!!.size) {
+            if (i.equals(0)) {
                 if (to!!.size > 1) {
-                    if (cc!!.size != 0){
-                        if (bcc!!.size !=0){
-                            binding.txtTo.text = to!![i] + " & " + ((to!!.size+cc!!.size+bcc!!.size)-1) + " more"
-                        }else{
-                            binding.txtTo.text = to!![i] + " & " + ((to!!.size+cc!!.size)-1) + " more"
+                    if (cc!!.size != 0) {
+                        if (bcc!!.size != 0) {
+                            binding.txtTo.text =
+                                to!![i] + " & " + ((to!!.size + cc!!.size + bcc!!.size) - 1) + " more"
+                        } else {
+                            binding.txtTo.text =
+                                to!![i] + " & " + ((to!!.size + cc!!.size) - 1) + " more"
                         }
-                    }else if (bcc!!.size != 0){
-                        binding.txtTo.text = to!![i] + " & " + ((to!!.size+bcc!!.size)-1) + " more"
-                    }else {
+                    } else if (bcc!!.size != 0) {
+                        binding.txtTo.text =
+                            to!![i] + " & " + ((to!!.size + bcc!!.size) - 1) + " more"
+                    } else {
                         binding.txtTo.text = to!![i] + " & " + (to!!.size - 1) + " more"
                     }
-                }else{
-                    if (cc!!.size != 0){
-                        if (bcc!!.size !=0){
-                            binding.txtTo.text = to!![i] + " & " + ((to!!.size+cc!!.size+bcc!!.size)-1) + " more"
-                        }else{
-                            binding.txtTo.text = to!![i] + " & " + ((to!!.size+cc!!.size)-1) + " more"
+                } else {
+                    if (cc!!.size != 0) {
+                        if (bcc!!.size != 0) {
+                            binding.txtTo.text =
+                                to!![i] + " & " + ((to!!.size + cc!!.size + bcc!!.size) - 1) + " more"
+                        } else {
+                            binding.txtTo.text =
+                                to!![i] + " & " + ((to!!.size + cc!!.size) - 1) + " more"
                         }
-                    }else if (bcc!!.size != 0){
-                        binding.txtTo.text = to!![i] + " & " + ((to!!.size+bcc!!.size)-1) + " more"
-                    }else {
+                    } else if (bcc!!.size != 0) {
+                        binding.txtTo.text =
+                            to!![i] + " & " + ((to!!.size + bcc!!.size) - 1) + " more"
+                    } else {
                         binding.txtTo.text = to!![i]
                     }
                 }
@@ -161,20 +168,20 @@ class ViewLetterActivity : BaseActivity() {
         }
 
         binding.btnForward.setOnClickListener {
-            startActivity(Intent(this,ForwardLetterActivity::class.java)
-                .putExtra("sub",subjectFwdVal(sub))
-                .putExtra("attach",path)
-                .putExtra("id",id))
+            startActivity(Intent(this, ForwardLetterActivity::class.java)
+                .putExtra("sub", subjectFwdVal(sub))
+                .putExtra("attach", path)
+                .putExtra("id", id))
         }
 
 
         binding.btnForwardMail.setOnClickListener {
-            UtilsDefault.downloadFile(this, path,"Letter",object : MailCallback {
+            UtilsDefault.downloadFile(this, path, "Letter", object : MailCallback {
                 override fun success(resp: String?, status: Boolean?) {
-                    if (status!!){
-                        startActivity(Intent(this@ViewLetterActivity,NewMailActivity::class.java)
-                            .putExtra("sub",subjectFwdVal(sub))
-                            .putExtra("attach",resp))
+                    if (status!!) {
+                        startActivity(Intent(this@ViewLetterActivity, NewMailActivity::class.java)
+                            .putExtra("sub", subjectFwdVal(sub))
+                            .putExtra("attach", resp))
                     }
                 }
 
@@ -189,22 +196,22 @@ class ViewLetterActivity : BaseActivity() {
             val toVal: String = TextUtils.join(",", to!!)
             val ccVal: String = TextUtils.join(",", cc!!)
             val bccVal: String = TextUtils.join(",", bcc!!)
-            binding.txtToFull.text =toVal
+            binding.txtToFull.text = toVal
 
             if (cc!!.size != 0) {
                 if (bcc!!.size != 0) {
                     binding.txtCC.visibility = View.VISIBLE
                     binding.txtBCC.visibility = View.VISIBLE
-                    binding.txtCC.text =ccVal
-                    binding.txtBCC.text =bccVal
-                }else{
+                    binding.txtCC.text = ccVal
+                    binding.txtBCC.text = bccVal
+                } else {
                     binding.txtCC.visibility = View.VISIBLE
-                    binding.txtCC.text =ccVal
+                    binding.txtCC.text = ccVal
                 }
-            }else{
+            } else {
                 if (bcc!!.size != 0) {
                     binding.txtBCC.visibility = View.VISIBLE
-                    binding.txtBCC.text =bccVal
+                    binding.txtBCC.text = bccVal
                 }
             }
 
@@ -216,12 +223,13 @@ class ViewLetterActivity : BaseActivity() {
 
 
         binding.clPdf.setOnClickListener {
-            UtilsDefault.downloadFile(this, path,"Letter",object : MailCallback {
+            UtilsDefault.downloadFile(this, path, "Letter", object : MailCallback {
                 override fun success(resp: String?, status: Boolean?) {
-                    if (status!!){
-                        if (resp!!.contains(".pdf")){
-                            startActivity(Intent(this@ViewLetterActivity,PdfViewActivity::class.java).putExtra("path",resp))
-                        }else {
+                    if (status!!) {
+                        if (resp!!.contains(".pdf")) {
+                            startActivity(Intent(this@ViewLetterActivity,
+                                PdfViewActivity::class.java).putExtra("path", resp))
+                        } else {
                             FileUtils.openDocument(this@ViewLetterActivity, resp)
                         }
                     }
@@ -232,12 +240,12 @@ class ViewLetterActivity : BaseActivity() {
     }
 
     private fun subjectFwdVal(sub: String): String {
-        if (sub.startsWith("Fwd:")){
+        if (sub.startsWith("Fwd:")) {
             return sub
-        }else if (sub.startsWith("Re:")){
-            return sub.replace("Re:","Fwd:")
+        } else if (sub.startsWith("Re:")) {
+            return sub.replace("Re:", "Fwd:")
         }
-        return "Fwd: "+sub
+        return "Fwd: " + sub
     }
 
     private fun deleteLetter() {
@@ -248,16 +256,16 @@ class ViewLetterActivity : BaseActivity() {
 
         apiViewModel.deleteLetter(inputParams).observe(this, Observer {
             it.let {
-                when(it.status){
+                when (it.status) {
                     Status.LOADING -> {
                         showProgress()
                     }
                     Status.SUCCESS -> {
                         dismissProgress()
-                        if (it.data!!.status){
+                        if (it.data!!.status) {
                             toast(it.data.message)
                             finish()
-                        }else{
+                        } else {
                             toast(it.data.message)
                         }
                     }

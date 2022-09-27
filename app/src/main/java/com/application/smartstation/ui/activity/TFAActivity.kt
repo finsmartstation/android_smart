@@ -17,7 +17,6 @@ import com.application.smartstation.util.UtilsDefault
 import com.application.smartstation.util.viewBinding
 import com.application.smartstation.viewmodel.ApiViewModel
 import com.google.zxing.BarcodeFormat
-import com.google.zxing.common.BitMatrix
 import com.google.zxing.qrcode.QRCodeWriter
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -25,7 +24,7 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class TFAActivity : BaseActivity() {
 
-    val binding:ActivityTfaactivityBinding by viewBinding()
+    val binding: ActivityTfaactivityBinding by viewBinding()
     var tfaStatus = ""
     var tfakey = ""
     var tfaUrl = ""
@@ -50,7 +49,7 @@ class TFAActivity : BaseActivity() {
 
         binding.imgCopy.setOnClickListener {
             val address = binding.textTfaKey.text.toString().trim()
-            UtilsDefault.copyToClipboard(this,address)
+            UtilsDefault.copyToClipboard(this, address)
             toast("Copied to Clipboard")
         }
 
@@ -90,41 +89,41 @@ class TFAActivity : BaseActivity() {
         }
 
         binding.btnEnable.setOnClickListener {
-            val code =  binding.edtCode.text.toString().trim()
-            when{
+            val code = binding.edtCode.text.toString().trim()
+            when {
                 TextUtils.isEmpty(code) -> showEnter("TFA Code")
                 code.length < 6 -> showEnter("Valid TFA Code")
                 else -> {
                     val params = InputParams()
                     params.user_id = UtilsDefault.getSharedPreferenceString(Constants.USER_ID)
-                    params.accessToken = UtilsDefault.getSharedPreferenceString(Constants.ACCESS_TOKEN)
+                    params.accessToken =
+                        UtilsDefault.getSharedPreferenceString(Constants.ACCESS_TOKEN)
                     params.authenticator_pin = code
                     updateTfa(params)
                 }
             }
-    }
+        }
     }
 
     private fun updateTfa(params: InputParams) {
         apiViewModel.updateTFA(params).observe(this, Observer {
             it?.let {
-                when(it.status){
+                when (it.status) {
                     Status.LOADING -> {
                         showProgress()
                     }
                     Status.SUCCESS -> {
                         dismissProgress()
                         if (it.data!!.status) {
-                            if (it.data.tfa_status.equals("1")){
-                                UtilsDefault.updateSharedPreferenceInt(Constants.TFA_STATUS,1)
+                            if (it.data.tfa_status.equals("1")) {
+                                UtilsDefault.updateSharedPreferenceInt(Constants.TFA_STATUS, 1)
                                 toast("TFA enabled successfully")
-                            }else{
-                                UtilsDefault.updateSharedPreferenceInt(Constants.TFA_STATUS,0)
+                            } else {
+                                UtilsDefault.updateSharedPreferenceInt(Constants.TFA_STATUS, 0)
                                 toast("TFA disabled successfully")
                             }
                             finish()
-                        }
-                        else {
+                        } else {
                             toast("Invalid 2FA Code")
                         }
 
@@ -150,15 +149,16 @@ class TFAActivity : BaseActivity() {
     private fun getTfaStatus(inputParams: InputParams) {
         apiViewModel.getTFA(inputParams).observe(this, Observer {
             it?.let {
-                when(it.status){
+                when (it.status) {
                     Status.LOADING -> {
                         showProgress()
                     }
                     Status.SUCCESS -> {
                         dismissProgress()
                         if (it.data!!.status) {
-                            UtilsDefault.updateSharedPreferenceInt(Constants.TFA_STATUS,  it.data.tfa_status.toInt())
-                                setData(it.data.secret_key, it.data.tfa_status.toInt())
+                            UtilsDefault.updateSharedPreferenceInt(Constants.TFA_STATUS,
+                                it.data.tfa_status.toInt())
+                            setData(it.data.secret_key, it.data.tfa_status.toInt())
                         }
                     }
                     Status.ERROR -> {
@@ -176,14 +176,13 @@ class TFAActivity : BaseActivity() {
         val name = UtilsDefault.getSharedPreferenceString(Constants.NAME)
         tfaUrl = "otpauth://totp/${resources.getString(R.string.app_name)}($name)?secret=$secretKey"
         setQrCode(secretKey)
-        if (tfastatus == 1){
+        if (tfastatus == 1) {
             binding.txtOnOff.text = resources.getString(R.string.on)
             binding.scTFA.isChecked = true
             binding.scTFA.isEnabled = false
             tfaStatus = "enable"
             binding.txtBtn.text = resources.getString(R.string.disable)
-        }
-        else {
+        } else {
             binding.txtOnOff.text = resources.getString(R.string.off)
             binding.scTFA.isChecked = false
             tfaStatus = "disable"
@@ -192,7 +191,7 @@ class TFAActivity : BaseActivity() {
         }
     }
 
-    private fun showEnter(fieldName: String){
+    private fun showEnter(fieldName: String) {
         toast("Enter $fieldName!")
     }
 

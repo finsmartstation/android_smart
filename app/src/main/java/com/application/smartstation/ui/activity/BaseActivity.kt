@@ -17,7 +17,7 @@ import kotlin.random.Random
 import kotlin.random.nextInt
 
 
-open class BaseActivity: AppCompatActivity(), UtilInterface {
+open class BaseActivity : AppCompatActivity(), UtilInterface {
 
     var mcontext: Context? = null
     private val permissions: HashMap<Int, (permissionGranted: Boolean) -> Unit> = HashMap()
@@ -28,7 +28,7 @@ open class BaseActivity: AppCompatActivity(), UtilInterface {
         mcontext = this
     }
 
-    fun setStatusBar(){
+    fun setStatusBar() {
         /*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
             window.statusBarColor = ContextCompat.getColor(this, android.R.color.transparent)
@@ -37,23 +37,20 @@ open class BaseActivity: AppCompatActivity(), UtilInterface {
         }*/
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-           if (UtilsDefault.getSharedPreferenceValuefcm(Constants.THEME)== "dark"){
-               window!!.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_VISIBLE
-               window!!.statusBarColor = ContextCompat.getColor(this, R.color.purple_200)
-           }
-           else {
-               window!!.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
-               window!!.statusBarColor = ContextCompat.getColor(this,R.color.white)
-           }
+            if (UtilsDefault.getSharedPreferenceValuefcm(Constants.THEME) == "dark") {
+                window!!.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_VISIBLE
+                window!!.statusBarColor = ContextCompat.getColor(this, R.color.purple_200)
+            } else {
+                window!!.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
+                window!!.statusBarColor = ContextCompat.getColor(this, R.color.white)
+            }
 
 
-
-
-       }
+        }
 
     }
 
-    fun setPrimaryStatusBar(){
+    fun setPrimaryStatusBar() {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
@@ -66,34 +63,34 @@ open class BaseActivity: AppCompatActivity(), UtilInterface {
         ToastUtils.show(this, message)
     }
 
-    fun imagePermission(action: () -> Unit){
+    fun imagePermission(action: () -> Unit) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             requestPermission(
                 Manifest.permission.READ_EXTERNAL_STORAGE,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                Manifest.permission.CAMERA){
-                if(it){
+                Manifest.permission.CAMERA) {
+                if (it) {
                     action()
-                }else{
+                } else {
                     toast("Need Camera and Storage Permission!")
                 }
             }
-        }else{
+        } else {
             action()
         }
     }
 
-    fun phnPermission(action: () -> Unit){
+    fun phnPermission(action: () -> Unit) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             requestPermission(
-                Manifest.permission.READ_CONTACTS,Manifest.permission.WRITE_CONTACTS){
-                if(it){
+                Manifest.permission.READ_CONTACTS, Manifest.permission.WRITE_CONTACTS) {
+                if (it) {
                     action()
-                }else{
+                } else {
                     toast("Need Phone Permission!")
                 }
             }
-        }else{
+        } else {
             action()
         }
     }
@@ -101,7 +98,7 @@ open class BaseActivity: AppCompatActivity(), UtilInterface {
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<out String>,
-        grantResults: IntArray
+        grantResults: IntArray,
     ) {
 
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
@@ -111,7 +108,7 @@ open class BaseActivity: AppCompatActivity(), UtilInterface {
     @RequiresApi(Build.VERSION_CODES.M)
     override fun requestPermission(
         vararg permissions: String,
-        result: (permissionGranted: Boolean) -> Unit
+        result: (permissionGranted: Boolean) -> Unit,
     ) {
         var requestCode = 0
         do {

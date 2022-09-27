@@ -21,30 +21,25 @@ import com.application.smartstation.R;
 @SuppressLint("RtlHardcoded")
 public class SmartStationSwipeView extends ViewGroup {
 
-    public static final int STATE_CLOSE     = 0;
-    public static final int STATE_CLOSING   = 1;
-    public static final int STATE_OPEN      = 2;
-    public static final int STATE_OPENING   = 3;
-    public static final int STATE_DRAGGING  = 4;
-
-    private static final int DEFAULT_MIN_FLING_VELOCITY = 300; // dp per second
-    private static final int DEFAULT_MIN_DIST_REQUEST_DISALLOW_PARENT = 1; // dp
-
-    public static final int DRAG_EDGE_LEFT =   0x1;
-    public static final int DRAG_EDGE_RIGHT =  0x1 << 1;
-    public static final int DRAG_EDGE_TOP =    0x1 << 2;
+    public static final int STATE_CLOSE = 0;
+    public static final int STATE_CLOSING = 1;
+    public static final int STATE_OPEN = 2;
+    public static final int STATE_OPENING = 3;
+    public static final int STATE_DRAGGING = 4;
+    public static final int DRAG_EDGE_LEFT = 0x1;
+    public static final int DRAG_EDGE_RIGHT = 0x1 << 1;
+    public static final int DRAG_EDGE_TOP = 0x1 << 2;
     public static final int DRAG_EDGE_BOTTOM = 0x1 << 3;
-
     /**
      * The secondary view will be under the main view.
      */
     public static final int MODE_NORMAL = 0;
-
     /**
      * The secondary view will stick the edge of the main view.
      */
     public static final int MODE_SAME_LEVEL = 1;
-
+    private static final int DEFAULT_MIN_FLING_VELOCITY = 300; // dp per second
+    private static final int DEFAULT_MIN_DIST_REQUEST_DISALLOW_PARENT = 1; // dp
     /**
      * Main view is the view which is shown when the layout is closed.
      */
@@ -58,22 +53,22 @@ public class SmartStationSwipeView extends ViewGroup {
     /**
      * The rectangle position of the main view when the layout is closed.
      */
-    private Rect mRectMainClose = new Rect();
+    private final Rect mRectMainClose = new Rect();
 
     /**
      * The rectangle position of the main view when the layout is opened.
      */
-    private Rect mRectMainOpen  = new Rect();
+    private final Rect mRectMainOpen = new Rect();
 
     /**
      * The rectangle position of the secondary view when the layout is closed.
      */
-    private Rect mRectSecClose  = new Rect();
+    private final Rect mRectSecClose = new Rect();
 
     /**
      * The rectangle position of the secondary view when the layout is opened.
      */
-    private Rect mRectSecOpen   = new Rect();
+    private final Rect mRectSecOpen = new Rect();
 
     /**
      * The minimum distance (px) to the closest drag edge that the SmartStationSwipeView
@@ -91,61 +86,286 @@ public class SmartStationSwipeView extends ViewGroup {
     private int mMode = MODE_NORMAL;
 
     private int mLastMainLeft = 0;
-    private int mLastMainTop  = 0;
+    private int mLastMainTop = 0;
 
     private int mDragEdge = DRAG_EDGE_LEFT;
+    private final GestureDetector.OnGestureListener mGestureListener = new GestureDetector.SimpleOnGestureListener() {
+        boolean hasDisallowed = false;
 
+        @Override
+        public boolean onDown(MotionEvent e) {
+            mIsScrolling = false;
+            hasDisallowed = false;
+            return true;
+        }
+
+        @Override
+        public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+            mIsScrolling = true;
+            return false;
+        }
+
+        @Override
+        public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
+            mIsScrolling = true;
+
+            if (getParent() != null) {
+                boolean shouldDisallow;
+
+                if (!hasDisallowed) {
+                    shouldDisallow = getDistToClosestEdge() >= mMinDistRequestDisallowParent;
+                    if (shouldDisallow) {
+                        hasDisallowed = true;
+                    }
+                } else {
+                    shouldDisallow = true;
+                }
+
+                // disallow parent to intercept touch event so that the layout will work
+                // properly on RecyclerView or view that handles scroll gesture.
+                getParent().requestDisallowInterceptTouchEvent(shouldDisallow);
+            }
+
+            return false;
+        }
+    };
     private float mDragDist = 0;
     private float mPrevX = -1;
     private float mPrevY = -1;
-
     private ViewDragHelper mDragHelper;
     private GestureDetectorCompat mGestureDetector;
-
     private DragStateChangeListener mDragStateChangeListener; // only used for ViewBindHelper
     private SwipeListener mSwipeListener;
+    private final ViewDragHelper.Callback mDragHelperCallback = new ViewDragHelper.Callback() {
+        @Override
+        public boolean tryCaptureView(View child, int pointerId) {
+            mAborted = false;
 
+            if (mLockDrag)
+                return false;
+
+            mDragHelper.captureChildView(mMainView, pointerId);
+            return false;
+        }
+
+        @Override
+        public int clampViewPositionVertical(View child, int top, int dy) {
+            switch (mDragEdge) {
+                case DRAG_EDGE_TOP:
+                    return Math.max(
+                            Math.min(top, mRectMainClose.top + mSecondaryView.getHeight()),
+                            mRectMainClose.top
+                    );
+
+                case DRAG_EDGE_BOTTOM:
+                    return Math.max(
+                            Math.min(top, mRectMainClose.top),
+                            mRectMainClose.top - mSecondaryView.getHeight()
+                    );
+
+                default:
+                    return child.getTop();
+            }
+        }
+
+        @Override
+        public int clampViewPositionHorizontal(View child, int left, int dx) {
+            switch (mDragEdge) {
+                case DRAG_EDGE_RIGHT:
+                    return Math.max(
+                            Math.min(left, mRectMainClose.left),
+                            mRectMainClose.left - mSecondaryView.getWidth()
+                    );
+
+                case DRAG_EDGE_LEFT:
+                    return Math.max(
+                            Math.min(left, mRectMainClose.left + mSecondaryView.getWidth()),
+                            mRectMainClose.left
+                    );
+
+                default:
+                    return child.getLeft();
+            }
+        }
+
+        @Override
+        public void onViewReleased(View releasedChild, float xvel, float yvel) {
+            final boolean velRightExceeded = pxToDp((int) xvel) >= mMinFlingVelocity;
+            final boolean velLeftExceeded = pxToDp((int) xvel) <= -mMinFlingVelocity;
+            final boolean velUpExceeded = pxToDp((int) yvel) <= -mMinFlingVelocity;
+            final boolean velDownExceeded = pxToDp((int) yvel) >= mMinFlingVelocity;
+
+            final int pivotHorizontal = getHalfwayPivotHorizontal();
+            final int pivotVertical = getHalfwayPivotVertical();
+
+            switch (mDragEdge) {
+                case DRAG_EDGE_RIGHT:
+                    if (velRightExceeded) {
+                        close(true);
+                    } else if (velLeftExceeded) {
+                        open(true);
+                    } else {
+                        if (mMainView.getRight() < pivotHorizontal) {
+                            open(true);
+                        } else {
+                            close(true);
+                        }
+                    }
+                    break;
+
+                case DRAG_EDGE_LEFT:
+                    if (velRightExceeded) {
+                        open(true);
+                    } else if (velLeftExceeded) {
+                        close(true);
+                    } else {
+                        if (mMainView.getLeft() < pivotHorizontal) {
+                            close(true);
+                        } else {
+                            open(true);
+                        }
+                    }
+                    break;
+
+                case DRAG_EDGE_TOP:
+                    if (velUpExceeded) {
+                        close(true);
+                    } else if (velDownExceeded) {
+                        open(true);
+                    } else {
+                        if (mMainView.getTop() < pivotVertical) {
+                            close(true);
+                        } else {
+                            open(true);
+                        }
+                    }
+                    break;
+
+                case DRAG_EDGE_BOTTOM:
+                    if (velUpExceeded) {
+                        open(true);
+                    } else if (velDownExceeded) {
+                        close(true);
+                    } else {
+                        if (mMainView.getBottom() < pivotVertical) {
+                            open(true);
+                        } else {
+                            close(true);
+                        }
+                    }
+                    break;
+            }
+        }
+
+        @Override
+        public void onEdgeDragStarted(int edgeFlags, int pointerId) {
+            super.onEdgeDragStarted(edgeFlags, pointerId);
+
+            if (mLockDrag) {
+                return;
+            }
+
+            boolean edgeStartLeft = (mDragEdge == DRAG_EDGE_RIGHT)
+                    && edgeFlags == ViewDragHelper.EDGE_LEFT;
+
+            boolean edgeStartRight = (mDragEdge == DRAG_EDGE_LEFT)
+                    && edgeFlags == ViewDragHelper.EDGE_RIGHT;
+
+            boolean edgeStartTop = (mDragEdge == DRAG_EDGE_BOTTOM)
+                    && edgeFlags == ViewDragHelper.EDGE_TOP;
+
+            boolean edgeStartBottom = (mDragEdge == DRAG_EDGE_TOP)
+                    && edgeFlags == ViewDragHelper.EDGE_BOTTOM;
+
+            if (edgeStartLeft || edgeStartRight || edgeStartTop || edgeStartBottom) {
+                mDragHelper.captureChildView(mMainView, pointerId);
+            }
+        }
+
+        @Override
+        public void onViewPositionChanged(View changedView, int left, int top, int dx, int dy) {
+            super.onViewPositionChanged(changedView, left, top, dx, dy);
+            if (mMode == MODE_SAME_LEVEL) {
+                if (mDragEdge == DRAG_EDGE_LEFT || mDragEdge == DRAG_EDGE_RIGHT) {
+                    mSecondaryView.offsetLeftAndRight(dx);
+                } else {
+                    mSecondaryView.offsetTopAndBottom(dy);
+                }
+            }
+
+            boolean isMoved = (mMainView.getLeft() != mLastMainLeft) || (mMainView.getTop() != mLastMainTop);
+            if (mSwipeListener != null && isMoved) {
+                if (mMainView.getLeft() == mRectMainClose.left && mMainView.getTop() == mRectMainClose.top) {
+                    mSwipeListener.onClosed(SmartStationSwipeView.this);
+                } else if (mMainView.getLeft() == mRectMainOpen.left && mMainView.getTop() == mRectMainOpen.top) {
+                    mSwipeListener.onOpened(SmartStationSwipeView.this);
+                } else {
+                    mSwipeListener.onSlide(SmartStationSwipeView.this, getSlideOffset());
+                }
+            }
+
+            mLastMainLeft = mMainView.getLeft();
+            mLastMainTop = mMainView.getTop();
+            ViewCompat.postInvalidateOnAnimation(SmartStationSwipeView.this);
+        }
+
+        private float getSlideOffset() {
+            switch (mDragEdge) {
+                case DRAG_EDGE_LEFT:
+                    return (float) (mMainView.getLeft() - mRectMainClose.left) / mSecondaryView.getWidth();
+
+                case DRAG_EDGE_RIGHT:
+                    return (float) (mRectMainClose.left - mMainView.getLeft()) / mSecondaryView.getWidth();
+
+                case DRAG_EDGE_TOP:
+                    return (float) (mMainView.getTop() - mRectMainClose.top) / mSecondaryView.getHeight();
+
+                case DRAG_EDGE_BOTTOM:
+                    return (float) (mRectMainClose.top - mMainView.getTop()) / mSecondaryView.getHeight();
+
+                default:
+                    return 0;
+            }
+        }
+
+        @Override
+        public void onViewDragStateChanged(int state) {
+            super.onViewDragStateChanged(state);
+            final int prevState = mState;
+
+            switch (state) {
+                case ViewDragHelper.STATE_DRAGGING:
+                    mState = STATE_DRAGGING;
+                    break;
+
+                case ViewDragHelper.STATE_IDLE:
+
+                    // drag edge is left or right
+                    if (mDragEdge == DRAG_EDGE_LEFT || mDragEdge == DRAG_EDGE_RIGHT) {
+                        if (mMainView.getLeft() == mRectMainClose.left) {
+                            mState = STATE_CLOSE;
+                        } else {
+                            mState = STATE_OPEN;
+                        }
+                    }
+
+                    // drag edge is top or bottom
+                    else {
+                        if (mMainView.getTop() == mRectMainClose.top) {
+                            mState = STATE_CLOSE;
+                        } else {
+                            mState = STATE_OPEN;
+                        }
+                    }
+                    break;
+            }
+
+            if (mDragStateChangeListener != null && !mAborted && prevState != mState) {
+                mDragStateChangeListener.onDragStateChanged(mState);
+            }
+        }
+    };
     private int mOnLayoutCount = 0;
-
-    interface DragStateChangeListener {
-        void onDragStateChanged(int state);
-    }
-
-    /**
-     * Listener for monitoring events about swipe layout.
-     */
-    public interface SwipeListener {
-        /**
-         * Called when the main view becomes completely closed.
-         */
-        void onClosed(SmartStationSwipeView view);
-
-        /**
-         * Called when the main view becomes completely opened.
-         */
-        void onOpened(SmartStationSwipeView view);
-
-        /**
-         * Called when the main view's position changes.
-         * @param slideOffset The new offset of the main view within its range, from 0-1
-         */
-        void onSlide(SmartStationSwipeView view, float slideOffset);
-    }
-
-    /**
-     * No-op stub for {@link SwipeListener}. If you only want ot implement a subset
-     * of the listener methods, you can extend this instead of implement the full interface.
-     */
-    public static class SimpleSwipeListener implements SwipeListener {
-        @Override
-        public void onClosed(SmartStationSwipeView view) {}
-
-        @Override
-        public void onOpened(SmartStationSwipeView view) {}
-
-        @Override
-        public void onSlide(SmartStationSwipeView view, float slideOffset) {}
-    }
 
     public SmartStationSwipeView(Context context) {
         super(context);
@@ -159,6 +379,28 @@ public class SmartStationSwipeView extends ViewGroup {
 
     public SmartStationSwipeView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+    }
+
+    public static String getStateString(int state) {
+        switch (state) {
+            case STATE_CLOSE:
+                return "state_close";
+
+            case STATE_CLOSING:
+                return "state_closing";
+
+            case STATE_OPEN:
+                return "state_open";
+
+            case STATE_OPENING:
+                return "state_opening";
+
+            case STATE_DRAGGING:
+                return "state_dragging";
+
+            default:
+                return "undefined";
+        }
     }
 
     @Override
@@ -199,8 +441,7 @@ public class SmartStationSwipeView extends ViewGroup {
         if (getChildCount() >= 2) {
             mSecondaryView = getChildAt(0);
             mMainView = getChildAt(1);
-        }
-        else if (getChildCount() == 1) {
+        } else if (getChildCount() == 1) {
             mMainView = getChildAt(0);
         }
     }
@@ -251,31 +492,31 @@ public class SmartStationSwipeView extends ViewGroup {
 
             switch (mDragEdge) {
                 case DRAG_EDGE_RIGHT:
-                    left    = Math.max(r - measuredChildWidth - getPaddingRight() - l, minLeft);
-                    top     = Math.min(getPaddingTop(), maxBottom);
-                    right   = Math.max(r - getPaddingRight() - l, minLeft);
-                    bottom  = Math.min(measuredChildHeight + getPaddingTop(), maxBottom);
+                    left = Math.max(r - measuredChildWidth - getPaddingRight() - l, minLeft);
+                    top = Math.min(getPaddingTop(), maxBottom);
+                    right = Math.max(r - getPaddingRight() - l, minLeft);
+                    bottom = Math.min(measuredChildHeight + getPaddingTop(), maxBottom);
                     break;
 
                 case DRAG_EDGE_LEFT:
-                    left    = Math.min(getPaddingLeft(), maxRight);
-                    top     = Math.min(getPaddingTop(), maxBottom);
-                    right   = Math.min(measuredChildWidth + getPaddingLeft(), maxRight);
-                    bottom  = Math.min(measuredChildHeight + getPaddingTop(), maxBottom);
+                    left = Math.min(getPaddingLeft(), maxRight);
+                    top = Math.min(getPaddingTop(), maxBottom);
+                    right = Math.min(measuredChildWidth + getPaddingLeft(), maxRight);
+                    bottom = Math.min(measuredChildHeight + getPaddingTop(), maxBottom);
                     break;
 
                 case DRAG_EDGE_TOP:
-                    left    = Math.min(getPaddingLeft(), maxRight);
-                    top     = Math.min(getPaddingTop(), maxBottom);
-                    right   = Math.min(measuredChildWidth + getPaddingLeft(), maxRight);
-                    bottom  = Math.min(measuredChildHeight + getPaddingTop(), maxBottom);
+                    left = Math.min(getPaddingLeft(), maxRight);
+                    top = Math.min(getPaddingTop(), maxBottom);
+                    right = Math.min(measuredChildWidth + getPaddingLeft(), maxRight);
+                    bottom = Math.min(measuredChildHeight + getPaddingTop(), maxBottom);
                     break;
 
                 case DRAG_EDGE_BOTTOM:
-                    left    = Math.min(getPaddingLeft(), maxRight);
-                    top     = Math.max(b - measuredChildHeight - getPaddingBottom() - t, minTop);
-                    right   = Math.min(measuredChildWidth + getPaddingLeft(), maxRight);
-                    bottom  = Math.max(b - getPaddingBottom() - t, minTop);
+                    left = Math.min(getPaddingLeft(), maxRight);
+                    top = Math.max(b - measuredChildHeight - getPaddingBottom() - t, minTop);
+                    right = Math.min(measuredChildWidth + getPaddingLeft(), maxRight);
+                    bottom = Math.max(b - getPaddingBottom() - t, minTop);
                     break;
             }
 
@@ -379,7 +620,7 @@ public class SmartStationSwipeView extends ViewGroup {
             }
 
             if (widthMode == MeasureSpec.AT_MOST) {
-                desiredWidth = (desiredWidth > measuredWidth)? measuredWidth : desiredWidth;
+                desiredWidth = (desiredWidth > measuredWidth) ? measuredWidth : desiredWidth;
             }
         }
 
@@ -392,7 +633,7 @@ public class SmartStationSwipeView extends ViewGroup {
             }
 
             if (heightMode == MeasureSpec.AT_MOST) {
-                desiredHeight = (desiredHeight > measuredHeight)? measuredHeight : desiredHeight;
+                desiredHeight = (desiredHeight > measuredHeight) ? measuredHeight : desiredHeight;
             }
         }
 
@@ -408,6 +649,7 @@ public class SmartStationSwipeView extends ViewGroup {
 
     /**
      * Open the panel to show the secondary view
+     *
      * @param animation true to animate the open motion. {@link SwipeListener} won't be
      *                  called if is animation is false.
      */
@@ -446,6 +688,7 @@ public class SmartStationSwipeView extends ViewGroup {
 
     /**
      * Close the panel to hide the secondary view
+     *
      * @param animation true to animate the close motion. {@link SwipeListener} won't be
      *                  called if is animation is false.
      */
@@ -484,15 +727,8 @@ public class SmartStationSwipeView extends ViewGroup {
     }
 
     /**
-     * Set the minimum fling velocity to cause the layout to open/close.
-     * @param velocity dp per second
-     */
-    public void setMinFlingVelocity(int velocity) {
-        mMinFlingVelocity = velocity;
-    }
-
-    /**
      * Get the minimum fling velocity to cause the layout to open/close.
+     *
      * @return dp per second
      */
     public int getMinFlingVelocity() {
@@ -500,7 +736,32 @@ public class SmartStationSwipeView extends ViewGroup {
     }
 
     /**
+     * Set the minimum fling velocity to cause the layout to open/close.
+     *
+     * @param velocity dp per second
+     */
+    public void setMinFlingVelocity(int velocity) {
+        mMinFlingVelocity = velocity;
+    }
+
+    /**
+     * Get the edge where the layout can be dragged from.
+     *
+     * @return Can be one of these
+     * <ul>
+     *      <li>{@link #DRAG_EDGE_LEFT}</li>
+     *      <li>{@link #DRAG_EDGE_TOP}</li>
+     *      <li>{@link #DRAG_EDGE_RIGHT}</li>
+     *      <li>{@link #DRAG_EDGE_BOTTOM}</li>
+     * </ul>
+     */
+    public int getDragEdge() {
+        return mDragEdge;
+    }
+
+    /**
      * Set the edge where the layout can be dragged from.
+     *
      * @param dragEdge Can be one of these
      *                 <ul>
      *                      <li>{@link #DRAG_EDGE_LEFT}</li>
@@ -511,20 +772,6 @@ public class SmartStationSwipeView extends ViewGroup {
      */
     public void setDragEdge(int dragEdge) {
         mDragEdge = dragEdge;
-    }
-
-    /**
-     * Get the edge where the layout can be dragged from.
-     * @return Can be one of these
-     *                 <ul>
-     *                      <li>{@link #DRAG_EDGE_LEFT}</li>
-     *                      <li>{@link #DRAG_EDGE_TOP}</li>
-     *                      <li>{@link #DRAG_EDGE_RIGHT}</li>
-     *                      <li>{@link #DRAG_EDGE_BOTTOM}</li>
-     *                 </ul>
-     */
-    public int getDragEdge() {
-        return mDragEdge;
     }
 
     public void setSwipeListener(SwipeListener listener) {
@@ -559,12 +806,16 @@ public class SmartStationSwipeView extends ViewGroup {
         return (mState == STATE_CLOSE);
     }
 
-    /** Only used for {@link ViewBinderHelper} */
+    /**
+     * Only used for {@link ViewBinderHelper}
+     */
     public void setDragStateChangeListener(DragStateChangeListener listener) {
         mDragStateChangeListener = listener;
     }
 
-    /** Abort current motion in progress. Only used for {@link ViewBinderHelper} */
+    /**
+     * Abort current motion in progress. Only used for {@link ViewBinderHelper}
+     */
     public void abort() {
         mAborted = true;
         mDragHelper.abort();
@@ -573,6 +824,7 @@ public class SmartStationSwipeView extends ViewGroup {
     /**
      * In RecyclerView/ListView, onLayout should be called 2 times to display children views correctly.
      * This method check if it've already called onLayout two times.
+     *
      * @return true if you should call {@link #requestLayout()}.
      */
     public boolean shouldRequestLayout() {
@@ -739,47 +991,6 @@ public class SmartStationSwipeView extends ViewGroup {
         mGestureDetector = new GestureDetectorCompat(context, mGestureListener);
     }
 
-    private final GestureDetector.OnGestureListener mGestureListener = new GestureDetector.SimpleOnGestureListener() {
-        boolean hasDisallowed = false;
-
-        @Override
-        public boolean onDown(MotionEvent e) {
-            mIsScrolling = false;
-            hasDisallowed = false;
-            return true;
-        }
-
-        @Override
-        public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-            mIsScrolling = true;
-            return false;
-        }
-
-        @Override
-        public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
-            mIsScrolling = true;
-
-            if (getParent() != null) {
-                boolean shouldDisallow;
-
-                if (!hasDisallowed) {
-                    shouldDisallow = getDistToClosestEdge() >= mMinDistRequestDisallowParent;
-                    if (shouldDisallow) {
-                        hasDisallowed = true;
-                    }
-                } else {
-                    shouldDisallow = true;
-                }
-
-                // disallow parent to intercept touch event so that the layout will work
-                // properly on RecyclerView or view that handles scroll gesture.
-                getParent().requestDisallowInterceptTouchEvent(shouldDisallow);
-            }
-
-            return false;
-        }
-    };
-
     private int getDistToClosestEdge() {
         switch (mDragEdge) {
             case DRAG_EDGE_LEFT:
@@ -834,264 +1045,10 @@ public class SmartStationSwipeView extends ViewGroup {
         }
     }
 
-    private final ViewDragHelper.Callback mDragHelperCallback = new ViewDragHelper.Callback() {
-        @Override
-        public boolean tryCaptureView(View child, int pointerId) {
-            mAborted = false;
-
-            if (mLockDrag)
-                return false;
-
-            mDragHelper.captureChildView(mMainView, pointerId);
-            return false;
-        }
-
-        @Override
-        public int clampViewPositionVertical(View child, int top, int dy) {
-            switch (mDragEdge) {
-                case DRAG_EDGE_TOP:
-                    return Math.max(
-                            Math.min(top, mRectMainClose.top + mSecondaryView.getHeight()),
-                            mRectMainClose.top
-                    );
-
-                case DRAG_EDGE_BOTTOM:
-                    return Math.max(
-                            Math.min(top, mRectMainClose.top),
-                            mRectMainClose.top - mSecondaryView.getHeight()
-                    );
-
-                default:
-                    return child.getTop();
-            }
-        }
-
-        @Override
-        public int clampViewPositionHorizontal(View child, int left, int dx) {
-            switch (mDragEdge) {
-                case DRAG_EDGE_RIGHT:
-                    return Math.max(
-                            Math.min(left, mRectMainClose.left),
-                            mRectMainClose.left - mSecondaryView.getWidth()
-                    );
-
-                case DRAG_EDGE_LEFT:
-                    return Math.max(
-                            Math.min(left, mRectMainClose.left + mSecondaryView.getWidth()),
-                            mRectMainClose.left
-                    );
-
-                default:
-                    return child.getLeft();
-            }
-        }
-
-        @Override
-        public void onViewReleased(View releasedChild, float xvel, float yvel) {
-            final boolean velRightExceeded =  pxToDp((int) xvel) >= mMinFlingVelocity;
-            final boolean velLeftExceeded =   pxToDp((int) xvel) <= -mMinFlingVelocity;
-            final boolean velUpExceeded =     pxToDp((int) yvel) <= -mMinFlingVelocity;
-            final boolean velDownExceeded =   pxToDp((int) yvel) >= mMinFlingVelocity;
-
-            final int pivotHorizontal = getHalfwayPivotHorizontal();
-            final int pivotVertical = getHalfwayPivotVertical();
-
-            switch (mDragEdge) {
-                case DRAG_EDGE_RIGHT:
-                    if (velRightExceeded) {
-                        close(true);
-                    } else if (velLeftExceeded) {
-                        open(true);
-                    } else {
-                        if (mMainView.getRight() < pivotHorizontal) {
-                            open(true);
-                        } else {
-                            close(true);
-                        }
-                    }
-                    break;
-
-                case DRAG_EDGE_LEFT:
-                    if (velRightExceeded) {
-                        open(true);
-                    } else if (velLeftExceeded) {
-                        close(true);
-                    } else {
-                        if (mMainView.getLeft() < pivotHorizontal) {
-                            close(true);
-                        } else {
-                            open(true);
-                        }
-                    }
-                    break;
-
-                case DRAG_EDGE_TOP:
-                    if (velUpExceeded) {
-                        close(true);
-                    } else if (velDownExceeded) {
-                        open(true);
-                    } else {
-                        if (mMainView.getTop() < pivotVertical) {
-                            close(true);
-                        } else {
-                            open(true);
-                        }
-                    }
-                    break;
-
-                case DRAG_EDGE_BOTTOM:
-                    if (velUpExceeded) {
-                        open(true);
-                    } else if (velDownExceeded) {
-                        close(true);
-                    } else {
-                        if (mMainView.getBottom() < pivotVertical) {
-                            open(true);
-                        } else {
-                            close(true);
-                        }
-                    }
-                    break;
-            }
-        }
-
-        @Override
-        public void onEdgeDragStarted(int edgeFlags, int pointerId) {
-            super.onEdgeDragStarted(edgeFlags, pointerId);
-
-            if (mLockDrag) {
-                return;
-            }
-
-            boolean edgeStartLeft = (mDragEdge == DRAG_EDGE_RIGHT)
-                    && edgeFlags == ViewDragHelper.EDGE_LEFT;
-
-            boolean edgeStartRight = (mDragEdge == DRAG_EDGE_LEFT)
-                    && edgeFlags == ViewDragHelper.EDGE_RIGHT;
-
-            boolean edgeStartTop = (mDragEdge == DRAG_EDGE_BOTTOM)
-                    && edgeFlags == ViewDragHelper.EDGE_TOP;
-
-            boolean edgeStartBottom = (mDragEdge == DRAG_EDGE_TOP)
-                    && edgeFlags == ViewDragHelper.EDGE_BOTTOM;
-
-            if (edgeStartLeft || edgeStartRight || edgeStartTop || edgeStartBottom) {
-                mDragHelper.captureChildView(mMainView, pointerId);
-            }
-        }
-
-        @Override
-        public void onViewPositionChanged(View changedView, int left, int top, int dx, int dy) {
-            super.onViewPositionChanged(changedView, left, top, dx, dy);
-            if (mMode == MODE_SAME_LEVEL) {
-                if (mDragEdge == DRAG_EDGE_LEFT || mDragEdge == DRAG_EDGE_RIGHT) {
-                    mSecondaryView.offsetLeftAndRight(dx);
-                } else {
-                    mSecondaryView.offsetTopAndBottom(dy);
-                }
-            }
-
-            boolean isMoved = (mMainView.getLeft() != mLastMainLeft) || (mMainView.getTop() != mLastMainTop);
-            if (mSwipeListener != null && isMoved) {
-                if (mMainView.getLeft() == mRectMainClose.left && mMainView.getTop() == mRectMainClose.top) {
-                    mSwipeListener.onClosed(SmartStationSwipeView.this);
-                }
-                else if (mMainView.getLeft() == mRectMainOpen.left && mMainView.getTop() == mRectMainOpen.top) {
-                    mSwipeListener.onOpened(SmartStationSwipeView.this);
-                }
-                else {
-                    mSwipeListener.onSlide(SmartStationSwipeView.this, getSlideOffset());
-                }
-            }
-
-            mLastMainLeft = mMainView.getLeft();
-            mLastMainTop = mMainView.getTop();
-            ViewCompat.postInvalidateOnAnimation(SmartStationSwipeView.this);
-        }
-
-        private float getSlideOffset() {
-            switch (mDragEdge) {
-                case DRAG_EDGE_LEFT:
-                    return (float) (mMainView.getLeft() - mRectMainClose.left) / mSecondaryView.getWidth();
-
-                case DRAG_EDGE_RIGHT:
-                    return (float) (mRectMainClose.left - mMainView.getLeft()) / mSecondaryView.getWidth();
-
-                case DRAG_EDGE_TOP:
-                    return (float) (mMainView.getTop() - mRectMainClose.top) / mSecondaryView.getHeight();
-
-                case DRAG_EDGE_BOTTOM:
-                    return (float) (mRectMainClose.top - mMainView.getTop()) / mSecondaryView.getHeight();
-
-                default:
-                    return 0;
-            }
-        }
-
-        @Override
-        public void onViewDragStateChanged(int state) {
-            super.onViewDragStateChanged(state);
-            final int prevState = mState;
-
-            switch (state) {
-                case ViewDragHelper.STATE_DRAGGING:
-                    mState = STATE_DRAGGING;
-                    break;
-
-                case ViewDragHelper.STATE_IDLE:
-
-                    // drag edge is left or right
-                    if (mDragEdge == DRAG_EDGE_LEFT || mDragEdge == DRAG_EDGE_RIGHT) {
-                        if (mMainView.getLeft() == mRectMainClose.left) {
-                            mState = STATE_CLOSE;
-                        } else {
-                            mState = STATE_OPEN;
-                        }
-                    }
-
-                    // drag edge is top or bottom
-                    else {
-                        if (mMainView.getTop() == mRectMainClose.top) {
-                            mState = STATE_CLOSE;
-                        } else {
-                            mState = STATE_OPEN;
-                        }
-                    }
-                    break;
-            }
-
-            if (mDragStateChangeListener != null && !mAborted && prevState != mState) {
-                mDragStateChangeListener.onDragStateChanged(mState);
-            }
-        }
-    };
-
-    public static String getStateString(int state) {
-        switch (state) {
-            case STATE_CLOSE:
-                return "state_close";
-
-            case STATE_CLOSING:
-                return "state_closing";
-
-            case STATE_OPEN:
-                return "state_open";
-
-            case STATE_OPENING:
-                return "state_opening";
-
-            case STATE_DRAGGING:
-                return "state_dragging";
-
-            default:
-                return "undefined";
-        }
-    }
-
     private int pxToDp(int px) {
         Resources resources = getContext().getResources();
         DisplayMetrics metrics = resources.getDisplayMetrics();
-        return (int) (px / ((float)metrics.densityDpi / DisplayMetrics.DENSITY_DEFAULT));
+        return (int) (px / ((float) metrics.densityDpi / DisplayMetrics.DENSITY_DEFAULT));
     }
 
     private int dpToPx(int dp) {
@@ -1099,5 +1056,49 @@ public class SmartStationSwipeView extends ViewGroup {
         DisplayMetrics metrics = resources.getDisplayMetrics();
         return (int) (dp * ((float) metrics.densityDpi / DisplayMetrics.DENSITY_DEFAULT));
     }
-    
+
+    interface DragStateChangeListener {
+        void onDragStateChanged(int state);
+    }
+
+    /**
+     * Listener for monitoring events about swipe layout.
+     */
+    public interface SwipeListener {
+        /**
+         * Called when the main view becomes completely closed.
+         */
+        void onClosed(SmartStationSwipeView view);
+
+        /**
+         * Called when the main view becomes completely opened.
+         */
+        void onOpened(SmartStationSwipeView view);
+
+        /**
+         * Called when the main view's position changes.
+         *
+         * @param slideOffset The new offset of the main view within its range, from 0-1
+         */
+        void onSlide(SmartStationSwipeView view, float slideOffset);
+    }
+
+    /**
+     * No-op stub for {@link SwipeListener}. If you only want ot implement a subset
+     * of the listener methods, you can extend this instead of implement the full interface.
+     */
+    public static class SimpleSwipeListener implements SwipeListener {
+        @Override
+        public void onClosed(SmartStationSwipeView view) {
+        }
+
+        @Override
+        public void onOpened(SmartStationSwipeView view) {
+        }
+
+        @Override
+        public void onSlide(SmartStationSwipeView view, float slideOffset) {
+        }
+    }
+
 }

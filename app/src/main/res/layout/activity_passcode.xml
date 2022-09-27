@@ -10,8 +10,8 @@
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scaleType="centerCrop"
         android:alpha="0.4"
+        android:scaleType="centerCrop"
         android:src="@drawable/ic_splash_bg_use" />
 
     <include
@@ -131,8 +131,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/_20sdp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_marginBottom="@dimen/_20sdp">
+        android:layout_marginBottom="@dimen/_20sdp"
+        app:layout_constraintBottom_toBottomOf="parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/constraintLayout9"
@@ -144,17 +144,17 @@
             app:layout_constraintTop_toTopOf="parent">
 
             <LinearLayout
+                android:id="@+id/t1"
+                style="@style/RippleRound"
                 android:layout_width="65dp"
                 android:layout_height="65dp"
-                android:id="@+id/t1"
                 android:gravity="center"
-                style="@style/RippleRound"
                 android:orientation="vertical"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/t2"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                >
+                app:layout_constraintTop_toTopOf="parent">
+
                 <com.application.smartstation.view.CustomTextViewMedium
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -167,18 +167,18 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/t2"
+                style="@style/RippleRound"
                 android:layout_width="65dp"
                 android:layout_height="65dp"
-                android:id="@+id/t2"
                 android:gravity="center"
-                style="@style/RippleRound"
                 android:orientation="vertical"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/t3"
                 app:layout_constraintStart_toEndOf="@+id/t1"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.529"
-                >
+                app:layout_constraintVertical_bias="0.529">
+
                 <com.application.smartstation.view.CustomTextViewMedium
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -191,17 +191,17 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/t3"
+                style="@style/RippleRound"
                 android:layout_width="65dp"
                 android:layout_height="65dp"
-                android:id="@+id/t3"
                 android:gravity="center"
-                style="@style/RippleRound"
                 android:orientation="vertical"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/t2"
-                app:layout_constraintTop_toTopOf="parent"
-                >
+                app:layout_constraintTop_toTopOf="parent">
+
                 <com.application.smartstation.view.CustomTextViewMedium
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -209,8 +209,7 @@
                     android:text="3"
                     android:textColor="@color/black"
                     android:textSize="30sp"
-                    android:textStyle="bold"
-                    />
+                    android:textStyle="bold" />
 
             </LinearLayout>
 
@@ -221,24 +220,24 @@
             android:id="@+id/constraintLayout10"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
             android:layout_marginHorizontal="@dimen/_20sdp"
+            android:layout_marginTop="16dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/constraintLayout9">
 
             <LinearLayout
+                android:id="@+id/t4"
+                style="@style/RippleRound"
                 android:layout_width="65dp"
                 android:layout_height="65dp"
-                android:id="@+id/t4"
                 android:gravity="center"
-                style="@style/RippleRound"
                 android:orientation="vertical"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/t5"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                >
+                app:layout_constraintTop_toTopOf="parent">
+
                 <com.application.smartstation.view.CustomTextViewMedium
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -251,18 +250,18 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/t5"
+                style="@style/RippleRound"
                 android:layout_width="65dp"
                 android:layout_height="65dp"
-                android:id="@+id/t5"
                 android:gravity="center"
-                style="@style/RippleRound"
                 android:orientation="vertical"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/t6"
                 app:layout_constraintStart_toEndOf="@+id/t4"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.529"
-                >
+                app:layout_constraintVertical_bias="0.529">
+
                 <com.application.smartstation.view.CustomTextViewMedium
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -275,24 +274,24 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/t6"
+                style="@style/RippleRound"
                 android:layout_width="65dp"
                 android:layout_height="65dp"
-                android:id="@+id/t6"
                 android:gravity="center"
-                style="@style/RippleRound"
                 android:orientation="vertical"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/t5"
-                app:layout_constraintTop_toTopOf="parent"
-                >
+                app:layout_constraintTop_toTopOf="parent">
+
                 <com.application.smartstation.view.CustomTextViewMedium
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     android:text="6"
-                    android:textSize="30sp"
                     android:textColor="@color/black"
+                    android:textSize="30sp"
                     android:textStyle="bold" />
 
             </LinearLayout>
@@ -311,65 +310,65 @@
             app:layout_constraintTop_toBottomOf="@+id/constraintLayout10">
 
             <LinearLayout
+                android:id="@+id/t7"
+                style="@style/RippleRound"
                 android:layout_width="65dp"
                 android:layout_height="65dp"
-                android:id="@+id/t7"
                 android:gravity="center"
-                style="@style/RippleRound"
                 android:orientation="vertical"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/t8"
                 app:layout_constraintHorizontal_chainStyle="spread"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                >
+                app:layout_constraintTop_toTopOf="parent">
+
                 <com.application.smartstation.view.CustomTextViewMedium
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:textColor="@color/black"
                     android:text="7"
+                    android:textColor="@color/black"
                     android:textSize="30sp"
                     android:textStyle="bold" />
 
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/t8"
+                style="@style/RippleRound"
                 android:layout_width="65dp"
                 android:layout_height="65dp"
-                android:id="@+id/t8"
                 android:gravity="center"
-                style="@style/RippleRound"
                 android:orientation="vertical"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/t9"
                 app:layout_constraintStart_toEndOf="@+id/t7"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.529"
-                >
+                app:layout_constraintVertical_bias="0.529">
+
                 <com.application.smartstation.view.CustomTextViewMedium
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     android:text="8"
-                    android:textSize="30sp"
                     android:textColor="@color/black"
+                    android:textSize="30sp"
                     android:textStyle="bold" />
 
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/t9"
+                style="@style/RippleRound"
                 android:layout_width="65dp"
                 android:layout_height="65dp"
-                android:id="@+id/t9"
                 android:gravity="center"
-                style="@style/RippleRound"
                 android:orientation="vertical"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/t8"
-                app:layout_constraintTop_toTopOf="parent"
-                >
+                app:layout_constraintTop_toTopOf="parent">
+
                 <com.application.smartstation.view.CustomTextViewMedium
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -386,8 +385,8 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
             android:layout_marginHorizontal="@dimen/_20sdp"
+            android:layout_marginTop="16dp"
 
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -395,20 +394,19 @@
             app:layout_constraintTop_toBottomOf="@+id/constraintLayout11">
 
             <RelativeLayout
+                android:id="@+id/tvdot"
                 android:layout_width="65dp"
                 android:layout_height="65dp"
-                android:id="@+id/tvdot"
                 android:gravity="center_horizontal"
-                android:visibility="visible"
                 android:orientation="vertical"
+                android:visibility="visible"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/t0"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintHorizontal_chainStyle="spread"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.0"
-                >
+                app:layout_constraintVertical_bias="0.0">
 
                 <ImageView
                     android:id="@+id/imgFingerprint"
@@ -424,18 +422,18 @@
             </RelativeLayout>
 
             <LinearLayout
+                android:id="@+id/t0"
+                style="@style/RippleRound"
                 android:layout_width="65dp"
                 android:layout_height="65dp"
-                android:id="@+id/t0"
                 android:gravity="center"
-                style="@style/RippleRound"
                 android:orientation="vertical"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/clearImg1"
                 app:layout_constraintStart_toEndOf="@+id/tvdot"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.0"
-                >
+                app:layout_constraintVertical_bias="0.0">
+
                 <com.application.smartstation.view.CustomTextViewMedium
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -448,34 +446,33 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/clearImg1"
+                style="@style/RippleRound"
                 android:layout_width="65dp"
                 android:layout_height="65dp"
-                android:id="@+id/clearImg1"
                 android:gravity="center"
-                style="@style/RippleRound"
                 android:orientation="vertical"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toEndOf="@+id/t0"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.0"
-                >
+                app:layout_constraintVertical_bias="0.0">
+
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    app:tint="@color/black"
                     android:src="@drawable/ic_backspace"
                     android:textSize="30sp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    app:tint="@color/black" />
 
             </LinearLayout>
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
-
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

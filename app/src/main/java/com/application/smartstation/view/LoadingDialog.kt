@@ -16,15 +16,15 @@ class LoadingDialog(context: Context) {
         alertDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
     }
 
-    fun show(){
-        if(!isShowing())
+    fun show() {
+        if (!isShowing())
             alertDialog.show()
     }
 
     fun isShowing(): Boolean = alertDialog.isShowing
 
-    fun dismiss(){
-        if(isShowing())
+    fun dismiss() {
+        if (isShowing())
             alertDialog.dismiss()
     }
 }

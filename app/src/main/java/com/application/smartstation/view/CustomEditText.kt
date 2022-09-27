@@ -6,14 +6,17 @@ import android.util.AttributeSet
 
 class CustomEditText : androidx.appcompat.widget.AppCompatEditText {
 
-    constructor(context: Context) : super(context){
-        setFont()
-    }
-    constructor(context: Context, attrs : AttributeSet) : super(context,attrs){
+    constructor(context: Context) : super(context) {
         setFont()
     }
 
-    constructor(context: Context, attrs: AttributeSet, defStyleAttr : Int) : super(context, attrs, defStyleAttr){
+    constructor(context: Context, attrs: AttributeSet) : super(context, attrs) {
+        setFont()
+    }
+
+    constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(context,
+        attrs,
+        defStyleAttr) {
         setFont()
     }
 

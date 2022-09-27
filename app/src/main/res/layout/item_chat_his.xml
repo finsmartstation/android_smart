@@ -1,25 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
     android:layout_marginStart="16dp"
     android:layout_marginEnd="16dp"
-    android:layout_height="wrap_content">
+    android:orientation="vertical">
 
     <LinearLayout
         android:id="@+id/llChatDate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="center"
         android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
-        android:paddingStart="8dp"
-        android:paddingEnd="8dp"
-        android:paddingTop="8dp"
-        android:paddingBottom="8dp"
-        android:layout_gravity="center"
         android:background="@drawable/chat_date_bg"
-        >
+        android:paddingStart="8dp"
+        android:paddingTop="8dp"
+        android:paddingEnd="8dp"
+        android:paddingBottom="8dp">
 
         <com.application.smartstation.view.CustomTextViewMedium
             android:id="@+id/txtDate"
@@ -36,75 +35,70 @@
         android:id="@+id/llChatMsg"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:visibility="visible"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"
         android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
         android:layout_marginEnd="16dp"
+        android:layout_marginBottom="8dp"
         android:layout_weight="1"
         android:orientation="vertical"
-        >
+        android:visibility="visible">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/llRec"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:visibility="gone"
             android:layout_marginEnd="30dp"
-            android:padding="4dp"
             android:background="@drawable/chat_rec_bg"
-            >
+            android:padding="4dp"
+            android:visibility="gone">
 
             <com.application.smartstation.view.CustomTextViewBold
                 android:id="@+id/txtRecName"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="4dp"
+                android:textAlignment="textStart"
                 android:textColor="@color/black"
                 android:textSize="16sp"
-                android:layout_marginStart="8dp"
-                android:layout_marginEnd="8dp"
-                android:textAlignment="textStart"
                 android:visibility="gone"
-                android:layout_marginTop="4dp"
-                android:layout_marginBottom="4dp"
-                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/replyLayoutRec"
-                >
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/replyLayoutRec">
 
             </com.application.smartstation.view.CustomTextViewBold>
 
             <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/imgChat"
                 android:layout_width="200dp"
                 android:layout_height="180dp"
-                android:id="@+id/imgChat"
-                android:scaleType="centerCrop"
                 android:layout_margin="4dp"
+                android:scaleType="centerCrop"
                 android:visibility="gone"
-                app:layout_constraintTop_toBottomOf="@+id/txtRecName"
-                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize24Percent"
-                />
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/txtRecName"
+                app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize24Percent" />
 
             <com.application.smartstation.view.CustomTextViewMedium
                 android:id="@+id/txtTimeImg"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom|right"
+                android:layout_marginTop="4dp"
                 android:layout_marginEnd="16dp"
+                android:layout_marginBottom="4dp"
+                android:padding="4dp"
                 android:paddingRight="5dp"
                 android:textColor="@color/color_chat_popup_gray"
                 android:textSize="12sp"
                 android:visibility="gone"
-                android:layout_marginTop="4dp"
-                android:layout_marginBottom="4dp"
-                android:padding="4dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/imgChat"
-                >
+                app:layout_constraintTop_toBottomOf="@id/imgChat">
 
             </com.application.smartstation.view.CustomTextViewMedium>
 
@@ -113,10 +107,10 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="4dp"
+                android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                android:visibility="gone">
+                app:layout_constraintTop_toTopOf="parent">
 
                 <View
                     android:id="@+id/image_line"
@@ -135,21 +129,20 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="8dp"
-                    android:textSize="14sp"
                     android:textColor="@color/color_green"
+                    android:textSize="14sp"
                     app:layout_constraintEnd_toEndOf="@+id/textQuotedMessage"
                     app:layout_constraintStart_toStartOf="@+id/image_line"
-                    app:layout_constraintTop_toTopOf="parent"
-                    />
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <com.application.smartstation.view.CustomTextViewMedium
                     android:id="@+id/textQuotedMessage"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
-                    android:layout_marginBottom="4dp"
                     android:layout_marginStart="16dp"
+                    android:layout_marginTop="4dp"
                     android:layout_marginEnd="16dp"
+                    android:layout_marginBottom="4dp"
                     android:ellipsize="end"
                     android:maxLines="3"
                     android:textColor="@color/black"
@@ -157,8 +150,7 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="@+id/image_line"
-                    app:layout_constraintTop_toBottomOf="@+id/txtReplyName"
-                    />
+                    app:layout_constraintTop_toBottomOf="@+id/txtReplyName" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -169,13 +161,13 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="right|bottom"
                 android:gravity="left|center_vertical"
-                app:viewPartMain="@+id/txtMsg"
                 android:padding="8dp"
-                app:viewPartSlave="@+id/lytStatusContainer"
-                app:layout_constraintTop_toBottomOf="@+id/txtRecName"
-                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent">
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/txtRecName"
+                app:viewPartMain="@+id/txtMsg"
+                app:viewPartSlave="@+id/lytStatusContainer">
 
                 <com.vanniktech.emoji.EmojiTextView
                     android:id="@+id/txtMsg"
@@ -218,45 +210,42 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/llSend"
-            android:layout_gravity="end"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
+            android:layout_gravity="end"
             android:layout_marginStart="30dp"
-            android:visibility="gone"
+            android:layout_marginTop="8dp"
             android:background="@drawable/send_chat_bg_blue"
-            >
+            android:visibility="gone">
 
             <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/imgChatSend"
                 android:layout_width="200dp"
                 android:layout_height="180dp"
-                android:id="@+id/imgChatSend"
                 android:layout_margin="4dp"
                 android:scaleType="centerCrop"
                 android:visibility="gone"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize24Percent"
-                />
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize24Percent" />
 
             <com.application.smartstation.view.CustomTextViewMedium
                 android:id="@+id/txtTimeImgSend"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom|right"
+                android:layout_marginTop="4dp"
                 android:layout_marginEnd="16dp"
+                android:layout_marginBottom="4dp"
+                android:padding="4dp"
                 android:paddingRight="5dp"
                 android:textColor="@color/white"
                 android:textSize="12sp"
-                android:layout_marginTop="4dp"
-                android:layout_marginBottom="4dp"
                 android:visibility="gone"
-                android:padding="4dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/imgChatSend"
-                >
+                app:layout_constraintTop_toBottomOf="@id/imgChatSend">
 
             </com.application.smartstation.view.CustomTextViewMedium>
 
@@ -265,10 +254,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="4dp"
+                android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                android:visibility="gone">
+                app:layout_constraintTop_toTopOf="parent">
 
                 <View
                     android:id="@+id/image_line_send"
@@ -287,31 +276,29 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="8dp"
-                    android:textSize="14sp"
                     android:textColor="@color/white"
+                    android:textSize="14sp"
                     app:layout_constraintEnd_toEndOf="@+id/textQuotedMessageSend"
                     app:layout_constraintStart_toStartOf="@+id/image_line_send"
-                    app:layout_constraintTop_toTopOf="parent"
-                    />
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <com.application.smartstation.view.CustomTextViewMedium
                     android:id="@+id/textQuotedMessageSend"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
-                    android:layout_marginBottom="4dp"
                     android:layout_marginStart="16dp"
+                    android:layout_marginTop="4dp"
                     android:layout_marginEnd="16dp"
+                    android:layout_marginBottom="4dp"
                     android:ellipsize="end"
                     android:maxLines="3"
+                    android:text="aaaaaa"
                     android:textColor="@color/white"
                     android:textSize="13sp"
-                    android:text="aaaaaa"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="@+id/image_line_send"
-                    app:layout_constraintTop_toBottomOf="@+id/txtReplyNameSend"
-                    />
+                    app:layout_constraintTop_toBottomOf="@+id/txtReplyNameSend" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -321,13 +308,13 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="right|bottom"
                 android:gravity="left|center_vertical"
-                app:viewPartMain="@+id/txtMsgSend"
                 android:padding="8dp"
-                app:viewPartSlave="@+id/lytStatusContainers"
-                app:layout_constraintTop_toBottomOf="@+id/replyLayoutSend"
-                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent">
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/replyLayoutSend"
+                app:viewPartMain="@+id/txtMsgSend"
+                app:viewPartSlave="@+id/lytStatusContainers">
 
                 <com.vanniktech.emoji.EmojiTextView
                     android:id="@+id/txtMsgSend"

@@ -26,13 +26,13 @@ import com.vanniktech.emoji.EmojiImageView
 import com.vanniktech.emoji.EmojiPopup
 import com.vanniktech.emoji.emoji.Emoji
 import dagger.hilt.android.AndroidEntryPoint
-import okhttp3.MediaType
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
+import okhttp3.RequestBody.Companion.asRequestBody
+import okhttp3.RequestBody.Companion.toRequestBody
 import org.json.JSONArray
 import java.io.File
-import java.util.*
 
 
 @AndroidEntryPoint
@@ -42,10 +42,10 @@ class AddGroupActivity : BaseActivity(), ImageSelectorDialog.Action {
     val apiViewModel: ApiViewModel by viewModels()
     var user = ""
     var pics = ""
-    var listAdd:ArrayList<DataUserList> = ArrayList()
+    var listAdd: ArrayList<DataUserList> = ArrayList()
     var emojiPopup: EmojiPopup? = null
-    var imageSelectorDialog:ImageSelectorDialog? = null
-    var grpProfile:MultipartBody.Part? = null
+    var imageSelectorDialog: ImageSelectorDialog? = null
+    var grpProfile: MultipartBody.Part? = null
     var addGrpAdapter: AddGroupAdapter? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -58,7 +58,7 @@ class AddGroupActivity : BaseActivity(), ImageSelectorDialog.Action {
     private fun initView() {
         binding.ilHeader.txtHeader.text = resources.getString(R.string.create_grp)
 
-        binding.rvParticipant.layoutManager = GridLayoutManager(this,4)
+        binding.rvParticipant.layoutManager = GridLayoutManager(this, 4)
         addGrpAdapter = AddGroupAdapter(this)
         binding.rvParticipant.adapter = addGrpAdapter
 
@@ -66,11 +66,12 @@ class AddGroupActivity : BaseActivity(), ImageSelectorDialog.Action {
 
         }
 
-        if (intent != null){
+        if (intent != null) {
             user = intent!!.getStringExtra("members")!!
             listAdd = CreateGroupActivity.listAdd
-            binding.txtParticipants.text = resources.getString(R.string.participant)+" "+listAdd.size
-            addGrpAdapter!!.setChat(listAdd,false)
+            binding.txtParticipants.text =
+                resources.getString(R.string.participant) + " " + listAdd.size
+            addGrpAdapter!!.setChat(listAdd, false)
         }
 
         emojiPopup = EmojiPopup.Builder.fromRootView(binding.clAddGrp)
@@ -106,7 +107,8 @@ class AddGroupActivity : BaseActivity(), ImageSelectorDialog.Action {
 
         binding.imgCamera.setOnClickListener {
             imagePermission {
-                imageSelectorDialog = ImageSelectorDialog(this, this,resources.getString(R.string.profile_pht))
+                imageSelectorDialog =
+                    ImageSelectorDialog(this, this, resources.getString(R.string.profile_pht))
             }
         }
 
@@ -121,71 +123,78 @@ class AddGroupActivity : BaseActivity(), ImageSelectorDialog.Action {
             when {
                 TextUtils.isEmpty(grpName) -> toast(resources.getString(R.string.please_enter_grp_name))
                 else -> {
-                    val user_id: RequestBody = RequestBody.create("text/plain".toMediaTypeOrNull(), UtilsDefault.getSharedPreferenceString(
-                        Constants.USER_ID)!!)
-                    val accessToken: RequestBody = RequestBody.create("text/plain".toMediaTypeOrNull(),
+                    val user_id: RequestBody = UtilsDefault.getSharedPreferenceString(
+                        Constants.USER_ID)!!.toRequestBody("text/plain".toMediaTypeOrNull())
+                    val accessToken: RequestBody =
                         UtilsDefault.getSharedPreferenceString(Constants.ACCESS_TOKEN)!!
-                    )
-                    val group_name: RequestBody = RequestBody.create("text/plain".toMediaTypeOrNull(),
+                            .toRequestBody("text/plain".toMediaTypeOrNull())
+                    val group_name: RequestBody =
                         grpName
-                    )
+                            .toRequestBody("text/plain".toMediaTypeOrNull())
 
-                    val member = "["+user+"]"
+                    val member = "[" + user + "]"
                     val jsonArray = JSONArray(member)
                     val strArr = arrayOfNulls<String>(jsonArray.length())
                     for (i in 0 until jsonArray.length()) {
                         strArr[i] = jsonArray.getString(i)
                     }
 //                    val members: Array<String?> = strArr
-                    val members:RequestBody = RequestBody.create("text/plain".toMediaTypeOrNull(),
-                        user
-                    )
+                    val members: RequestBody = user
+                        .toRequestBody("text/plain".toMediaTypeOrNull())
 //                    Log.d("TAG", "setOnClickListener: "+ Arrays.toString(members))
                     if (pics != null && pics != "") {
                         val file = File(pics)
                         val requestBody =
-                            RequestBody.create("multipart/form-data".toMediaTypeOrNull(), file)
+                            file.asRequestBody("multipart/form-data".toMediaTypeOrNull())
                         grpProfile = MultipartBody.Part.createFormData("group_profile",
-                            file.getName(),
+                            file.name,
                             requestBody)
-                    }else{
-                        val attachmentEmpty: RequestBody = RequestBody.create("text/plain".toMediaTypeOrNull(), "")
+                    } else {
+                        val attachmentEmpty: RequestBody =
+                            "".toRequestBody("text/plain".toMediaTypeOrNull())
                         grpProfile =
                             MultipartBody.Part.createFormData("group_profile", "", attachmentEmpty)
                     }
-                    Log.d("TAG", "setOnClickListener: "+pics)
-                    createGrp(user_id,accessToken,group_name,members,grpProfile)
+                    Log.d("TAG", "setOnClickListener: " + pics)
+                    createGrp(user_id, accessToken, group_name, members, grpProfile)
                 }
             }
         }
     }
 
-    private fun createGrp(userId: RequestBody, accessToken: RequestBody, groupName: RequestBody, members: RequestBody, grpProfile: MultipartBody.Part?) {
-        apiViewModel.grpCreate(userId,accessToken,groupName,members,grpProfile!!).observe(this, Observer {
-            it.let {
-                when(it.status){
-                    Status.LOADING -> {
-                        showProgress()
-                    }
-                    Status.SUCCESS -> {
-                        dismissProgress()
-                        if (it.data!!.status){
-                            toast(it.data.message)
-                            CreateGroupActivity.listAdd.clear()
-                            startActivity(Intent(this,MainActivity::class.java)
-                                .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK))
-                            finish()
-                        }else{
-                            toast(it.data.message)
+    private fun createGrp(
+        userId: RequestBody,
+        accessToken: RequestBody,
+        groupName: RequestBody,
+        members: RequestBody,
+        grpProfile: MultipartBody.Part?,
+    ) {
+        apiViewModel.grpCreate(userId, accessToken, groupName, members, grpProfile!!)
+            .observe(this, Observer {
+                it.let {
+                    when (it.status) {
+                        Status.LOADING -> {
+                            showProgress()
+                        }
+                        Status.SUCCESS -> {
+                            dismissProgress()
+                            if (it.data!!.status) {
+                                toast(it.data.message)
+                                CreateGroupActivity.listAdd.clear()
+                                startActivity(Intent(this, MainActivity::class.java)
+                                    .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK))
+                                finish()
+                            } else {
+                                toast(it.data.message)
+                            }
+                        }
+                        Status.ERROR -> {
+                            dismissProgress()
+                            toast(it.message!!)
                         }
                     }
-                    Status.ERROR -> {
-                        dismissProgress()
-                        toast(it.message!!)
-                    }
                 }
-            }
-        })
+            })
     }
 
     override fun onImageSelected(imagePath: String, filename: String) {
@@ -193,10 +202,10 @@ class AddGroupActivity : BaseActivity(), ImageSelectorDialog.Action {
         crop(Uri.fromFile(file))
     }
 
-    fun crop(uri: Uri){
+    fun crop(uri: Uri) {
         CropImage.activity(uri)
             .setGuidelines(CropImageView.Guidelines.ON)
-            .setAspectRatio(1,1)
+            .setAspectRatio(1, 1)
             .setCropShape(CropImageView.CropShape.RECTANGLE)
             .setAutoZoomEnabled(true)
             .start(this)
@@ -208,7 +217,7 @@ class AddGroupActivity : BaseActivity(), ImageSelectorDialog.Action {
             CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE -> {
                 val result = CropImage.getActivityResult(data)
                 if (resultCode == RESULT_OK) {
-                    val uri = result.getUri()
+                    val uri = result.uri
                     Glide.with(this).load(uri).into(binding.imgCamera)
                     pics = uri.path.toString()
                 }

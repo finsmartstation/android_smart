@@ -5,7 +5,6 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.text.TextUtils
-import android.util.Log
 import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -20,24 +19,25 @@ import com.application.smartstation.util.viewBinding
 import com.application.smartstation.view.ImageSelectorDialog
 import com.application.smartstation.viewmodel.ApiViewModel
 import com.bumptech.glide.Glide
-import com.bumptech.glide.request.RequestOptions
 import com.theartofdev.edmodo.cropper.CropImage
 import com.theartofdev.edmodo.cropper.CropImageView
 import dagger.hilt.android.AndroidEntryPoint
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
+import okhttp3.RequestBody.Companion.asRequestBody
+import okhttp3.RequestBody.Companion.toRequestBody
 import java.io.File
 
 
 @AndroidEntryPoint
-class ProfileFragment : BaseFragment(R.layout.fragment_profile),ImageSelectorDialog.Action {
+class ProfileFragment : BaseFragment(R.layout.fragment_profile), ImageSelectorDialog.Action {
 
     private val binding by viewBinding(FragmentProfileBinding::bind)
-    val apiViewModel:ApiViewModel by viewModels()
-    var imageSelectorDialog:ImageSelectorDialog? = null
-    var pics=""
-    var profile:MultipartBody.Part? = null
+    val apiViewModel: ApiViewModel by viewModels()
+    var imageSelectorDialog: ImageSelectorDialog? = null
+    var pics = ""
+    var profile: MultipartBody.Part? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -48,7 +48,9 @@ class ProfileFragment : BaseFragment(R.layout.fragment_profile),ImageSelectorDia
     private fun setOnClickListener() {
         binding.imgProfile.setOnClickListener {
             imagePermission {
-                imageSelectorDialog = ImageSelectorDialog(this, this,requireActivity().getString(R.string.profile_pht))
+                imageSelectorDialog = ImageSelectorDialog(this,
+                    this,
+                    requireActivity().getString(R.string.profile_pht))
             }
         }
 
@@ -65,23 +67,26 @@ class ProfileFragment : BaseFragment(R.layout.fragment_profile),ImageSelectorDia
                     if (!profilePic.isNullOrEmpty()) {
                         val file = File(profilePic)
                         val requestBody =
-                            RequestBody.create("multipart/form-data".toMediaTypeOrNull(), file)
-                        profile  = MultipartBody.Part.createFormData("profile_pic",
-                            file.getName(),
+                            file.asRequestBody("multipart/form-data".toMediaTypeOrNull())
+                        profile = MultipartBody.Part.createFormData("profile_pic",
+                            file.name,
                             requestBody)
 
-                    }else{
-                        val attachmentEmpty: RequestBody = RequestBody.create("text/plain".toMediaTypeOrNull(), "")
+                    } else {
+                        val attachmentEmpty: RequestBody =
+                            "".toRequestBody("text/plain".toMediaTypeOrNull())
                         profile =
                             MultipartBody.Part.createFormData("profile_pic", "", attachmentEmpty)
                     }
-                    val name1: RequestBody = RequestBody.create("text/plain".toMediaTypeOrNull(), name)
-                    val user_id: RequestBody = RequestBody.create("text/plain".toMediaTypeOrNull(), UtilsDefault.getSharedPreferenceString(Constants.USER_ID)!!)
-                    val accessToken: RequestBody = RequestBody.create("text/plain".toMediaTypeOrNull(),
+                    val name1: RequestBody =
+                        name.toRequestBody("text/plain".toMediaTypeOrNull())
+                    val user_id: RequestBody = UtilsDefault.getSharedPreferenceString(Constants.USER_ID)!!
+                        .toRequestBody("text/plain".toMediaTypeOrNull())
+                    val accessToken: RequestBody =
                         UtilsDefault.getSharedPreferenceString(Constants.ACCESS_TOKEN)!!
-                    )
+                            .toRequestBody("text/plain".toMediaTypeOrNull())
 
-                    updateProfile(user_id,accessToken,name1, profile!!)
+                    updateProfile(user_id, accessToken, name1, profile!!)
                 }
             }
         }
@@ -91,41 +96,45 @@ class ProfileFragment : BaseFragment(R.layout.fragment_profile),ImageSelectorDia
         user_id: RequestBody,
         accessToken: RequestBody,
         name: RequestBody,
-        profile: MultipartBody.Part
+        profile: MultipartBody.Part,
     ) {
-        apiViewModel.updateProfile(user_id,accessToken,name,profile).observe(requireActivity(), Observer {
-            it.let {
-                when(it.status){
-                    Status.LOADING -> {
-                        showProgress()
-                    }
-                    Status.SUCCESS -> {
-                        dismissProgress()
-                        if (it.data!!.status){
-                            toast(it.data.message)
-                            UtilsDefault.updateSharedPreferenceString(Constants.PROFILE_PIC,it.data.data.profile_pic)
-                            UtilsDefault.updateSharedPreferenceString(Constants.NAME,it.data.data.name)
-                            UtilsDefault.updateSharedPreferenceString(Constants.ABOUT,it.data.data.about)
-                            UtilsDefault.setLoggedIn(requireActivity(),true)
-                            startActivity(Intent(requireActivity(),MainActivity::class.java))
-                            activity?.finish()
-                        }else{
-                            toast(it.data.message)
+        apiViewModel.updateProfile(user_id, accessToken, name, profile)
+            .observe(requireActivity(), Observer {
+                it.let {
+                    when (it.status) {
+                        Status.LOADING -> {
+                            showProgress()
+                        }
+                        Status.SUCCESS -> {
+                            dismissProgress()
+                            if (it.data!!.status) {
+                                toast(it.data.message)
+                                UtilsDefault.updateSharedPreferenceString(Constants.PROFILE_PIC,
+                                    it.data.data.profile_pic)
+                                UtilsDefault.updateSharedPreferenceString(Constants.NAME,
+                                    it.data.data.name)
+                                UtilsDefault.updateSharedPreferenceString(Constants.ABOUT,
+                                    it.data.data.about)
+                                UtilsDefault.setLoggedIn(requireActivity(), true)
+                                startActivity(Intent(requireActivity(), MainActivity::class.java))
+                                activity?.finish()
+                            } else {
+                                toast(it.data.message)
+                            }
+                        }
+                        Status.ERROR -> {
+                            dismissProgress()
+                            toast(it.message!!)
                         }
                     }
-                    Status.ERROR -> {
-                        dismissProgress()
-                        toast(it.message!!)
-                    }
                 }
-            }
-        })
+            })
     }
 
     private fun initView() {
 
     }
-    
+
     override fun onResume() {
         super.onResume()
         loginBack = 1
@@ -136,13 +145,13 @@ class ProfileFragment : BaseFragment(R.layout.fragment_profile),ImageSelectorDia
         crop(Uri.fromFile(file))
     }
 
-    fun crop(uri: Uri){
+    fun crop(uri: Uri) {
         CropImage.activity(uri)
             .setGuidelines(CropImageView.Guidelines.ON)
-            .setAspectRatio(1,1)
+            .setAspectRatio(1, 1)
             .setCropShape(CropImageView.CropShape.RECTANGLE)
             .setAutoZoomEnabled(true)
-            .start(requireContext(),this)
+            .start(requireContext(), this)
     }
 
 //    private fun uploadImg(profileImage: MultipartBody.Part) {
@@ -176,14 +185,13 @@ class ProfileFragment : BaseFragment(R.layout.fragment_profile),ImageSelectorDia
 //    }
 
 
-
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         when (requestCode) {
             CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE -> {
                 val result = CropImage.getActivityResult(data)
                 if (resultCode == RESULT_OK) {
-                    val uri = result.getUri()
+                    val uri = result.uri
                     Glide.with(requireActivity()).load(uri).into(binding.imgProfile)
                     pics = uri.path.toString()
                 }

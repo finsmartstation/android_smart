@@ -2,19 +2,19 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:background="@drawable/chat_round_use"
-    android:orientation="vertical"
+    android:layout_height="wrap_content"
     android:layout_marginStart="16dp"
     android:layout_marginEnd="16dp"
-    android:layout_height="wrap_content">
+    android:background="@drawable/chat_round_use"
+    android:orientation="vertical">
 
     <ImageView
         android:id="@+id/imgClose"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
         android:layout_gravity="end"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="10dp"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
         android:src="@drawable/close"
         app:tint="@color/color_green" />
 
@@ -41,13 +41,13 @@
         android:id="@+id/txtFileName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:hint="@string/upload_file"
-        android:textColorHint="@color/grey"
         android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
-        android:textColor="@color/black"
+        android:hint="@string/upload_file"
         android:textAlignment="center"
+        android:textColor="@color/black"
+        android:textColorHint="@color/grey"
         android:textSize="18sp">
 
     </com.application.smartstation.view.CustomTextViewBold>
@@ -57,50 +57,47 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
         android:layout_marginTop="16dp"
-        android:orientation="horizontal"
+        android:layout_marginEnd="16dp"
         android:gravity="center"
-        >
+        android:orientation="horizontal">
 
         <RadioButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/free"
-            android:layout_marginEnd="8dp"
             android:id="@+id/rbtnFree"
-            android:layout_gravity="center_horizontal"
-            android:checked="true"
             style="@style/MyRadioButton"
-            android:textSize="18sp"
-            android:fontFamily="@font/dinbold"
-            />
-
-        <RadioButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/time_period"
-            android:id="@+id/rbtnTime"
-            android:layout_marginStart="8dp"
             android:layout_gravity="center_horizontal"
-            android:checked="false"
-            style="@style/MyRadioButton"
+            android:layout_marginEnd="8dp"
+            android:checked="true"
             android:fontFamily="@font/dinbold"
+            android:text="@string/free"
+            android:textSize="18sp" />
+
+        <RadioButton
+            android:id="@+id/rbtnTime"
+            style="@style/MyRadioButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginStart="8dp"
+            android:checked="false"
+            android:fontFamily="@font/dinbold"
+            android:text="@string/time_period"
             android:textSize="18sp" />
 
 
     </RadioGroup>
 
     <LinearLayout
+        android:id="@+id/llTime"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/llTime"
-        android:visibility="gone"
-        android:orientation="vertical"
         android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
         android:layout_marginTop="16dp"
-        >
+        android:layout_marginEnd="16dp"
+        android:orientation="vertical"
+        android:visibility="gone">
 
         <com.application.smartstation.view.CustomTextViewBold
             android:layout_width="match_parent"
@@ -114,28 +111,25 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
             android:layout_marginTop="16dp"
-            >
+            android:orientation="horizontal">
 
             <Spinner
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
                 android:id="@+id/spTime"
-                android:layout_marginEnd="8dp"
-                android:layout_weight="1"
                 style="@style/mySpinnerItemStyle"
-                />
-
-            <Spinner
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
+                android:layout_marginEnd="8dp"
+                android:layout_weight="1" />
+
+            <Spinner
                 android:id="@+id/spHrs"
                 style="@style/mySpinnerItemStyle"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
                 android:layout_marginStart="8dp"
                 android:layout_weight="1"
-                android:backgroundTint="@color/grey"
-                />
+                android:backgroundTint="@color/grey" />
 
 
         </LinearLayout>
@@ -146,31 +140,29 @@
     <androidx.cardview.widget.CardView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:cardElevation="8dp"
-        android:layout_marginTop="36dp"
         android:layout_gravity="center"
+        android:layout_marginTop="36dp"
         android:layout_marginBottom="36dp"
         app:cardCornerRadius="30dp"
-        >
+        app:cardElevation="8dp">
 
         <LinearLayout
             android:id="@+id/btnFile"
             android:layout_width="230dp"
             android:layout_height="wrap_content"
             android:background="@drawable/btn_bg_use_gran"
-            android:orientation="vertical"
-            >
+            android:orientation="vertical">
 
             <com.application.smartstation.view.CustomTextViewBold
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:gravity="center"
                 android:text="@string/submit"
-                android:visibility="visible"
+                android:textAlignment="center"
                 android:textColor="@color/white"
                 android:textSize="18sp"
-                android:gravity="center"
-                android:textAlignment="center"
-                android:layout_margin="8dp">
+                android:visibility="visible">
 
             </com.application.smartstation.view.CustomTextViewBold>
 

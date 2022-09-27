@@ -17,8 +17,8 @@ class SelectCountryActivity : BaseActivity() {
 
     val binding: ActivitySelectCountryBinding by viewBinding()
 
-    var selectCountryAdapter:SelectCountryAdapter? = null
-    var list:ArrayList<CountryList> = ArrayList()
+    var selectCountryAdapter: SelectCountryAdapter? = null
+    var list: ArrayList<CountryList> = ArrayList()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,7 +37,7 @@ class SelectCountryActivity : BaseActivity() {
         list.addAll(CountryUtils.getAllCountries(this))
 
         binding.rvCountry.layoutManager = LinearLayoutManager(this,
-            LinearLayoutManager.VERTICAL,false)
+            LinearLayoutManager.VERTICAL, false)
         selectCountryAdapter = SelectCountryAdapter(this)
         binding.rvCountry.adapter = selectCountryAdapter
         selectCountryAdapter!!.setCountry(list)
@@ -46,7 +46,7 @@ class SelectCountryActivity : BaseActivity() {
             val intent = Intent()
             intent.putExtra("country", model.countryName)
             intent.putExtra("countryFlag", model.countryCode)
-            intent.putExtra("countryCode","+ "+ model.countryNum)
+            intent.putExtra("countryCode", "+ " + model.countryNum)
             setResult(RESULT_OK, intent)
             finish()
         }
@@ -73,7 +73,8 @@ class SelectCountryActivity : BaseActivity() {
             val templist: ArrayList<CountryList> = ArrayList()
 
             for (items in list) {
-                val coinsy = items.countryName.toLowerCase()+items.countryCode.toLowerCase()+items.countryNum
+                val coinsy =
+                    items.countryName.toLowerCase() + items.countryCode.toLowerCase() + items.countryNum
                 if (coinsy.contains(searchtext)) {
                     templist.add(items)
                 }

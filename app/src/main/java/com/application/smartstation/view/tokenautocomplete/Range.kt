@@ -5,6 +5,7 @@ import java.util.*
 class Range(start: Int, end: Int) {
     @JvmField
     val start: Int
+
     @JvmField
     val end: Int
     fun length(): Int {

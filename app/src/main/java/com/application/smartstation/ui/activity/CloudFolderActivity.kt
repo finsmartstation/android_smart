@@ -5,7 +5,6 @@ import android.app.Activity
 import android.content.Intent
 import android.graphics.Color
 import android.net.Uri
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.TextUtils
 import android.util.Log
@@ -16,12 +15,10 @@ import android.widget.*
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
 import com.application.smartstation.R
 import com.application.smartstation.databinding.ActivityCloudFolderBinding
-import com.application.smartstation.databinding.ActivityCloudViewBinding
 import com.application.smartstation.databinding.DialogFileBinding
 import com.application.smartstation.service.MailCallback
 import com.application.smartstation.service.Status
@@ -41,14 +38,15 @@ import id.zelory.compressor.Compressor
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
+import okhttp3.RequestBody.Companion.asRequestBody
+import okhttp3.RequestBody.Companion.toRequestBody
 import java.io.File
-import java.util.ArrayList
 
 @AndroidEntryPoint
-class CloudFolderActivity : BaseActivity() , AdapterView.OnItemSelectedListener{
+class CloudFolderActivity : BaseActivity(), AdapterView.OnItemSelectedListener {
 
     val binding: ActivityCloudFolderBinding by viewBinding()
-    var list:ArrayList<CloudDetailListRes> = ArrayList()
+    var list: ArrayList<CloudDetailListRes> = ArrayList()
     var name = ""
     var id = ""
     var showBtn: Animation? = null
@@ -58,10 +56,10 @@ class CloudFolderActivity : BaseActivity() , AdapterView.OnItemSelectedListener{
     val apiViewModel: ApiViewModel by viewModels()
     var time = ""
     var hrs = "life_time"
-    var hrsArray = arrayOf("hourly", "days", "months","year")
+    var hrsArray = arrayOf("hourly", "days", "months", "year")
     val timeArray = IntArray(100) { (it + 1) }
-    var path:MultipartBody.Part? = null
-    var uris:Uri? = null
+    var path: MultipartBody.Part? = null
+    var uris: Uri? = null
     var imgUpload: ImageView? = null
     var txtFileName: TextView? = null
     var cloudViewAdapter: CloudViewAdapter? = null
@@ -85,14 +83,14 @@ class CloudFolderActivity : BaseActivity() , AdapterView.OnItemSelectedListener{
     }
 
     private fun initView() {
-        if (intent != null){
+        if (intent != null) {
             name = intent.getStringExtra("name")!!
             id = intent.getStringExtra("id")!!
             val type = intent.getStringExtra("type")!!
 
-            if (type.equals("send")){
+            if (type.equals("send")) {
                 binding.llFab.visibility = View.VISIBLE
-            }else{
+            } else {
                 binding.llFab.visibility = View.GONE
             }
 
@@ -103,20 +101,20 @@ class CloudFolderActivity : BaseActivity() , AdapterView.OnItemSelectedListener{
         cloudViewAdapter = CloudViewAdapter(this)
         binding.rvCloudView.adapter = cloudViewAdapter
 
-        showBtn  = AnimationUtils.loadAnimation(this,R.anim.show_btn)
-        hideBtn  = AnimationUtils.loadAnimation(this,R.anim.hide_btn)
-        showLay  = AnimationUtils.loadAnimation(this,R.anim.show_layout)
-        hideLay  = AnimationUtils.loadAnimation(this,R.anim.hide_layout)
+        showBtn = AnimationUtils.loadAnimation(this, R.anim.show_btn)
+        hideBtn = AnimationUtils.loadAnimation(this, R.anim.hide_btn)
+        showLay = AnimationUtils.loadAnimation(this, R.anim.show_layout)
+        hideLay = AnimationUtils.loadAnimation(this, R.anim.hide_layout)
 
         cloudViewAdapter!!.onItemClick = { model ->
-            if (model.file_type.equals("folder")){
-                startActivity(Intent(this,CloudFolderActivity::class.java)
-                    .putExtra("id",model.id)
-                    .putExtra("name",model.name)
-                    .putExtra("type","send"))
-            }else {
+            if (model.file_type.equals("folder")) {
+                startActivity(Intent(this, CloudFolderActivity::class.java)
+                    .putExtra("id", model.id)
+                    .putExtra("name", model.name)
+                    .putExtra("type", "send"))
+            } else {
                 UtilsDefault.downloadFile(this,
-                    model.file_path,"Cloud",
+                    model.file_path, "Cloud",
                     object : MailCallback {
                         override fun success(resp: String?, status: Boolean?) {
                             if (status!!) {
@@ -140,11 +138,11 @@ class CloudFolderActivity : BaseActivity() , AdapterView.OnItemSelectedListener{
         }
 
         binding.fabAdd.setOnClickListener {
-            if(binding.llFile.visibility == View.VISIBLE){
+            if (binding.llFile.visibility == View.VISIBLE) {
                 binding.llFile.visibility = View.GONE
                 binding.llFile.startAnimation(hideLay)
                 binding.fabAdd.startAnimation(hideBtn)
-            }else{
+            } else {
                 binding.llFile.visibility = View.VISIBLE
                 binding.llFile.startAnimation(showLay)
                 binding.fabAdd.startAnimation(showBtn)
@@ -175,19 +173,19 @@ class CloudFolderActivity : BaseActivity() , AdapterView.OnItemSelectedListener{
             val bind = DialogFileBinding.bind(view)
             dialogFile.setCancelable(false)
 
-            bind.spHrs.setOnItemSelectedListener(this)
-            bind.spTime.setOnItemSelectedListener(this)
+            bind.spHrs.onItemSelectedListener = this
+            bind.spTime.onItemSelectedListener = this
 
-            val hrs= ArrayAdapter(this, android.R.layout.simple_spinner_item, hrsArray)
+            val hrs = ArrayAdapter(this, android.R.layout.simple_spinner_item, hrsArray)
             hrs.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
             bind.spHrs.adapter = hrs
 
             val timeLsit: ArrayList<String> = ArrayList()
             timeLsit.clear()
-            for (i in 0 until timeArray.size){
+            for (i in 0 until timeArray.size) {
                 timeLsit.add(timeArray[i].toString())
             }
-            val time= ArrayAdapter(this, android.R.layout.simple_spinner_item, timeLsit)
+            val time = ArrayAdapter(this, android.R.layout.simple_spinner_item, timeLsit)
             time.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
             bind.spTime.adapter = time
 
@@ -201,10 +199,10 @@ class CloudFolderActivity : BaseActivity() , AdapterView.OnItemSelectedListener{
                 UtilsDefault.hideKeyboardForFocusedView(this)
                 val paths = FileUtils.getPath(this, uris)
                 var type = ""
-                if (UtilsDefault.isImageFile(paths)){
+                if (UtilsDefault.isImageFile(paths)) {
                     type = "image"
                 }
-                if (UtilsDefault.isPdfFile(paths)){
+                if (UtilsDefault.isPdfFile(paths)) {
                     type = "pdf"
                 }
 
@@ -212,30 +210,40 @@ class CloudFolderActivity : BaseActivity() , AdapterView.OnItemSelectedListener{
                     TextUtils.isEmpty(paths) -> toast(resources.getString(R.string.please_upload))
 
                     else -> {
-                        val user_id: RequestBody = RequestBody.create("text/plain".toMediaTypeOrNull(), UtilsDefault.getSharedPreferenceString(
-                            Constants.USER_ID)!!)
-                        val accessToken: RequestBody = RequestBody.create("text/plain".toMediaTypeOrNull(),
+                        val user_id: RequestBody =
+                            UtilsDefault.getSharedPreferenceString(
+                                Constants.USER_ID)!!
+                                .toRequestBody("text/plain".toMediaTypeOrNull())
+                        val accessToken: RequestBody =
                             UtilsDefault.getSharedPreferenceString(Constants.ACCESS_TOKEN)!!
-                        )
-                        val parent_folder_id: RequestBody = RequestBody.create("text/plain".toMediaTypeOrNull(),
+                                .toRequestBody("text/plain".toMediaTypeOrNull())
+                        val subparent_folder_id: RequestBody =
                             id
-                        )
-                        val access_period: RequestBody = RequestBody.create("text/plain".toMediaTypeOrNull(),
-                            hrs.toString()
-                        )
-                        val period_limit: RequestBody = RequestBody.create("text/plain".toMediaTypeOrNull(),
-                            time.toString()
-                        )
+                                .toRequestBody("text/plain".toMediaTypeOrNull())
+                        val access_period: RequestBody =
+                            this.hrs
+                                .toRequestBody("text/plain".toMediaTypeOrNull())
+                        val period_limit: RequestBody =
+                            this.time
+                                .toRequestBody("text/plain".toMediaTypeOrNull())
 
-                        val file_type: RequestBody = RequestBody.create("text/plain".toMediaTypeOrNull(),
+                        val file_type: RequestBody =
                             type
-                        )
+                                .toRequestBody("text/plain".toMediaTypeOrNull())
 
                         val files = File(paths)
-                        val requestBody = RequestBody.create("multipart/form-data".toMediaTypeOrNull(), files)
-                        val file = MultipartBody.Part.createFormData("file", files.getName(), requestBody)
+                        val requestBody =
+                            files.asRequestBody("multipart/form-data".toMediaTypeOrNull())
+                        val file =
+                            MultipartBody.Part.createFormData("file", files.name, requestBody)
 
-                        createFile(user_id,accessToken,parent_folder_id,access_period,period_limit,file_type,file)
+                        createFile(user_id,
+                            accessToken,
+                            subparent_folder_id,
+                            access_period,
+                            period_limit,
+                            file_type,
+                            file)
                         dialogFile.dismiss()
                     }
                 }
@@ -271,20 +279,26 @@ class CloudFolderActivity : BaseActivity() , AdapterView.OnItemSelectedListener{
         access_period: RequestBody,
         period_limit: RequestBody,
         file_type: RequestBody,
-        path: MultipartBody.Part?
+        path: MultipartBody.Part?,
     ) {
-        apiViewModel.fileUploadCloud(user_id, accessToken, parent_folder_id,access_period,period_limit,file_type,path!!).observe(this, Observer {
+        apiViewModel.fileUploadCloudFolder(user_id,
+            accessToken,
+            parent_folder_id,
+            access_period,
+            period_limit,
+            file_type,
+            path!!).observe(this, Observer {
             it.let {
-                when(it.status){
+                when (it.status) {
                     Status.LOADING -> {
                         showProgress()
                     }
                     Status.SUCCESS -> {
                         dismissProgress()
-                        if (it.data!!.status){
+                        if (it.data!!.status) {
                             toast(it.data.message)
                             getCloudFiles()
-                        }else{
+                        } else {
                             toast(it.data.message)
                         }
                     }
@@ -328,13 +342,14 @@ class CloudFolderActivity : BaseActivity() , AdapterView.OnItemSelectedListener{
                 val uri = singleUri
                 try {
                     uris = singleUri
-                    Glide.with(this).load(uri).placeholder(R.drawable.ic_default).error(R.drawable.ic_default).diskCacheStrategy(
+                    Glide.with(this).load(uri).placeholder(R.drawable.ic_default)
+                        .error(R.drawable.ic_default).diskCacheStrategy(
                         DiskCacheStrategy.DATA).into(imgUpload!!)
                     val paths = FileUtils.getPath(this, uri)
-                    val fileName = FileUtils.getFileNameFromPath(paths).replace("/","")
+                    val fileName = FileUtils.getFileNameFromPath(paths).replace("/", "")
                     txtFileName!!.text = fileName
-                }catch (e:Exception){
-                    Log.d("TAG", "onFilePickerResult: "+e)
+                } catch (e: Exception) {
+                    Log.d("TAG", "onFilePickerResult: " + e)
                 }
             }
             else -> return
@@ -343,28 +358,25 @@ class CloudFolderActivity : BaseActivity() , AdapterView.OnItemSelectedListener{
 
     @SuppressLint("Range")
     private fun prepareFilePart(s: String, uri: Uri?): MultipartBody.Part {
-        val path = FileUtils.getPath(this,uri)
+        val path = FileUtils.getPath(this, uri)
         val file = File(path)
-        if (UtilsDefault.isImageFile(path)){
+        if (UtilsDefault.isImageFile(path)) {
             val compressedImageFile = Compressor(this).setQuality(100).compressToFile(file)
-            val requestFile: RequestBody = RequestBody.create(
-                "*/*".toMediaTypeOrNull(),
-                compressedImageFile)
+            val requestFile: RequestBody =
+                compressedImageFile.asRequestBody("*/*".toMediaTypeOrNull())
             return MultipartBody.Part.createFormData(s, compressedImageFile.name, requestFile)
         }
 
-        val requestFile: RequestBody = RequestBody.create(
-            "*/*".toMediaTypeOrNull(),
-            file)
+        val requestFile: RequestBody = file.asRequestBody("*/*".toMediaTypeOrNull())
         return MultipartBody.Part.createFormData(s, file.name, requestFile)
     }
 
     override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
         (p0!!.getChildAt(0) as TextView).setTextColor(Color.BLACK)
-        if (p0.id == R.id.spHrs){
+        if (p0.id == R.id.spHrs) {
             hrs = hrsArray[p2]
         }
-        if (p0.id == R.id.spTime){
+        if (p0.id == R.id.spTime) {
             time = timeArray[p2].toString()
         }
     }
@@ -386,24 +398,25 @@ class CloudFolderActivity : BaseActivity() , AdapterView.OnItemSelectedListener{
 
         apiViewModel.getCloudFile(inputParams).observe(this, Observer {
             it.let {
-                when(it.status){
+                when (it.status) {
                     Status.LOADING -> {
                         showProgress()
                     }
                     Status.SUCCESS -> {
                         dismissProgress()
-                        if (it.data!!.status){
+                        if (it.data!!.status) {
                             list = it.data.datas
-                            if (!list.isNullOrEmpty()){
+                            if (!list.isNullOrEmpty()) {
                                 binding.rvCloudView.visibility = View.VISIBLE
                                 binding.txtNoFound.visibility = View.GONE
                                 setData(list)
-                            }else{
+                            } else {
                                 binding.rvCloudView.visibility = View.GONE
-                                binding.txtNoFound.text = resources.getString(R.string.folder_is_empty)
+                                binding.txtNoFound.text =
+                                    resources.getString(R.string.folder_is_empty)
                                 binding.txtNoFound.visibility = View.VISIBLE
                             }
-                        }else{
+                        } else {
                             toast(it.data.message)
                         }
                     }

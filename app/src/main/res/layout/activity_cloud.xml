@@ -4,136 +4,134 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:background="@color/white"
+    android:orientation="vertical"
     tools:context=".ui.activity.CloudActivity">
 
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scaleType="centerCrop"
         android:alpha="0.4"
+        android:scaleType="centerCrop"
         android:src="@drawable/ic_splash_bg_use" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        >
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="80dp"
-        android:background="@color/color_chat_popup_gray"
-        android:orientation="horizontal">
-
-        <ImageView
-            android:id="@+id/imgBack"
-            android:layout_width="22dp"
-            android:layout_height="22dp"
-            android:layout_gravity="center_vertical"
-            android:layout_marginStart="16dp"
-            android:src="@drawable/ic_back" />
-
-        <com.application.smartstation.view.CustomTextViewBold
-            android:id="@+id/txtHeader"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginStart="16dp"
-            android:text="@string/cloud"
-            android:singleLine="true"
-            android:textColor="@color/white"
-            android:textSize="18sp" />
+        android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp"
-            android:gravity="end"
+            android:layout_height="80dp"
+            android:background="@color/color_chat_popup_gray"
             android:orientation="horizontal">
 
-            <LinearLayout
-                android:id="@+id/llSearch"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_marginEnd="16dp"
-                android:layout_weight="1"
+            <ImageView
+                android:id="@+id/imgBack"
+                android:layout_width="22dp"
+                android:layout_height="22dp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="16dp"
+                android:src="@drawable/ic_back" />
+
+            <com.application.smartstation.view.CustomTextViewBold
+                android:id="@+id/txtHeader"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:background="@drawable/search_bg_use"
-                android:backgroundTint="@color/phn_bg_color"
-                android:orientation="horizontal"
-                android:paddingStart="4dp"
-                android:paddingEnd="4dp"
-                android:visibility="gone">
+                android:layout_marginStart="16dp"
+                android:singleLine="true"
+                android:text="@string/cloud"
+                android:textColor="@color/white"
+                android:textSize="18sp" />
 
-                <com.application.smartstation.view.CustomEditText
-                    android:id="@+id/edtSearch"
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                android:gravity="end"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:id="@+id/llSearch"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginEnd="8dp"
-                    android:background="@null"
-                    android:drawableStart="@drawable/ic_search"
-                    android:drawablePadding="8dp"
-                    android:hint="@string/search"
-                    android:imeOptions="actionDone"
-                    android:inputType="text"
-                    android:textColor="@color/black"
-                    android:textColorHint="@color/grey"
-                    android:textCursorDrawable="@drawable/cusor_bg"
-                    android:textSize="16sp">
+                    android:layout_height="50dp"
+                    android:layout_gravity="center"
+                    android:layout_marginEnd="16dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/search_bg_use"
+                    android:backgroundTint="@color/phn_bg_color"
+                    android:orientation="horizontal"
+                    android:paddingStart="4dp"
+                    android:paddingEnd="4dp"
+                    android:visibility="gone">
+
+                    <com.application.smartstation.view.CustomEditText
+                        android:id="@+id/edtSearch"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginEnd="8dp"
+                        android:background="@null"
+                        android:drawableStart="@drawable/ic_search"
+                        android:drawablePadding="8dp"
+                        android:hint="@string/search"
+                        android:imeOptions="actionDone"
+                        android:inputType="text"
+                        android:textColor="@color/black"
+                        android:textColorHint="@color/grey"
+                        android:textCursorDrawable="@drawable/cusor_bg"
+                        android:textSize="16sp">
 
 
-                </com.application.smartstation.view.CustomEditText>
+                    </com.application.smartstation.view.CustomEditText>
 
+
+                </LinearLayout>
+
+                <ImageView
+                    android:id="@+id/imgSearch"
+                    android:layout_width="22dp"
+                    android:layout_height="22dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginEnd="16dp"
+                    android:src="@drawable/ic_search_use"
+                    app:tint="@color/white" />
+
+                <ImageView
+                    android:id="@+id/imgCancel"
+                    android:layout_width="22dp"
+                    android:layout_height="22dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginEnd="16dp"
+                    android:src="@drawable/ic_cancel"
+                    android:visibility="gone"
+                    app:tint="@color/color_green" />
 
             </LinearLayout>
 
-            <ImageView
-                android:id="@+id/imgSearch"
-                android:layout_width="22dp"
-                android:layout_height="22dp"
-                android:layout_gravity="center_vertical"
-                android:layout_marginEnd="16dp"
-                app:tint="@color/white"
-                android:src="@drawable/ic_search_use" />
-
-            <ImageView
-                android:id="@+id/imgCancel"
-                android:layout_width="22dp"
-                android:layout_height="22dp"
-                android:layout_gravity="center_vertical"
-                android:layout_marginEnd="16dp"
-                android:src="@drawable/ic_cancel"
-                android:visibility="gone"
-                app:tint="@color/color_green" />
-
         </LinearLayout>
 
-    </LinearLayout>
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/rvCloud"
-        android:layout_marginTop="6dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
-        />
-
-        <com.application.smartstation.view.CustomTextViewBold
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvCloud"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:text="@string/no_cloud"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="6dp"
+            android:layout_marginEnd="8dp" />
+
+        <com.application.smartstation.view.CustomTextViewBold
             android:id="@+id/txtNoFound"
-            android:textSize="30sp"
-            android:visibility="gone"
-            android:gravity="center"
-            android:textColor="@color/colorE"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:layout_margin="16dp"
-            >
+            android:gravity="center"
+            android:text="@string/no_cloud"
+            android:textColor="@color/colorE"
+            android:textSize="30sp"
+            android:visibility="gone">
 
         </com.application.smartstation.view.CustomTextViewBold>
 
@@ -141,31 +139,29 @@
 
     <LinearLayout
         android:id="@+id/llFab"
-        android:gravity="center_horizontal"
-        android:orientation="vertical"
-        android:layout_gravity="bottom|end|right"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end|right"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
 
         <LinearLayout
             android:id="@+id/llNewUser"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:visibility="gone"
-            >
+            android:visibility="gone">
 
             <com.application.smartstation.view.CustomTextViewBold
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/contact"
-                android:textSize="18sp"
                 android:layout_gravity="center"
-                android:visibility="visible"
-                android:gravity="center"
                 android:layout_marginEnd="16dp"
+                android:gravity="center"
+                android:text="@string/contact"
                 android:textColor="@color/black"
-                >
+                android:textSize="18sp"
+                android:visibility="visible">
 
             </com.application.smartstation.view.CustomTextViewBold>
 
@@ -175,13 +171,13 @@
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
                 android:layout_marginTop="10dp"
-                android:layout_marginBottom="10dp"
                 android:layout_marginEnd="22dp"
+                android:layout_marginBottom="10dp"
                 android:src="@drawable/call"
-                app:tint="@color/white"
                 app:backgroundTint="@color/color_green"
                 app:fabSize="mini"
-                app:rippleColor="@color/white" />
+                app:rippleColor="@color/white"
+                app:tint="@color/white" />
 
         </LinearLayout>
 
@@ -190,16 +186,16 @@
             android:id="@+id/fabAdd"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end|right"
             android:layout_marginLeft="18dp"
             android:layout_marginTop="10dp"
             android:layout_marginRight="18dp"
-            android:layout_gravity="bottom|end|right"
             android:layout_marginBottom="18dp"
-            android:src="@drawable/ic_add"
-            app:tint="@android:color/white"
             android:backgroundTint="@color/color_green"
+            android:src="@drawable/ic_add"
             app:fabSize="normal"
-            app:rippleColor="@color/white" />
+            app:rippleColor="@color/white"
+            app:tint="@android:color/white" />
 
     </LinearLayout>
 
@@ -208,13 +204,13 @@
         android:layout_width="90dp"
         android:layout_height="25dp"
         android:layout_centerInParent="true"
-        android:alpha="0.7"
         android:layout_gravity="bottom|center"
         android:layout_margin="30dp"
+        android:alpha="0.7"
         android:src="@drawable/login_logo_use"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"/>
+        app:layout_constraintStart_toStartOf="parent" />
 
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -25,11 +25,14 @@ import dagger.hilt.android.AndroidEntryPoint
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
+import okhttp3.RequestBody.Companion.asRequestBody
+import okhttp3.RequestBody.Companion.toRequestBody
 import java.io.File
 import java.io.IOException
 
 @AndroidEntryPoint
-class ImagePerviewActivity : BaseActivity(), SurfaceHolder.Callback, MediaPlayer.OnPreparedListener, SmartStationVideoView.MediaPlayerControl {
+class ImagePerviewActivity : BaseActivity(), SurfaceHolder.Callback, MediaPlayer.OnPreparedListener,
+    SmartStationVideoView.MediaPlayerControl {
 
     val binding: ActivityImagePerviewBinding by viewBinding()
     val apiViewModel: ApiViewModel by viewModels()
@@ -48,12 +51,12 @@ class ImagePerviewActivity : BaseActivity(), SurfaceHolder.Callback, MediaPlayer
         if (intent != null) {
             val type = intent.getStringExtra(Constants.TYPE)
             path = intent.getStringExtra(Constants.FILE_PATH)!!
-            Log.d("TAG", "initView: "+path)
-            if (type.equals("img")){
+            Log.d("TAG", "initView: " + path)
+            if (type.equals("img")) {
                 binding.imgShow.visibility = View.VISIBLE
                 Glide.with(this).load(path).diskCacheStrategy(
                     DiskCacheStrategy.DATA).into(binding.imgShow)
-            }else{
+            } else {
                 binding.videoSurfaceContainer.visibility = View.VISIBLE
                 videoView(path)
             }
@@ -86,8 +89,8 @@ class ImagePerviewActivity : BaseActivity(), SurfaceHolder.Callback, MediaPlayer
     override fun onTouchEvent(event: MotionEvent?): Boolean {
         try {
             controller!!.show()
-        }catch (e:Exception){
-            Log.d("TAG", "onTouchEvent: "+e)
+        } catch (e: Exception) {
+            Log.d("TAG", "onTouchEvent: " + e)
         }
         return false
     }
@@ -102,15 +105,16 @@ class ImagePerviewActivity : BaseActivity(), SurfaceHolder.Callback, MediaPlayer
         }
 
         binding.llSend.setOnClickListener {
-            if (path.isNotEmpty()){
+            if (path.isNotEmpty()) {
                 val files = File(path)
-                val requestBody = RequestBody.create("multipart/form-data".toMediaTypeOrNull(), files)
-                val file = MultipartBody.Part.createFormData("file", files.getName(), requestBody)
-                val user_id: RequestBody = RequestBody.create("text/plain".toMediaTypeOrNull(), UtilsDefault.getSharedPreferenceString(Constants.USER_ID)!!)
-                val accessToken: RequestBody = RequestBody.create("text/plain".toMediaTypeOrNull(),
-                    UtilsDefault.getSharedPreferenceString(Constants.ACCESS_TOKEN)!!
-                )
-                fileUpload(user_id,accessToken,file)
+                val requestBody =
+                    files.asRequestBody("multipart/form-data".toMediaTypeOrNull())
+                val file = MultipartBody.Part.createFormData("file", files.name, requestBody)
+                val user_id: RequestBody = UtilsDefault.getSharedPreferenceString(Constants.USER_ID)!!
+                    .toRequestBody("text/plain".toMediaTypeOrNull())
+                val accessToken: RequestBody = UtilsDefault.getSharedPreferenceString(Constants.ACCESS_TOKEN)!!
+                    .toRequestBody("text/plain".toMediaTypeOrNull())
+                fileUpload(user_id, accessToken, file)
             }
         }
     }
@@ -118,23 +122,23 @@ class ImagePerviewActivity : BaseActivity(), SurfaceHolder.Callback, MediaPlayer
     private fun fileUpload(
         user_id: RequestBody,
         accessToken: RequestBody,
-        file: MultipartBody.Part
+        file: MultipartBody.Part,
     ) {
         apiViewModel.fileUpload(user_id, accessToken, file).observe(this, Observer {
             it.let {
-                when(it.status){
+                when (it.status) {
                     Status.LOADING -> {
                         showProgress()
                     }
                     Status.SUCCESS -> {
                         dismissProgress()
-                        if (it.data!!.status){
+                        if (it.data!!.status) {
                             toast(it.data.message)
                             val intent = Intent()
                             intent.putExtra("file_url", it.data.filepath)
                             setResult(RESULT_OK, intent)
                             finish()
-                        }else{
+                        } else {
                             toast(it.data.message)
                         }
                     }
@@ -165,7 +169,7 @@ class ImagePerviewActivity : BaseActivity(), SurfaceHolder.Callback, MediaPlayer
     }
 
     override fun start() {
-        player!!.start();
+        player!!.start()
     }
 
     override fun pause() {
@@ -173,11 +177,11 @@ class ImagePerviewActivity : BaseActivity(), SurfaceHolder.Callback, MediaPlayer
     }
 
     override fun getDuration(): Int {
-        return player!!.getDuration()
+        return player!!.duration
     }
 
     override fun getCurrentPosition(): Int {
-        return player!!.getCurrentPosition()
+        return player!!.currentPosition
     }
 
     override fun seekTo(pos: Int) {
@@ -185,7 +189,7 @@ class ImagePerviewActivity : BaseActivity(), SurfaceHolder.Callback, MediaPlayer
     }
 
     override fun isPlaying(): Boolean {
-        return player!!.isPlaying()
+        return player!!.isPlaying
     }
 
     override fun getBufferPercentage(): Int {

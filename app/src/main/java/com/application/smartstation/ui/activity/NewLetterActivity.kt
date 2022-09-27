@@ -1,7 +1,6 @@
 package com.application.smartstation.ui.activity
 
 import android.content.DialogInterface
-import android.content.res.Resources
 import android.graphics.Color
 import android.os.Bundle
 import android.text.TextUtils
@@ -28,16 +27,14 @@ import com.application.smartstation.util.viewBinding
 import com.application.smartstation.viewmodel.ApiViewModel
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
-import com.bumptech.glide.load.engine.Resource
-import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.*
 
 @AndroidEntryPoint
-class NewLetterActivity : BaseActivity(), TokenCompleteTextView.TokenListener<Person>  {
+class NewLetterActivity : BaseActivity(), TokenCompleteTextView.TokenListener<Person> {
 
-    val binding:ActivityNewLetterBinding by viewBinding()
+    val binding: ActivityNewLetterBinding by viewBinding()
     var clickB = true
     val apiViewModel: ApiViewModel by viewModels()
     var toMail = ""
@@ -84,40 +81,46 @@ class NewLetterActivity : BaseActivity(), TokenCompleteTextView.TokenListener<Pe
             UtilsDefault.getSharedPreferenceString(Constants.ACCESS_TOKEN)
         apiViewModel.getStampSignature(inputParams).observe(this, Observer {
             it.let {
-                when(it.status){
+                when (it.status) {
                     Status.LOADING -> {
                         showProgress()
                     }
                     Status.SUCCESS -> {
                         dismissProgress()
-                        if (it.data!!.status){
+                        if (it.data!!.status) {
 
-                            if (!it.data.data.signature.isNullOrEmpty()){
+                            if (!it.data.data.signature.isNullOrEmpty()) {
                                 signatureList = it.data.data.signature
                             }
 
-                            if (!it.data.data.stamp.isNullOrEmpty()){
+                            if (!it.data.data.stamp.isNullOrEmpty()) {
                                 stampList = it.data.data.stamp
                             }
 
-                            if (!it.data.data.default_signature.isNullOrEmpty()){
+                            if (!it.data.data.default_signature.isNullOrEmpty()) {
                                 binding.clSignature.visibility = View.VISIBLE
                                 signature = it.data.data.default_signature
-                                Glide.with(this).load(signature).placeholder(R.drawable.ic_default).error(R.drawable.ic_default).diskCacheStrategy(DiskCacheStrategy.DATA).into(binding.imgSignature)
+                                Glide.with(this).load(signature).placeholder(R.drawable.ic_default)
+                                    .error(R.drawable.ic_default)
+                                    .diskCacheStrategy(DiskCacheStrategy.DATA)
+                                    .into(binding.imgSignature)
                             }
-                            if (!it.data.data.default_stamp.isNullOrEmpty()){
+                            if (!it.data.data.default_stamp.isNullOrEmpty()) {
                                 binding.clStamp.visibility = View.VISIBLE
                                 stamp = it.data.data.default_stamp
-                                Glide.with(this).load(stamp).placeholder(R.drawable.ic_default).error(R.drawable.ic_default).diskCacheStrategy(DiskCacheStrategy.DATA).into(binding.imgStamp)
+                                Glide.with(this).load(stamp).placeholder(R.drawable.ic_default)
+                                    .error(R.drawable.ic_default)
+                                    .diskCacheStrategy(DiskCacheStrategy.DATA)
+                                    .into(binding.imgStamp)
                             }
 
-                            if (it.data.data.default_signature.isNullOrEmpty() && it.data.data.default_stamp.isNullOrEmpty()){
+                            if (it.data.data.default_signature.isNullOrEmpty() && it.data.data.default_stamp.isNullOrEmpty()) {
                                 binding.llAttach.visibility = View.GONE
-                            }else{
+                            } else {
                                 binding.llAttach.visibility = View.VISIBLE
                             }
 
-                        }else{
+                        } else {
                             toast(it.data.message)
                         }
                     }
@@ -151,7 +154,9 @@ class NewLetterActivity : BaseActivity(), TokenCompleteTextView.TokenListener<Pe
             binding.llCc.visibility = View.VISIBLE
             binding.ivCc.visibility = View.VISIBLE
             binding.txtCcVisible.visibility = View.GONE
-            if (binding.txtCcVisible.visibility.equals(View.GONE) && binding.txtBccVisible.visibility.equals(View.GONE)){
+            if (binding.txtCcVisible.visibility.equals(View.GONE) && binding.txtBccVisible.visibility.equals(
+                    View.GONE)
+            ) {
                 binding.ivTo.visibility = View.GONE
             }
         }
@@ -160,20 +165,22 @@ class NewLetterActivity : BaseActivity(), TokenCompleteTextView.TokenListener<Pe
             binding.llBcc.visibility = View.VISIBLE
             binding.ivBcc.visibility = View.VISIBLE
             binding.txtBccVisible.visibility = View.GONE
-            if (binding.txtCcVisible.visibility.equals(View.GONE) && binding.txtBccVisible.visibility.equals(View.GONE)){
+            if (binding.txtCcVisible.visibility.equals(View.GONE) && binding.txtBccVisible.visibility.equals(
+                    View.GONE)
+            ) {
                 binding.ivTo.visibility = View.GONE
             }
         }
 
         binding.imgToArrow.setOnClickListener {
-            if (clickB){
+            if (clickB) {
                 clickB = false
                 binding.llTo.visibility = View.VISIBLE
                 binding.ivTo.visibility = View.VISIBLE
                 binding.txtBccVisible.visibility = View.VISIBLE
                 binding.txtCcVisible.visibility = View.VISIBLE
                 binding.imgToArrow.setImageResource(R.drawable.ic_up_arrow)
-            }else{
+            } else {
                 clickB = true
                 binding.llTo.visibility = View.GONE
                 binding.ivTo.visibility = View.GONE
@@ -190,7 +197,7 @@ class NewLetterActivity : BaseActivity(), TokenCompleteTextView.TokenListener<Pe
         binding.imgSignatureClose.setOnClickListener {
             binding.clSignature.visibility = View.GONE
             signature = ""
-            if (signature.isNullOrEmpty() && stamp.isNullOrEmpty()){
+            if (signature.isNullOrEmpty() && stamp.isNullOrEmpty()) {
                 binding.llAttach.visibility = View.GONE
             }
         }
@@ -198,23 +205,23 @@ class NewLetterActivity : BaseActivity(), TokenCompleteTextView.TokenListener<Pe
         binding.imgStampClose.setOnClickListener {
             binding.clStamp.visibility = View.GONE
             stamp = ""
-            if (signature.isNullOrEmpty() && stamp.isNullOrEmpty()){
+            if (signature.isNullOrEmpty() && stamp.isNullOrEmpty()) {
                 binding.llAttach.visibility = View.GONE
             }
         }
 
         binding.llSignature.setOnClickListener {
-            if (signatureList.isNullOrEmpty()){
+            if (signatureList.isNullOrEmpty()) {
                 toast("Please upload your signature")
-            }else{
+            } else {
                 showSignatureBottomDialog(1)
             }
         }
 
         binding.llStamp.setOnClickListener {
-            if (stampList.isNullOrEmpty()){
+            if (stampList.isNullOrEmpty()) {
                 toast("Please upload your stamp")
-            }else{
+            } else {
                 showSignatureBottomDialog(2)
             }
         }
@@ -230,7 +237,7 @@ class NewLetterActivity : BaseActivity(), TokenCompleteTextView.TokenListener<Pe
                         toMail = toMail + ", " + toList[s]
                     }
                 }
-            }else{
+            } else {
                 toMail = binding.edtTo.text.toString().trim()
             }
 
@@ -242,7 +249,7 @@ class NewLetterActivity : BaseActivity(), TokenCompleteTextView.TokenListener<Pe
                         ccMail = ccMail + ", " + ccList[s]
                     }
                 }
-            }else{
+            } else {
                 ccMail = binding.edtCc.text.toString().trim()
             }
 
@@ -254,7 +261,7 @@ class NewLetterActivity : BaseActivity(), TokenCompleteTextView.TokenListener<Pe
                         bccMail = bccMail + ", " + bccList[s]
                     }
                 }
-            }else{
+            } else {
                 bccMail = binding.edtBcc.text.toString().trim()
             }
 
@@ -268,7 +275,8 @@ class NewLetterActivity : BaseActivity(), TokenCompleteTextView.TokenListener<Pe
                 else -> {
                     val inputParams = InputParams()
                     inputParams.user_id = UtilsDefault.getSharedPreferenceString(Constants.USER_ID)
-                    inputParams.accessToken = UtilsDefault.getSharedPreferenceString(Constants.ACCESS_TOKEN)
+                    inputParams.accessToken =
+                        UtilsDefault.getSharedPreferenceString(Constants.ACCESS_TOKEN)
                     inputParams.to_mail = toMail
                     inputParams.cc_mail = ccMail
                     inputParams.bcc_mail = bccMail
@@ -296,52 +304,56 @@ class NewLetterActivity : BaseActivity(), TokenCompleteTextView.TokenListener<Pe
 //        bind.clView.minimumHeight = Resources.getSystem().displayMetrics.heightPixels
 
         bind.rvSignStamp.layoutManager = LinearLayoutManager(this,
-            LinearLayoutManager.VERTICAL,false)
+            LinearLayoutManager.VERTICAL, false)
 
-       if (i.equals(1)){
-           signatureAdapter = SignatureAdapter(this,2)
-           bind.rvSignStamp.adapter = signatureAdapter
-           signatureAdapter!!.setSignature(signatureList)
+        if (i.equals(1)) {
+            signatureAdapter = SignatureAdapter(this, 2)
+            bind.rvSignStamp.adapter = signatureAdapter
+            signatureAdapter!!.setSignature(signatureList)
 
-           signatureAdapter!!.onItemDeleteClick = { model ->
+            signatureAdapter!!.onItemDeleteClick = { model ->
 
-           }
+            }
 
-           signatureAdapter!!.onItemClick = { model ->
+            signatureAdapter!!.onItemClick = { model ->
 
-           }
+            }
 
-           signatureAdapter!!.onItemSelectClick = { model ->
-               dialog.dismiss()
-               Log.d("TAG", "showSignatureBottomDialog:"+model.image)
-               binding.llAttach.visibility = View.VISIBLE
-               binding.clSignature.visibility = View.VISIBLE
-               signature = model.image
-               Glide.with(this).load(model.image).placeholder(R.drawable.ic_default).error(R.drawable.ic_default).diskCacheStrategy(DiskCacheStrategy.DATA).into(binding.imgSignature)
-           }
+            signatureAdapter!!.onItemSelectClick = { model ->
+                dialog.dismiss()
+                Log.d("TAG", "showSignatureBottomDialog:" + model.image)
+                binding.llAttach.visibility = View.VISIBLE
+                binding.clSignature.visibility = View.VISIBLE
+                signature = model.image
+                Glide.with(this).load(model.image).placeholder(R.drawable.ic_default)
+                    .error(R.drawable.ic_default).diskCacheStrategy(DiskCacheStrategy.DATA)
+                    .into(binding.imgSignature)
+            }
 
-       }else{
-           stampAdapter = StampAdapter(this,2)
-           bind.rvSignStamp.adapter = stampAdapter
-           stampAdapter!!.setStamp(stampList)
+        } else {
+            stampAdapter = StampAdapter(this, 2)
+            bind.rvSignStamp.adapter = stampAdapter
+            stampAdapter!!.setStamp(stampList)
 
-           stampAdapter!!.onItemDeleteClick = { model ->
+            stampAdapter!!.onItemDeleteClick = { model ->
 
-           }
+            }
 
-           stampAdapter!!.onItemClick = { model ->
+            stampAdapter!!.onItemClick = { model ->
 
-           }
+            }
 
 
-           stampAdapter!!.onItemSelectClick = { model ->
-               dialog.dismiss()
-               binding.llAttach.visibility = View.VISIBLE
-               binding.clStamp.visibility = View.VISIBLE
-               stamp = model.image
-               Glide.with(this).load(stamp).placeholder(R.drawable.ic_default).error(R.drawable.ic_default).diskCacheStrategy(DiskCacheStrategy.DATA).into(binding.imgStamp)
-           }
-       }
+            stampAdapter!!.onItemSelectClick = { model ->
+                dialog.dismiss()
+                binding.llAttach.visibility = View.VISIBLE
+                binding.clStamp.visibility = View.VISIBLE
+                stamp = model.image
+                Glide.with(this).load(stamp).placeholder(R.drawable.ic_default)
+                    .error(R.drawable.ic_default).diskCacheStrategy(DiskCacheStrategy.DATA)
+                    .into(binding.imgStamp)
+            }
+        }
         dialog.show()
     }
 
@@ -356,16 +368,16 @@ class NewLetterActivity : BaseActivity(), TokenCompleteTextView.TokenListener<Pe
     private fun createLetter(inputParams: InputParams) {
         apiViewModel.newLetter(inputParams).observe(this, Observer {
             it.let {
-                when(it.status){
+                when (it.status) {
                     Status.LOADING -> {
                         showProgress()
                     }
                     Status.SUCCESS -> {
                         dismissProgress()
-                        if (it.data!!.status){
+                        if (it.data!!.status) {
                             toast(it.data.message)
                             finish()
-                        }else{
+                        } else {
                             toast(it.data.message)
                         }
                     }
@@ -381,9 +393,9 @@ class NewLetterActivity : BaseActivity(), TokenCompleteTextView.TokenListener<Pe
     override fun onTokenAdded(token: Person) {
         if (status.equals(0)) {
             toList.add(token.email)
-        }else if (status.equals(1)) {
+        } else if (status.equals(1)) {
             ccList.add(token.email)
-        }else if (status.equals(2)) {
+        } else if (status.equals(2)) {
             bccList.add(token.email)
         }
     }
@@ -401,7 +413,7 @@ class NewLetterActivity : BaseActivity(), TokenCompleteTextView.TokenListener<Pe
                     ccList.remove(ccList[i])
                 }
             }
-        }else if (status.equals(2)) {
+        } else if (status.equals(2)) {
             for (i in 0 until bccList.size) {
                 if (token.email.equals(bccList[i])) {
                     bccList.remove(bccList[i])

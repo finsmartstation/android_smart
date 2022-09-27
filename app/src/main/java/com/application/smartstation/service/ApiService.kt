@@ -3,7 +3,6 @@ package com.application.smartstation.service
 import com.application.smartstation.ui.model.*
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
-import retrofit2.Call
 import retrofit2.http.*
 
 
@@ -20,7 +19,12 @@ interface ApiService {
 
     @Multipart
     @POST(ApiUrl.UPDATE_PROFILE)
-    suspend fun updateProfile(@Part("user_id")user_id:RequestBody,@Part("accessToken")accessToken:RequestBody,@Part("name")name:RequestBody,@Part profile_pic: MultipartBody.Part): ProfileUpdateResponse
+    suspend fun updateProfile(
+        @Part("user_id") user_id: RequestBody,
+        @Part("accessToken") accessToken: RequestBody,
+        @Part("name") name: RequestBody,
+        @Part profile_pic: MultipartBody.Part,
+    ): ProfileUpdateResponse
 
     @Multipart
     @POST(ApiUrl.IMG_UPLOAD)
@@ -46,7 +50,11 @@ interface ApiService {
 
     @Multipart
     @POST(ApiUrl.UPDATE_PROFILE_PIC)
-    suspend fun updateProfilePic(@Part("user_id")user_id:RequestBody,@Part("accessToken")accessToken:RequestBody,@Part profile_pic: MultipartBody.Part): UpdateProfilePicResponse
+    suspend fun updateProfilePic(
+        @Part("user_id") user_id: RequestBody,
+        @Part("accessToken") accessToken: RequestBody,
+        @Part profile_pic: MultipartBody.Part,
+    ): UpdateProfilePicResponse
 
     @POST(ApiUrl.EDIT_PROFILE)
     suspend fun editProfile(@Body inputParams: InputParams): EditProfileResponse
@@ -170,27 +178,76 @@ interface ApiService {
 
     @Multipart
     @POST(ApiUrl.SIGNATURE_UPLOAD)
-    suspend fun uploadSignature(@Part("user_id") user_id:RequestBody, @Part("accessToken") accessToken:RequestBody,@Part("name") group_name:RequestBody,@Part signature: MultipartBody.Part): BaseResponse
+    suspend fun uploadSignature(
+        @Part("user_id") user_id: RequestBody,
+        @Part("accessToken") accessToken: RequestBody,
+        @Part("name") group_name: RequestBody,
+        @Part signature: MultipartBody.Part,
+    ): BaseResponse
 
     @Multipart
     @POST(ApiUrl.STAMP_UPLOAD)
-    suspend fun stampUpload(@Part("user_id") user_id:RequestBody, @Part("accessToken") accessToken:RequestBody,@Part("name") group_name:RequestBody,@Part stamp: MultipartBody.Part): BaseResponse
+    suspend fun stampUpload(
+        @Part("user_id") user_id: RequestBody,
+        @Part("accessToken") accessToken: RequestBody,
+        @Part("name") group_name: RequestBody,
+        @Part stamp: MultipartBody.Part,
+    ): BaseResponse
 
     @Multipart
     @POST(ApiUrl.CREATE_GRP)
-    suspend fun grpCreate(@Part("user_id") user_id:RequestBody, @Part("accessToken") accessToken:RequestBody, @Part("group_name") group_name:RequestBody, @Part("members") members: RequestBody, @Part group_profile: MultipartBody.Part): BaseResponse
+    suspend fun grpCreate(
+        @Part("user_id") user_id: RequestBody,
+        @Part("accessToken") accessToken: RequestBody,
+        @Part("group_name") group_name: RequestBody,
+        @Part("members") members: RequestBody,
+        @Part group_profile: MultipartBody.Part,
+    ): BaseResponse
 
     @Multipart
     @POST(ApiUrl.FILE_UPLOAD)
-    suspend fun fileUpload(@Part("user_id")user_id:RequestBody,@Part("accessToken")accessToken:RequestBody,@Part file: MultipartBody.Part): BaseResponse
+    suspend fun fileUpload(
+        @Part("user_id") user_id: RequestBody,
+        @Part("accessToken") accessToken: RequestBody,
+        @Part file: MultipartBody.Part,
+    ): BaseResponse
 
     @Multipart
     @POST(ApiUrl.COMPOSE_MAIL)
-    suspend fun composeMail(@Part("user_id") user_id:RequestBody, @Part("accessToken") accessToken:RequestBody, @Part("to_mail") to_mail:RequestBody, @Part("cc_mail") cc_mail:RequestBody, @Part("bcc_mail") bcc_mail:RequestBody, @Part("subject") subject:RequestBody, @Part("body") body:RequestBody, @Part attachment: List<MultipartBody.Part?>): BaseResponse
+    suspend fun composeMail(
+        @Part("user_id") user_id: RequestBody,
+        @Part("accessToken") accessToken: RequestBody,
+        @Part("to_mail") to_mail: RequestBody,
+        @Part("cc_mail") cc_mail: RequestBody,
+        @Part("bcc_mail") bcc_mail: RequestBody,
+        @Part("subject") subject: RequestBody,
+        @Part("body") body: RequestBody,
+        @Part attachment: List<MultipartBody.Part?>,
+    ): BaseResponse
 
     @Multipart
     @POST(ApiUrl.UPLOAD_FILE_CLOUD)
-    suspend fun fileUploadCloud(@Part("user_id")user_id:RequestBody,@Part("accessToken")accessToken:RequestBody,@Part("parent_folder_id")parent_folder_id:RequestBody,@Part("access_period")access_period:RequestBody,@Part("period_limit")period_limit:RequestBody,@Part("file_type")file_type:RequestBody,@Part file: MultipartBody.Part): BaseResponse
+    suspend fun fileUploadCloud(
+        @Part("user_id") user_id: RequestBody,
+        @Part("accessToken") accessToken: RequestBody,
+        @Part("parent_folder_id") parent_folder_id: RequestBody,
+        @Part("access_period") access_period: RequestBody,
+        @Part("period_limit") period_limit: RequestBody,
+        @Part("file_type") file_type: RequestBody,
+        @Part file: MultipartBody.Part,
+    ): BaseResponse
+
+    @Multipart
+    @POST(ApiUrl.UPLOAD_FILE_CLOUD)
+    suspend fun fileUploadCloudFolder(
+        @Part("user_id") user_id: RequestBody,
+        @Part("accessToken") accessToken: RequestBody,
+        @Part("subparent_folder_id") subparent_folder_id: RequestBody,
+        @Part("access_period") access_period: RequestBody,
+        @Part("period_limit") period_limit: RequestBody,
+        @Part("file_type") file_type: RequestBody,
+        @Part file: MultipartBody.Part,
+    ): BaseResponse
 
 
 }

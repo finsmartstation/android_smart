@@ -23,16 +23,10 @@ public class FrameLayoutAudio extends FrameLayout {
         super(context, attrs, defStyle);
     }
 
-    public final int getMeasuredStateFixed(View view) {
-        return (view.getMeasuredWidth()&0xff000000)
-                | ((view.getMeasuredHeight()>>16)
-                & (0xff000000>>16));
-    }
-
     public static int resolveSizeAndStateFixed(int size, int measureSpec, int childMeasuredState) {
         int result = size;
         int specMode = MeasureSpec.getMode(measureSpec);
-        int specSize =  MeasureSpec.getSize(measureSpec);
+        int specSize = MeasureSpec.getSize(measureSpec);
         switch (specMode) {
             case MeasureSpec.UNSPECIFIED:
                 result = size;
@@ -48,7 +42,13 @@ public class FrameLayoutAudio extends FrameLayout {
                 result = specSize;
                 break;
         }
-        return result | (childMeasuredState&0xff000000);
+        return result | (childMeasuredState & 0xff000000);
+    }
+
+    public final int getMeasuredStateFixed(View view) {
+        return (view.getMeasuredWidth() & 0xff000000)
+                | ((view.getMeasuredHeight() >> 16)
+                & (0xff000000 >> 16));
     }
 
     @Override

@@ -19,7 +19,7 @@ class ContactChatFragment : BaseFragment(R.layout.fragment_contact_chat) {
 
     private val binding by viewBinding(FragmentContactChatBinding::bind)
 
-    var list:ArrayList<ChatResponse> = ArrayList()
+    var list: ArrayList<ChatResponse> = ArrayList()
     var chatAdapter: ChatAdapter? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -38,13 +38,16 @@ class ContactChatFragment : BaseFragment(R.layout.fragment_contact_chat) {
 //        list.add(ChatResponse("Aguilera","Stevie: Hai, h r u","9.30 PM",R.drawable.pht5,0,0))
 
 
-        binding.rvContact.layoutManager = LinearLayoutManager(requireActivity(),LinearLayoutManager.VERTICAL,false)
+        binding.rvContact.layoutManager =
+            LinearLayoutManager(requireActivity(), LinearLayoutManager.VERTICAL, false)
         chatAdapter = ChatAdapter(requireActivity())
         binding.rvContact.adapter = chatAdapter
 //        chatAdapter!!.setChat(list)
 
         chatAdapter!!.onItemClick = { model ->
-            startActivity(Intent(requireActivity(), ChatActivity::class.java).putExtra(Constants.NAME,model.name).putExtra(Constants.PROFILE,model.profile))
+            startActivity(Intent(requireActivity(),
+                ChatActivity::class.java).putExtra(Constants.NAME, model.name)
+                .putExtra(Constants.PROFILE, model.profile))
         }
 
         binding.edtSearch.addTextChangedListener(object : TextWatcher {
@@ -61,7 +64,7 @@ class ContactChatFragment : BaseFragment(R.layout.fragment_contact_chat) {
             }
         })
 
-        Log.d("TAG", "initView: "+"cccc")
+        Log.d("TAG", "initView: " + "cccc")
 
     }
 

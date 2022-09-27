@@ -25,14 +25,14 @@ import java.io.IOException
 
 class ImageSelectorDialog {
 
-    constructor(activity: Activity, action: Action,typeImage:String){
+    constructor(activity: Activity, action: Action, typeImage: String) {
         this.activity = activity
         this.action = action
         this.typeImage = typeImage
         create()
     }
 
-    constructor(fragment: Fragment, action: Action,typeImage:String){
+    constructor(fragment: Fragment, action: Action, typeImage: String) {
         this.fragment = fragment
         this.action = action
         this.typeImage = typeImage
@@ -44,9 +44,9 @@ class ImageSelectorDialog {
     var typeImage: String? = null
     var action: Action
     var dialog: BottomSheetDialog? = null
-    var currentPhotoPath :String? = null
+    var currentPhotoPath: String? = null
 
-    private fun create(){
+    private fun create() {
         dialog = BottomSheetDialog(getContext())
         currentPhotoPath = String()
 
@@ -108,25 +108,25 @@ class ImageSelectorDialog {
         val myStuff =
             File(
                 Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM),
-                "com.smartstation"+"/Smart Station/Media/Smart Station $typeImage"
+                "com.smartstation" + "/Smart Station/Media/Smart Station $typeImage"
             )
         if (!myStuff.exists())
             myStuff.mkdirs()
         return File.createTempFile(
-            "smart_station_"+timeStamp, /* prefix */
+            "smart_station_" + timeStamp, /* prefix */
             ".jpg", /* suffix */
             myStuff /* directory */
         ).apply {
             // Save a file: path for use with ACTION_VIEW intents
             currentPhotoPath = absolutePath
-            Log.d("TAG", "createImageFile: "+currentPhotoPath)
+            Log.d("TAG", "createImageFile: " + currentPhotoPath)
         }
 
     }
 
 
-    fun processActivityResult(requestCode: Int, resultCode: Int, data: Intent?){
-        when(resultCode == Activity.RESULT_OK){
+    fun processActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        when (resultCode == Activity.RESULT_OK) {
             true -> {
                 when (requestCode) {
                     CAMERA -> {
@@ -134,7 +134,7 @@ class ImageSelectorDialog {
                             val path = currentPhotoPath
                             val file = File(path)
                             path.let {
-                                action.onImageSelected(path!!,file.name)
+                                action.onImageSelected(path!!, file.name)
                             }
 
                         } catch (e: Exception) {
@@ -143,17 +143,16 @@ class ImageSelectorDialog {
 
                     }
                     GALLERY -> {
-                        if (data!=null){
+                        if (data != null) {
                             val uri = data.data
-                            val imagePath = FileUtils.getPath(getContext(),uri!!)
-                            if (!TextUtils.isEmpty(imagePath)){
+                            val imagePath = FileUtils.getPath(getContext(), uri!!)
+                            if (!TextUtils.isEmpty(imagePath)) {
                                 val file = File(imagePath!!)
                                 imagePath.let {
-                                    action.onImageSelected(imagePath,file.name)
+                                    action.onImageSelected(imagePath, file.name)
                                 }
                             }
-                        }
-                        else{
+                        } else {
                             ((activity ?: fragment) as UtilInterface).toast("Image not Selected!")
                         }
 
@@ -167,18 +166,17 @@ class ImageSelectorDialog {
     }
 
 
-
     private fun getContext(): Context = (activity ?: fragment!!.context) as Context
 
 
-    companion object{
+    companion object {
 
         val CAMERA = 1
         val GALLERY = 2
 
     }
 
-    interface Action{
-        fun onImageSelected(imagePath: String,filename:String)
+    interface Action {
+        fun onImageSelected(imagePath: String, filename: String)
     }
 }

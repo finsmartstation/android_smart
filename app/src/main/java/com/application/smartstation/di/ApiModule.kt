@@ -39,10 +39,10 @@ class ApiModule {
 //                    Log.d("authorization", ""
 //                            + UtilsDefault.getSharedPreferenceString(Constants.JWT_TOKEN))
 //                } else {
-                    request = chain.request().newBuilder()
-                        .addHeader("Content-Type", "application/x-www-form-urlencoded")
-                        .method(original.method, original.body)
-                        .build()
+                request = chain.request().newBuilder()
+                    .addHeader("Content-Type", "application/x-www-form-urlencoded")
+                    .method(original.method, original.body)
+                    .build()
 //                }
 
 

@@ -10,8 +10,8 @@
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scaleType="centerCrop"
         android:alpha="0.4"
+        android:scaleType="centerCrop"
         android:src="@drawable/ic_splash_bg_use" />
 
     <include
@@ -25,30 +25,27 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:orientation="vertical"
-        app:layout_constraintTop_toBottomOf="@+id/ilHeader"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        >
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ilHeader">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:orientation="horizontal"
-            >
+            android:orientation="horizontal">
 
             <com.application.smartstation.view.CustomTextViewMedium
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/passcode"
-                android:textSize="18sp"
                 android:layout_gravity="center"
-                android:layout_weight="1"
                 android:layout_marginStart="16dp"
                 android:layout_marginEnd="16dp"
+                android:layout_weight="1"
+                android:text="@string/passcode"
                 android:textColor="@color/black"
-                >
+                android:textSize="18sp">
 
             </com.application.smartstation.view.CustomTextViewMedium>
 
@@ -58,8 +55,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="16dp"
                 android:thumb="@drawable/thumb_sc"
-                app:track="@drawable/sc_track"
-                >
+                app:track="@drawable/sc_track">
 
             </androidx.appcompat.widget.SwitchCompat>
 
@@ -70,21 +66,19 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:visibility="gone"
             android:orientation="horizontal"
-            >
+            android:visibility="gone">
 
             <com.application.smartstation.view.CustomTextViewMedium
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/fingerprint"
-                android:textSize="18sp"
                 android:layout_gravity="center"
-                android:layout_weight="1"
                 android:layout_marginStart="16dp"
                 android:layout_marginEnd="16dp"
+                android:layout_weight="1"
+                android:text="@string/fingerprint"
                 android:textColor="@color/black"
-                >
+                android:textSize="18sp">
 
             </com.application.smartstation.view.CustomTextViewMedium>
 
@@ -94,8 +88,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="16dp"
                 android:thumb="@drawable/thumb_sc"
-                app:track="@drawable/sc_track"
-                >
+                app:track="@drawable/sc_track">
 
             </androidx.appcompat.widget.SwitchCompat>
 
@@ -106,20 +99,18 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:orientation="horizontal"
-            >
+            android:orientation="horizontal">
 
             <com.application.smartstation.view.CustomTextViewMedium
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/tfa"
-                android:textSize="18sp"
                 android:layout_gravity="center"
-                android:layout_weight="1"
                 android:layout_marginStart="16dp"
                 android:layout_marginEnd="16dp"
+                android:layout_weight="1"
+                android:text="@string/tfa"
                 android:textColor="@color/black"
-                >
+                android:textSize="18sp">
 
             </com.application.smartstation.view.CustomTextViewMedium>
 
@@ -128,10 +119,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="16dp"
-                android:visibility="invisible"
                 android:thumb="@drawable/thumb_sc"
-                app:track="@drawable/sc_track"
-                >
+                android:visibility="invisible"
+                app:track="@drawable/sc_track">
 
             </androidx.appcompat.widget.SwitchCompat>
 

@@ -19,43 +19,28 @@ import com.application.smartstation.R;
 import java.util.ArrayList;
 
 
-public class RunTimePermission extends Activity
-{
+public class RunTimePermission extends Activity {
 
-    private Activity activity;
+    private final Activity activity;
     private ArrayList<PermissionBean> arrayListPermission;
     private String[] arrayPermissions;
     private RunTimePermissionListener runTimePermissionListener;
 
-    public RunTimePermission(Activity activity)
-    {
+    public RunTimePermission(Activity activity) {
         this.activity = activity;
     }
 
-    public class PermissionBean
-    {
-
-        String permission;
-        boolean isAccept;
-    }
-
-    public void requestPermission(String[] permissions, RunTimePermissionListener runTimePermissionListener)
-    {
+    public void requestPermission(String[] permissions, RunTimePermissionListener runTimePermissionListener) {
         this.runTimePermissionListener = runTimePermissionListener;
         arrayListPermission = new ArrayList<PermissionBean>();
 
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
-        {
-            for (int i = 0; i < permissions.length; i++)
-            {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            for (int i = 0; i < permissions.length; i++) {
                 PermissionBean permissionBean = new PermissionBean();
-                if (ContextCompat.checkSelfPermission(activity, permissions[i]) == PackageManager.PERMISSION_GRANTED)
-                {
+                if (ContextCompat.checkSelfPermission(activity, permissions[i]) == PackageManager.PERMISSION_GRANTED) {
                     permissionBean.isAccept = true;
-                }
-                else
-                {
+                } else {
                     permissionBean.isAccept = false;
                     permissionBean.permission = permissions[i];
                     arrayListPermission.add(permissionBean);
@@ -64,37 +49,23 @@ public class RunTimePermission extends Activity
 
             }
 
-            if (arrayListPermission.size() <= 0)
-            {
+            if (arrayListPermission.size() <= 0) {
                 runTimePermissionListener.permissionGranted();
                 return;
             }
             arrayPermissions = new String[arrayListPermission.size()];
-            for (int i = 0; i < arrayListPermission.size(); i++)
-            {
+            for (int i = 0; i < arrayListPermission.size(); i++) {
                 arrayPermissions[i] = arrayListPermission.get(i).permission;
             }
             activity.requestPermissions(arrayPermissions, 10);
-        }
-        else
-        {
-            if (runTimePermissionListener != null)
-            {
+        } else {
+            if (runTimePermissionListener != null) {
                 runTimePermissionListener.permissionGranted();
             }
         }
     }
 
-    public interface RunTimePermissionListener
-    {
-
-        void permissionGranted();
-
-        void permissionDenied();
-    }
-
-    private void callSettingActivity()
-    {
+    private void callSettingActivity() {
         Intent intent = new Intent();
         intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
         Uri uri = Uri.fromParts("package", activity.getPackageName(), null);
@@ -103,33 +74,25 @@ public class RunTimePermission extends Activity
 
     }
 
-    private void checkUpdate()
-    {
+    private void checkUpdate() {
         boolean isGranted = true;
         int deniedCount = 0;
-        for (int i = 0; i < arrayListPermission.size(); i++)
-        {
-            if (!arrayListPermission.get(i).isAccept)
-            {
+        for (int i = 0; i < arrayListPermission.size(); i++) {
+            if (!arrayListPermission.get(i).isAccept) {
                 isGranted = false;
                 deniedCount++;
             }
         }
 
-        if (isGranted)
-        {
-            if (runTimePermissionListener != null)
-            {
+        if (isGranted) {
+            if (runTimePermissionListener != null) {
                 runTimePermissionListener.permissionGranted();
             }
-        }
-        else
-        {
-            if (runTimePermissionListener != null)
-            {
+        } else {
+            if (runTimePermissionListener != null) {
 //                if (deniedCount == arrayListPermission.size())
 //                {
-                    setAlertMessage();
+                setAlertMessage();
 
 //                }
                 runTimePermissionListener.permissionDenied();
@@ -137,8 +100,7 @@ public class RunTimePermission extends Activity
         }
     }
 
-    public void setAlertMessage()
-    {
+    public void setAlertMessage() {
         AlertDialog.Builder adb;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             adb = new AlertDialog.Builder(activity, android.R.style.Theme_Material_Light_Dialog_Alert);
@@ -154,65 +116,58 @@ public class RunTimePermission extends Activity
                 "<p>Go To : Settings >> App > " + activity.getResources().getString(R.string.app_name) + " Permission : Allow ALL</p>";
 
         adb.setMessage(Html.fromHtml(msg));
-        adb.setPositiveButton("Allow All", new AlertDialog.OnClickListener()
-        {
+        adb.setPositiveButton("Allow All", new AlertDialog.OnClickListener() {
 
             @Override
-            public void onClick(DialogInterface dialog, int which)
-            {
+            public void onClick(DialogInterface dialog, int which) {
                 callSettingActivity();
                 dialog.dismiss();
             }
         });
 
-        adb.setNegativeButton("Remind Me Later", new AlertDialog.OnClickListener()
-        {
+        adb.setNegativeButton("Remind Me Later", new AlertDialog.OnClickListener() {
 
             @Override
-            public void onClick(DialogInterface dialog, int which)
-            {
+            public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();
             }
         });
-        if (!((Activity) activity).isFinishing() && msg.length() > 0)
-        {
+        if (!((Activity) activity).isFinishing() && msg.length() > 0) {
             adb.show();
-        }
-        else
-        {
+        } else {
             Log.v("log_tag", "either activity finish or message length is 0");
         }
     }
 
-    private void updatePermissionResult(String permissions, int grantResults)
-    {
+    private void updatePermissionResult(String permissions, int grantResults) {
 
-        for (int i = 0; i < arrayListPermission.size(); i++)
-        {
-            if (arrayListPermission.get(i).permission.equals(permissions))
-            {
-                if (grantResults == 0)
-                {
-                    arrayListPermission.get(i).isAccept = true;
-                }
-                else
-                {
-                    arrayListPermission.get(i).isAccept = false;
-                }
+        for (int i = 0; i < arrayListPermission.size(); i++) {
+            if (arrayListPermission.get(i).permission.equals(permissions)) {
+                arrayListPermission.get(i).isAccept = grantResults == 0;
                 break;
             }
         }
 
     }
 
-
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults)
-    {
-        for (int i = 0; i < permissions.length; i++)
-        {
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        for (int i = 0; i < permissions.length; i++) {
             updatePermissionResult(permissions[i], grantResults[i]);
         }
         checkUpdate();
+    }
+
+    public interface RunTimePermissionListener {
+
+        void permissionGranted();
+
+        void permissionDenied();
+    }
+
+    public class PermissionBean {
+
+        String permission;
+        boolean isAccept;
     }
 
 

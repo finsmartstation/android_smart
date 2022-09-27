@@ -36,7 +36,7 @@ class WelcomeFragment : BaseFragment(R.layout.fragment_welcome) {
             override fun onClick(textView: View) {
                 startActivity(
                     Intent(requireActivity(), TermAndConditionActivity::class.java)
-                        .putExtra("type","terms"))
+                        .putExtra("type", "terms"))
             }
 
             override fun updateDrawState(ds: TextPaint) {
@@ -63,12 +63,18 @@ class WelcomeFragment : BaseFragment(R.layout.fragment_welcome) {
         SpanString.setSpan(privacy, 9, 23, 0)
         SpanString.setSpan(RelativeSizeSpan(1f), 57, 73, 0)
         SpanString.setSpan(RelativeSizeSpan(1f), 9, 23, 0)
-        SpanString.setSpan(ForegroundColorSpan(resources.getColor(R.color.color_dark_green)), 57, 73, 0)
-        SpanString.setSpan(ForegroundColorSpan(resources.getColor(R.color.color_dark_green)), 9, 23, 0)
+        SpanString.setSpan(ForegroundColorSpan(resources.getColor(R.color.color_dark_green)),
+            57,
+            73,
+            0)
+        SpanString.setSpan(ForegroundColorSpan(resources.getColor(R.color.color_dark_green)),
+            9,
+            23,
+            0)
 
-        binding.txtTerms.setMovementMethod(LinkMovementMethod.getInstance())
+        binding.txtTerms.movementMethod = LinkMovementMethod.getInstance()
         binding.txtTerms.setText(SpanString, TextView.BufferType.SPANNABLE)
-        binding.txtTerms.setSelected(true)
+        binding.txtTerms.isSelected = true
 
     }
 

@@ -5,7 +5,6 @@ import android.text.SpannableString
 import android.text.Spanned
 import android.text.TextUtils
 import kotlinx.android.parcel.Parcelize
-import java.util.*
 
 /**
  * Tokenizer with configurable array of characters to tokenize on.
@@ -15,7 +14,10 @@ import java.util.*
  */
 @Parcelize
 @SuppressLint("ParcelCreator")
-open class CharacterTokenizer(private val splitChar: List<Char>, private val tokenTerminator: String) : Tokenizer {
+open class CharacterTokenizer(
+    private val splitChar: List<Char>,
+    private val tokenTerminator: String,
+) : Tokenizer {
     override fun containsTokenTerminator(charSequence: CharSequence): Boolean {
         for (element in charSequence) {
             if (splitChar.contains(element)) {

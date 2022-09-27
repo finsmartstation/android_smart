@@ -3,7 +3,6 @@ package com.application.smartstation.tokenautocomplete
 import android.content.Context
 import android.widget.ArrayAdapter
 import android.widget.Filter
-import java.util.*
 
 /**
  * Simplified custom filtered ArrayAdapter
@@ -30,7 +29,7 @@ abstract class FilteredArrayAdapter<T>
     context: Context,
     resource: Int,
     textViewResourceId: Int,
-    objects: List<T>
+    objects: List<T>,
 ) : ArrayAdapter<T>(
     context, resource, textViewResourceId, ArrayList(objects)
 ) {
@@ -65,7 +64,7 @@ abstract class FilteredArrayAdapter<T>
         context: Context,
         resource: Int,
         textViewResourceId: Int,
-        objects: Array<T>
+        objects: Array<T>,
     ) : this(context, resource, textViewResourceId, ArrayList<T>(listOf(*objects)))
 
     /**

@@ -1,133 +1,121 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@color/white"
-    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
     android:layout_marginBottom="8dp"
-    android:layout_height="wrap_content">
+    android:background="@color/white"
+    android:orientation="vertical">
 
     <com.application.smartstation.view.CustomTextViewMedium
+        android:id="@+id/txtDate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/txtDate"
-        android:layout_marginTop="5dp"
         android:layout_gravity="end"
+        android:layout_marginTop="5dp"
         android:textColor="@color/mail_date_coloe"
-        android:textSize="13sp"
-        />
+        android:textSize="13sp" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center"
         android:layout_marginTop="10dp"
-        >
+        android:gravity="center"
+        android:orientation="horizontal">
 
         <LinearLayout
             android:layout_width="60dp"
             android:layout_height="60dp"
-            android:gravity="center"
             android:background="@drawable/mail_img_bg"
-            >
+            android:gravity="center">
 
             <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/imgMailProfile"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
-                android:src="@drawable/ic_default"
-                android:id="@+id/imgMailProfile"
-                />
+                android:src="@drawable/ic_default" />
 
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:background="@drawable/mail_img_bg"
-            android:layout_weight="1"
             android:layout_gravity="center"
             android:layout_marginStart="16dp"
-            >
+            android:layout_weight="1"
+            android:background="@drawable/mail_img_bg"
+            android:orientation="horizontal">
 
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_weight="1"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"
                 android:layout_marginBottom="8dp"
-                >
+                android:layout_weight="1"
+                android:orientation="vertical">
 
                 <com.application.smartstation.view.CustomTextViewBold
+                    android:id="@+id/txtTitle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:singleLine="true"
-                    android:id="@+id/txtTitle"
                     android:ellipsize="end"
+                    android:maxLines="1"
+                    android:singleLine="true"
                     android:textColor="@color/black"
                     android:textSize="16sp"
-                    android:maxLines="1"
-                    android:textStyle="bold"
-                    />
+                    android:textStyle="bold" />
 
                 <com.application.smartstation.view.CustomTextViewMedium
+                    android:id="@+id/txtSub"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:maxLines="1"
-                    android:ellipsize="end"
-                    android:singleLine="true"
-                    android:id="@+id/txtSub"
                     android:layout_marginTop="5dp"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:singleLine="true"
                     android:textColor="@color/mail_date_coloe"
-                    android:textSize="14sp"
-                    />
+                    android:textSize="14sp" />
 
                 <com.application.smartstation.view.CustomTextViewNormal
+                    android:id="@+id/txtBody"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:maxLines="1"
-                    android:ellipsize="end"
-                    android:singleLine="true"
-                    android:id="@+id/txtBody"
                     android:layout_marginTop="5dp"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:singleLine="true"
                     android:textColor="@color/mail_date_coloe"
-                    android:textSize="12sp"
-                    />
+                    android:textSize="12sp" />
 
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
                 android:layout_marginTop="8dp"
-                android:layout_marginBottom="8dp"
                 android:layout_marginEnd="8dp"
-                >
+                android:layout_marginBottom="8dp"
+                android:orientation="vertical">
 
                 <com.application.smartstation.view.CustomTextViewMedium
+                    android:id="@+id/txtTime"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:singleLine="true"
-                    android:id="@+id/txtTime"
                     android:textColor="@color/black"
-                    android:textSize="13sp"
-                    />
+                    android:textSize="13sp" />
 
                 <ImageView
-                    android:visibility="gone"
                     android:id="@+id/imgAttach"
                     android:layout_width="20dp"
                     android:layout_height="20dp"
                     android:layout_gravity="end"
                     android:layout_marginTop="4dp"
                     android:src="@drawable/ic_attachement_use_compose"
-                    app:tint="@color/color_green"
-                    />
+                    android:visibility="gone"
+                    app:tint="@color/color_green" />
 
             </LinearLayout>
 

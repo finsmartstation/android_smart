@@ -1,18 +1,14 @@
 package com.application.smartstation.ui.fragment
+
 import android.content.Context
 import android.content.Intent
 import android.content.IntentSender
 import android.graphics.Color
 import android.os.Bundle
 import android.telephony.TelephonyManager
-import android.text.*
-import android.text.method.LinkMovementMethod
-import android.text.style.ClickableSpan
-import android.text.style.ForegroundColorSpan
-import android.text.style.RelativeSizeSpan
+import android.text.TextUtils
 import android.util.Log
 import android.view.View
-import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.viewModels
@@ -33,7 +29,6 @@ import com.application.smartstation.viewmodel.ApiViewModel
 import com.google.android.gms.auth.api.credentials.*
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import dagger.hilt.android.AndroidEntryPoint
-import java.util.*
 
 @AndroidEntryPoint
 class LoginFragment : BaseFragment(R.layout.fragment_login) {
@@ -56,13 +51,14 @@ class LoginFragment : BaseFragment(R.layout.fragment_login) {
 
     private fun initView() {
 
-        val telephoneManager = requireActivity().getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager
+        val telephoneManager =
+            requireActivity().getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager
         val countryCode = telephoneManager.networkCountryIso
 
-        for (i in 0 until CountryUtils.getAllCountries(requireActivity()).size){
-            if (CountryUtils.getAllCountries(requireActivity())[i].countryCode.equals(countryCode)){
-                countryNum = "+ "+CountryUtils.getAllCountries(requireActivity())[i].countryNum
-                Log.d("TAG", "initView: "+countryNum)
+        for (i in 0 until CountryUtils.getAllCountries(requireActivity()).size) {
+            if (CountryUtils.getAllCountries(requireActivity())[i].countryCode.equals(countryCode)) {
+                countryNum = "+ " + CountryUtils.getAllCountries(requireActivity())[i].countryNum
+                Log.d("TAG", "initView: " + countryNum)
             }
         }
 
@@ -70,7 +66,8 @@ class LoginFragment : BaseFragment(R.layout.fragment_login) {
 //
 //        }
 
-        binding.txtCountry.text = UtilsDefault.countryImg(countryCode.toUpperCase())+" "+countryCode.toUpperCase()+" "+countryNum
+        binding.txtCountry.text =
+            UtilsDefault.countryImg(countryCode.toUpperCase()) + " " + countryCode.toUpperCase() + " " + countryNum
 
 //        val SpanString = SpannableString(
 //            binding.txtLoginSub.text.toString()
@@ -101,7 +98,6 @@ class LoginFragment : BaseFragment(R.layout.fragment_login) {
     }
 
 
-
     private fun showHint() {
         val hintRequest = HintRequest.Builder()
             .setPhoneNumberIdentifierSupported(true)
@@ -128,7 +124,8 @@ class LoginFragment : BaseFragment(R.layout.fragment_login) {
     private fun setOnClickListener() {
 
         binding.llCountry.setOnClickListener {
-            startActivityForResult(Intent(requireActivity(),SelectCountryActivity::class.java),RESULT_CODE)
+            startActivityForResult(Intent(requireActivity(), SelectCountryActivity::class.java),
+                RESULT_CODE)
         }
 
         binding.txtLost.setOnClickListener {
@@ -143,10 +140,11 @@ class LoginFragment : BaseFragment(R.layout.fragment_login) {
 
                 TextUtils.isEmpty(countryNum) -> toast(requireActivity().resources.getString(R.string.please_select_country))
                 TextUtils.isEmpty(mobileNum) -> toast(requireActivity().resources.getString(R.string.please_enter_mobile))
-                mobileNum.length < 6 || mobileNum.length > 17  -> toast(requireActivity().resources.getString(R.string.please_enter_valid_mobile))
+                mobileNum.length < 6 || mobileNum.length > 17 -> toast(requireActivity().resources.getString(
+                    R.string.please_enter_valid_mobile))
 
                 else -> {
-                    dialogConfrim(mobileNum,countryNum)
+                    dialogConfrim(mobileNum, countryNum)
                 }
 
             }
@@ -156,14 +154,14 @@ class LoginFragment : BaseFragment(R.layout.fragment_login) {
     private fun loginApi(inputParams: InputParams) {
         apiViewModel.login(inputParams).observe(requireActivity(), Observer {
             it?.let {
-                when(it.status){
+                when (it.status) {
 
                     Status.LOADING -> {
                         showProgress()
                     }
                     Status.SUCCESS -> {
                         dismissProgress()
-                        if (it.data!!.status){
+                        if (it.data!!.status) {
                             val otpFragment = OTPFragment()
                             val bundle = Bundle()
                             bundle.putString(Constants.MOB, mobileNum)
@@ -171,7 +169,7 @@ class LoginFragment : BaseFragment(R.layout.fragment_login) {
                             bundle.putInt(Constants.OTP, it.data.otp)
                             otpFragment.arguments = bundle
                             (activity as LoginActivity).fragmentHelper?.push(otpFragment)
-                        }else{
+                        } else {
                             toast(it.data.message)
                         }
                     }
@@ -197,7 +195,7 @@ class LoginFragment : BaseFragment(R.layout.fragment_login) {
         dialog.setContentView(view)
         dialog.show()
 
-        bind.txtNumber.text = countryNum+" "+mobileNum
+        bind.txtNumber.text = countryNum + " " + mobileNum
 
         bind.txtEdit.setOnClickListener {
             dialog.dismiss()
@@ -206,8 +204,9 @@ class LoginFragment : BaseFragment(R.layout.fragment_login) {
         bind.txtOk.setOnClickListener {
             dialog.dismiss()
             val inputParams = InputParams()
-            inputParams.country = countryNum.replace("+ ","")
-            inputParams.phone = mobileNum.replace("(","").replace(")","").replace("-","").replace(" ","")
+            inputParams.country = countryNum.replace("+ ", "")
+            inputParams.phone =
+                mobileNum.replace("(", "").replace(")", "").replace("-", "").replace(" ", "")
             inputParams.deviceType = "android"
             inputParams.deviceToken = UtilsDefault.getSharedPreferenceValuefcm(Constants.FCM_KEY)
             loginApi(inputParams)
@@ -221,10 +220,10 @@ class LoginFragment : BaseFragment(R.layout.fragment_login) {
             val flag = data.getStringExtra("countryFlag")
             countryNum = data.getStringExtra("countryCode")!!
             binding.txtCountry.post {
-                binding.txtCountry.setText(UtilsDefault.countryImg(flag!!.toUpperCase())+" "+flag!!.toUpperCase()+" "+countryNum)
+                binding.txtCountry.text = UtilsDefault.countryImg(flag!!.toUpperCase()) + " " + flag.toUpperCase() + " " + countryNum
             }
 
-        }else if (requestCode == RC_HINT && resultCode == AppCompatActivity.RESULT_OK) {
+        } else if (requestCode == RC_HINT && resultCode == AppCompatActivity.RESULT_OK) {
 
             // get data from the dialog which is of type Credential
             val credential: Credential? = data?.getParcelableExtra(Credential.EXTRA_KEY)
@@ -232,14 +231,15 @@ class LoginFragment : BaseFragment(R.layout.fragment_login) {
             // set the received data t the text view
             credential?.apply {
                 binding.edtMobile.setText(UtilsDefault.PhoneNumberWithoutCountryCode(credential.id))
-                Log.d("TAG", "onActivityResult: "+credential.id+"  "+UtilsDefault.PhoneNumberWithoutCountryCode(credential.id))
+                Log.d("TAG",
+                    "onActivityResult: " + credential.id + "  " + UtilsDefault.PhoneNumberWithoutCountryCode(
+                        credential.id))
             }
         } else if (requestCode == RC_HINT && resultCode == CredentialsApi.ACTIVITY_RESULT_NO_HINTS_AVAILABLE) {
             Toast.makeText(requireActivity(), "No phone numbers found", Toast.LENGTH_LONG).show()
         }
 
     }
-
 
 
     override fun onResume() {

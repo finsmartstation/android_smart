@@ -69,9 +69,9 @@ class ForwardLetterActivity : BaseActivity(), TokenCompleteTextView.TokenListene
 
             if (intent.getStringExtra("attach") != null) {
                 path = intent.getStringExtra("attach")!!
-                if(!path.isNullOrEmpty()){
+                if (!path.isNullOrEmpty()) {
                     binding.clPdf.visibility = View.VISIBLE
-                    val fileName = FileUtils.getFileNameFromPath(path).replace("/","")
+                    val fileName = FileUtils.getFileNameFromPath(path).replace("/", "")
                     binding.txtFileName.text = fileName
                 }
             }
@@ -96,12 +96,13 @@ class ForwardLetterActivity : BaseActivity(), TokenCompleteTextView.TokenListene
         }
 
         binding.clPdf.setOnClickListener {
-            UtilsDefault.downloadFile(this, path,"Letter",object : MailCallback {
+            UtilsDefault.downloadFile(this, path, "Letter", object : MailCallback {
                 override fun success(resp: String?, status: Boolean?) {
-                    if (status!!){
-                        if (resp!!.contains(".pdf")){
-                            startActivity(Intent(this@ForwardLetterActivity,PdfViewActivity::class.java).putExtra("path",resp))
-                        }else {
+                    if (status!!) {
+                        if (resp!!.contains(".pdf")) {
+                            startActivity(Intent(this@ForwardLetterActivity,
+                                PdfViewActivity::class.java).putExtra("path", resp))
+                        } else {
                             FileUtils.openDocument(this@ForwardLetterActivity, resp)
                         }
                     }
@@ -114,7 +115,9 @@ class ForwardLetterActivity : BaseActivity(), TokenCompleteTextView.TokenListene
             binding.llCc.visibility = View.VISIBLE
             binding.ivCc.visibility = View.VISIBLE
             binding.txtCcVisible.visibility = View.GONE
-            if (binding.txtCcVisible.visibility.equals(View.GONE) && binding.txtBccVisible.visibility.equals(View.GONE)){
+            if (binding.txtCcVisible.visibility.equals(View.GONE) && binding.txtBccVisible.visibility.equals(
+                    View.GONE)
+            ) {
                 binding.ivTo.visibility = View.GONE
             }
         }
@@ -123,20 +126,22 @@ class ForwardLetterActivity : BaseActivity(), TokenCompleteTextView.TokenListene
             binding.llBcc.visibility = View.VISIBLE
             binding.ivBcc.visibility = View.VISIBLE
             binding.txtBccVisible.visibility = View.GONE
-            if (binding.txtCcVisible.visibility.equals(View.GONE) && binding.txtBccVisible.visibility.equals(View.GONE)){
+            if (binding.txtCcVisible.visibility.equals(View.GONE) && binding.txtBccVisible.visibility.equals(
+                    View.GONE)
+            ) {
                 binding.ivTo.visibility = View.GONE
             }
         }
 
         binding.imgToArrow.setOnClickListener {
-            if (clickB){
+            if (clickB) {
                 clickB = false
                 binding.llTo.visibility = View.VISIBLE
                 binding.ivTo.visibility = View.VISIBLE
                 binding.txtBccVisible.visibility = View.VISIBLE
                 binding.txtCcVisible.visibility = View.VISIBLE
                 binding.imgToArrow.setImageResource(R.drawable.ic_up_arrow)
-            }else{
+            } else {
                 clickB = true
                 binding.llTo.visibility = View.GONE
                 binding.ivTo.visibility = View.GONE
@@ -161,7 +166,7 @@ class ForwardLetterActivity : BaseActivity(), TokenCompleteTextView.TokenListene
                         toMail = toMail + ", " + toList[s]
                     }
                 }
-            }else{
+            } else {
                 toMail = binding.edtTo.text.toString().trim()
             }
 
@@ -173,7 +178,7 @@ class ForwardLetterActivity : BaseActivity(), TokenCompleteTextView.TokenListene
                         ccMail = ccMail + ", " + ccList[s]
                     }
                 }
-            }else{
+            } else {
                 ccMail = binding.edtCc.text.toString().trim()
             }
 
@@ -185,7 +190,7 @@ class ForwardLetterActivity : BaseActivity(), TokenCompleteTextView.TokenListene
                         bccMail = bccMail + ", " + bccList[s]
                     }
                 }
-            }else{
+            } else {
                 bccMail = binding.edtBcc.text.toString().trim()
             }
 
@@ -199,7 +204,8 @@ class ForwardLetterActivity : BaseActivity(), TokenCompleteTextView.TokenListene
                 else -> {
                     val inputParams = InputParams()
                     inputParams.user_id = UtilsDefault.getSharedPreferenceString(Constants.USER_ID)
-                    inputParams.accessToken = UtilsDefault.getSharedPreferenceString(Constants.ACCESS_TOKEN)
+                    inputParams.accessToken =
+                        UtilsDefault.getSharedPreferenceString(Constants.ACCESS_TOKEN)
                     inputParams.to_mail = toMail
                     inputParams.cc = ccMail
                     inputParams.bcc = bccMail
@@ -216,16 +222,16 @@ class ForwardLetterActivity : BaseActivity(), TokenCompleteTextView.TokenListene
     private fun forwardLetter(inputParams: InputParams) {
         apiViewModel.forwardLetter(inputParams).observe(this, androidx.lifecycle.Observer {
             it.let {
-                when(it.status){
+                when (it.status) {
                     Status.LOADING -> {
                         showProgress()
                     }
                     Status.SUCCESS -> {
                         dismissProgress()
-                        if (it.data!!.status){
+                        if (it.data!!.status) {
                             toast(it.data.message)
                             finish()
-                        }else{
+                        } else {
                             toast(it.data.message)
                         }
                     }
@@ -241,9 +247,9 @@ class ForwardLetterActivity : BaseActivity(), TokenCompleteTextView.TokenListene
     override fun onTokenAdded(token: Person) {
         if (status.equals(0)) {
             toList.add(token.email)
-        }else if (status.equals(1)) {
+        } else if (status.equals(1)) {
             ccList.add(token.email)
-        }else if (status.equals(2)) {
+        } else if (status.equals(2)) {
             bccList.add(token.email)
         }
     }
@@ -261,7 +267,7 @@ class ForwardLetterActivity : BaseActivity(), TokenCompleteTextView.TokenListene
                     ccList.remove(ccList[i])
                 }
             }
-        }else if (status.equals(2)) {
+        } else if (status.equals(2)) {
             for (i in 0 until bccList.size) {
                 if (token.email.equals(bccList[i])) {
                     bccList.remove(bccList[i])

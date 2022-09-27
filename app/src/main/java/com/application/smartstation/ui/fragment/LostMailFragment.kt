@@ -1,7 +1,5 @@
 package com.application.smartstation.ui.fragment
 
-import android.graphics.Color
-import android.os.Build
 import android.os.Bundle
 import android.text.SpannableString
 import android.text.TextPaint
@@ -11,8 +9,6 @@ import android.text.style.ClickableSpan
 import android.text.style.ForegroundColorSpan
 import android.text.style.RelativeSizeSpan
 import android.view.View
-import android.view.Window
-import android.view.WindowManager
 import android.widget.TextView
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -34,7 +30,7 @@ class LostMailFragment : BaseFragment(R.layout.fragment_lost_mail) {
 
     private val binding by viewBinding(FragmentLostMailBinding::bind)
     val apiViewModel: ApiViewModel by viewModels()
-    var email=""
+    var email = ""
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -64,9 +60,9 @@ class LostMailFragment : BaseFragment(R.layout.fragment_lost_mail) {
         SpanString.setSpan(RelativeSizeSpan(1f), 18, 31, 0)
         SpanString.setSpan(ForegroundColorSpan(resources.getColor(R.color.black)), 18, 31, 0)
 
-        binding.txtLostDec.setMovementMethod(LinkMovementMethod.getInstance())
+        binding.txtLostDec.movementMethod = LinkMovementMethod.getInstance()
         binding.txtLostDec.setText(SpanString, TextView.BufferType.SPANNABLE)
-        binding.txtLostDec.setSelected(true)
+        binding.txtLostDec.isSelected = true
 
     }
 
@@ -97,7 +93,7 @@ class LostMailFragment : BaseFragment(R.layout.fragment_lost_mail) {
     private fun sendOtpMail(inputParams: InputParams) {
         apiViewModel.sendMailOTP(inputParams).observe(requireActivity(), Observer {
             it.let {
-                when(it.status){
+                when (it.status) {
                     Status.LOADING -> {
                         showProgress()
                     }
@@ -111,14 +107,14 @@ class LostMailFragment : BaseFragment(R.layout.fragment_lost_mail) {
                             bundle.putString(Constants.MAIL_ID, email)
                             lostOTPFragment.arguments = bundle
                             (activity as LoginActivity).fragmentHelper?.push((lostOTPFragment))
-                        }else{
+                        } else {
                             toast(it.data.message)
                         }
                     }
                     Status.ERROR -> {
-                    dismissProgress()
-                    toast(it.message!!)
-                }
+                        dismissProgress()
+                        toast(it.message!!)
+                    }
                 }
             }
         })

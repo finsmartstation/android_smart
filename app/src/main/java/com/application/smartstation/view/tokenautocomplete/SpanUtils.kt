@@ -10,7 +10,7 @@ internal object SpanUtils {
     fun ellipsizeWithSpans(
         prefix: CharSequence?, countSpan: CountSpan?,
         tokenCount: Int, paint: TextPaint,
-        originalText: CharSequence, maxWidth: Float
+        originalText: CharSequence, maxWidth: Float,
     ): Spanned? {
         var countWidth = 0f
         if (countSpan != null) {
@@ -43,7 +43,9 @@ internal object SpanUtils {
         if (ellipsizeCallback.start != ellipsizeCallback.end) {
             if (countSpan != null) {
                 val visibleCount =
-                    ellipsized.getSpans(0, ellipsized.length, TokenCompleteTextView.TokenImageSpan::class.java).size
+                    ellipsized.getSpans(0,
+                        ellipsized.length,
+                        TokenCompleteTextView.TokenImageSpan::class.java).size
                 countSpan.setCount(tokenCount - visibleCount)
                 ellipsized.replace(ellipsizeCallback.start, ellipsized.length, countSpan.countText)
                 ellipsized.setSpan(

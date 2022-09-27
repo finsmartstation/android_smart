@@ -9,8 +9,8 @@ import com.application.smartstation.ui.model.*
 import com.application.smartstation.util.UtilsDefault
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.onStart
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import javax.inject.Inject
@@ -18,7 +18,7 @@ import javax.inject.Inject
 @HiltViewModel
 class ApiViewModel @Inject constructor(
     application: Application,
-    private val repository: ApiRepository
+    private val repository: ApiRepository,
 ) : AndroidViewModel(application) {
 
     fun login(inputParams: InputParams) = liveData<Resource<LoginResponse>> {
@@ -75,8 +75,13 @@ class ApiViewModel @Inject constructor(
 
     }
 
-    fun updateProfile(user_id: RequestBody, accessToken: RequestBody, name: RequestBody, profile_pic: MultipartBody.Part) = liveData<Resource<ProfileUpdateResponse>> {
-        if (UtilsDefault.isOnline()){
+    fun updateProfile(
+        user_id: RequestBody,
+        accessToken: RequestBody,
+        name: RequestBody,
+        profile_pic: MultipartBody.Part,
+    ) = liveData<Resource<ProfileUpdateResponse>> {
+        if (UtilsDefault.isOnline()) {
             repository.updateProfile(user_id, accessToken, name, profile_pic)
                 .onStart {
                     emit(Resource.loading(data = null))
@@ -201,8 +206,12 @@ class ApiViewModel @Inject constructor(
 
     }
 
-    fun updateProfilePic(user_id: RequestBody, accessToken: RequestBody, profile_pic: MultipartBody.Part) = liveData<Resource<UpdateProfilePicResponse>> {
-        if (UtilsDefault.isOnline()){
+    fun updateProfilePic(
+        user_id: RequestBody,
+        accessToken: RequestBody,
+        profile_pic: MultipartBody.Part,
+    ) = liveData<Resource<UpdateProfilePicResponse>> {
+        if (UtilsDefault.isOnline()) {
             repository.updateProfilePic(user_id, accessToken, profile_pic)
                 .onStart {
                     emit(Resource.loading(data = null))
@@ -309,9 +318,14 @@ class ApiViewModel @Inject constructor(
 
     }
 
-    fun uploadSignature(user_id:RequestBody,accessToken:RequestBody,name:RequestBody,signature: MultipartBody.Part) = liveData<Resource<BaseResponse>> {
+    fun uploadSignature(
+        user_id: RequestBody,
+        accessToken: RequestBody,
+        name: RequestBody,
+        signature: MultipartBody.Part,
+    ) = liveData<Resource<BaseResponse>> {
         if (UtilsDefault.isOnline()) {
-            repository.uploadSignature(user_id,accessToken,name, signature)
+            repository.uploadSignature(user_id, accessToken, name, signature)
                 .onStart {
                     emit(Resource.loading(data = null))
                 }
@@ -327,9 +341,14 @@ class ApiViewModel @Inject constructor(
 
     }
 
-    fun stampUpload(user_id:RequestBody,accessToken:RequestBody,name:RequestBody,stamp: MultipartBody.Part) = liveData<Resource<BaseResponse>> {
+    fun stampUpload(
+        user_id: RequestBody,
+        accessToken: RequestBody,
+        name: RequestBody,
+        stamp: MultipartBody.Part,
+    ) = liveData<Resource<BaseResponse>> {
         if (UtilsDefault.isOnline()) {
-            repository.stampUpload(user_id,accessToken,name, stamp)
+            repository.stampUpload(user_id, accessToken, name, stamp)
                 .onStart {
                     emit(Resource.loading(data = null))
                 }
@@ -507,23 +526,24 @@ class ApiViewModel @Inject constructor(
 
     }
 
-    fun getChatDetailslist(inputParams: InputParams) = liveData<Resource<GetChatDetailsListResponse>> {
-        if (UtilsDefault.isOnline()) {
-            repository.getChatDetailslist(inputParams)
-                .onStart {
-                    emit(Resource.loading(data = null))
-                }
-                .catch {
-                    emit(Resource.error(data = null, msg = "Cannot reach server..try again"))
-                }
-                .collect {
-                    emit(Resource.success(it))
-                }
-        } else {
-            emit(Resource.error(data = null, msg = "No internet connection"))
-        }
+    fun getChatDetailslist(inputParams: InputParams) =
+        liveData<Resource<GetChatDetailsListResponse>> {
+            if (UtilsDefault.isOnline()) {
+                repository.getChatDetailslist(inputParams)
+                    .onStart {
+                        emit(Resource.loading(data = null))
+                    }
+                    .catch {
+                        emit(Resource.error(data = null, msg = "Cannot reach server..try again"))
+                    }
+                    .collect {
+                        emit(Resource.success(it))
+                    }
+            } else {
+                emit(Resource.error(data = null, msg = "No internet connection"))
+            }
 
-    }
+        }
 
     fun getGrpDetails(inputParams: InputParams) = liveData<Resource<GetChatDetailsListResponse>> {
         if (UtilsDefault.isOnline()) {
@@ -977,11 +997,12 @@ class ApiViewModel @Inject constructor(
     }
 
     fun grpCreate(
-        user_id:RequestBody,
-        accessToken:RequestBody,
-        group_name:RequestBody,
-        members:RequestBody,
-        group_profile: MultipartBody.Part) = liveData<Resource<BaseResponse>> {
+        user_id: RequestBody,
+        accessToken: RequestBody,
+        group_name: RequestBody,
+        members: RequestBody,
+        group_profile: MultipartBody.Part,
+    ) = liveData<Resource<BaseResponse>> {
         if (UtilsDefault.isOnline()) {
             repository.grpCreate(user_id, accessToken, group_name, members, group_profile)
                 .onStart {
@@ -999,36 +1020,44 @@ class ApiViewModel @Inject constructor(
 
     }
 
-    fun fileUpload(user_id:RequestBody,accessToken:RequestBody,file: MultipartBody.Part) = liveData<Resource<BaseResponse>> {
-        if (UtilsDefault.isOnline()) {
-            repository.fileUpload(user_id, accessToken, file)
-                .onStart {
-                    emit(Resource.loading(data = null))
-                }
-                .catch {
-                    emit(Resource.error(data = null, msg = "Cannot reach server..try again"))
-                }
-                .collect {
-                    emit(Resource.success(it))
-                }
-        } else {
-            emit(Resource.error(data = null, msg = "No internet connection"))
+    fun fileUpload(user_id: RequestBody, accessToken: RequestBody, file: MultipartBody.Part) =
+        liveData<Resource<BaseResponse>> {
+            if (UtilsDefault.isOnline()) {
+                repository.fileUpload(user_id, accessToken, file)
+                    .onStart {
+                        emit(Resource.loading(data = null))
+                    }
+                    .catch {
+                        emit(Resource.error(data = null, msg = "Cannot reach server..try again"))
+                    }
+                    .collect {
+                        emit(Resource.success(it))
+                    }
+            } else {
+                emit(Resource.error(data = null, msg = "No internet connection"))
+            }
+
         }
 
-    }
-
     fun composeMail(
-        user_id:RequestBody,
-        accessToken:RequestBody,
-        to_mail:RequestBody,
-        cc_mail:RequestBody,
-        bcc_mail:RequestBody,
-        subject:RequestBody,
-        body:RequestBody,
-        attachment: List<MultipartBody.Part?>
+        user_id: RequestBody,
+        accessToken: RequestBody,
+        to_mail: RequestBody,
+        cc_mail: RequestBody,
+        bcc_mail: RequestBody,
+        subject: RequestBody,
+        body: RequestBody,
+        attachment: List<MultipartBody.Part?>,
     ) = liveData<Resource<BaseResponse>> {
         if (UtilsDefault.isOnline()) {
-            repository.composeMail(user_id, accessToken, to_mail, cc_mail, bcc_mail, subject, body, attachment)
+            repository.composeMail(user_id,
+                accessToken,
+                to_mail,
+                cc_mail,
+                bcc_mail,
+                subject,
+                body,
+                attachment)
                 .onStart {
                     emit(Resource.loading(data = null))
                 }
@@ -1045,16 +1074,54 @@ class ApiViewModel @Inject constructor(
     }
 
     fun fileUploadCloud(
-        user_id:RequestBody,
-        accessToken:RequestBody,
-        parent_folder_id:RequestBody,
-        access_period:RequestBody,
-        period_limit:RequestBody,
-        file_type:RequestBody,
-        file:MultipartBody.Part
+        user_id: RequestBody,
+        accessToken: RequestBody,
+        parent_folder_id: RequestBody,
+        access_period: RequestBody,
+        period_limit: RequestBody,
+        file_type: RequestBody,
+        file: MultipartBody.Part,
     ) = liveData<Resource<BaseResponse>> {
         if (UtilsDefault.isOnline()) {
-            repository.fileUploadCloud(user_id,accessToken, parent_folder_id, access_period, period_limit, file_type, file)
+            repository.fileUploadCloud(user_id,
+                accessToken,
+                parent_folder_id,
+                access_period,
+                period_limit,
+                file_type,
+                file)
+                .onStart {
+                    emit(Resource.loading(data = null))
+                }
+                .catch {
+                    emit(Resource.error(data = null, msg = "Cannot reach server..try again"))
+                }
+                .collect {
+                    emit(Resource.success(it))
+                }
+        } else {
+            emit(Resource.error(data = null, msg = "No internet connection"))
+        }
+
+    }
+
+    fun fileUploadCloudFolder(
+        user_id: RequestBody,
+        accessToken: RequestBody,
+        subparent_folder_id: RequestBody,
+        access_period: RequestBody,
+        period_limit: RequestBody,
+        file_type: RequestBody,
+        file: MultipartBody.Part,
+    ) = liveData<Resource<BaseResponse>> {
+        if (UtilsDefault.isOnline()) {
+            repository.fileUploadCloudFolder(user_id,
+                accessToken,
+                subparent_folder_id,
+                access_period,
+                period_limit,
+                file_type,
+                file)
                 .onStart {
                     emit(Resource.loading(data = null))
                 }

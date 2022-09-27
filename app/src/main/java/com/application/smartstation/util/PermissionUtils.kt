@@ -8,24 +8,29 @@ import androidx.annotation.RequiresApi
 import com.application.smartstation.ui.activity.BaseActivity
 
 class PermissionUtils {
-    
-    companion object{
-        
+
+    companion object {
+
         @RequiresApi(Build.VERSION_CODES.M)
-        fun requestPermission(activity: Activity,
-                              requestCode: Int,
-                              vararg permissions: String){
+        fun requestPermission(
+            activity: Activity,
+            requestCode: Int,
+            vararg permissions: String,
+        ) {
             activity.requestPermissions(permissions, requestCode)
         }
 
-        fun permissionResult(requestCode: Int,
-                             permissions: Array<out String>,
-                             grantResults: IntArray, permissionResults: HashMap<Int, (permissionGranted: Boolean) -> Unit>){
+        fun permissionResult(
+            requestCode: Int,
+            permissions: Array<out String>,
+            grantResults: IntArray,
+            permissionResults: HashMap<Int, (permissionGranted: Boolean) -> Unit>,
+        ) {
             val result = permissionResults[requestCode]
             result.let {
                 var result = true
-                for (grantResult in grantResults){
-                    if(grantResult != PackageManager.PERMISSION_GRANTED) {
+                for (grantResult in grantResults) {
+                    if (grantResult != PackageManager.PERMISSION_GRANTED) {
                         result = false
                     }
                 }
@@ -34,47 +39,50 @@ class PermissionUtils {
             }
         }
 
-        fun imagePermission(activity: BaseActivity, action: () -> Unit){
+        fun imagePermission(activity: BaseActivity, action: () -> Unit) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 activity.requestPermission(
                     Manifest.permission.WRITE_EXTERNAL_STORAGE,
                     Manifest.permission.READ_EXTERNAL_STORAGE,
-                    Manifest.permission.CAMERA){
-                    if(it){
+                    Manifest.permission.CAMERA) {
+                    if (it) {
                         action()
-                    }else{
+                    } else {
                         activity.toast("Need Camera and Storage Permission!")
                     }
                 }
-            }else{
+            } else {
                 action()
             }
         }
 
-        fun locationPermission(activity: BaseActivity, action: () -> Unit){
+        fun locationPermission(activity: BaseActivity, action: () -> Unit) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 activity.requestPermission(
                     Manifest.permission.ACCESS_FINE_LOCATION,
-                    Manifest.permission.ACCESS_COARSE_LOCATION){
-                    if(it){
+                    Manifest.permission.ACCESS_COARSE_LOCATION) {
+                    if (it) {
                         action()
-                    }else{
+                    } else {
                         activity.toast("Need location Permission!")
                     }
                 }
-            }else{
+            } else {
                 action()
             }
         }
 
-        fun phnPermission(requestCode: Int,
-                             permissions: Array<out String>,
-                             grantResults: IntArray, permissionResults: HashMap<Int, (permissionGranted: Boolean) -> Unit>){
+        fun phnPermission(
+            requestCode: Int,
+            permissions: Array<out String>,
+            grantResults: IntArray,
+            permissionResults: HashMap<Int, (permissionGranted: Boolean) -> Unit>,
+        ) {
             val result = permissionResults[requestCode]
             result.let {
                 var result = true
-                for (grantResult in grantResults){
-                    if(grantResult != PackageManager.PERMISSION_GRANTED) {
+                for (grantResult in grantResults) {
+                    if (grantResult != PackageManager.PERMISSION_GRANTED) {
                         result = false
                     }
                 }
@@ -85,5 +93,5 @@ class PermissionUtils {
 
 
     }
-    
+
 }

@@ -9,7 +9,7 @@ import android.util.AttributeSet;
 import android.view.View;
 
 public class MyScanningView extends View {
-    private Paint paint = new Paint();
+    private final Paint paint = new Paint();
     private int mPosY = 0;
     private boolean runAnimation = true;
     private boolean showLine = true;

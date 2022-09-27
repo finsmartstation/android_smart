@@ -15,34 +15,32 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvSentBox"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:id="@+id/rvSentBox"
-        android:layout_marginTop="6dp"
         android:layout_marginStart="16dp"
+        android:layout_marginTop="6dp"
         android:layout_marginEnd="16dp"
-        app:layout_constraintTop_toBottomOf="@+id/ilHeader"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toTopOf="@+id/rlBottom"
         app:layout_constraintEnd_toEndOf="parent"
-        />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ilHeader" />
 
     <com.application.smartstation.view.CustomTextViewBold
+        android:id="@+id/txtNoFound"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:text="@string/no_sendbox"
-        android:id="@+id/txtNoFound"
-        android:textSize="30sp"
-        android:visibility="gone"
-        android:gravity="center"
-        app:layout_constraintTop_toBottomOf="@+id/ilHeader"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/rlBottom"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:textColor="@color/colorE"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
-        >
+        android:gravity="center"
+        android:text="@string/no_sendbox"
+        android:textColor="@color/colorE"
+        android:textSize="30sp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@+id/rlBottom"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ilHeader">
 
     </com.application.smartstation.view.CustomTextViewBold>
 
@@ -52,9 +50,9 @@
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:background="@color/bg"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent">
+        app:layout_constraintStart_toStartOf="parent">
 
         <ImageView
             android:layout_width="90dp"

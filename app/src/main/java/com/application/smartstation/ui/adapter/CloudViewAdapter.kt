@@ -1,16 +1,13 @@
 package com.application.smartstation.ui.adapter
 
 import android.content.Context
-import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.application.smartstation.R
-import com.application.smartstation.databinding.ItemChatBinding
-import com.application.smartstation.databinding.ItemCloudBinding
 import com.application.smartstation.databinding.ItemCloudViewBinding
-import com.application.smartstation.ui.model.*
+import com.application.smartstation.ui.model.CloudDetailListRes
 import com.application.smartstation.util.FileUtils
 import com.application.smartstation.util.UtilsDefault
 import com.application.smartstation.view.ViewBinderHelper
@@ -26,7 +23,8 @@ class CloudViewAdapter(val context: Context) : RecyclerView.Adapter<CloudViewAda
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
 
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_cloud_view, parent, false)
+        val view =
+            LayoutInflater.from(parent.context).inflate(R.layout.item_cloud_view, parent, false)
         return ViewHolder(view)
     }
 
@@ -39,18 +37,18 @@ class CloudViewAdapter(val context: Context) : RecyclerView.Adapter<CloudViewAda
 
         with(holder) {
 
-            if (model.file_type.equals("folder")){
+            if (model.file_type.equals("folder")) {
                 binding.llView.visibility = View.VISIBLE
                 binding.clView.visibility = View.GONE
                 binding.txtFolderName.text = model.name
-            }else {
-                val fileName = FileUtils.getFileNameFromPath(model.file_path).replace("/","")
+            } else {
+                val fileName = FileUtils.getFileNameFromPath(model.file_path).replace("/", "")
                 var type = ""
-                if (UtilsDefault.isImageFile(model.file_path)){
+                if (UtilsDefault.isImageFile(model.file_path)) {
                     type = "img"
-                }else if (UtilsDefault.isPdfFile(model.file_path)){
+                } else if (UtilsDefault.isPdfFile(model.file_path)) {
                     type = "pdf"
-                }else{
+                } else {
                     type = ""
                 }
                 binding.llView.visibility = View.GONE

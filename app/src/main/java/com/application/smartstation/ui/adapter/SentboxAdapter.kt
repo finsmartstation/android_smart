@@ -36,26 +36,29 @@ class SentboxAdapter(val context: Context) : RecyclerView.Adapter<SentboxAdapter
         with(holder) {
             val str: String = TextUtils.join(",", model.to)
             binding.txtTitle.text = str
-            binding.txtDate.text = UtilsDefault.dateMail(UtilsDefault.localTimeConvert(model.createdAt)!!)
-            binding.txtTime.text = UtilsDefault.todayDate(UtilsDefault.localTimeConvert(model.createdAt))
+            binding.txtDate.text =
+                UtilsDefault.dateMail(UtilsDefault.localTimeConvert(model.createdAt)!!)
+            binding.txtTime.text =
+                UtilsDefault.todayDate(UtilsDefault.localTimeConvert(model.createdAt))
             binding.txtSub.text = model.subject
             binding.txtBody.text = Html.fromHtml(model.body)
 
-            if (model.attachments != null){
-                if (!model.attachments.isNullOrEmpty()){
+            if (model.attachments != null) {
+                if (!model.attachments.isNullOrEmpty()) {
                     binding.imgAttach.visibility = View.VISIBLE
-                }else{
+                } else {
                     binding.imgAttach.visibility = View.GONE
                 }
-            }else{
+            } else {
                 binding.imgAttach.visibility = View.GONE
             }
 
-            Glide.with(context).load(model.profile_pic).placeholder(R.drawable.ic_default).error(R.drawable.ic_default).diskCacheStrategy(
+            Glide.with(context).load(model.profile_pic).placeholder(R.drawable.ic_default)
+                .error(R.drawable.ic_default).diskCacheStrategy(
                 DiskCacheStrategy.DATA).into(binding.imgMailProfile)
 
 //            if (model.mail_read_status == "1"){
-                binding.txtTitle.setTextColor(context.resources.getColor(R.color.black))
+            binding.txtTitle.setTextColor(context.resources.getColor(R.color.black))
 //            }else{
 //                binding.txtTitle.setTextColor(context.resources.getColor(R.color.mail_date_coloe))
 //            }

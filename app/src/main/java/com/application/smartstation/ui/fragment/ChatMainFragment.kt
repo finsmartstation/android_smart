@@ -33,7 +33,7 @@ class ChatMainFragment : BaseFragment(R.layout.fragment_chat_main) {
 
     private fun setOnClickListener() {
         binding.rgChat.setOnCheckedChangeListener { p0, p1 ->
-            when(p1){
+            when (p1) {
                 R.id.rbChat -> {
                     fragmentHelper?.push(ChatFragment())
                 }

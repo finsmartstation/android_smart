@@ -43,9 +43,9 @@ class OTPFragment : BaseFragment(R.layout.fragment_o_t_p) {
 
     val apiViewModel: ApiViewModel by viewModels()
 
-    var mobile:String? = null
-    var countryNum:String? = null
-    var otpData:String? = null
+    var mobile: String? = null
+    var countryNum: String? = null
+    var otpData: String? = null
     private lateinit var smsClient: SmsRetrieverClient
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -60,7 +60,7 @@ class OTPFragment : BaseFragment(R.layout.fragment_o_t_p) {
         }
 
         binding.btnVerify.setOnClickListener {
-            if (binding.otpView.otp!!.length.equals(6)){
+            if (binding.otpView.otp!!.length.equals(6)) {
                 completeOTP(otpData!!)
             }
         }
@@ -71,14 +71,14 @@ class OTPFragment : BaseFragment(R.layout.fragment_o_t_p) {
         smsClient = SmsRetriever.getClient(requireActivity())
 
         val appSignatureHelper = SignatureHelper(requireActivity())
-        Log.d("SIGNATURE",appSignatureHelper.appSignature.toString())
+        Log.d("SIGNATURE", appSignatureHelper.appSignature.toString())
 
         val bundle = arguments
         bundle?.let {
             mobile = it.getString(Constants.MOB)
             countryNum = it.getString(Constants.COUNTRY_NUM)
-            otpData = it.getInt(Constants.OTP,0).toString()
-            binding.txtNumber.text = countryNum+" "+mobile+". "
+            otpData = it.getInt(Constants.OTP, 0).toString()
+            binding.txtNumber.text = countryNum + " " + mobile + ". "
         }
 
         binding.otpView.setOTP(otpData!!)
@@ -114,11 +114,14 @@ class OTPFragment : BaseFragment(R.layout.fragment_o_t_p) {
 
         SpanString.setSpan(resendOtp, 28, 34, 0)
         SpanString.setSpan(RelativeSizeSpan(1f), 28, 34, 0)
-        SpanString.setSpan(ForegroundColorSpan(resources.getColor(R.color.color_dark_green)), 28, 34, 0)
+        SpanString.setSpan(ForegroundColorSpan(resources.getColor(R.color.color_dark_green)),
+            28,
+            34,
+            0)
 
-        binding.txtResend.setMovementMethod(LinkMovementMethod.getInstance())
+        binding.txtResend.movementMethod = LinkMovementMethod.getInstance()
         binding.txtResend.setText(SpanString, TextView.BufferType.SPANNABLE)
-        binding.txtResend.setSelected(true)
+        binding.txtResend.isSelected = true
 
         //initSmsListener()
 
@@ -127,16 +130,16 @@ class OTPFragment : BaseFragment(R.layout.fragment_o_t_p) {
     private fun resendOTP(inputParams: InputParams) {
         apiViewModel.resendOTP(inputParams).observe(this, Observer {
             it.let {
-                when(it.status){
+                when (it.status) {
                     Status.LOADING -> {
                         showProgress()
                     }
                     Status.SUCCESS -> {
                         dismissProgress()
-                        if (it.data!!.status){
+                        if (it.data!!.status) {
                             toast(it.data.message)
                             binding.otpView.setOTP(otpData!!)
-                        }else{
+                        } else {
                             toast(it.data.message)
                         }
                     }
@@ -192,31 +195,38 @@ class OTPFragment : BaseFragment(R.layout.fragment_o_t_p) {
     private fun verifyOTP(inputParams: InputParams) {
         apiViewModel.otpVerify(inputParams).observe(requireActivity(), Observer {
             it.let {
-                when(it.status){
+                when (it.status) {
                     Status.LOADING -> {
                         showProgress()
                     }
                     Status.SUCCESS -> {
                         dismissProgress()
-                        if (it.data!!.status){
+                        if (it.data!!.status) {
                             binding.otpView.showSuccess()
-                           toast(it.data.message)
-                            UtilsDefault.updateSharedPreferenceString(Constants.USER_ID,it.data.data.id)
-                            UtilsDefault.updateSharedPreferenceString(Constants.ACCESS_TOKEN,it.data.data.accessToken)
-                            if(it.data.data.login_status.equals("0")) {
+                            toast(it.data.message)
+                            UtilsDefault.updateSharedPreferenceString(Constants.USER_ID,
+                                it.data.data.id)
+                            UtilsDefault.updateSharedPreferenceString(Constants.ACCESS_TOKEN,
+                                it.data.data.accessToken)
+                            if (it.data.data.login_status.equals("0")) {
                                 (activity as LoginActivity).fragmentHelper?.push(ProfileFragment())
-                            }else{
-                                UtilsDefault.updateSharedPreferenceString(Constants.PROFILE_PIC,it.data.data.profile_pic)
-                                UtilsDefault.updateSharedPreferenceString(Constants.NAME,it.data.data.name)
-                                UtilsDefault.updateSharedPreferenceString(Constants.ABOUT,it.data.data.about)
-                                UtilsDefault.setLoggedIn(requireActivity(),true)
-                                if(it.data.data.security_status.equals("1")) {
-                                    UtilsDefault.updateSharedPreferenceString(Constants.PASSCODE,"yes")
-                                    val intent = Intent(requireActivity(), PasscodeActivity::class.java)
-                                    intent.putExtra("isFromSplash",true)
+                            } else {
+                                UtilsDefault.updateSharedPreferenceString(Constants.PROFILE_PIC,
+                                    it.data.data.profile_pic)
+                                UtilsDefault.updateSharedPreferenceString(Constants.NAME,
+                                    it.data.data.name)
+                                UtilsDefault.updateSharedPreferenceString(Constants.ABOUT,
+                                    it.data.data.about)
+                                UtilsDefault.setLoggedIn(requireActivity(), true)
+                                if (it.data.data.security_status.equals("1")) {
+                                    UtilsDefault.updateSharedPreferenceString(Constants.PASSCODE,
+                                        "yes")
+                                    val intent =
+                                        Intent(requireActivity(), PasscodeActivity::class.java)
+                                    intent.putExtra("isFromSplash", true)
                                     startActivity(intent)
                                     requireActivity().finish()
-                                }else{
+                                } else {
                                     startActivity(
                                         Intent(
                                             requireActivity(),
@@ -226,7 +236,7 @@ class OTPFragment : BaseFragment(R.layout.fragment_o_t_p) {
                                     requireActivity().finish()
                                 }
                             }
-                        }else{
+                        } else {
                             binding.otpView.showError()
                             toast(it.data.message)
                         }

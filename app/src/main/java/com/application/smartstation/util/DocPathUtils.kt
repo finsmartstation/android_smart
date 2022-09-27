@@ -18,7 +18,7 @@ class DocPathUtils {
         @SuppressLint("Range")
         fun getSourceDocPath(
             context: Context,
-            uridata: Uri
+            uridata: Uri,
         ): String? {
             var displayname = ""
             var size = 0
@@ -99,7 +99,7 @@ class DocPathUtils {
             context: Context,
             uri: Uri?,
             selection: String?,
-            selectionArgs: Array<String>?
+            selectionArgs: Array<String>?,
         ): String? {
             var cursor: Cursor? = null
             val column = "_data"

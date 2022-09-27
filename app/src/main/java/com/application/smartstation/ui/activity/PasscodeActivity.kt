@@ -54,30 +54,28 @@ class PasscodeActivity : BaseActivity() {
         builder = StringBuilder()
         confirmBuilder = StringBuilder()
 
-        if (biometricManager.canAuthenticate() == BiometricManager.BIOMETRIC_ERROR_NO_HARDWARE){
+        if (biometricManager.canAuthenticate() == BiometricManager.BIOMETRIC_ERROR_NO_HARDWARE) {
             binding.imgFingerprint.visibility = View.INVISIBLE
-        }
-        else {
+        } else {
             binding.imgFingerprint.visibility = View.VISIBLE
         }
 
-        if (intent!=null){
-            isFromSplash = intent.getBooleanExtra("isFromSplash",false)
-            isFromSettings = intent.getBooleanExtra("isFromSettings",false)
+        if (intent != null) {
+            isFromSplash = intent.getBooleanExtra("isFromSplash", false)
+            isFromSettings = intent.getBooleanExtra("isFromSettings", false)
 //            isFromDeposit = intent.getBooleanExtra("isFromDeposit",false)
         }
 
-        if (isFromSplash){
-            if (biometricManager.canAuthenticate() == BiometricManager.BIOMETRIC_SUCCESS){
+        if (isFromSplash) {
+            if (biometricManager.canAuthenticate() == BiometricManager.BIOMETRIC_SUCCESS) {
                 binding.imgFingerprint.visibility = View.VISIBLE
-            }else{
+            } else {
                 binding.imgFingerprint.visibility = View.INVISIBLE
             }
             setPinTo = 3
             binding.tvEnterPin.text = resources.getString(R.string.enter_pin)
 //            fingerPrintAuth()
-        }
-        else {
+        } else {
             binding.imgFingerprint.visibility = View.INVISIBLE
         }
 
@@ -88,7 +86,7 @@ class PasscodeActivity : BaseActivity() {
 //            fingerPrintAuth()
 //        }
 
-        if (isFromSettings){
+        if (isFromSettings) {
             setPinTo = 4
             binding.tvEnterPin.text = resources.getString(R.string.deactive_passcode)
         }
@@ -97,11 +95,10 @@ class PasscodeActivity : BaseActivity() {
 
     private fun checkFingerPrint() {
 
-        if (biometricManager.canAuthenticate() == BiometricManager.BIOMETRIC_ERROR_NO_HARDWARE){
+        if (biometricManager.canAuthenticate() == BiometricManager.BIOMETRIC_ERROR_NO_HARDWARE) {
             UtilsDefault.updateSharedPreferenceString(Constants.FINGERPRINT, "yes")
             finish()
-        }
-        else{
+        } else {
 
             FingerPrintHelper().scanData(this, object : FingerPrintHelper.FingerPrintAction {
                 override fun onSuccess(result: String?) {
@@ -141,22 +138,21 @@ class PasscodeActivity : BaseActivity() {
 
     private fun fingerPrintAuth() {
 
-        if (biometricManager.canAuthenticate() == BiometricManager.BIOMETRIC_SUCCESS){
+        if (biometricManager.canAuthenticate() == BiometricManager.BIOMETRIC_SUCCESS) {
 
             FingerPrintHelper().scanData(this, object : FingerPrintHelper.FingerPrintAction {
                 override fun onSuccess(result: String?) {
 
-                        if (isFromSettings){
-                            val intent = Intent()
-                            intent.putExtra("status", "verified")
-                            setResult(RESULT_OK, intent)
-                            finish()
-                        }
-                        else {
-                            val intent = Intent(this@PasscodeActivity, MainActivity::class.java)
-                            startActivity(intent)
-                            finish()
-                        }
+                    if (isFromSettings) {
+                        val intent = Intent()
+                        intent.putExtra("status", "verified")
+                        setResult(RESULT_OK, intent)
+                        finish()
+                    } else {
+                        val intent = Intent(this@PasscodeActivity, MainActivity::class.java)
+                        startActivity(intent)
+                        finish()
+                    }
 
                 }
 
@@ -187,41 +183,41 @@ class PasscodeActivity : BaseActivity() {
                 builder!!.setLength(0)
                 count = 0
                 isConfirm = false
-                binding.llPinPage.startAnimation(AnimationUtils.loadAnimation(this,R.anim.shake))
+                binding.llPinPage.startAnimation(AnimationUtils.loadAnimation(this, R.anim.shake))
                 toast("Pin mismatch")
             } else {
                 val inputParams = InputParams()
-                inputParams.accessToken = UtilsDefault.getSharedPreferenceString(Constants.ACCESS_TOKEN)
+                inputParams.accessToken =
+                    UtilsDefault.getSharedPreferenceString(Constants.ACCESS_TOKEN)
                 inputParams.user_id = UtilsDefault.getSharedPreferenceString(Constants.USER_ID)
                 inputParams.security_pin = newpin
                 setPin(inputParams)
             }
-        }
-        else if (setPinTo == 3) {
+        } else if (setPinTo == 3) {
             newpin = builder.toString()
             val inputParams = InputParams()
             inputParams.accessToken = UtilsDefault.getSharedPreferenceString(Constants.ACCESS_TOKEN)
             inputParams.user_id = UtilsDefault.getSharedPreferenceString(Constants.USER_ID)
             inputParams.security_pin = newpin
             checkPin(inputParams)
-        }
-        else if (setPinTo == 4) {
+        } else if (setPinTo == 4) {
             newpin = builder.toString()
             val inputParams = InputParams()
             inputParams.accessToken = UtilsDefault.getSharedPreferenceString(Constants.ACCESS_TOKEN)
             inputParams.user_id = UtilsDefault.getSharedPreferenceString(Constants.USER_ID)
             inputParams.security_pin = newpin
             removePin(inputParams)
-        }
-        else if (setPinTo == 5) {
+        } else if (setPinTo == 5) {
 
-            if (!UtilsDefault.getSharedPreferenceString(Constants.PASSCODE).equals(builder.toString())) {
+            if (!UtilsDefault.getSharedPreferenceString(Constants.PASSCODE)
+                    .equals(builder.toString())
+            ) {
 
                 clearPins()
                 builder!!.setLength(0)
                 count = 0
                 isConfirm = false
-                binding.llPinPage.startAnimation(AnimationUtils.loadAnimation(this,R.anim.shake))
+                binding.llPinPage.startAnimation(AnimationUtils.loadAnimation(this, R.anim.shake))
                 Toast.makeText(this, "Pin wrong", Toast.LENGTH_SHORT).show()
 
             } else {
@@ -236,21 +232,22 @@ class PasscodeActivity : BaseActivity() {
     private fun removePin(inputParams: InputParams) {
         apiViewModel.passcodeRemove(inputParams).observe(this, Observer {
             it.let {
-                when(it.status){
+                when (it.status) {
                     Status.LOADING -> {
                         showProgress()
                     }
                     Status.SUCCESS -> {
                         dismissProgress()
-                        if (it.data!!.status){
-                            UtilsDefault.updateSharedPreferenceString(Constants.PASSCODE,"no")
+                        if (it.data!!.status) {
+                            UtilsDefault.updateSharedPreferenceString(Constants.PASSCODE, "no")
                             finish()
-                        }else{
+                        } else {
                             clearPins()
                             builder!!.setLength(0)
                             count = 0
                             isConfirm = false
-                            binding.llPinPage.startAnimation(AnimationUtils.loadAnimation(this,R.anim.shake))
+                            binding.llPinPage.startAnimation(AnimationUtils.loadAnimation(this,
+                                R.anim.shake))
                             toast(it.data.message)
                         }
                     }
@@ -266,21 +263,22 @@ class PasscodeActivity : BaseActivity() {
     private fun checkPin(inputParams: InputParams) {
         apiViewModel.passcodeCheck(inputParams).observe(this, Observer {
             it.let {
-                when(it.status){
+                when (it.status) {
                     Status.LOADING -> {
                         showProgress()
                     }
                     Status.SUCCESS -> {
                         dismissProgress()
-                        if (it.data!!.status){
-                            startActivity(Intent(this,MainActivity::class.java))
+                        if (it.data!!.status) {
+                            startActivity(Intent(this, MainActivity::class.java))
                             finish()
-                        }else{
+                        } else {
                             clearPins()
                             builder!!.setLength(0)
                             count = 0
                             isConfirm = false
-                            binding.llPinPage.startAnimation(AnimationUtils.loadAnimation(this,R.anim.shake))
+                            binding.llPinPage.startAnimation(AnimationUtils.loadAnimation(this,
+                                R.anim.shake))
                             toast(it.data.message)
                         }
                     }
@@ -296,16 +294,16 @@ class PasscodeActivity : BaseActivity() {
     private fun setPin(inputParams: InputParams) {
         apiViewModel.passcodeUpdate(inputParams).observe(this, Observer {
             it.let {
-                when(it.status){
+                when (it.status) {
                     Status.LOADING -> {
                         showProgress()
                     }
                     Status.SUCCESS -> {
                         dismissProgress()
-                        if (it.data!!.status){
-                            UtilsDefault.updateSharedPreferenceString(Constants.PASSCODE,"yes")
+                        if (it.data!!.status) {
+                            UtilsDefault.updateSharedPreferenceString(Constants.PASSCODE, "yes")
                             finish()
-                        }else{
+                        } else {
                             toast(it.data.message)
                         }
                     }

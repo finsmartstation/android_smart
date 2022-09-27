@@ -1,9 +1,8 @@
 package com.application.smartstation.util
 
-import com.application.smartstation.R
 import android.content.Context
+import com.application.smartstation.R
 import com.application.smartstation.ui.model.CountryList
-import kotlin.collections.ArrayList
 
 
 object CountryUtils {

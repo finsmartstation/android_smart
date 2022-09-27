@@ -25,9 +25,9 @@ class TermAndConditionActivity : BaseActivity() {
     }
 
     private fun initView() {
-        if(intent != null){
+        if (intent != null) {
             val type = intent.getStringExtra("type")
-            if (type.equals("terms")){
+            if (type.equals("terms")) {
                 getTerms()
             }
         }
@@ -36,7 +36,7 @@ class TermAndConditionActivity : BaseActivity() {
     private fun getTerms() {
         apiViewModel.getTerms().observe(this, Observer {
             it.let {
-                when(it.status){
+                when (it.status) {
                     Status.LOADING -> {
                         showProgress()
                     }

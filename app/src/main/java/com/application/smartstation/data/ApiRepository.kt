@@ -33,9 +33,14 @@ class ApiRepository @Inject constructor(val apiService: ApiService) {
         }.flowOn(Dispatchers.IO)
     }
 
-    fun updateProfile(user_id:RequestBody,accessToken:RequestBody,name:RequestBody,profile_pic: MultipartBody.Part): Flow<ProfileUpdateResponse> {
+    fun updateProfile(
+        user_id: RequestBody,
+        accessToken: RequestBody,
+        name: RequestBody,
+        profile_pic: MultipartBody.Part,
+    ): Flow<ProfileUpdateResponse> {
         return flow {
-            val response = apiService.updateProfile(user_id,accessToken,name,profile_pic)
+            val response = apiService.updateProfile(user_id, accessToken, name, profile_pic)
             emit(response)
         }.flowOn(Dispatchers.IO)
     }
@@ -82,9 +87,13 @@ class ApiRepository @Inject constructor(val apiService: ApiService) {
         }.flowOn(Dispatchers.IO)
     }
 
-    fun updateProfilePic(user_id:RequestBody,accessToken:RequestBody,profile_pic: MultipartBody.Part): Flow<UpdateProfilePicResponse> {
+    fun updateProfilePic(
+        user_id: RequestBody,
+        accessToken: RequestBody,
+        profile_pic: MultipartBody.Part,
+    ): Flow<UpdateProfilePicResponse> {
         return flow {
-            val response = apiService.updateProfilePic(user_id,accessToken,profile_pic)
+            val response = apiService.updateProfilePic(user_id, accessToken, profile_pic)
             emit(response)
         }.flowOn(Dispatchers.IO)
     }
@@ -124,16 +133,26 @@ class ApiRepository @Inject constructor(val apiService: ApiService) {
         }.flowOn(Dispatchers.IO)
     }
 
-    fun uploadSignature(user_id:RequestBody,accessToken:RequestBody,name:RequestBody,signature: MultipartBody.Part): Flow<BaseResponse> {
+    fun uploadSignature(
+        user_id: RequestBody,
+        accessToken: RequestBody,
+        name: RequestBody,
+        signature: MultipartBody.Part,
+    ): Flow<BaseResponse> {
         return flow {
-            val response = apiService.uploadSignature(user_id,accessToken,name,signature)
+            val response = apiService.uploadSignature(user_id, accessToken, name, signature)
             emit(response)
         }.flowOn(Dispatchers.IO)
     }
 
-    fun stampUpload(user_id:RequestBody,accessToken:RequestBody,name:RequestBody,stamp: MultipartBody.Part): Flow<BaseResponse> {
+    fun stampUpload(
+        user_id: RequestBody,
+        accessToken: RequestBody,
+        name: RequestBody,
+        stamp: MultipartBody.Part,
+    ): Flow<BaseResponse> {
         return flow {
-            val response = apiService.stampUpload(user_id,accessToken,name,stamp)
+            val response = apiService.stampUpload(user_id, accessToken, name, stamp)
             emit(response)
         }.flowOn(Dispatchers.IO)
     }
@@ -384,51 +403,91 @@ class ApiRepository @Inject constructor(val apiService: ApiService) {
     }
 
     fun grpCreate(
-        user_id:RequestBody,
-        accessToken:RequestBody,
-        group_name:RequestBody,
-        members:RequestBody,
-        group_profile: MultipartBody.Part): Flow<BaseResponse> {
+        user_id: RequestBody,
+        accessToken: RequestBody,
+        group_name: RequestBody,
+        members: RequestBody,
+        group_profile: MultipartBody.Part,
+    ): Flow<BaseResponse> {
         return flow {
-            val response = apiService.grpCreate(user_id, accessToken, group_name, members, group_profile)
+            val response =
+                apiService.grpCreate(user_id, accessToken, group_name, members, group_profile)
             emit(response)
         }.flowOn(Dispatchers.IO)
     }
 
-    fun fileUpload(user_id:RequestBody,accessToken:RequestBody,file: MultipartBody.Part): Flow<BaseResponse> {
+    fun fileUpload(
+        user_id: RequestBody,
+        accessToken: RequestBody,
+        file: MultipartBody.Part,
+    ): Flow<BaseResponse> {
         return flow {
-            val response = apiService.fileUpload(user_id,accessToken, file)
+            val response = apiService.fileUpload(user_id, accessToken, file)
             emit(response)
         }.flowOn(Dispatchers.IO)
     }
 
     fun composeMail(
-        user_id:RequestBody,
-        accessToken:RequestBody,
-        to_mail:RequestBody,
-        cc_mail:RequestBody,
-        bcc_mail:RequestBody,
-        subject:RequestBody,
-        body:RequestBody,
-        attachment: List<MultipartBody.Part?>
+        user_id: RequestBody,
+        accessToken: RequestBody,
+        to_mail: RequestBody,
+        cc_mail: RequestBody,
+        bcc_mail: RequestBody,
+        subject: RequestBody,
+        body: RequestBody,
+        attachment: List<MultipartBody.Part?>,
     ): Flow<BaseResponse> {
         return flow {
-            val response = apiService.composeMail(user_id,accessToken, to_mail, cc_mail, bcc_mail, subject, body, attachment)
+            val response = apiService.composeMail(user_id,
+                accessToken,
+                to_mail,
+                cc_mail,
+                bcc_mail,
+                subject,
+                body,
+                attachment)
             emit(response)
         }.flowOn(Dispatchers.IO)
     }
 
     fun fileUploadCloud(
-        user_id:RequestBody,
-        accessToken:RequestBody,
-        parent_folder_id:RequestBody,
-        access_period:RequestBody,
-        period_limit:RequestBody,
-        file_type:RequestBody,
-        file:MultipartBody.Part
+        user_id: RequestBody,
+        accessToken: RequestBody,
+        parent_folder_id: RequestBody,
+        access_period: RequestBody,
+        period_limit: RequestBody,
+        file_type: RequestBody,
+        file: MultipartBody.Part,
     ): Flow<BaseResponse> {
         return flow {
-            val response = apiService.fileUploadCloud(user_id,accessToken, parent_folder_id, access_period, period_limit, file_type, file)
+            val response = apiService.fileUploadCloud(user_id,
+                accessToken,
+                parent_folder_id,
+                access_period,
+                period_limit,
+                file_type,
+                file)
+            emit(response)
+        }.flowOn(Dispatchers.IO)
+    }
+
+    fun fileUploadCloudFolder(
+        user_id: RequestBody,
+        accessToken: RequestBody,
+        subparent_folder_id: RequestBody,
+        access_period: RequestBody,
+        period_limit: RequestBody,
+        file_type: RequestBody,
+        file: MultipartBody.Part,
+    ): Flow<BaseResponse> {
+        return flow {
+            val response = apiService.fileUploadCloudFolder(user_id,
+                accessToken,
+                subparent_folder_id,
+                access_period,
+                period_limit,
+                file_type,
+                file)
             emit(response)
         }.flowOn(Dispatchers.IO)
     }

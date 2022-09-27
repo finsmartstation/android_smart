@@ -48,7 +48,8 @@ import org.json.JSONObject
 
 
 @AndroidEntryPoint
-class MainActivity : BaseActivity(), InboxFragment.OnUnreadMailCountListener,LetterInboxFragment.OnUnreadLetterCountListener {
+class MainActivity : BaseActivity(), InboxFragment.OnUnreadMailCountListener,
+    LetterInboxFragment.OnUnreadLetterCountListener {
 
     val binding: ActivityMainBinding by viewBinding()
     val apiViewModel: ApiViewModel by viewModels()
@@ -56,10 +57,10 @@ class MainActivity : BaseActivity(), InboxFragment.OnUnreadMailCountListener,Let
     var mBottomDialogLogout: Dialog? = null
     var rootref: DatabaseReference? = null
     var type = "chat"
-    var searchInterface:SearchInterface? = null
+    var searchInterface: SearchInterface? = null
     val chatMainFragment = ChatMainFragment()
-    var list:ArrayList<DataUserList> = ArrayList()
-    var contactList:ArrayList<ContactListRes> = ArrayList()
+    var list: ArrayList<DataUserList> = ArrayList()
+    var contactList: ArrayList<ContactListRes> = ArrayList()
     var contactAdapter: ContactAdapter? = null
     var listChat: ArrayList<DataChatList> = java.util.ArrayList()
     var chatAdapter: ChatAdapter? = null
@@ -68,7 +69,7 @@ class MainActivity : BaseActivity(), InboxFragment.OnUnreadMailCountListener,Let
     val REQUEST_READ_CONTACTS = 79
 
     interface SearchInterface {
-        fun searchData(searchTxt:String,type:String)
+        fun searchData(searchTxt: String, type: String)
     }
 
     fun setSendData(sendData: SearchInterface) {
@@ -92,17 +93,19 @@ class MainActivity : BaseActivity(), InboxFragment.OnUnreadMailCountListener,Let
 
     private fun initView() {
 
-        phnPermission{
+        phnPermission {
             getContactList()
         }
 
         binding.rvSearch.layoutManager = LinearLayoutManager(this,
-            LinearLayoutManager.VERTICAL,false)
+            LinearLayoutManager.VERTICAL, false)
         contactAdapter = ContactAdapter(this)
         binding.rvSearch.adapter = contactAdapter
 
         contactAdapter!!.onItemClick = { model ->
-            startActivity(Intent(this, ChatActivity::class.java).putExtra(Constants.REC_ID,model.user_id).putExtra(Constants.NAME,model.name).putExtra(Constants.PROFILE,model.profile_pic))
+            startActivity(Intent(this, ChatActivity::class.java).putExtra(Constants.REC_ID,
+                model.user_id).putExtra(Constants.NAME, model.name)
+                .putExtra(Constants.PROFILE, model.profile_pic))
             UtilsDefault.hideKeyboardForFocusedView(this)
             binding.llSearch.visibility = View.GONE
             binding.imgSearch.visibility = View.VISIBLE
@@ -118,12 +121,15 @@ class MainActivity : BaseActivity(), InboxFragment.OnUnreadMailCountListener,Let
             binding.edtSearch.setText("")
         }
 
-        binding.rvMessage.layoutManager = LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false)
+        binding.rvMessage.layoutManager =
+            LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
         chatAdapter = ChatAdapter(this)
         binding.rvMessage.adapter = chatAdapter
 
         chatAdapter!!.onItemClick = { model ->
-            startActivity(Intent(this, ChatActivity::class.java).putExtra(Constants.REC_ID,model.userid).putExtra(Constants.NAME,model.name).putExtra(Constants.PROFILE,model.profile))
+            startActivity(Intent(this, ChatActivity::class.java).putExtra(Constants.REC_ID,
+                model.userid).putExtra(Constants.NAME, model.name)
+                .putExtra(Constants.PROFILE, model.profile))
             UtilsDefault.hideKeyboardForFocusedView(this)
             binding.llSearch.visibility = View.GONE
             binding.imgSearch.visibility = View.VISIBLE
@@ -157,7 +163,7 @@ class MainActivity : BaseActivity(), InboxFragment.OnUnreadMailCountListener,Let
 
 //        binding.nvMenu.getHeaderView(0).txtUsername.text = "Fin Smart"
 
-        UtilsDefault.initService(SocketService::class.java,this)
+        UtilsDefault.initService(SocketService::class.java, this)
 
         rootref = FirebaseDatabase.getInstance().reference
 
@@ -171,9 +177,9 @@ class MainActivity : BaseActivity(), InboxFragment.OnUnreadMailCountListener,Let
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 val txt = s.toString()
-                if(!type.equals("chat")) {
+                if (!type.equals("chat")) {
                     searchInterface!!.searchData(txt, type)
-                }else{
+                } else {
                     filterUserList(txt)
                     filterChatList(txt)
                 }
@@ -190,11 +196,12 @@ class MainActivity : BaseActivity(), InboxFragment.OnUnreadMailCountListener,Let
         NavigationView.OnNavigationItemSelectedListener { menuItem ->
             when (menuItem.itemId) {
                 R.id.settings -> {
-                    startActivity(Intent(this,SettingsActivity::class.java))
+                    startActivity(Intent(this, SettingsActivity::class.java))
                 }
                 R.id.logout -> {
                     val inputParams = InputParams()
-                    inputParams.accessToken = UtilsDefault.getSharedPreferenceString(Constants.ACCESS_TOKEN)
+                    inputParams.accessToken =
+                        UtilsDefault.getSharedPreferenceString(Constants.ACCESS_TOKEN)
                     inputParams.user_id = UtilsDefault.getSharedPreferenceString(Constants.USER_ID)
                     logout(inputParams)
                     return@OnNavigationItemSelectedListener true
@@ -206,18 +213,18 @@ class MainActivity : BaseActivity(), InboxFragment.OnUnreadMailCountListener,Let
     private fun logout(inputParams: InputParams) {
         apiViewModel.logout(inputParams).observe(this, Observer {
             it.let {
-                when(it.status){
+                when (it.status) {
                     Status.LOADING -> {
                         showProgress()
                     }
                     Status.SUCCESS -> {
                         dismissProgress()
-                        if (it.data!!.status){
-                            UtilsDefault.setLoggedIn(this,false)
+                        if (it.data!!.status) {
+                            UtilsDefault.setLoggedIn(this, false)
                             UtilsDefault.clearSession()
-                            startActivity(Intent(this,LoginActivity::class.java))
+                            startActivity(Intent(this, LoginActivity::class.java))
                             finish()
-                        }else{
+                        } else {
                             toast(it.data.message)
                         }
                     }
@@ -262,7 +269,7 @@ class MainActivity : BaseActivity(), InboxFragment.OnUnreadMailCountListener,Let
         binding.imgNewMail.setOnClickListener {
             if (type.equals("mail")) {
                 startActivity(Intent(this, NewMailActivity::class.java))
-            }else{
+            } else {
                 startActivity(Intent(this, NewLetterActivity::class.java))
             }
         }
@@ -328,7 +335,7 @@ class MainActivity : BaseActivity(), InboxFragment.OnUnreadMailCountListener,Let
             binding.edtSearch.setText("")
         }
 
-        binding.imgMenu.setOnClickListener {v ->
+        binding.imgMenu.setOnClickListener { v ->
             binding.imgMenu.visibility = View.GONE
             menuPopup(v)
         }
@@ -342,11 +349,11 @@ class MainActivity : BaseActivity(), InboxFragment.OnUnreadMailCountListener,Let
         dialog.setOnShowListener { setupBottomSheet(it) }
         val bind = BottomSheetDialogMainBinding.bind(view)
         bind.llCloud.setOnClickListener {
-            startActivity(Intent(this,CloudActivity::class.java))
+            startActivity(Intent(this, CloudActivity::class.java))
             dialog.dismiss()
         }
         bind.llProduct.setOnClickListener {
-            startActivity(Intent(this,ProductActivity::class.java))
+            startActivity(Intent(this, ProductActivity::class.java))
             dialog.dismiss()
         }
         dialog.show()
@@ -367,20 +374,20 @@ class MainActivity : BaseActivity(), InboxFragment.OnUnreadMailCountListener,Let
         val width = LinearLayout.LayoutParams.WRAP_CONTENT
         val height = LinearLayout.LayoutParams.WRAP_CONTENT
         val popupWindow = PopupWindow(popupView, width, height, true)
-        popupWindow.setFocusable(true)
-        popupWindow.setOutsideTouchable(true)
+        popupWindow.isFocusable = true
+        popupWindow.isOutsideTouchable = true
         popupWindow.showAtLocation(v, Gravity.TOP or Gravity.LEFT, -100, -50)
 
         val bind = MenuPopupBinding.bind(popupView)
 
-        if (type.equals("chat")){
+        if (type.equals("chat")) {
             bind.txtNewGrp.visibility = View.VISIBLE
             bind.imgNewGrp.visibility = View.VISIBLE
             bind.txtStarMsg.visibility = View.VISIBLE
             bind.imgStarMsg.visibility = View.VISIBLE
             bind.txtSendMail.visibility = View.GONE
             bind.imgSent.visibility = View.GONE
-        }else {
+        } else {
             bind.txtNewGrp.visibility = View.GONE
             bind.imgNewGrp.visibility = View.GONE
             bind.txtStarMsg.visibility = View.GONE
@@ -390,13 +397,13 @@ class MainActivity : BaseActivity(), InboxFragment.OnUnreadMailCountListener,Let
         }
 
         bind.txtSettings.setOnClickListener {
-            startActivity(Intent(this,SettingsActivity::class.java))
+            startActivity(Intent(this, SettingsActivity::class.java))
             binding.imgMenu.visibility = View.VISIBLE
             popupWindow.dismiss()
         }
 
         bind.txtNewGrp.setOnClickListener {
-            startActivity(Intent(this,CreateGroupActivity::class.java))
+            startActivity(Intent(this, CreateGroupActivity::class.java))
             binding.imgMenu.visibility = View.VISIBLE
             popupWindow.dismiss()
         }
@@ -408,10 +415,10 @@ class MainActivity : BaseActivity(), InboxFragment.OnUnreadMailCountListener,Let
         }
 
         bind.txtSendMail.setOnClickListener {
-            if (type.equals("mail")){
-                startActivity(Intent(this,SentMailActivity::class.java))
-            }else{
-                startActivity(Intent(this,SentLetterActivity::class.java))
+            if (type.equals("mail")) {
+                startActivity(Intent(this, SentMailActivity::class.java))
+            } else {
+                startActivity(Intent(this, SentLetterActivity::class.java))
             }
             binding.imgMenu.visibility = View.VISIBLE
             popupWindow.dismiss()
@@ -427,9 +434,10 @@ class MainActivity : BaseActivity(), InboxFragment.OnUnreadMailCountListener,Let
         try {
             val view = layoutInflater.inflate(R.layout.dialog_logout, null)
             val dialogLogout = Dialog(this)
-            val window: Window = dialogLogout.getWindow()!!
+            val window: Window = dialogLogout.window!!
             window.setGravity(Gravity.CENTER)
-            window.setLayout(WindowManager.LayoutParams.FILL_PARENT, WindowManager.LayoutParams.FILL_PARENT)
+            window.setLayout(WindowManager.LayoutParams.FILL_PARENT,
+                WindowManager.LayoutParams.FILL_PARENT)
             window.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
             val bind = DialogLogoutBinding.bind(view)
             dialogLogout.setCancelable(false)
@@ -440,7 +448,8 @@ class MainActivity : BaseActivity(), InboxFragment.OnUnreadMailCountListener,Let
             bind.txtYes.setOnClickListener {
                 dialogLogout.dismiss()
                 val inputParams = InputParams()
-                inputParams.accessToken = UtilsDefault.getSharedPreferenceString(Constants.ACCESS_TOKEN)
+                inputParams.accessToken =
+                    UtilsDefault.getSharedPreferenceString(Constants.ACCESS_TOKEN)
                 inputParams.user_id = UtilsDefault.getSharedPreferenceString(Constants.USER_ID)
                 logout(inputParams)
             }
@@ -469,26 +478,31 @@ class MainActivity : BaseActivity(), InboxFragment.OnUnreadMailCountListener,Let
 
         apiViewModel.getUserlist(inputParams).observe(this, Observer {
             it.let {
-                when(it.status){
+                when (it.status) {
                     Status.LOADING -> {
 //                        showProgress()
                     }
                     Status.SUCCESS -> {
 //                        dismissProgress()
-                        if (it.data!!.status){
+                        if (it.data!!.status) {
                             var list1 = it.data.data
-                            if(list1.isNotEmpty()) {
+                            if (list1.isNotEmpty()) {
                                 list.clear()
-                                for (a in contactList){
-                                    for (b in list1){
-                                        if (PhoneNumberUtils.compare(a.Phn,b.phone)){
-                                            list.add(DataUserList(b.user_id,a.name,b.profile_pic,b.phone,b.country,b.about))
+                                for (a in contactList) {
+                                    for (b in list1) {
+                                        if (PhoneNumberUtils.compare(a.Phn, b.phone)) {
+                                            list.add(DataUserList(b.user_id,
+                                                a.name,
+                                                b.profile_pic,
+                                                b.phone,
+                                                b.country,
+                                                b.about))
                                         }
                                     }
                                 }
                                 setData(list)
                             }
-                        }else{
+                        } else {
                             toast(it.data.message)
                         }
                     }
@@ -530,16 +544,16 @@ class MainActivity : BaseActivity(), InboxFragment.OnUnreadMailCountListener,Let
         try {
             apiViewModel.getChatlist(inputParams).observe(this, Observer {
                 it.let {
-                    when(it.status){
+                    when (it.status) {
                         Status.LOADING -> {
                         }
                         Status.SUCCESS -> {
-                            if (it.data!!.status){
+                            if (it.data!!.status) {
                                 listChat = it.data.data
-                                if(listChat.isNotEmpty()) {
+                                if (listChat.isNotEmpty()) {
                                     setDataChat(listChat)
                                 }
-                            }else{
+                            } else {
                                 toast(it.data.message)
                             }
                         }
@@ -549,8 +563,8 @@ class MainActivity : BaseActivity(), InboxFragment.OnUnreadMailCountListener,Let
                     }
                 }
             })
-        }catch (e:Exception){
-            Log.d("TAG", "getChatListRefresh: "+e)
+        } catch (e: Exception) {
+            Log.d("TAG", "getChatListRefresh: " + e)
         }
 
     }
@@ -565,14 +579,14 @@ class MainActivity : BaseActivity(), InboxFragment.OnUnreadMailCountListener,Let
             val templist: java.util.ArrayList<DataChatList> = java.util.ArrayList()
 
             for (items in listChat) {
-                val chat = items.name.toLowerCase()+items.message.toLowerCase()
+                val chat = items.name.toLowerCase() + items.message.toLowerCase()
                 if (chat.contains(searchtext)) {
                     templist.add(items)
                 }
             }
-            if (templist.isNotEmpty()){
+            if (templist.isNotEmpty()) {
                 binding.llMsgList.visibility = View.VISIBLE
-            }else{
+            } else {
                 binding.llMsgList.visibility = View.GONE
             }
             chatAdapter?.setChat(templist)
@@ -587,11 +601,11 @@ class MainActivity : BaseActivity(), InboxFragment.OnUnreadMailCountListener,Let
         super.onDestroy()
     }
 
-    fun offline(){
+    fun offline() {
         val jsonObject = JSONObject()
         try {
             jsonObject.put("s_id", UtilsDefault.getSharedPreferenceString(Constants.USER_ID))
-            Log.d("TAG", "offline: "+jsonObject)
+            Log.d("TAG", "offline: " + jsonObject)
             emitters.offline(jsonObject)
         } catch (e: java.lang.Exception) {
             e.printStackTrace()
@@ -602,10 +616,10 @@ class MainActivity : BaseActivity(), InboxFragment.OnUnreadMailCountListener,Let
     override fun onUnreadMail(count: String) {
         if (count.toInt() == 0) {
             binding.llUnread.visibility = View.INVISIBLE
-        }else if (count.toInt() < 100) {
+        } else if (count.toInt() < 100) {
             binding.llUnread.visibility = View.VISIBLE
             binding.txtUnreadCount.text = count
-        }else{
+        } else {
             binding.llUnread.visibility = View.VISIBLE
             binding.txtUnreadCount.text = "99+"
         }
@@ -614,10 +628,10 @@ class MainActivity : BaseActivity(), InboxFragment.OnUnreadMailCountListener,Let
     override fun onUnreadLetter(count: String) {
         if (count.toInt() == 0) {
             binding.llUnread.visibility = View.INVISIBLE
-        }else if (count.toInt() < 100) {
+        } else if (count.toInt() < 100) {
             binding.llUnread.visibility = View.VISIBLE
             binding.txtUnreadCount.text = count
-        }else{
+        } else {
             binding.llUnread.visibility = View.VISIBLE
             binding.txtUnreadCount.text = "99+"
         }
@@ -626,39 +640,39 @@ class MainActivity : BaseActivity(), InboxFragment.OnUnreadMailCountListener,Let
     @SuppressLint("Range")
     private fun getContactList() {
         try {
-        val cr = contentResolver
-        val cur: Cursor? = cr.query(ContactsContract.Contacts.CONTENT_URI,
-            null, null, null, null)
-        if ((if (cur != null) cur.getCount() else 0) > 0) {
-            while (cur != null && cur.moveToNext()) {
-                val id: String = cur.getString(
-                    cur.getColumnIndex(ContactsContract.Contacts._ID))
-                val name: String = cur.getString(cur.getColumnIndex(
-                    ContactsContract.Contacts.DISPLAY_NAME))
-                if (cur.getInt(cur.getColumnIndex(
-                        ContactsContract.Contacts.HAS_PHONE_NUMBER)) > 0
-                ) {
-                    val pCur: Cursor? = cr.query(
-                        ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
-                        null,
-                        ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = ?",
-                        arrayOf(id),
-                        null)
-                    while (pCur!!.moveToNext()) {
-                        val phoneNo: String = pCur.getString(pCur.getColumnIndex(
-                            ContactsContract.CommonDataKinds.Phone.NUMBER))
-                        contactList.add(ContactListRes(name,phoneNo))
+            val cr = contentResolver
+            val cur: Cursor? = cr.query(ContactsContract.Contacts.CONTENT_URI,
+                null, null, null, null)
+            if ((if (cur != null) cur.count else 0) > 0) {
+                while (cur != null && cur.moveToNext()) {
+                    val id: String = cur.getString(
+                        cur.getColumnIndex(ContactsContract.Contacts._ID))
+                    val name: String = cur.getString(cur.getColumnIndex(
+                        ContactsContract.Contacts.DISPLAY_NAME))
+                    if (cur.getInt(cur.getColumnIndex(
+                            ContactsContract.Contacts.HAS_PHONE_NUMBER)) > 0
+                    ) {
+                        val pCur: Cursor? = cr.query(
+                            ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
+                            null,
+                            ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = ?",
+                            arrayOf(id),
+                            null)
+                        while (pCur!!.moveToNext()) {
+                            val phoneNo: String = pCur.getString(pCur.getColumnIndex(
+                                ContactsContract.CommonDataKinds.Phone.NUMBER))
+                            contactList.add(ContactListRes(name, phoneNo))
+                        }
+                        pCur.close()
                     }
-                    pCur.close()
                 }
             }
+            if (cur != null) {
+                cur.close()
+            }
+        } catch (e: Exception) {
+            Log.d("TAG", "getContactList: " + e)
         }
-        if (cur != null) {
-            cur.close()
-        }
-    }catch (e:Exception){
-        Log.d("TAG", "getContactList: "+e)
-    }
     }
 
 }

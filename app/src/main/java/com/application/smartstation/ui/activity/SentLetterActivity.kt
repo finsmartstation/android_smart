@@ -22,7 +22,7 @@ import dagger.hilt.android.AndroidEntryPoint
 class SentLetterActivity : BaseActivity() {
 
     val binding: ActivitySentLetterBinding by viewBinding()
-    var list:ArrayList<DataSentLetter> = ArrayList()
+    var list: ArrayList<DataSentLetter> = ArrayList()
     var sentboxLetterAdapter: SentboxLetterAdapter? = null
     val apiViewModel: ApiViewModel by viewModels()
 
@@ -36,14 +36,14 @@ class SentLetterActivity : BaseActivity() {
     private fun initView() {
         binding.ilHeader.txtHeader.text = resources.getString(R.string.sentbox)
         binding.rvSentBox.layoutManager = LinearLayoutManager(this,
-            LinearLayoutManager.VERTICAL,false)
+            LinearLayoutManager.VERTICAL, false)
         sentboxLetterAdapter = SentboxLetterAdapter(this)
         binding.rvSentBox.adapter = sentboxLetterAdapter
 
         sentboxLetterAdapter!!.onItemClick = { model ->
-            val intent = Intent(this,ViewLetterActivity::class.java)
-            intent.putExtra("boxType",2)
-            intent.putExtra("id",model.id)
+            val intent = Intent(this, ViewLetterActivity::class.java)
+            intent.putExtra("boxType", 2)
+            intent.putExtra("id", model.id)
             startActivity(intent)
         }
 
@@ -68,23 +68,23 @@ class SentLetterActivity : BaseActivity() {
 
         apiViewModel.getLetterSent(inputParams).observe(this, Observer {
             it.let {
-                when(it.status){
+                when (it.status) {
                     Status.LOADING -> {
                         showProgress()
                     }
                     Status.SUCCESS -> {
                         dismissProgress()
-                        if (it.data!!.status){
+                        if (it.data!!.status) {
                             list = it.data.data.letter_sent_list
-                            if(list.isNotEmpty()) {
+                            if (list.isNotEmpty()) {
                                 binding.rvSentBox.visibility = View.VISIBLE
                                 binding.txtNoFound.visibility = View.GONE
                                 setData(list)
-                            }else{
+                            } else {
                                 binding.rvSentBox.visibility = View.GONE
                                 binding.txtNoFound.visibility = View.VISIBLE
                             }
-                        }else{
+                        } else {
                             toast(it.data.message)
                         }
                     }

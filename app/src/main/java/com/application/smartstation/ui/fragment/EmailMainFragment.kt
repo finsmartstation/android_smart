@@ -1,8 +1,6 @@
 package com.application.smartstation.ui.fragment
 
-import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import com.application.smartstation.R
 import com.application.smartstation.databinding.FragmentEmailMainBinding

@@ -18,7 +18,6 @@ import android.media.MediaRecorder
 import android.media.ThumbnailUtils
 import android.os.*
 import android.util.DisplayMetrics
-import android.util.Log
 import android.view.*
 import android.view.View.OnLongClickListener
 import android.view.View.OnTouchListener
@@ -53,9 +52,9 @@ class CameraActivity : BaseActivity(), SurfaceHolder.Callback {
     var mOrientation = 90
     private var mediaFileName: String? = null
     private var timeInMilliseconds = 0L
-    private  var startTime:Long = SystemClock.uptimeMillis()
-    private  var updatedTime:Long = 0L
-    private  var timeSwapBuff:Long = 0L
+    private var startTime: Long = SystemClock.uptimeMillis()
+    private var updatedTime: Long = 0L
+    private var timeSwapBuff: Long = 0L
     var saveVideoTask: SaveVideoTask? = null
     var savePicTask: SavePicTask? = null
     private var mPhotoAngle = 90
@@ -106,7 +105,7 @@ class CameraActivity : BaseActivity(), SurfaceHolder.Callback {
                 if (camera != null) {
                     val info = CameraInfo()
                     if (info.facing == CameraInfo.CAMERA_FACING_FRONT) {
-                        binding.ivCameraFlashOff.setVisibility(View.INVISIBLE)
+                        binding.ivCameraFlashOff.visibility = View.INVISIBLE
                     }
                 }
             }
@@ -125,10 +124,10 @@ class CameraActivity : BaseActivity(), SurfaceHolder.Callback {
     @SuppressLint("ClickableViewAccessibility")
     private fun activeCameraCapture() {
         if (binding.ivCaptureImage != null) {
-            binding.ivCaptureImage.setAlpha(1.0f)
+            binding.ivCaptureImage.alpha = 1.0f
 
             binding.ivCaptureImage.setOnLongClickListener(OnLongClickListener {
-                binding.txtVHintiew.setVisibility(View.INVISIBLE)
+                binding.txtVHintiew.visibility = View.INVISIBLE
                 try {
                     if (prepareMediaRecorder()) {
                         myOrientationEventListener!!.disable()
@@ -141,9 +140,9 @@ class CameraActivity : BaseActivity(), SurfaceHolder.Callback {
                 } catch (e: java.lang.Exception) {
                     e.printStackTrace()
                 }
-                binding.txtCounter.setVisibility(View.VISIBLE)
-                binding.ivRotateCamera.setVisibility(View.GONE)
-                binding.ivCameraFlashOff.setVisibility(View.INVISIBLE)
+                binding.txtCounter.visibility = View.VISIBLE
+                binding.ivRotateCamera.visibility = View.GONE
+                binding.ivCameraFlashOff.visibility = View.INVISIBLE
                 scaleUpAnimation()
 
                 binding.ivCaptureImage.setOnTouchListener(OnTouchListener { v, event ->
@@ -152,7 +151,7 @@ class CameraActivity : BaseActivity(), SurfaceHolder.Callback {
                     }
                     if (event.action == MotionEvent.ACTION_UP) {
                         scaleDownAnimation()
-                        binding.txtVHintiew.setVisibility(View.VISIBLE)
+                        binding.txtVHintiew.visibility = View.VISIBLE
                         cancelSaveVideoTaskIfNeed()
                         saveVideoTask =
                             SaveVideoTask(this)
@@ -185,7 +184,7 @@ class CameraActivity : BaseActivity(), SurfaceHolder.Callback {
         scaleDown.play(scaleDownX).with(scaleDownY)
 
         scaleDownX.addUpdateListener {
-            val p = binding.ivCaptureImage.getParent() as View
+            val p = binding.ivCaptureImage.parent as View
             p.invalidate()
         }
         scaleDown.start()
@@ -200,7 +199,7 @@ class CameraActivity : BaseActivity(), SurfaceHolder.Callback {
         scaleDown.play(scaleDownX).with(scaleDownY)
 
         scaleDownX.addUpdateListener {
-            val p = binding.ivCaptureImage.getParent() as View
+            val p = binding.ivCaptureImage.parent as View
             p.invalidate()
         }
         scaleDown.start()
@@ -236,7 +235,7 @@ class CameraActivity : BaseActivity(), SurfaceHolder.Callback {
             mediaRecorder!!.setOrientationHint(mOrientation)
         }
         mediaFileName = "smart_station_" + System.currentTimeMillis()
-        mediaRecorder!!.setOutputFile(folderVideo!!.getAbsolutePath() + "/" + mediaFileName + ".mp4") // Environment.getExternalStorageDirectory()
+        mediaRecorder!!.setOutputFile(folderVideo!!.absolutePath + "/" + mediaFileName + ".mp4") // Environment.getExternalStorageDirectory()
         mediaRecorder!!.setOnInfoListener { mr, what, extra -> // TODO Auto-generated method stub
             if (what == MediaRecorder.MEDIA_RECORDER_INFO_MAX_FILESIZE_REACHED) {
                 val downTime: Long = 0
@@ -332,7 +331,7 @@ class CameraActivity : BaseActivity(), SurfaceHolder.Callback {
     private fun createFolder() {
         folderImg = File(
             Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM),
-            "com.smartstation"+"/Smart Station/Media/Smart Station Images"
+            "com.smartstation" + "/Smart Station/Media/Smart Station Images"
         )
         if (!folderImg!!.exists()) {
             folderImg!!.mkdirs()
@@ -340,7 +339,7 @@ class CameraActivity : BaseActivity(), SurfaceHolder.Callback {
 
         folderVideo = File(
             Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM),
-            "com.smartstation"+"/Smart Station/Media/Smart Station Video"
+            "com.smartstation" + "/Smart Station/Media/Smart Station Video"
         )
         if (!folderVideo!!.exists()) {
             folderVideo!!.mkdirs()
@@ -359,10 +358,10 @@ class CameraActivity : BaseActivity(), SurfaceHolder.Callback {
             camera!!.release()
             camera = null
             flag = if (flag == 0) {
-                binding.ivCameraFlashOff.setVisibility(View.GONE)
+                binding.ivCameraFlashOff.visibility = View.GONE
                 1
             } else {
-                binding.ivCameraFlashOff.setVisibility(View.VISIBLE)
+                binding.ivCameraFlashOff.visibility = View.VISIBLE
                 0
             }
             surfaceCreated(surfaceHolder!!)
@@ -391,7 +390,8 @@ class CameraActivity : BaseActivity(), SurfaceHolder.Callback {
             val mins = secs / 60
             val hrs = mins / 60
             secs = secs % 60
-            binding.txtCounter.setText(String.format("%02d", mins) + ":" + String.format("%02d", secs))
+            binding.txtCounter.text = String.format("%02d", mins) + ":" + String.format("%02d",
+                secs)
             customHandler.postDelayed(this, 0)
         }
     }
@@ -408,22 +408,21 @@ class CameraActivity : BaseActivity(), SurfaceHolder.Callback {
     }
 
     private fun cancelSavePicTaskIfNeed() {
-        if (savePicTask != null && savePicTask!!.getStatus() == AsyncTask.Status.RUNNING) {
+        if (savePicTask != null && savePicTask!!.status == AsyncTask.Status.RUNNING) {
             savePicTask!!.cancel(true)
         }
     }
 
     private fun cancelSaveVideoTaskIfNeed() {
-        if (saveVideoTask != null && saveVideoTask!!.getStatus() == AsyncTask.Status.RUNNING) {
+        if (saveVideoTask != null && saveVideoTask!!.status == AsyncTask.Status.RUNNING) {
             saveVideoTask!!.cancel(true)
         }
     }
 
-    class SavePicTask(activity: CameraActivity,val data: ByteArray, rotation: Int) :
+    class SavePicTask(activity: CameraActivity, val data: ByteArray, rotation: Int) :
         AsyncTask<Void?, Void?, String?>() {
-        var activity : CameraActivity? = null
+        var activity: CameraActivity? = null
         var rotation = 0
-
 
 
         override fun onPreExecute() {}
@@ -510,7 +509,8 @@ class CameraActivity : BaseActivity(), SurfaceHolder.Callback {
         try {
             val output: OutputStream
             val file: File =
-                File(folderImg!!.getAbsolutePath(), "smart_station_" + System.currentTimeMillis() + ".jpg")
+                File(folderImg!!.absolutePath,
+                    "smart_station_" + System.currentTimeMillis() + ".jpg")
             try {
                 output = FileOutputStream(file)
                 bitmap!!.compress(Bitmap.CompressFormat.JPEG, 100, output)
@@ -533,7 +533,7 @@ class CameraActivity : BaseActivity(), SurfaceHolder.Callback {
         jpegCallback = Camera.PictureCallback { data, camera ->
             refreshCamera()
             cancelSavePicTaskIfNeed()
-            savePicTask = SavePicTask(this@CameraActivity,data, getPhotoRotation())
+            savePicTask = SavePicTask(this@CameraActivity, data, getPhotoRotation())
             savePicTask!!.executeOnExecutor(AsyncTask.SERIAL_EXECUTOR)
         }
     }
@@ -541,7 +541,7 @@ class CameraActivity : BaseActivity(), SurfaceHolder.Callback {
     class SaveVideoTask(activity: CameraActivity) :
         AsyncTask<Void?, Void?, Void?>() {
         @SuppressLint("StaticFieldLeak")
-        var activity:CameraActivity? = null
+        var activity: CameraActivity? = null
         var thumbFilename: File? = null
         var progressDialog: ProgressDialog? = null
 
@@ -556,9 +556,9 @@ class CameraActivity : BaseActivity(), SurfaceHolder.Callback {
             progressDialog!!.show()
             super.onPreExecute()
             activity!!.binding.ivCaptureImage.setOnTouchListener(null)
-            activity!!.binding.txtCounter.setVisibility(View.GONE)
-            activity!!.binding.ivRotateCamera.setVisibility(View.VISIBLE)
-            activity!!.binding.ivCameraFlashOff.setVisibility(View.VISIBLE)
+            activity!!.binding.txtCounter.visibility = View.GONE
+            activity!!.binding.ivRotateCamera.visibility = View.VISIBLE
+            activity!!.binding.ivCameraFlashOff.visibility = View.VISIBLE
         }
 
         override fun onPostExecute(aVoid: Void?) {
@@ -569,7 +569,7 @@ class CameraActivity : BaseActivity(), SurfaceHolder.Callback {
                 }
             }
             if (activity!!.tempFile != null && thumbFilename != null) activity!!.onVideoSendDialog(
-                activity!!.tempFile!!.getAbsolutePath(),
+                activity!!.tempFile!!.absolutePath,
                 thumbFilename!!.absolutePath
             )
         }
@@ -582,9 +582,10 @@ class CameraActivity : BaseActivity(), SurfaceHolder.Callback {
                     activity!!.mediaRecorder!!.stop()
                     activity!!.releaseMediaRecorder()
                     val name = activity!!.mediaFileName
-                    activity!!.tempFile = File(activity!!.folderVideo!!.getAbsolutePath() + "/" + name + ".mp4")
-                    thumbFilename = File(activity!!.folderVideo!!.getAbsolutePath(), "$name.jpeg")
-                    activity!!.generateVideoThmb(activity!!.tempFile!!.getPath(), thumbFilename)
+                    activity!!.tempFile =
+                        File(activity!!.folderVideo!!.absolutePath + "/" + name + ".mp4")
+                    thumbFilename = File(activity!!.folderVideo!!.absolutePath, "$name.jpeg")
+                    activity!!.generateVideoThmb(activity!!.tempFile!!.path, thumbFilename)
                 } catch (e: java.lang.Exception) {
                     e.printStackTrace()
                 }
@@ -626,7 +627,7 @@ class CameraActivity : BaseActivity(), SurfaceHolder.Callback {
 
     private fun inActiveCameraCapture() {
         if (binding.ivCaptureImage != null) {
-            binding.ivCaptureImage.setAlpha(0.5f)
+            binding.ivCaptureImage.alpha = 0.5f
             binding.ivCaptureImage.setOnClickListener(null)
         }
     }
@@ -651,11 +652,7 @@ class CameraActivity : BaseActivity(), SurfaceHolder.Callback {
     }
 
     fun isSpaceAvailable(): Boolean {
-        return if (getFreeSpacePercantage() >= 1) {
-            true
-        } else {
-            false
-        }
+        return getFreeSpacePercantage() >= 1
     }
 
     fun generateVideoThmb(srcFilePath: String?, destFile: File?) {
@@ -717,7 +714,7 @@ class CameraActivity : BaseActivity(), SurfaceHolder.Callback {
         }
         try {
             val param: Camera.Parameters
-            param = camera!!.getParameters()
+            param = camera!!.parameters
             val sizes = param.supportedPreviewSizes
             //get diff to get perfact preview sizes
             val displaymetrics = DisplayMetrics()
@@ -737,13 +734,13 @@ class CameraActivity : BaseActivity(), SurfaceHolder.Callback {
             val cs = sizes[idx]
             param.setPreviewSize(cs.width, cs.height)
 //            param.setPictureSize(cs.width, cs.height)
-            val focusModes: List<String> = param.getSupportedFocusModes()
+            val focusModes: List<String> = param.supportedFocusModes
             if (focusModes.contains(Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE)) {
-                param.setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE)
+                param.focusMode = Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE
             } else if (focusModes.contains(Camera.Parameters.FOCUS_MODE_AUTO)) {
-                param.setFocusMode(Camera.Parameters.FOCUS_MODE_AUTO)
+                param.focusMode = Camera.Parameters.FOCUS_MODE_AUTO
             }
-            camera!!.setParameters(param)
+            camera!!.parameters = param
             setCameraDisplayOrientation(0)
             camera!!.setPreviewDisplay(surfaceHolder)
             camera!!.startPreview()
@@ -755,7 +752,7 @@ class CameraActivity : BaseActivity(), SurfaceHolder.Callback {
                 param.flashMode = Camera.Parameters.FLASH_MODE_ON
                 var params: Camera.Parameters? = null
                 if (camera != null) {
-                    params = camera!!.getParameters()
+                    params = camera!!.parameters
                     if (params != null) {
                         val supportedFlashModes = params.supportedFlashModes
                         if (supportedFlashModes != null) {

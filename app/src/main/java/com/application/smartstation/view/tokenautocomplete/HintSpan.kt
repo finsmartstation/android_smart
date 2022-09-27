@@ -14,5 +14,5 @@ internal class HintSpan(
     style: Int,
     size: Int,
     color: ColorStateList?,
-    linkColor: ColorStateList?
+    linkColor: ColorStateList?,
 ) : TextAppearanceSpan(family, style, size, color, linkColor)

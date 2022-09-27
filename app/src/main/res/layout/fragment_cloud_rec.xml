@@ -1,62 +1,58 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".ui.fragment.CloudRecFragment">
 
     <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvCloudView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/rvCloudView"
-        android:layout_marginTop="6dp"
         android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
-        />
+        android:layout_marginTop="6dp"
+        android:layout_marginEnd="8dp" />
 
     <com.application.smartstation.view.CustomTextViewBold
+        android:id="@+id/txtNoFound"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="@string/no_rec_cloud"
-        android:id="@+id/txtNoFound"
-        android:textSize="30sp"
-        android:visibility="gone"
-        android:gravity="center"
         android:layout_margin="16dp"
+        android:gravity="center"
+        android:text="@string/no_rec_cloud"
         android:textColor="@color/colorE"
-        >
+        android:textSize="30sp"
+        android:visibility="gone">
 
     </com.application.smartstation.view.CustomTextViewBold>
 
     <LinearLayout
         android:id="@+id/llFab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end|right"
         android:gravity="center_horizontal"
         android:orientation="vertical"
-        android:visibility="gone"
-        android:layout_gravity="bottom|end|right"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+        android:visibility="gone">
 
         <LinearLayout
             android:id="@+id/llFolder"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:visibility="gone"
-            >
+            android:visibility="gone">
 
             <com.application.smartstation.view.CustomTextViewBold
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/upload_folder"
-                android:textSize="18sp"
                 android:layout_gravity="center"
-                android:visibility="visible"
-                android:gravity="center"
                 android:layout_marginEnd="16dp"
+                android:gravity="center"
+                android:text="@string/upload_folder"
                 android:textColor="@color/black"
-                >
+                android:textSize="18sp"
+                android:visibility="visible">
 
             </com.application.smartstation.view.CustomTextViewBold>
 
@@ -66,65 +62,63 @@
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
                 android:layout_marginTop="10dp"
-                android:layout_marginBottom="10dp"
                 android:layout_marginEnd="22dp"
+                android:layout_marginBottom="10dp"
                 android:src="@drawable/ic_folder_icon"
-                app:tint="@color/white"
                 app:backgroundTint="@color/color_green"
                 app:fabSize="mini"
-                app:rippleColor="@color/white" />
+                app:rippleColor="@color/white"
+                app:tint="@color/white" />
 
         </LinearLayout>
 
-    <LinearLayout
-        android:id="@+id/llFile"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:visibility="gone"
-        >
-
-        <com.application.smartstation.view.CustomTextViewBold
+        <LinearLayout
+            android:id="@+id/llFile"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/upload_file"
-            android:textSize="18sp"
-            android:layout_gravity="center"
-            android:visibility="visible"
-            android:gravity="center"
-            android:layout_marginEnd="16dp"
-            android:textColor="@color/black"
-            >
+            android:orientation="horizontal"
+            android:visibility="gone">
 
-        </com.application.smartstation.view.CustomTextViewBold>
+            <com.application.smartstation.view.CustomTextViewBold
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginEnd="16dp"
+                android:gravity="center"
+                android:text="@string/upload_file"
+                android:textColor="@color/black"
+                android:textSize="18sp"
+                android:visibility="visible">
 
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/fabFile"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:src="@drawable/ic_letter_use"
-            app:tint="@color/white"
-            app:backgroundTint="@color/color_green"
-            app:fabSize="mini"
-            app:rippleColor="@color/white" />
+            </com.application.smartstation.view.CustomTextViewBold>
 
-    </LinearLayout>
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/fabFile"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:src="@drawable/ic_letter_use"
+                app:backgroundTint="@color/color_green"
+                app:fabSize="mini"
+                app:rippleColor="@color/white"
+                app:tint="@color/white" />
+
+        </LinearLayout>
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/fabAdd"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end|right"
             android:layout_marginLeft="18dp"
             android:layout_marginTop="10dp"
             android:layout_marginRight="18dp"
-            android:layout_gravity="bottom|end|right"
             android:layout_marginBottom="18dp"
-            android:src="@drawable/ic_add"
-            app:tint="@android:color/white"
             android:backgroundTint="@color/color_green"
+            android:src="@drawable/ic_add"
             app:fabSize="normal"
-            app:rippleColor="@color/white" />
+            app:rippleColor="@color/white"
+            app:tint="@android:color/white" />
 
     </LinearLayout>
 

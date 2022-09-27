@@ -16,7 +16,6 @@ import androidx.core.content.ContextCompat
 import com.application.smartstation.R
 import com.application.smartstation.ui.activity.CallActivity
 import com.application.smartstation.ui.activity.MainActivity
-import com.application.smartstation.ui.activity.SplashActivity
 import com.application.smartstation.util.Constants
 import com.application.smartstation.util.UtilsDefault
 import com.google.firebase.messaging.FirebaseMessaging
@@ -26,11 +25,11 @@ import java.net.HttpURLConnection
 import java.net.URL
 import java.util.*
 
-open class FirebaseMessagingService: FirebaseMessagingService() {
+open class FirebaseMessagingService : FirebaseMessagingService() {
 
     var deviceToken: String = ""
     var title: String = ""
-    var message:String = ""
+    var message: String = ""
     var intent: Intent? = null
     var TAG = "FirebaseMessaging"
     var type = ""
@@ -42,7 +41,7 @@ open class FirebaseMessagingService: FirebaseMessagingService() {
         super.onNewToken(p0)
 
         FirebaseMessaging.getInstance().token.addOnCompleteListener {
-            if(it.isComplete){
+            if (it.isComplete) {
                 deviceToken = it.result.toString()
                 Log.d("fcmtoken", deviceToken)
                 UtilsDefault.updateSharedPreferenceFCM(Constants.FCM_KEY, deviceToken)
@@ -54,7 +53,7 @@ open class FirebaseMessagingService: FirebaseMessagingService() {
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
         super.onMessageReceived(remoteMessage)
 
-        if (remoteMessage.data.isNotEmpty()){
+        if (remoteMessage.data.isNotEmpty()) {
             message = remoteMessage.data["body"].toString()
             title = remoteMessage.data["title"].toString()
             type = remoteMessage.data["type"].toString()
@@ -65,7 +64,7 @@ open class FirebaseMessagingService: FirebaseMessagingService() {
             Log.d(TAG, "Message data payload: " + remoteMessage.data)
         }
 
-        if (remoteMessage.notification !=null){
+        if (remoteMessage.notification != null) {
             message = remoteMessage.notification!!.body!!
 //            title = remoteMessage.notification!!.title!!
 //            type = remoteMessage.notification!!.type!!
@@ -74,22 +73,23 @@ open class FirebaseMessagingService: FirebaseMessagingService() {
 
         try {
 //            if (UtilsDefault.getSharedPreferenceString(Constants.PUSHNOTIFICATION) == "enable"){
-            if (type != null && (type == "video_call" || type == "voice_call")){
-                    if (UtilsDefault.isOnline()){
-                            if (action == CallActivity.callReceive || CallActivity.is_calling_activity_open) {
-                                val i = Intent(this, CallActivity::class.java)
-                                i.putExtra(Constants.REC_ID, id)
-                                i.putExtra(Constants.REC_NAME, title)
-                                i.putExtra(Constants.REC_PROFILE, image)
-                                i.putExtra(Constants.STATUS, action)
-                                i.putExtra(Constants.CALL_TYPE, type)
-                                i.putExtra(Constants.ROOM_NAME, roomName)
-                                i.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
-                                startActivity(i)
-                            }
+            if (type != null && (type == "video_call" || type == "voice_call")) {
+                if (UtilsDefault.isOnline()) {
+                    if (action == CallActivity.callReceive || CallActivity.is_calling_activity_open) {
+                        val i = Intent(this, CallActivity::class.java)
+                        i.putExtra(Constants.REC_ID, id)
+                        i.putExtra(Constants.REC_NAME, title)
+                        i.putExtra(Constants.REC_PROFILE, image)
+                        i.putExtra(Constants.STATUS, action)
+                        i.putExtra(Constants.CALL_TYPE, type)
+                        i.putExtra(Constants.ROOM_NAME, roomName)
+                        i.flags =
+                            Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
+                        startActivity(i)
                     }
-            }else {
-                sendNotification(message, title,type,action,id,image,roomName)
+                }
+            } else {
+                sendNotification(message, title, type, action, id, image, roomName)
                 Log.i("onmessage", "message" + message)
             }
         } catch (e: Exception) {
@@ -104,15 +104,15 @@ open class FirebaseMessagingService: FirebaseMessagingService() {
         action: String,
         id: String,
         image: String,
-        roomName: String
+        roomName: String,
     ) {
 
         val channelId = "SMART_STATION_CHANNEL_ID"
         val channelName = "SMART_STATION"
-        Log.d(TAG, "sendNotification: "+"aaaaaaa")
+        Log.d(TAG, "sendNotification: " + "aaaaaaa")
 
-        val intent = if (type != null && (type == "video_call" || type == "voice_call")){
-          Intent(this, CallActivity::class.java)
+        val intent = if (type != null && (type == "video_call" || type == "voice_call")) {
+            Intent(this, CallActivity::class.java)
             intent!!.putExtra(Constants.REC_ID, id)
             intent!!.putExtra(Constants.REC_NAME, title)
             intent!!.putExtra(Constants.REC_PROFILE, image)
@@ -122,9 +122,11 @@ open class FirebaseMessagingService: FirebaseMessagingService() {
         } else {
             Intent(this, MainActivity::class.java)
         }
-        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
+        intent.flags =
+            Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
 
-        val pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
+        val pendingIntent =
+            PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
         val defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
         val notificationBuilder = NotificationCompat.Builder(this, channelId)
             .setLargeIcon(BitmapFactory.decodeResource(resources, R.mipmap.app_logo))
@@ -138,7 +140,8 @@ open class FirebaseMessagingService: FirebaseMessagingService() {
             .setDefaults(Notification.DEFAULT_SOUND or Notification.DEFAULT_LIGHTS or Notification.DEFAULT_VIBRATE)
             .setContentIntent(pendingIntent)
 
-        val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        val notificationManager =
+            getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val channel = NotificationChannel(channelId, channelName,

@@ -9,7 +9,7 @@ import com.google.android.gms.common.api.CommonStatusCodes
 import com.google.android.gms.common.api.Status
 import org.greenrobot.eventbus.EventBus
 
-class MessageBroadcastReceiver: BroadcastReceiver() {
+class MessageBroadcastReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context?, intent: Intent?) {
         if (SmsRetriever.SMS_RETRIEVED_ACTION == intent?.action) {
             val data = intent.extras

@@ -25,33 +25,30 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:orientation="vertical"
-        app:layout_constraintTop_toBottomOf="@+id/ilHeader"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        >
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ilHeader">
 
         <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvSignatureList"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:id="@+id/rvSignatureList"
             android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
             android:layout_marginTop="10dp"
-            />
+            android:layout_marginEnd="16dp" />
 
         <com.application.smartstation.view.CustomTextViewBold
+            android:id="@+id/txtNoFound"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:text="@string/no_signature"
-            android:id="@+id/txtNoFound"
-            android:textSize="30sp"
-            android:visibility="gone"
-            android:textColor="@color/colorE"
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
             android:gravity="center"
-            >
+            android:text="@string/no_signature"
+            android:textColor="@color/colorE"
+            android:textSize="30sp"
+            android:visibility="gone">
 
         </com.application.smartstation.view.CustomTextViewBold>
 

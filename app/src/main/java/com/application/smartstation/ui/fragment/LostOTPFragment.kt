@@ -9,15 +9,11 @@ import android.text.method.LinkMovementMethod
 import android.text.style.ClickableSpan
 import android.text.style.ForegroundColorSpan
 import android.text.style.RelativeSizeSpan
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import com.application.smartstation.R
-import com.application.smartstation.databinding.FragmentLostMailBinding
 import com.application.smartstation.databinding.FragmentLostOTPBinding
 import com.application.smartstation.service.Status
 import com.application.smartstation.ui.activity.LoginActivity
@@ -36,8 +32,8 @@ class LostOTPFragment : BaseFragment(R.layout.fragment_lost_o_t_p) {
 
     private val binding by viewBinding(FragmentLostOTPBinding::bind)
     val apiViewModel: ApiViewModel by viewModels()
-    var mail:String? = null
-    var otpData:String? = null
+    var mail: String? = null
+    var otpData: String? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -84,9 +80,9 @@ class LostOTPFragment : BaseFragment(R.layout.fragment_lost_o_t_p) {
         SpanString.setSpan(RelativeSizeSpan(1f), 50, 63, 0)
         SpanString.setSpan(ForegroundColorSpan(resources.getColor(R.color.black)), 50, 63, 0)
 
-        binding.txtVerificationDec.setMovementMethod(LinkMovementMethod.getInstance())
+        binding.txtVerificationDec.movementMethod = LinkMovementMethod.getInstance()
         binding.txtVerificationDec.setText(SpanString, TextView.BufferType.SPANNABLE)
-        binding.txtVerificationDec.setSelected(true)
+        binding.txtVerificationDec.isSelected = true
 
         val SpanString1 = SpannableString(
             binding.txtResend.text.toString()
@@ -107,26 +103,29 @@ class LostOTPFragment : BaseFragment(R.layout.fragment_lost_o_t_p) {
 
         SpanString1.setSpan(resendOtp, 28, 34, 0)
         SpanString1.setSpan(RelativeSizeSpan(1f), 28, 34, 0)
-        SpanString1.setSpan(ForegroundColorSpan(resources.getColor(R.color.color_dark_green)), 28, 34, 0)
+        SpanString1.setSpan(ForegroundColorSpan(resources.getColor(R.color.color_dark_green)),
+            28,
+            34,
+            0)
 
-        binding.txtResend.setMovementMethod(LinkMovementMethod.getInstance())
+        binding.txtResend.movementMethod = LinkMovementMethod.getInstance()
         binding.txtResend.setText(SpanString1, TextView.BufferType.SPANNABLE)
-        binding.txtResend.setSelected(true)
+        binding.txtResend.isSelected = true
 
     }
 
     private fun resendOTP(inputParams: InputParams) {
         apiViewModel.resendEmailOTP(inputParams).observe(requireActivity(), Observer {
             it.let {
-                when(it.status){
+                when (it.status) {
                     Status.LOADING -> {
                         showProgress()
                     }
                     Status.SUCCESS -> {
                         dismissProgress()
-                        if (it.data!!.status){
+                        if (it.data!!.status) {
                             toast(it.data.message)
-                        }else{
+                        } else {
                             toast(it.data.message)
                         }
                     }
@@ -155,31 +154,38 @@ class LostOTPFragment : BaseFragment(R.layout.fragment_lost_o_t_p) {
     private fun verifyOTP(inputParams: InputParams) {
         apiViewModel.checkEmailOTP(inputParams).observe(requireActivity(), Observer {
             it.let {
-                when(it.status){
+                when (it.status) {
                     Status.LOADING -> {
                         showProgress()
                     }
                     Status.SUCCESS -> {
                         dismissProgress()
-                        if (it.data!!.status){
+                        if (it.data!!.status) {
                             binding.otpView.showSuccess()
                             toast(it.data.message)
-                            UtilsDefault.updateSharedPreferenceString(Constants.USER_ID,it.data.data.id)
-                            UtilsDefault.updateSharedPreferenceString(Constants.ACCESS_TOKEN,it.data.data.accessToken)
-                            if(it.data.data.login_status.equals("0")) {
+                            UtilsDefault.updateSharedPreferenceString(Constants.USER_ID,
+                                it.data.data.id)
+                            UtilsDefault.updateSharedPreferenceString(Constants.ACCESS_TOKEN,
+                                it.data.data.accessToken)
+                            if (it.data.data.login_status.equals("0")) {
                                 (activity as LoginActivity).fragmentHelper?.push(ProfileFragment())
-                            }else{
-                                UtilsDefault.updateSharedPreferenceString(Constants.PROFILE_PIC,it.data.data.profile_pic)
-                                UtilsDefault.updateSharedPreferenceString(Constants.NAME,it.data.data.name)
-                                UtilsDefault.updateSharedPreferenceString(Constants.ABOUT,it.data.data.about)
-                                UtilsDefault.setLoggedIn(requireActivity(),true)
-                                if(it.data.data.security_status.equals("1")) {
-                                    UtilsDefault.updateSharedPreferenceString(Constants.PASSCODE,"yes")
-                                    val intent = Intent(requireActivity(), PasscodeActivity::class.java)
-                                    intent.putExtra("isFromSplash",true)
+                            } else {
+                                UtilsDefault.updateSharedPreferenceString(Constants.PROFILE_PIC,
+                                    it.data.data.profile_pic)
+                                UtilsDefault.updateSharedPreferenceString(Constants.NAME,
+                                    it.data.data.name)
+                                UtilsDefault.updateSharedPreferenceString(Constants.ABOUT,
+                                    it.data.data.about)
+                                UtilsDefault.setLoggedIn(requireActivity(), true)
+                                if (it.data.data.security_status.equals("1")) {
+                                    UtilsDefault.updateSharedPreferenceString(Constants.PASSCODE,
+                                        "yes")
+                                    val intent =
+                                        Intent(requireActivity(), PasscodeActivity::class.java)
+                                    intent.putExtra("isFromSplash", true)
                                     startActivity(intent)
                                     requireActivity().finish()
-                                }else{
+                                } else {
                                     startActivity(
                                         Intent(
                                             requireActivity(),
@@ -189,7 +195,7 @@ class LostOTPFragment : BaseFragment(R.layout.fragment_lost_o_t_p) {
                                     requireActivity().finish()
                                 }
                             }
-                        }else{
+                        } else {
                             binding.otpView.showError()
                             toast(it.data.message)
                         }

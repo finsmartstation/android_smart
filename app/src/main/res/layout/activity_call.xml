@@ -4,9 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     android:fitsSystemWindows="true"
     android:keepScreenOn="true"
-    android:background="@color/white"
     tools:context=".ui.activity.CallActivity">
 
     <include
@@ -14,24 +14,22 @@
         layout="@layout/content_video" />
 
     <RelativeLayout
+        android:id="@+id/callingUserInfoLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:clickable="true"
-        android:id="@+id/callingUserInfoLayout"
-        >
+        android:clickable="true">
 
         <pl.bclogic.pulsator4droid.library.PulsatorLayout
             android:id="@+id/pulsator"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
+            app:pulse_color="@color/white"
             app:pulse_count="1"
             app:pulse_duration="1000"
+            app:pulse_interpolator="Linear"
             app:pulse_repeat="100"
-            app:pulse_color="@color/white"
-            app:pulse_startFromScratch="true"
-            app:pulse_interpolator="Linear">
-        </pl.bclogic.pulsator4droid.library.PulsatorLayout>
+            app:pulse_startFromScratch="true"></pl.bclogic.pulsator4droid.library.PulsatorLayout>
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -121,63 +119,63 @@
     </RelativeLayout>
 
     <LinearLayout
+        android:id="@+id/callingActionButtons"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|center"
         android:layout_marginBottom="50dp"
         android:orientation="horizontal"
-        android:visibility="gone"
-        android:id="@+id/callingActionButtons">
+        android:visibility="gone">
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/connectActionFab"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
-            app:fabSize="normal"
+            android:src="@drawable/ic_call_end_pink_24px"
             app:backgroundTint="@color/white"
-            android:src="@drawable/ic_call_end_pink_24px" />
+            app:fabSize="normal" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/switchCameraActionFab"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            app:fabSize="normal"
-            app:backgroundTint="@color/white"
             android:layout_margin="5dp"
-            android:src="@drawable/ic_switch_camera_white_24dp" />
+            android:src="@drawable/ic_switch_camera_white_24dp"
+            app:backgroundTint="@color/white"
+            app:fabSize="normal" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/localVideoActionFab"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
             android:layout_gravity="center"
-            app:fabSize="normal"
             android:layout_margin="5dp"
+            android:layout_marginBottom="10dp"
+            android:src="@drawable/ic_videocam_white_24dp"
             app:backgroundTint="@color/white"
-            android:src="@drawable/ic_videocam_white_24dp" />
+            app:fabSize="normal" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/muteActionFab"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:fabSize="normal"
-            android:layout_margin="5dp"
-            app:backgroundTint="@color/white"
             android:layout_gravity="center"
-            android:src="@drawable/ic_mic_white_24dp" />
+            android:layout_margin="5dp"
+            android:src="@drawable/ic_mic_white_24dp"
+            app:backgroundTint="@color/white"
+            app:fabSize="normal" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/speakerActionFab"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:fabSize="normal"
-            android:layout_margin="5dp"
-            app:backgroundTint="@color/white"
             android:layout_gravity="center"
-            android:src="@drawable/ic_volume_up_white_24dp"/>
+            android:layout_margin="5dp"
+            android:src="@drawable/ic_volume_up_white_24dp"
+            app:backgroundTint="@color/white"
+            app:fabSize="normal" />
 
     </LinearLayout>
 

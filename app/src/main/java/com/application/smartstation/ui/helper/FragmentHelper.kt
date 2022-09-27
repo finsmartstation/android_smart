@@ -8,7 +8,7 @@ class FragmentHelper(val fragmentManager: FragmentManager) {
 
     var frameLayout: FrameLayout? = null
 
-    fun setUpFrame(fragment: Fragment, frameLayout: FrameLayout){
+    fun setUpFrame(fragment: Fragment, frameLayout: FrameLayout) {
         this.frameLayout = frameLayout
         push(fragment)
     }

@@ -10,8 +10,8 @@
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scaleType="centerCrop"
         android:alpha="0.4"
+        android:scaleType="centerCrop"
         android:src="@drawable/ic_splash_bg_use" />
 
     <include
@@ -25,18 +25,17 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:orientation="vertical"
-        app:layout_constraintTop_toBottomOf="@+id/ilHeader"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        >
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ilHeader">
 
         <LinearLayout
             android:id="@+id/llPrivacy"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
             android:layout_marginStart="16dp"
+            android:layout_marginTop="20dp"
             android:layout_marginEnd="16dp"
             android:orientation="horizontal">
 
@@ -46,8 +45,7 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginBottom="16dp"
-                android:src="@drawable/ic_privacy_icon"
-                 />
+                android:src="@drawable/ic_privacy_icon" />
 
             <com.application.smartstation.view.CustomTextViewBold
                 android:layout_width="match_parent"
@@ -70,8 +68,8 @@
             android:id="@+id/llSecurity"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
             android:layout_marginStart="16dp"
+            android:layout_marginTop="12dp"
             android:layout_marginEnd="16dp"
             android:orientation="horizontal">
 
@@ -81,8 +79,7 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginBottom="16dp"
-                android:src="@drawable/ic_security_use"
-                />
+                android:src="@drawable/ic_security_use" />
 
             <com.application.smartstation.view.CustomTextViewBold
                 android:layout_width="match_parent"
@@ -103,8 +100,8 @@
             android:id="@+id/llChnageNumber"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
             android:layout_marginStart="16dp"
+            android:layout_marginTop="12dp"
             android:layout_marginEnd="16dp"
             android:orientation="horizontal">
 
@@ -114,8 +111,7 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginBottom="16dp"
-                android:src="@drawable/ic_change_phone_number_use"
-                />
+                android:src="@drawable/ic_change_phone_number_use" />
 
             <com.application.smartstation.view.CustomTextViewBold
                 android:layout_width="match_parent"
@@ -136,8 +132,8 @@
             android:id="@+id/llSignature"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
             android:layout_marginStart="16dp"
+            android:layout_marginTop="12dp"
             android:layout_marginEnd="16dp"
             android:orientation="horizontal">
 
@@ -147,8 +143,7 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginBottom="16dp"
-                android:src="@drawable/ic_signature_icon_use"
-                />
+                android:src="@drawable/ic_signature_icon_use" />
 
             <com.application.smartstation.view.CustomTextViewBold
                 android:layout_width="match_parent"
@@ -169,8 +164,8 @@
             android:id="@+id/llStamp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
             android:layout_marginStart="16dp"
+            android:layout_marginTop="12dp"
             android:layout_marginEnd="16dp"
             android:orientation="horizontal">
 
@@ -180,7 +175,7 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginBottom="16dp"
-                android:src="@drawable/ic_stamp_icon_use"/>
+                android:src="@drawable/ic_stamp_icon_use" />
 
 
             <com.application.smartstation.view.CustomTextViewBold

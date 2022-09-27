@@ -2,7 +2,6 @@ package com.application.smartstation.tokenautocomplete
 
 import android.annotation.SuppressLint
 import kotlinx.android.parcel.Parcelize
-import java.util.*
 
 @Parcelize
 @SuppressLint("ParcelCreator")

@@ -11,8 +11,8 @@
         android:id="@+id/imageView2"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scaleType="centerCrop"
         android:alpha="0.4"
+        android:scaleType="centerCrop"
         android:src="@drawable/ic_splash_bg_use" />
 
     <include
@@ -26,9 +26,9 @@
         android:id="@+id/linearLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/_15sdp"
         android:layout_marginTop="16dp"
         android:orientation="horizontal"
-        android:layout_marginHorizontal="@dimen/_15sdp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/ilHeader">
@@ -64,10 +64,10 @@
         android:id="@+id/cardQr"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
         app:cardBackgroundColor="@color/white"
         app:cardCornerRadius="@dimen/_10sdp"
         app:cardElevation="@dimen/_5sdp"
-        android:layout_marginTop="16dp"
         app:cardUseCompatPadding="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -94,17 +94,16 @@
     </androidx.cardview.widget.CardView>
 
     <androidx.cardview.widget.CardView
+        android:id="@+id/rlCode"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/rlCode"
+        android:layout_marginHorizontal="@dimen/_15sdp"
+        android:layout_marginTop="@dimen/_15sdp"
+        app:cardBackgroundColor="@color/white"
         app:cardCornerRadius="@dimen/_5sdp"
         app:cardElevation="@dimen/_5sdp"
-        app:cardBackgroundColor="@color/white"
         app:cardUseCompatPadding="true"
-        app:layout_constraintTop_toBottomOf="@+id/cardQr"
-        android:layout_marginTop="@dimen/_15sdp"
-        android:layout_marginHorizontal="@dimen/_15sdp"
-        >
+        app:layout_constraintTop_toBottomOf="@+id/cardQr">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -125,13 +124,13 @@
             </com.application.smartstation.view.CustomTextViewBold>
 
             <ImageView
+                android:id="@+id/imgCopy"
                 android:layout_width="25dp"
                 android:layout_height="25dp"
-                android:id="@+id/imgCopy"
-                android:src="@drawable/ic_copy"
-                android:layout_marginEnd="@dimen/_10sdp"
                 android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
+                android:layout_marginEnd="@dimen/_10sdp"
+                android:src="@drawable/ic_copy"
                 app:tint="@color/color_green">
 
             </ImageView>
@@ -141,22 +140,20 @@
     </androidx.cardview.widget.CardView>
 
     <androidx.cardview.widget.CardView
+        android:id="@+id/rlAuthCode"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/rlAuthCode"
+        android:layout_marginHorizontal="@dimen/_15sdp"
+        android:layout_marginTop="@dimen/_15sdp"
+        app:cardBackgroundColor="@color/white"
         app:cardCornerRadius="@dimen/_5sdp"
         app:cardElevation="@dimen/_5sdp"
-        app:cardBackgroundColor="@color/white"
         app:cardUseCompatPadding="true"
-        app:layout_constraintTop_toBottomOf="@+id/rlCode"
-        android:layout_marginTop="@dimen/_15sdp"
-        android:layout_marginHorizontal="@dimen/_15sdp"
-        >
+        app:layout_constraintTop_toBottomOf="@+id/rlCode">
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="45dp"
-            >
+            android:layout_height="45dp">
 
             <com.application.smartstation.view.CustomEditText
                 android:id="@+id/edtCode"
@@ -174,13 +171,13 @@
             </com.application.smartstation.view.CustomEditText>
 
             <ImageView
+                android:id="@+id/imgTfaPaste"
                 android:layout_width="25dp"
                 android:layout_height="25dp"
-                android:id="@+id/imgTfaPaste"
-                android:src="@drawable/ic_paste"
-                android:layout_marginEnd="@dimen/_10sdp"
                 android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
+                android:layout_marginEnd="@dimen/_10sdp"
+                android:src="@drawable/ic_paste"
                 app:tint="@color/color_green">
 
             </ImageView>
@@ -194,11 +191,11 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginStart="16dp"
+        android:layout_marginTop="30dp"
         android:layout_marginEnd="16dp"
+        android:layout_marginBottom="30dp"
         android:layout_weight="1"
         android:gravity="bottom"
-        android:layout_marginBottom="30dp"
-        android:layout_marginTop="30dp"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -231,8 +228,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        app:cardCornerRadius="30dp"
         android:layout_marginTop="@dimen/_30sdp"
+        app:cardCornerRadius="30dp"
         app:cardElevation="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

@@ -3,44 +3,38 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".ui.fragment.ReceivedLetterFragment">
 
-        <LinearLayout
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvReceivedLetter"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="6dp"
+            android:layout_marginEnd="16dp"
+            android:nestedScrollingEnabled="true"
+            android:visibility="visible" />
+
+        <com.application.smartstation.view.CustomTextViewNormal
+            android:id="@+id/txtNoFound"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical"
-            >
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:gravity="center"
+            android:text="@string/no_letter_found"
+            android:textColor="@color/black"
+            android:textSize="18sp"
+            android:visibility="gone">
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/rvReceivedLetter"
-                android:visibility="visible"
-                android:nestedScrollingEnabled="true"
-                android:layout_marginTop="6dp"
-                android:layout_marginStart="16dp"
-                android:layout_marginEnd="16dp"
-                />
+        </com.application.smartstation.view.CustomTextViewNormal>
 
-            <com.application.smartstation.view.CustomTextViewNormal
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:text="@string/no_letter_found"
-                android:id="@+id/txtNoFound"
-                android:textSize="18sp"
-                android:visibility="gone"
-                android:textColor="@color/black"
-                android:layout_marginStart="16dp"
-                android:layout_marginEnd="16dp"
-                android:gravity="center"
-                >
-
-            </com.application.smartstation.view.CustomTextViewNormal>
-
-        </LinearLayout>
-
-
+    </LinearLayout>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -29,8 +29,8 @@ class LoginActivity : BaseActivity() {
     }
 
     private fun setUpFragments() {
-            fragmentHelper = FragmentHelper(supportFragmentManager)
-            fragmentHelper?.setUpFrame(WelcomeFragment(),binding.flContainer)
+        fragmentHelper = FragmentHelper(supportFragmentManager)
+        fragmentHelper?.setUpFrame(WelcomeFragment(), binding.flContainer)
     }
 
     override fun onBackPressed() {
@@ -49,7 +49,6 @@ class LoginActivity : BaseActivity() {
                 super.onBackPressed()
             }
         }
-
 
 
     }

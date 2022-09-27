@@ -24,15 +24,17 @@ import dagger.hilt.android.AndroidEntryPoint
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
+import okhttp3.RequestBody.Companion.asRequestBody
+import okhttp3.RequestBody.Companion.toRequestBody
 import java.io.File
 
 @AndroidEntryPoint
-class EditProfileActivity : BaseActivity() , ImageSelectorDialog.Action{
+class EditProfileActivity : BaseActivity(), ImageSelectorDialog.Action {
 
     val binding: ActivityEditProfileBinding by viewBinding()
     val apiViewModel: ApiViewModel by viewModels()
-    var imageSelectorDialog:ImageSelectorDialog? = null
-    var pics=""
+    var imageSelectorDialog: ImageSelectorDialog? = null
+    var pics = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,7 +47,7 @@ class EditProfileActivity : BaseActivity() , ImageSelectorDialog.Action{
 
         binding.ilHeader.txtHeader.text = resources.getString(R.string.edit_profile)
 
-        val inputParams= InputParams()
+        val inputParams = InputParams()
         inputParams.accessToken = UtilsDefault.getSharedPreferenceString(Constants.ACCESS_TOKEN)
         inputParams.user_id = UtilsDefault.getSharedPreferenceString(Constants.USER_ID)
 
@@ -55,26 +57,30 @@ class EditProfileActivity : BaseActivity() , ImageSelectorDialog.Action{
     private fun getProfile(inputParams: InputParams) {
         apiViewModel.getProfile(inputParams).observe(this, Observer {
             it.let {
-                when(it.status){
+                when (it.status) {
                     Status.LOADING -> {
                         showProgress()
                     }
                     Status.SUCCESS -> {
                         dismissProgress()
-                        if (it.data!!.status){
+                        if (it.data!!.status) {
                             Glide.with(this).applyDefaultRequestOptions(
                                 RequestOptions()
                                     .error(R.drawable.ic_default)
                             ).load(it.data.data.profile_pic).diskCacheStrategy(
-                                DiskCacheStrategy.DATA).placeholder(R.drawable.ic_default).into(binding.imgProfile)
+                                DiskCacheStrategy.DATA).placeholder(R.drawable.ic_default)
+                                .into(binding.imgProfile)
                             binding.edtName.setText(it.data.data.name)
                             binding.edtEmail.setText(it.data.data.email)
                             binding.edtAbout.setText(it.data.data.about)
 
-                            UtilsDefault.updateSharedPreferenceString(Constants.PROFILE_PIC,it.data.data.profile_pic)
-                            UtilsDefault.updateSharedPreferenceString(Constants.NAME,it.data.data.name)
-                            UtilsDefault.updateSharedPreferenceString(Constants.ABOUT,it.data.data.about)
-                        }else{
+                            UtilsDefault.updateSharedPreferenceString(Constants.PROFILE_PIC,
+                                it.data.data.profile_pic)
+                            UtilsDefault.updateSharedPreferenceString(Constants.NAME,
+                                it.data.data.name)
+                            UtilsDefault.updateSharedPreferenceString(Constants.ABOUT,
+                                it.data.data.about)
+                        } else {
                             toast(it.data.message)
                         }
                     }
@@ -95,7 +101,8 @@ class EditProfileActivity : BaseActivity() , ImageSelectorDialog.Action{
 
         binding.imgProfile.setOnClickListener {
             imagePermission {
-                imageSelectorDialog = ImageSelectorDialog(this, this,resources.getString(R.string.profile_pht))
+                imageSelectorDialog =
+                    ImageSelectorDialog(this, this, resources.getString(R.string.profile_pht))
             }
         }
 
@@ -114,7 +121,8 @@ class EditProfileActivity : BaseActivity() , ImageSelectorDialog.Action{
 
                 else -> {
                     val inputParams = InputParams()
-                    inputParams.accessToken = UtilsDefault.getSharedPreferenceString(Constants.ACCESS_TOKEN)
+                    inputParams.accessToken =
+                        UtilsDefault.getSharedPreferenceString(Constants.ACCESS_TOKEN)
                     inputParams.user_id = UtilsDefault.getSharedPreferenceString(Constants.USER_ID)
                     inputParams.name = name
                     inputParams.email = email
@@ -129,20 +137,21 @@ class EditProfileActivity : BaseActivity() , ImageSelectorDialog.Action{
     private fun editProfile(inputParams: InputParams) {
         apiViewModel.editProfile(inputParams).observe(this, Observer {
             it.let {
-                when(it.status){
+                when (it.status) {
                     Status.LOADING -> {
                         showProgress()
                     }
                     Status.SUCCESS -> {
                         dismissProgress()
-                        if (it.data!!.status){
+                        if (it.data!!.status) {
                             toast(it.data.message)
                             binding.edtName.setText(it.data.name)
                             binding.edtEmail.setText(it.data.email)
                             binding.edtAbout.setText(it.data.about)
-                            UtilsDefault.updateSharedPreferenceString(Constants.NAME,it.data.name)
-                            UtilsDefault.updateSharedPreferenceString(Constants.ABOUT,it.data.about)
-                        }else{
+                            UtilsDefault.updateSharedPreferenceString(Constants.NAME, it.data.name)
+                            UtilsDefault.updateSharedPreferenceString(Constants.ABOUT,
+                                it.data.about)
+                        } else {
                             toast(it.data.message)
                         }
                     }
@@ -160,10 +169,10 @@ class EditProfileActivity : BaseActivity() , ImageSelectorDialog.Action{
         crop(Uri.fromFile(file))
     }
 
-    fun crop(uri: Uri){
+    fun crop(uri: Uri) {
         CropImage.activity(uri)
             .setGuidelines(CropImageView.Guidelines.ON)
-            .setAspectRatio(1,1)
+            .setAspectRatio(1, 1)
             .setCropShape(CropImageView.CropShape.RECTANGLE)
             .setAutoZoomEnabled(true)
             .start(this)
@@ -176,11 +185,14 @@ class EditProfileActivity : BaseActivity() , ImageSelectorDialog.Action{
             CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE -> {
                 val result = CropImage.getActivityResult(data)
                 if (resultCode == RESULT_OK) {
-                    val uri = result.getUri()
+                    val uri = result.uri
                     pics = uri.path.toString()
                     val file = File(pics)
-                    val requestBody = RequestBody.create("multipart/form-data".toMediaTypeOrNull(), file)
-                    val profile = MultipartBody.Part.createFormData("profile_pic", file.getName(), requestBody)
+                    val requestBody =
+                        file.asRequestBody("multipart/form-data".toMediaTypeOrNull())
+                    val profile = MultipartBody.Part.createFormData("profile_pic",
+                        file.name,
+                        requestBody)
                     updatePic(profile)
                 }
             }
@@ -191,37 +203,39 @@ class EditProfileActivity : BaseActivity() , ImageSelectorDialog.Action{
     }
 
     private fun updatePic(profile: MultipartBody.Part) {
-        val user_id: RequestBody = RequestBody.create("text/plain".toMediaTypeOrNull(), UtilsDefault.getSharedPreferenceString(Constants.USER_ID)!!)
-        val accessToken: RequestBody = RequestBody.create("text/plain".toMediaTypeOrNull(),
-            UtilsDefault.getSharedPreferenceString(Constants.ACCESS_TOKEN)!!
-        )
+        val user_id: RequestBody = UtilsDefault.getSharedPreferenceString(Constants.USER_ID)!!
+            .toRequestBody("text/plain".toMediaTypeOrNull())
+        val accessToken: RequestBody = UtilsDefault.getSharedPreferenceString(Constants.ACCESS_TOKEN)!!
+            .toRequestBody("text/plain".toMediaTypeOrNull())
 
-        updateProfilePic(user_id,accessToken,profile)
+        updateProfilePic(user_id, accessToken, profile)
     }
 
     private fun updateProfilePic(
         user_id: RequestBody,
         accessToken: RequestBody,
-        profile: MultipartBody.Part
+        profile: MultipartBody.Part,
     ) {
-        apiViewModel.updateProfilePic(user_id,accessToken,profile).observe(this, Observer {
+        apiViewModel.updateProfilePic(user_id, accessToken, profile).observe(this, Observer {
             it.let {
-                when(it.status){
+                when (it.status) {
                     Status.LOADING -> {
                         showProgress()
                     }
                     Status.SUCCESS -> {
                         dismissProgress()
-                        if (it.data!!.status){
+                        if (it.data!!.status) {
                             toast(it.data.message)
                             Glide.with(this).applyDefaultRequestOptions(
                                 RequestOptions()
                                     .error(R.drawable.ic_default)
                             ).load(it.data.profile_pic).diskCacheStrategy(
-                                DiskCacheStrategy.DATA).placeholder(R.drawable.ic_default).into(binding.imgProfile)
+                                DiskCacheStrategy.DATA).placeholder(R.drawable.ic_default)
+                                .into(binding.imgProfile)
 
-                            UtilsDefault.updateSharedPreferenceString(Constants.PROFILE_PIC,it.data.profile_pic)
-                        }else{
+                            UtilsDefault.updateSharedPreferenceString(Constants.PROFILE_PIC,
+                                it.data.profile_pic)
+                        } else {
                             toast(it.data.message)
                         }
                     }

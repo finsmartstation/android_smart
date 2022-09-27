@@ -10,7 +10,8 @@ import com.application.smartstation.databinding.ItemCountryBinding
 import com.application.smartstation.ui.model.CountryList
 import com.application.smartstation.util.UtilsDefault
 
-class SelectCountryAdapter(val context: Context) : RecyclerView.Adapter<SelectCountryAdapter.ViewHolder>() {
+class SelectCountryAdapter(val context: Context) :
+    RecyclerView.Adapter<SelectCountryAdapter.ViewHolder>() {
 
     private var list = emptyList<CountryList>()
     var onItemClick: ((model: CountryList) -> Unit)? = null
@@ -30,8 +31,8 @@ class SelectCountryAdapter(val context: Context) : RecyclerView.Adapter<SelectCo
 
         with(holder) {
 
-            binding.txtCountry.setText(UtilsDefault.countryImg(model.countryCode.toUpperCase()))
-            binding.txtCountryCode.text = "+ "+model.countryNum
+            binding.txtCountry.text = UtilsDefault.countryImg(model.countryCode.toUpperCase())
+            binding.txtCountryCode.text = "+ " + model.countryNum
             binding.txtCountryName.text = model.countryName
 
             itemView.setOnClickListener {

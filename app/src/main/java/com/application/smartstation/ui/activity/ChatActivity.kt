@@ -18,7 +18,6 @@ import android.text.TextUtils
 import android.text.TextWatcher
 import android.util.Log
 import android.view.Gravity
-import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.View.OnFocusChangeListener
@@ -30,7 +29,6 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
-import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.application.smartstation.R
 import com.application.smartstation.databinding.ActivityChatBinding
@@ -41,16 +39,15 @@ import com.application.smartstation.service.Status
 import com.application.smartstation.service.background.SocketService
 import com.application.smartstation.ui.adapter.ChatHistoryAdapter
 import com.application.smartstation.ui.model.*
-import com.application.smartstation.util.*
+import com.application.smartstation.util.Constants
+import com.application.smartstation.util.RunTimePermission
+import com.application.smartstation.util.UtilsDefault
+import com.application.smartstation.util.viewBinding
 import com.application.smartstation.view.ImageVideoSelectorDialog
-import com.application.smartstation.view.MessageSwipeReplyView
 import com.application.smartstation.viewmodel.*
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
-import com.google.android.gms.tasks.OnCompleteListener
-import com.google.android.gms.tasks.OnSuccessListener
 import com.google.android.material.bottomsheet.BottomSheetDialog
-import com.google.firebase.database.*
 import com.google.gson.Gson
 import com.vanniktech.emoji.EmojiImageView
 import com.vanniktech.emoji.EmojiPopup
@@ -59,28 +56,26 @@ import dagger.hilt.android.AndroidEntryPoint
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
+import okhttp3.RequestBody.Companion.asRequestBody
+import okhttp3.RequestBody.Companion.toRequestBody
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 import org.json.JSONObject
 import java.io.File
-import java.text.SimpleDateFormat
-import java.util.*
-import kotlin.collections.ArrayList
-import kotlin.collections.HashMap
 
 @AndroidEntryPoint
-class ChatActivity : BaseActivity(),ImageVideoSelectorDialog.Action {
+class ChatActivity : BaseActivity(), ImageVideoSelectorDialog.Action {
 
-    val binding:ActivityChatBinding by viewBinding()
+    val binding: ActivityChatBinding by viewBinding()
     val apiViewModel: ApiViewModel by viewModels()
-    var emojiPopup:EmojiPopup? = null
+    var emojiPopup: EmojiPopup? = null
     var mBottomDialogDocument: BottomSheetDialog? = null
     var chatHistoryAdapter: ChatHistoryAdapter? = null
-    var list:ArrayList<ChatDetailsRes> = ArrayList()
+    var list: ArrayList<ChatDetailsRes> = ArrayList()
     val emitters: SocketService.Emitters = SocketService.Emitters(this)
     private var runTimePermission: RunTimePermission? = null
-    var layoutManager:LinearLayoutManager? = null
+    var layoutManager: LinearLayoutManager? = null
     private var quotedMessagePos = -1
     var receiverId = ""
     var receiverName = ""
@@ -134,25 +129,25 @@ class ChatActivity : BaseActivity(),ImageVideoSelectorDialog.Action {
             emojiPopup!!.toggle()
         }
 
-        binding.ilHeader.imgMenu.setOnClickListener {v ->
+        binding.ilHeader.imgMenu.setOnClickListener { v ->
             binding.ilHeader.imgMenu.visibility = View.INVISIBLE
             menuPopup(v)
         }
 
         binding.ilHeader.imgAudio.setOnClickListener {
-           if (!checkPermissionForCameraAndMicrophone()) {
-               requestPermissionForCameraAndMicrophone()
-           }else{
-               calling("voice_call")
-           }
+            if (!checkPermissionForCameraAndMicrophone()) {
+                requestPermissionForCameraAndMicrophone()
+            } else {
+                calling("voice_call")
+            }
         }
 
         binding.ilHeader.imgVideo.setOnClickListener {
-           if (!checkPermissionForCameraAndMicrophone()) {
-               requestPermissionForCameraAndMicrophone()
-           }else{
-               calling("video_call")
-           }
+            if (!checkPermissionForCameraAndMicrophone()) {
+                requestPermissionForCameraAndMicrophone()
+            } else {
+                calling("video_call")
+            }
         }
 
 //        binding.imgCamera.setOnClickListener {
@@ -165,16 +160,16 @@ class ChatActivity : BaseActivity(),ImageVideoSelectorDialog.Action {
             showDialogChat()
         }
 
-        binding.llSend.setOnClickListener{
+        binding.llSend.setOnClickListener {
             val msg = binding.edtChat.text.toString().trim()
             when {
                 TextUtils.isEmpty(msg) -> toast(resources.getString(R.string.please_msg))
                 else -> {
-                    sendMessage(msg,"text")
+                    sendMessage(msg, "text")
                 }
             }
         }
-        
+
         binding.imgRec.setOnClickListener {
 
         }
@@ -185,14 +180,14 @@ class ChatActivity : BaseActivity(),ImageVideoSelectorDialog.Action {
 
     }
 
-    private fun calling(type:String) {
-        val intent = Intent(this@ChatActivity,CallActivity::class.java)
-        intent.putExtra(Constants.REC_ID,receiverId)
-        intent.putExtra(Constants.REC_NAME,receiverName)
-        intent.putExtra(Constants.REC_PROFILE,receiverProfile)
-        intent.putExtra(Constants.CALL_TYPE,type)
-        intent.putExtra(Constants.STATUS,"Call_Send")
-        intent.putExtra(Constants.ROOM_NAME,UtilsDefault.getRandomString(10))
+    private fun calling(type: String) {
+        val intent = Intent(this@ChatActivity, CallActivity::class.java)
+        intent.putExtra(Constants.REC_ID, receiverId)
+        intent.putExtra(Constants.REC_NAME, receiverName)
+        intent.putExtra(Constants.REC_PROFILE, receiverProfile)
+        intent.putExtra(Constants.CALL_TYPE, type)
+        intent.putExtra(Constants.STATUS, "Call_Send")
+        intent.putExtra(Constants.ROOM_NAME, UtilsDefault.getRandomString(10))
         startActivity(intent)
     }
 
@@ -211,11 +206,12 @@ class ChatActivity : BaseActivity(),ImageVideoSelectorDialog.Action {
                 } catch (e: java.lang.Exception) {
                     e.printStackTrace()
                 }
-            }else{
+            } else {
                 val jsonObject = JSONObject()
                 try {
                     jsonObject.put("sid", UtilsDefault.getSharedPreferenceString(Constants.USER_ID))
-                    jsonObject.put("accessToken", UtilsDefault.getSharedPreferenceString(Constants.ACCESS_TOKEN))
+                    jsonObject.put("accessToken",
+                        UtilsDefault.getSharedPreferenceString(Constants.ACCESS_TOKEN))
                     jsonObject.put("room", room)
                     jsonObject.put("type", type)
                     jsonObject.put("message", msg)
@@ -237,8 +233,8 @@ class ChatActivity : BaseActivity(),ImageVideoSelectorDialog.Action {
         val width = LinearLayout.LayoutParams.WRAP_CONTENT
         val height = LinearLayout.LayoutParams.WRAP_CONTENT
         val popupWindow = PopupWindow(popupView, width, height, true)
-        popupWindow.setFocusable(true)
-        popupWindow.setOutsideTouchable(true)
+        popupWindow.isFocusable = true
+        popupWindow.isOutsideTouchable = true
         popupWindow.showAtLocation(v, Gravity.TOP or Gravity.RIGHT, 0, 0)
 
         val bind = MenuChatPopupBinding.bind(popupView)
@@ -264,7 +260,7 @@ class ChatActivity : BaseActivity(),ImageVideoSelectorDialog.Action {
 
 
         popupWindow.setOnDismissListener(PopupWindow.OnDismissListener {
-            if (i == 0){
+            if (i == 0) {
                 binding.ilHeader.imgMenu.visibility = View.VISIBLE
             }
         })
@@ -276,8 +272,8 @@ class ChatActivity : BaseActivity(),ImageVideoSelectorDialog.Action {
         val width = LinearLayout.LayoutParams.WRAP_CONTENT
         val height = LinearLayout.LayoutParams.WRAP_CONTENT
         val popupWindow = PopupWindow(popupView, width, height, true)
-        popupWindow.setFocusable(true)
-        popupWindow.setOutsideTouchable(true)
+        popupWindow.isFocusable = true
+        popupWindow.isOutsideTouchable = true
         popupWindow.showAtLocation(v, Gravity.TOP or Gravity.RIGHT, 0, 0)
 
         val bind = MenuChatMorePopupBinding.bind(popupView)
@@ -290,7 +286,7 @@ class ChatActivity : BaseActivity(),ImageVideoSelectorDialog.Action {
     private fun initView() {
 
         if (intent != null) {
-            if(intent.getStringExtra(Constants.REC_ID) != null) {
+            if (intent.getStringExtra(Constants.REC_ID) != null) {
                 receiverId = intent.getStringExtra(Constants.REC_ID)!!
             }
             receiverName = intent.getStringExtra(Constants.NAME)!!
@@ -301,11 +297,12 @@ class ChatActivity : BaseActivity(),ImageVideoSelectorDialog.Action {
             }
             if (intent.getStringExtra(Constants.CHAT_TYPE) != null) {
                 chatType = intent.getStringExtra(Constants.CHAT_TYPE)!!
-            }else{
+            } else {
                 chatType = "private"
             }
             binding.ilHeader.txtName.text = intent.getStringExtra(Constants.NAME)
-            Glide.with(this).load(intent.getStringExtra(Constants.PROFILE)).placeholder(R.drawable.ic_default).error(R.drawable.ic_default).diskCacheStrategy(
+            Glide.with(this).load(intent.getStringExtra(Constants.PROFILE))
+                .placeholder(R.drawable.ic_default).error(R.drawable.ic_default).diskCacheStrategy(
                 DiskCacheStrategy.DATA)
                 .into(binding.ilHeader.imgProfile)
         }
@@ -313,14 +310,14 @@ class ChatActivity : BaseActivity(),ImageVideoSelectorDialog.Action {
         if (chatType.equals("private")) {
             getChatDetails()
             roomEmit(receiverId)
-        }else{
+        } else {
             getGrpChatDetails()
             grpRoomEmit(room)
         }
 
         runTimePermission = RunTimePermission(this)
 
-        layoutManager = LinearLayoutManager(this,LinearLayoutManager.VERTICAL, false)
+        layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
         binding.rvChatRoom.layoutManager = layoutManager
         chatHistoryAdapter = ChatHistoryAdapter(this)
         binding.rvChatRoom.adapter = chatHistoryAdapter
@@ -331,7 +328,7 @@ class ChatActivity : BaseActivity(),ImageVideoSelectorDialog.Action {
                 binding.rvChatRoom.postDelayed(Runnable {
                     try {
                         binding.rvChatRoom.smoothScrollToPosition(
-                            binding.rvChatRoom.getAdapter()!!.getItemCount() - 1
+                            binding.rvChatRoom.adapter!!.itemCount - 1
                         )
                     } catch (e: java.lang.Exception) {
                         e.printStackTrace()
@@ -339,7 +336,6 @@ class ChatActivity : BaseActivity(),ImageVideoSelectorDialog.Action {
                 }, 100)
             }
         })
-
 
 
 //        chatHistoryAdapter!!.onItemClick = {
@@ -388,13 +384,12 @@ class ChatActivity : BaseActivity(),ImageVideoSelectorDialog.Action {
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
                 val text = p0.toString()
                 var txt = p3
-                if (text!=""){
+                if (text != "") {
                     binding.imgPlus.visibility = View.GONE
 //                    binding.imgPay.visibility = View.GONE
 //                    binding.imgCamera.visibility = View.GONE
                     binding.llSend.visibility = View.VISIBLE
-                }
-                else {
+                } else {
                     binding.imgPlus.visibility = View.VISIBLE
 //                    binding.imgPay.visibility = View.VISIBLE
 //                    binding.imgCamera.visibility = View.VISIBLE
@@ -404,11 +399,11 @@ class ChatActivity : BaseActivity(),ImageVideoSelectorDialog.Action {
 
         })
 
-        binding.edtChat.setOnFocusChangeListener(OnFocusChangeListener { v, hasFocus ->
+        binding.edtChat.onFocusChangeListener = OnFocusChangeListener { v, hasFocus ->
             if (!hasFocus) {
                 sendTypingIndicator(false)
             }
-        })
+        }
 
     }
 
@@ -420,17 +415,17 @@ class ChatActivity : BaseActivity(),ImageVideoSelectorDialog.Action {
 
         apiViewModel.getGrpDetails(inputParams).observe(this, Observer {
             it.let {
-                when(it.status){
+                when (it.status) {
                     Status.LOADING -> {
                         showProgress()
                     }
                     Status.SUCCESS -> {
                         dismissProgress()
-                        if (it.data!!.status){
-                            if (it.data.data.list.isNotEmpty()){
-                                setData(it.data.data.list,true)
+                        if (it.data!!.status) {
+                            if (it.data.data.list.isNotEmpty()) {
+                                setData(it.data.data.list, true)
                             }
-                        }else{
+                        } else {
                             toast(it.data.message)
                         }
                     }
@@ -451,17 +446,17 @@ class ChatActivity : BaseActivity(),ImageVideoSelectorDialog.Action {
 
         apiViewModel.getChatDetailslist(inputParams).observe(this, Observer {
             it.let {
-                when(it.status){
+                when (it.status) {
                     Status.LOADING -> {
                         showProgress()
                     }
                     Status.SUCCESS -> {
                         dismissProgress()
-                        if (it.data!!.status){
-                           if (it.data.data.list.isNotEmpty()){
-                               setData(it.data.data.list,false)
-                           }
-                        }else{
+                        if (it.data!!.status) {
+                            if (it.data.data.list.isNotEmpty()) {
+                                setData(it.data.data.list, false)
+                            }
+                        } else {
                             toast(it.data.message)
                         }
                     }
@@ -474,10 +469,10 @@ class ChatActivity : BaseActivity(),ImageVideoSelectorDialog.Action {
         })
     }
 
-    private fun setData(list: ArrayList<ChatDetailsRes>,chatType:Boolean) {
+    private fun setData(list: ArrayList<ChatDetailsRes>, chatType: Boolean) {
         this.list = list
-        chatHistoryAdapter!!.setChatHis(list,chatType)
-        layoutManager!!.scrollToPosition(chatHistoryAdapter!!.getItemCount() - 1)
+        chatHistoryAdapter!!.setChatHis(list, chatType)
+        layoutManager!!.scrollToPosition(chatHistoryAdapter!!.itemCount - 1)
 
         //reply msg
 //        val messageSwipeController = MessageSwipeReplyView(this,list ,object : SwipeControllerActions {
@@ -497,7 +492,7 @@ class ChatActivity : BaseActivity(),ImageVideoSelectorDialog.Action {
             try {
                 jsonObject.put("sid", UtilsDefault.getSharedPreferenceString(Constants.USER_ID))
                 jsonObject.put("rid", receiverId)
-                Log.d("TAG", "room: "+jsonObject)
+                Log.d("TAG", "room: " + jsonObject)
                 emitters.room(jsonObject)
             } catch (e: java.lang.Exception) {
                 e.printStackTrace()
@@ -512,7 +507,7 @@ class ChatActivity : BaseActivity(),ImageVideoSelectorDialog.Action {
                 jsonObject.put("sid", UtilsDefault.getSharedPreferenceString(Constants.USER_ID))
                 jsonObject.put("rid", receiverId)
                 jsonObject.put("room", receiverId)
-                Log.d("TAG", "room: "+jsonObject)
+                Log.d("TAG", "room: " + jsonObject)
                 emitters.room(jsonObject)
             } catch (e: java.lang.Exception) {
                 e.printStackTrace()
@@ -530,9 +525,9 @@ class ChatActivity : BaseActivity(),ImageVideoSelectorDialog.Action {
 
         if (dataResChat.message_type.equals("text")) {
             binding.textQuotedMessage.text = dataResChat.message
-            if (dataResChat.senter_id.equals(UtilsDefault.getSharedPreferenceString(Constants.USER_ID))){
+            if (dataResChat.senter_id.equals(UtilsDefault.getSharedPreferenceString(Constants.USER_ID))) {
                 binding.txtReplyName.text = "You"
-            }else{
+            } else {
                 binding.txtReplyName.text = receiverName
             }
 
@@ -566,7 +561,8 @@ class ChatActivity : BaseActivity(),ImageVideoSelectorDialog.Action {
                 ), object : RunTimePermission.RunTimePermissionListener {
                     override fun permissionGranted() {
                         // First we need to check availability of play services
-                        startActivityForResult(Intent(this@ChatActivity,CameraActivity::class.java),RESULT_CODE)
+                        startActivityForResult(Intent(this@ChatActivity,
+                            CameraActivity::class.java), RESULT_CODE)
                     }
 
                     override fun permissionDenied() {
@@ -579,7 +575,7 @@ class ChatActivity : BaseActivity(),ImageVideoSelectorDialog.Action {
             bind.llPhoto.setOnClickListener {
                 binding.llMsg.visibility = View.VISIBLE
                 imagePermission {
-                    imageVideoSelectorDialog = ImageVideoSelectorDialog(this@ChatActivity,this)
+                    imageVideoSelectorDialog = ImageVideoSelectorDialog(this@ChatActivity, this)
                 }
                 mBottomDialogDocument!!.dismiss()
             }
@@ -602,19 +598,19 @@ class ChatActivity : BaseActivity(),ImageVideoSelectorDialog.Action {
         var jsonObject: JSONObject? = JSONObject()
         jsonObject = event.getJsonObject()
         setMessageEvent(jsonObject)
-        Log.d("TAG", "ONCHATEVENT: "+jsonObject)
+        Log.d("TAG", "ONCHATEVENT: " + jsonObject)
     }
 
     private fun setMessageEvent(jsonObject: JSONObject?) {
         val gson = Gson()
         val messageSocketModel: GetChatDetailsListResponse = gson.fromJson(jsonObject.toString(),
             GetChatDetailsListResponse::class.java)
-        if (messageSocketModel.status){
+        if (messageSocketModel.status) {
 //            if (messageSocketModel)
-            if (!messageSocketModel.data.list.isNullOrEmpty()){
-                setData(messageSocketModel.data.list,false)
+            if (!messageSocketModel.data.list.isNullOrEmpty()) {
+                setData(messageSocketModel.data.list, false)
             }
-        }else{
+        } else {
             toast(messageSocketModel.message)
         }
     }
@@ -624,16 +620,17 @@ class ChatActivity : BaseActivity(),ImageVideoSelectorDialog.Action {
         var jsonObject: JSONObject? = JSONObject()
         jsonObject = event.getJsonObject()
         setOnlineEvent(jsonObject)
-        Log.d("TAG", "ONONLINEEVENT: "+jsonObject)
+        Log.d("TAG", "ONONLINEEVENT: " + jsonObject)
     }
 
     private fun setOnlineEvent(jsonObject: JSONObject?) {
         val gson = Gson()
         val onlineSocketModel: OnlineRes = gson.fromJson(jsonObject.toString(),
             OnlineRes::class.java)
-        if(onlineSocketModel.online_status.equals("0")){
-            Log.d("TAG", "setOnlineEvent: "+UtilsDefault.dateLastSeen(onlineSocketModel.last_seen))
-        }else{
+        if (onlineSocketModel.online_status.equals("0")) {
+            Log.d("TAG",
+                "setOnlineEvent: " + UtilsDefault.dateLastSeen(onlineSocketModel.last_seen))
+        } else {
             binding.ilHeader.txtStatus.text = "Online"
         }
     }
@@ -668,7 +665,7 @@ class ChatActivity : BaseActivity(),ImageVideoSelectorDialog.Action {
                     Manifest.permission.RECORD_AUDIO)
             ) {
                 val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
-                val uri = Uri.fromParts("package", getPackageName(), null)
+                val uri = Uri.fromParts("package", packageName, null)
                 intent.data = uri
                 startActivity(intent)
             } else {
@@ -695,13 +692,13 @@ class ChatActivity : BaseActivity(),ImageVideoSelectorDialog.Action {
     }
 
     override fun onImageSelected(imagePath: String, filename: String) {
-        if (UtilsDefault.isImageFile(imagePath)){
+        if (UtilsDefault.isImageFile(imagePath)) {
             val mIntent = Intent(this,
                 ImagePerviewActivity::class.java)
             mIntent.putExtra(Constants.FILE_PATH, imagePath)
             mIntent.putExtra(Constants.TYPE, "img")
             startActivityForResult(mIntent, RESULT_CODE)
-        }else{
+        } else {
             val mIntent = Intent(this,
                 ImagePerviewActivity::class.java)
             mIntent.putExtra(Constants.FILE_PATH, imagePath)
@@ -712,15 +709,15 @@ class ChatActivity : BaseActivity(),ImageVideoSelectorDialog.Action {
 
     fun sendTypingIndicator(indicate: Boolean) {
         if (indicate) {
-           if (chatType.equals("private")) {
-               typingEmit("1")
-           }else{
-               typingGrpEmit("1")
-           }
+            if (chatType.equals("private")) {
+                typingEmit("1")
+            } else {
+                typingGrpEmit("1")
+            }
         } else {
             if (chatType.equals("private")) {
                 typingEmit("0")
-            }else{
+            } else {
                 typingGrpEmit("0")
             }
         }
@@ -733,7 +730,7 @@ class ChatActivity : BaseActivity(),ImageVideoSelectorDialog.Action {
                 jsonObject.put("sid", UtilsDefault.getSharedPreferenceString(Constants.USER_ID))
                 jsonObject.put("rid", receiverId)
                 jsonObject.put("status", s)
-                Log.d("TAG", "typing: "+jsonObject)
+                Log.d("TAG", "typing: " + jsonObject)
                 emitters.typingStatus(jsonObject)
             } catch (e: java.lang.Exception) {
                 e.printStackTrace()
@@ -748,7 +745,7 @@ class ChatActivity : BaseActivity(),ImageVideoSelectorDialog.Action {
                 jsonObject.put("sid", UtilsDefault.getSharedPreferenceString(Constants.USER_ID))
                 jsonObject.put("room", receiverId)
                 jsonObject.put("status", s)
-                Log.d("TAG", "typing: "+jsonObject)
+                Log.d("TAG", "typing: " + jsonObject)
                 emitters.typingGrpStatus(jsonObject)
             } catch (e: java.lang.Exception) {
                 e.printStackTrace()
@@ -786,18 +783,19 @@ class ChatActivity : BaseActivity(),ImageVideoSelectorDialog.Action {
             multipleUriData != null -> {
                 for (i in 0 until multipleUriData.itemCount) {
                     val uri = multipleUriData.getItemAt(i).uri
-                    Log.d("TAG", "onFilePickerResult: "+uri)
+                    Log.d("TAG", "onFilePickerResult: " + uri)
                 }
             }
             singleUri != null -> {
                 val uri = singleUri
                 val files = File(uri.toString())
-                val requestBody = RequestBody.create("multipart/form-data".toMediaTypeOrNull(), files)
-                val file = MultipartBody.Part.createFormData("file", files.getName(), requestBody)
-                val user_id: RequestBody = RequestBody.create("text/plain".toMediaTypeOrNull(), UtilsDefault.getSharedPreferenceString(Constants.USER_ID)!!)
-                val accessToken: RequestBody = RequestBody.create("text/plain".toMediaTypeOrNull(),
-                    UtilsDefault.getSharedPreferenceString(Constants.ACCESS_TOKEN)!!
-                )
+                val requestBody =
+                    files.asRequestBody("multipart/form-data".toMediaTypeOrNull())
+                val file = MultipartBody.Part.createFormData("file", files.name, requestBody)
+                val user_id: RequestBody = UtilsDefault.getSharedPreferenceString(Constants.USER_ID)!!
+                    .toRequestBody("text/plain".toMediaTypeOrNull())
+                val accessToken: RequestBody = UtilsDefault.getSharedPreferenceString(Constants.ACCESS_TOKEN)!!
+                    .toRequestBody("text/plain".toMediaTypeOrNull())
 //                fileUpload(user_id,accessToken,file)
             }
             else -> return
@@ -807,20 +805,20 @@ class ChatActivity : BaseActivity(),ImageVideoSelectorDialog.Action {
     private fun fileUpload(
         user_id: RequestBody,
         accessToken: RequestBody,
-        file: MultipartBody.Part
+        file: MultipartBody.Part,
     ) {
         apiViewModel.fileUpload(user_id, accessToken, file).observe(this, Observer {
             it.let {
-                when(it.status){
+                when (it.status) {
                     Status.LOADING -> {
                         showProgress()
                     }
                     Status.SUCCESS -> {
                         dismissProgress()
-                        if (it.data!!.status){
+                        if (it.data!!.status) {
                             toast(it.data.message)
                             sendMessage(it.data.filepath, "image")
-                        }else{
+                        } else {
                             toast(it.data.message)
                         }
                     }
@@ -833,7 +831,7 @@ class ChatActivity : BaseActivity(),ImageVideoSelectorDialog.Action {
         })
     }
 
-    fun typingHandler(){
+    fun typingHandler() {
         Handler(Looper.getMainLooper()).postDelayed({
             sendTypingIndicator(false)
         }, 2000)
@@ -844,7 +842,7 @@ class ChatActivity : BaseActivity(),ImageVideoSelectorDialog.Action {
         var jsonObject: JSONObject? = JSONObject()
         jsonObject = event.getJsonObject()
         setTypingEvent(jsonObject)
-        Log.d("TAG", "TYPINGEVENT: "+jsonObject)
+        Log.d("TAG", "TYPINGEVENT: " + jsonObject)
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -852,14 +850,14 @@ class ChatActivity : BaseActivity(),ImageVideoSelectorDialog.Action {
         var jsonObject: JSONObject? = JSONObject()
         jsonObject = event.getJsonObject()
         setTypingEvent(jsonObject)
-        Log.d("TAG", "TYPINGEVENT: "+jsonObject)
+        Log.d("TAG", "TYPINGEVENT: " + jsonObject)
     }
 
     fun setTypingEvent(jsonObject: JSONObject?) {
         val gson = Gson()
         val typingModel: TypingRes = gson.fromJson(jsonObject.toString(),
             TypingRes::class.java)
-        if(typingModel.status){
+        if (typingModel.status) {
             if (chatType.equals("private")) {
                 if (typingModel.user_id.equals(receiverId)) {
                     if (typingModel.typing.equals("1")) {
@@ -870,12 +868,13 @@ class ChatActivity : BaseActivity(),ImageVideoSelectorDialog.Action {
                         binding.ilHeader.txtTypingStatus.visibility = View.GONE
                     }
                 }
-            }else{
+            } else {
                 if (!typingModel.user_id.equals(UtilsDefault.getSharedPreferenceString(Constants.USER_ID))) {
                     if (typingModel.typing.equals("1")) {
                         binding.ilHeader.txtStatus.visibility = View.GONE
                         binding.ilHeader.txtTypingStatus.visibility = View.VISIBLE
-                        binding.ilHeader.txtTypingStatus.text = typingModel.name+" "+resources.getString(R.string.typing)
+                        binding.ilHeader.txtTypingStatus.text =
+                            typingModel.name + " " + resources.getString(R.string.typing)
                     } else {
                         binding.ilHeader.txtStatus.visibility = View.VISIBLE
                         binding.ilHeader.txtTypingStatus.visibility = View.GONE

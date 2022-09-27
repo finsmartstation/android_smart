@@ -1,28 +1,25 @@
 package com.application.smartstation.ui.activity
 
 import android.content.Intent
-import android.net.Uri
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.TextUtils
 import androidx.activity.viewModels
 import androidx.lifecycle.Observer
 import com.application.smartstation.R
-import com.application.smartstation.databinding.ActivitySignatureBinding
 import com.application.smartstation.databinding.ActivityUploadSignatureBinding
 import com.application.smartstation.service.Status
-import com.application.smartstation.ui.model.InputParams
 import com.application.smartstation.util.Constants
 import com.application.smartstation.util.UtilsDefault
 import com.application.smartstation.util.viewBinding
 import com.application.smartstation.view.ImageSelectorDialog
 import com.application.smartstation.viewmodel.ApiViewModel
 import com.bumptech.glide.Glide
-import com.theartofdev.edmodo.cropper.CropImage
 import dagger.hilt.android.AndroidEntryPoint
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
+import okhttp3.RequestBody.Companion.asRequestBody
+import okhttp3.RequestBody.Companion.toRequestBody
 import java.io.File
 
 @AndroidEntryPoint
@@ -30,8 +27,8 @@ class UploadSignatureActivity : BaseActivity(), ImageSelectorDialog.Action {
 
     val binding: ActivityUploadSignatureBinding by viewBinding()
     val apiViewModel: ApiViewModel by viewModels()
-    var imageSelectorDialog:ImageSelectorDialog? = null
-    var pics=""
+    var imageSelectorDialog: ImageSelectorDialog? = null
+    var pics = ""
     var type = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -59,7 +56,8 @@ class UploadSignatureActivity : BaseActivity(), ImageSelectorDialog.Action {
 
         binding.imgUpload.setOnClickListener {
             imagePermission {
-                imageSelectorDialog = ImageSelectorDialog(this, this,resources.getString(R.string.signature))
+                imageSelectorDialog =
+                    ImageSelectorDialog(this, this, resources.getString(R.string.signature))
             }
         }
 
@@ -73,41 +71,37 @@ class UploadSignatureActivity : BaseActivity(), ImageSelectorDialog.Action {
                 else -> {
                     if (type.equals(1)) {
                         val user_id: RequestBody =
-                            RequestBody.create("text/plain".toMediaTypeOrNull(),
-                                UtilsDefault.getSharedPreferenceString(
-                                    Constants.USER_ID)!!)
+                            UtilsDefault.getSharedPreferenceString(
+                                Constants.USER_ID)!!
+                                .toRequestBody("text/plain".toMediaTypeOrNull())
                         val accessToken: RequestBody =
-                            RequestBody.create("text/plain".toMediaTypeOrNull(),
-                                UtilsDefault.getSharedPreferenceString(Constants.ACCESS_TOKEN)!!
-                            )
-                        val name: RequestBody = RequestBody.create("text/plain".toMediaTypeOrNull(),
-                            name
-                        )
+                            UtilsDefault.getSharedPreferenceString(Constants.ACCESS_TOKEN)!!
+                                .toRequestBody("text/plain".toMediaTypeOrNull())
+                        val name: RequestBody = name
+                            .toRequestBody("text/plain".toMediaTypeOrNull())
                         val file = File(pics)
                         val requestBody =
-                            RequestBody.create("multipart/form-data".toMediaTypeOrNull(), file)
+                            file.asRequestBody("multipart/form-data".toMediaTypeOrNull())
                         val signature = MultipartBody.Part.createFormData("signature",
-                            file.getName(),
+                            file.name,
                             requestBody)
 
                         uploadSignature(user_id, accessToken, name, signature)
-                    }else{
+                    } else {
                         val user_id: RequestBody =
-                            RequestBody.create("text/plain".toMediaTypeOrNull(),
-                                UtilsDefault.getSharedPreferenceString(
-                                    Constants.USER_ID)!!)
+                            UtilsDefault.getSharedPreferenceString(
+                                Constants.USER_ID)!!
+                                .toRequestBody("text/plain".toMediaTypeOrNull())
                         val accessToken: RequestBody =
-                            RequestBody.create("text/plain".toMediaTypeOrNull(),
-                                UtilsDefault.getSharedPreferenceString(Constants.ACCESS_TOKEN)!!
-                            )
-                        val name: RequestBody = RequestBody.create("text/plain".toMediaTypeOrNull(),
-                            name
-                        )
+                            UtilsDefault.getSharedPreferenceString(Constants.ACCESS_TOKEN)!!
+                                .toRequestBody("text/plain".toMediaTypeOrNull())
+                        val name: RequestBody = name
+                            .toRequestBody("text/plain".toMediaTypeOrNull())
                         val file = File(pics)
                         val requestBody =
-                            RequestBody.create("multipart/form-data".toMediaTypeOrNull(), file)
+                            file.asRequestBody("multipart/form-data".toMediaTypeOrNull())
                         val stamp = MultipartBody.Part.createFormData("stamp",
-                            file.getName(),
+                            file.name,
                             requestBody)
 
                         uploadStamp(user_id, accessToken, name, stamp)
@@ -118,19 +112,24 @@ class UploadSignatureActivity : BaseActivity(), ImageSelectorDialog.Action {
 
     }
 
-    private fun uploadStamp(userId: RequestBody, accessToken: RequestBody, name: RequestBody, stamp: MultipartBody.Part) {
-        apiViewModel.stampUpload(userId,accessToken,name,stamp).observe(this, Observer {
+    private fun uploadStamp(
+        userId: RequestBody,
+        accessToken: RequestBody,
+        name: RequestBody,
+        stamp: MultipartBody.Part,
+    ) {
+        apiViewModel.stampUpload(userId, accessToken, name, stamp).observe(this, Observer {
             it.let {
-                when(it.status){
+                when (it.status) {
                     Status.LOADING -> {
                         showProgress()
                     }
                     Status.SUCCESS -> {
                         dismissProgress()
-                        if (it.data!!.status){
+                        if (it.data!!.status) {
                             finish()
                             toast(it.data.message)
-                        }else{
+                        } else {
                             toast(it.data.message)
                         }
                     }
@@ -143,19 +142,24 @@ class UploadSignatureActivity : BaseActivity(), ImageSelectorDialog.Action {
         })
     }
 
-    fun uploadSignature(userId: RequestBody, accessToken: RequestBody, name: RequestBody, signature: MultipartBody.Part) {
-        apiViewModel.uploadSignature(userId,accessToken,name,signature).observe(this, Observer {
+    fun uploadSignature(
+        userId: RequestBody,
+        accessToken: RequestBody,
+        name: RequestBody,
+        signature: MultipartBody.Part,
+    ) {
+        apiViewModel.uploadSignature(userId, accessToken, name, signature).observe(this, Observer {
             it.let {
-                when(it.status){
+                when (it.status) {
                     Status.LOADING -> {
                         showProgress()
                     }
                     Status.SUCCESS -> {
                         dismissProgress()
-                        if (it.data!!.status){
+                        if (it.data!!.status) {
                             finish()
                             toast(it.data.message)
-                        }else{
+                        } else {
                             toast(it.data.message)
                         }
                     }

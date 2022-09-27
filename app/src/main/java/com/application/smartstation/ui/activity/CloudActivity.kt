@@ -3,7 +3,6 @@ package com.application.smartstation.ui.activity
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.database.Cursor
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.ContactsContract
 import android.telephony.PhoneNumberUtils
@@ -15,14 +14,13 @@ import android.view.animation.AnimationUtils
 import androidx.activity.viewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.application.smartstation.R
 import com.application.smartstation.databinding.ActivityCloudBinding
-import com.application.smartstation.databinding.ActivityEditProfileBinding
 import com.application.smartstation.service.Status
 import com.application.smartstation.ui.adapter.CloudAdapter
-import com.application.smartstation.ui.adapter.SentboxAdapter
-import com.application.smartstation.ui.model.*
+import com.application.smartstation.ui.model.CloudListRes
+import com.application.smartstation.ui.model.ContactListRes
+import com.application.smartstation.ui.model.InputParams
 import com.application.smartstation.util.Constants
 import com.application.smartstation.util.UtilsDefault
 import com.application.smartstation.util.viewBinding
@@ -34,9 +32,9 @@ class CloudActivity : BaseActivity() {
 
     val binding: ActivityCloudBinding by viewBinding()
     val apiViewModel: ApiViewModel by viewModels()
-    var list:ArrayList<CloudListRes> = ArrayList()
+    var list: ArrayList<CloudListRes> = ArrayList()
     var cloudAdapter: CloudAdapter? = null
-    var contactList:ArrayList<ContactListRes> = ArrayList()
+    var contactList: ArrayList<ContactListRes> = ArrayList()
 
     var showBtn: Animation? = null
     var hideBtn: Animation? = null
@@ -59,17 +57,18 @@ class CloudActivity : BaseActivity() {
         cloudAdapter = CloudAdapter(this)
         binding.rvCloud.adapter = cloudAdapter
 
-        showBtn  = AnimationUtils.loadAnimation(this,R.anim.show_btn)
-        hideBtn  = AnimationUtils.loadAnimation(this,R.anim.hide_btn)
-        showLay  = AnimationUtils.loadAnimation(this,R.anim.show_layout)
-        hideLay  = AnimationUtils.loadAnimation(this,R.anim.hide_layout)
+        showBtn = AnimationUtils.loadAnimation(this, R.anim.show_btn)
+        hideBtn = AnimationUtils.loadAnimation(this, R.anim.hide_btn)
+        showLay = AnimationUtils.loadAnimation(this, R.anim.show_layout)
+        hideLay = AnimationUtils.loadAnimation(this, R.anim.hide_layout)
 
-        phnPermission{
+        phnPermission {
             getContactList()
         }
 
         cloudAdapter!!.onItemClick = { model ->
-            startActivity(Intent(this, CloudViewActivity::class.java).putExtra("name",model.phone).putExtra("id",model.id))
+            startActivity(Intent(this, CloudViewActivity::class.java).putExtra("name", model.phone)
+                .putExtra("id", model.id))
         }
 
         binding.edtSearch.addTextChangedListener(object : TextWatcher {
@@ -95,31 +94,36 @@ class CloudActivity : BaseActivity() {
 
         apiViewModel.getCloud(inputParams).observe(this, Observer {
             it.let {
-                when(it.status){
+                when (it.status) {
                     Status.LOADING -> {
                         showProgress()
                     }
                     Status.SUCCESS -> {
                         dismissProgress()
-                        if (it.data!!.status){
+                        if (it.data!!.status) {
                             list = it.data.cloud_numbers
-                            if(list.isNotEmpty()) {
+                            if (list.isNotEmpty()) {
                                 binding.rvCloud.visibility = View.VISIBLE
                                 binding.txtNoFound.visibility = View.GONE
                                 for (a in contactList) {
                                     for (b in 0 until list.size) {
                                         if (PhoneNumberUtils.compare(a.Phn, list[b].phone)) {
 //                                            list.removeAt(b)
-                                            list.set(b,CloudListRes(a.name,list[b].profile_pic,list[b].id,list[b].folder_name,list[b].user_id))
+                                            list.set(b,
+                                                CloudListRes(a.name,
+                                                    list[b].profile_pic,
+                                                    list[b].id,
+                                                    list[b].folder_name,
+                                                    list[b].user_id))
                                         }
                                     }
                                 }
                                 setData(list)
-                            }else{
+                            } else {
                                 binding.rvCloud.visibility = View.GONE
                                 binding.txtNoFound.visibility = View.VISIBLE
                             }
-                        }else{
+                        } else {
                             toast(it.data.message)
                         }
                     }
@@ -173,11 +177,11 @@ class CloudActivity : BaseActivity() {
         }
 
         binding.fabAdd.setOnClickListener {
-            if(binding.llNewUser.visibility == View.VISIBLE){
+            if (binding.llNewUser.visibility == View.VISIBLE) {
                 binding.llNewUser.visibility = View.GONE
                 binding.llNewUser.startAnimation(hideLay)
                 binding.fabAdd.startAnimation(hideBtn)
-            }else{
+            } else {
                 binding.llNewUser.visibility = View.VISIBLE
                 binding.llNewUser.startAnimation(showLay)
                 binding.fabAdd.startAnimation(showBtn)
@@ -188,14 +192,14 @@ class CloudActivity : BaseActivity() {
             binding.llNewUser.visibility = View.GONE
             binding.llNewUser.startAnimation(hideLay)
             binding.fabAdd.startAnimation(hideBtn)
-            startActivityForResult(Intent(this,UserDetailsActivity::class.java), RESULT_CODE)
+            startActivityForResult(Intent(this, UserDetailsActivity::class.java), RESULT_CODE)
         }
 
         binding.llNewUser.setOnClickListener {
             binding.llNewUser.visibility = View.GONE
             binding.llNewUser.startAnimation(hideLay)
             binding.fabAdd.startAnimation(hideBtn)
-            startActivityForResult(Intent(this,UserDetailsActivity::class.java), RESULT_CODE)
+            startActivityForResult(Intent(this, UserDetailsActivity::class.java), RESULT_CODE)
         }
 
     }
@@ -220,15 +224,15 @@ class CloudActivity : BaseActivity() {
 
         apiViewModel.createCloudFolder(inputParams).observe(this, Observer {
             it.let {
-                when(it.status){
+                when (it.status) {
                     Status.LOADING -> {
                         showProgress()
                     }
                     Status.SUCCESS -> {
                         dismissProgress()
-                        if (it.data!!.status){
+                        if (it.data!!.status) {
                             getCloud()
-                        }else{
+                        } else {
                             toast(it.data.message)
                         }
                     }
@@ -246,7 +250,7 @@ class CloudActivity : BaseActivity() {
         val cr = contentResolver
         val cur: Cursor? = cr.query(ContactsContract.Contacts.CONTENT_URI,
             null, null, null, null)
-        if ((if (cur != null) cur.getCount() else 0) > 0) {
+        if ((if (cur != null) cur.count else 0) > 0) {
             while (cur != null && cur.moveToNext()) {
                 val id: String = cur.getString(
                     cur.getColumnIndex(ContactsContract.Contacts._ID))
@@ -264,7 +268,7 @@ class CloudActivity : BaseActivity() {
                     while (pCur!!.moveToNext()) {
                         val phoneNo: String = pCur.getString(pCur.getColumnIndex(
                             ContactsContract.CommonDataKinds.Phone.NUMBER))
-                        contactList.add(ContactListRes(name,phoneNo))
+                        contactList.add(ContactListRes(name, phoneNo))
                     }
                     pCur.close()
                 }

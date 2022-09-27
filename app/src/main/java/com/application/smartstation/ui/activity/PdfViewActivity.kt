@@ -33,10 +33,10 @@ class PdfViewActivity : BaseActivity(), OnPageChangeListener, OnLoadCompleteList
     }
 
     private fun initView() {
-        if(intent != null){
+        if (intent != null) {
             path = intent.getStringExtra("path")!!
         }
-        val fileName = FileUtils.getFileNameFromPath(path).replace("/","")
+        val fileName = FileUtils.getFileNameFromPath(path).replace("/", "")
         binding.ilHeader.txtHeader.text = fileName
 
         binding.pdfView.fromUri(Uri.fromFile(File(path)))
@@ -54,7 +54,7 @@ class PdfViewActivity : BaseActivity(), OnPageChangeListener, OnLoadCompleteList
     }
 
     override fun loadComplete(nbPages: Int) {
-        val meta: PdfDocument.Meta = binding.pdfView.getDocumentMeta()
+        val meta: PdfDocument.Meta = binding.pdfView.documentMeta
     }
 
     override fun onPageError(page: Int, t: Throwable?) {

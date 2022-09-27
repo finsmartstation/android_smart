@@ -1,14 +1,12 @@
 package com.application.smartstation.ui.adapter
 
 import android.content.Context
-import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.application.smartstation.R
 import com.application.smartstation.databinding.ItemChatBinding
-import com.application.smartstation.ui.model.ChatResponse
 import com.application.smartstation.ui.model.DataChatList
 import com.application.smartstation.util.UtilsDefault
 import com.application.smartstation.view.ViewBinderHelper
@@ -38,14 +36,17 @@ class ChatAdapter(val context: Context) : RecyclerView.Adapter<ChatAdapter.ViewH
 
         with(holder) {
             binding.txtName.text = model.name
-            binding.txtTime.text = UtilsDefault.dateChatList(UtilsDefault.localTimeConvert(model.date))
+            binding.txtTime.text =
+                UtilsDefault.dateChatList(UtilsDefault.localTimeConvert(model.date))
 
-            Glide.with(context).load(model.profile).placeholder(R.drawable.ic_default).error(R.drawable.ic_default).diskCacheStrategy(DiskCacheStrategy.DATA).into(binding.imgProfile)
+            Glide.with(context).load(model.profile).placeholder(R.drawable.ic_default)
+                .error(R.drawable.ic_default).diskCacheStrategy(DiskCacheStrategy.DATA)
+                .into(binding.imgProfile)
 
-            if (typingStatus.equals(1)){
+            if (typingStatus.equals(1)) {
                 binding.llView.visibility = View.GONE
                 binding.txtTyping.visibility = View.VISIBLE
-            }else{
+            } else {
                 binding.llView.visibility = View.VISIBLE
                 binding.txtTyping.visibility = View.GONE
 
@@ -56,9 +57,9 @@ class ChatAdapter(val context: Context) : RecyclerView.Adapter<ChatAdapter.ViewH
                 onItemClick!!.invoke(model)
             }
 
-            if (model.unread_message.equals("0")){
+            if (model.unread_message.equals("0")) {
                 binding.llRead.visibility = View.GONE
-                if(!model.message_type.equals("")) {
+                if (!model.message_type.equals("")) {
                     if (model.message_type.equals("text")) {
                         binding.txtMsg.text = model.message
                         binding.imgPht.visibility = View.GONE
@@ -67,17 +68,17 @@ class ChatAdapter(val context: Context) : RecyclerView.Adapter<ChatAdapter.ViewH
                         binding.imgPht.visibility = View.VISIBLE
                     }
                     binding.txtMsg.setTextColor(context.resources.getColor(R.color.color_gray_2))
-                }else{
+                } else {
                     binding.txtMsg.text = model.message
                 }
-            }else{
+            } else {
                 binding.llRead.visibility = View.VISIBLE
-                if (model.unread_message > "9"){
+                if (model.unread_message > "9") {
                     binding.txtUnread.text = "9+"
-                }else {
+                } else {
                     binding.txtUnread.text = model.unread_message
                 }
-                if(!model.message_type.equals("")) {
+                if (!model.message_type.equals("")) {
                     if (model.message_type.equals("text")) {
                         binding.txtMsg.text = UtilsDefault.chatBold(model.message)
                         binding.imgPht.visibility = View.GONE
@@ -86,7 +87,7 @@ class ChatAdapter(val context: Context) : RecyclerView.Adapter<ChatAdapter.ViewH
                         binding.imgPht.visibility = View.VISIBLE
                     }
                     binding.txtMsg.setTextColor(context.resources.getColor(R.color.black))
-                }else{
+                } else {
                     binding.txtMsg.text = UtilsDefault.chatBold(model.message)
                 }
             }
@@ -99,7 +100,7 @@ class ChatAdapter(val context: Context) : RecyclerView.Adapter<ChatAdapter.ViewH
         notifyDataSetChanged()
     }
 
-    internal fun setChats(typing:Int, position: Int) {
+    internal fun setChats(typing: Int, position: Int) {
         this.typingStatus = typing
         notifyItemChanged(position)
     }

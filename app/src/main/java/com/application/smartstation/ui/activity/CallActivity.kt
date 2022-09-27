@@ -27,7 +27,6 @@ import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.database.*
 import com.twilio.video.*
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.android.synthetic.main.activity_call.view.*
 import org.json.JSONException
 import org.json.JSONObject
 import java.util.concurrent.TimeUnit
@@ -99,10 +98,10 @@ class CallActivity : BaseActivity() {
             if (cameraCapturerCompat != null) {
                 val cameraSource = cameraCapturerCompat!!.cameraSource
                 cameraCapturerCompat!!.switchCamera()
-                if (binding.videoView.thumbnailVideoView.getVisibility() == View.VISIBLE) {
-                    binding.videoView.thumbnailVideoView.setMirror(cameraSource == CameraCapturer.CameraSource.BACK_CAMERA)
+                if (binding.videoView.thumbnailVideoView.visibility == View.VISIBLE) {
+                    binding.videoView.thumbnailVideoView.mirror = cameraSource == CameraCapturer.CameraSource.BACK_CAMERA
                 } else {
-                    binding.videoView.thumbnailVideoView.setMirror(cameraSource == CameraCapturer.CameraSource.BACK_CAMERA)
+                    binding.videoView.thumbnailVideoView.mirror = cameraSource == CameraCapturer.CameraSource.BACK_CAMERA
                 }
             }
         }
@@ -206,21 +205,21 @@ class CallActivity : BaseActivity() {
 
     @SuppressLint("SetTextI18n")
     private fun showCallingDialog() {
-        binding.callingUserInfoLayout.setVisibility(View.VISIBLE)
-        binding.callingActionButtons.setVisibility(View.GONE)
-        binding.username.setText(callerName)
+        binding.callingUserInfoLayout.visibility = View.VISIBLE
+        binding.callingActionButtons.visibility = View.GONE
+        binding.username.text = callerName
 
         binding.pickIncomingCall.setOnClickListener {
             if (accessToken != null) {
                 if (callType == "video_call") {
-                    binding.callingUserInfoLayout.setVisibility(View.GONE)
+                    binding.callingUserInfoLayout.visibility = View.GONE
                 } else {
-                    binding.switchCameraActionFab.setVisibility(View.GONE)
-                    binding.localVideoActionFab.setVisibility(View.GONE)
+                    binding.switchCameraActionFab.visibility = View.GONE
+                    binding.localVideoActionFab.visibility = View.GONE
                     binding.receiveDisconnectLayout.visibility = View.GONE
                     binding.cancelCall.visibility = View.GONE
                 }
-                binding.callingActionButtons.setVisibility(View.VISIBLE)
+                binding.callingActionButtons.visibility = View.VISIBLE
                 if (ringtoneSound != null) {
                     ringtoneSound!!.stop()
                 }
@@ -249,13 +248,13 @@ class CallActivity : BaseActivity() {
         }
 
         if (callStatus == callSend) {
-            binding.receiveDisconnectLayout.setVisibility(View.GONE)
-            binding.cancelCall.setVisibility(View.VISIBLE)
+            binding.receiveDisconnectLayout.visibility = View.GONE
+            binding.cancelCall.visibility = View.VISIBLE
             Send_notification(callReceive, "Calling you...")
             Start_Countdown_timer()
         } else if (callStatus == callReceive) {
-            binding.receiveDisconnectLayout.setVisibility(View.VISIBLE)
-            binding.cancelCall.setVisibility(View.GONE)
+            binding.receiveDisconnectLayout.visibility = View.VISIBLE
+            binding.cancelCall.visibility = View.GONE
             binding.callingStatusText.text = "Calling you..."
             Send_notification(callRinging, "Ringing...")
         }
@@ -337,9 +336,9 @@ class CallActivity : BaseActivity() {
         return object : Room.Listener {
             override fun onConnected(room: Room) {
                 localParticipant = room.localParticipant
-                Log.d(TAG, "onConnected: "+room.remoteParticipants.count())
+                Log.d(TAG, "onConnected: " + room.remoteParticipants.count())
 //                binding.videoView.videoStatusTextView.setText(getString(R.string.connected_to) + " " + callerName)
-                binding.callingStatusText.setText(getString(R.string.connected))
+                binding.callingStatusText.text = getString(R.string.connected)
                 title = room.name
 //                Start_limit_Timer()
                 for (remoteParticipant in room.remoteParticipants) {
@@ -351,13 +350,13 @@ class CallActivity : BaseActivity() {
             override fun onReconnecting(room: Room, twilioException: TwilioException) {
 //                binding.videoView.videoStatusTextView.setText(getString(R.string.reconnecting_to) + callerName)
                 binding.callingStatusText.setText(R.string.reconnecting)
-                binding.videoView.reconnectingProgressBar.setVisibility(View.VISIBLE)
+                binding.videoView.reconnectingProgressBar.visibility = View.VISIBLE
             }
 
             override fun onReconnected(room: Room) {
 //                binding.videoView.videoStatusTextView.setText(getString(R.string.connected_to) + room.name)
                 binding.callingStatusText.setText(R.string.connected)
-                binding.videoView.reconnectingProgressBar.setVisibility(View.GONE)
+                binding.videoView.reconnectingProgressBar.visibility = View.GONE
             }
 
             override fun onConnectFailure(room: Room, e: TwilioException) {
@@ -370,7 +369,7 @@ class CallActivity : BaseActivity() {
             override fun onDisconnected(room: Room, e: TwilioException?) {
                 localParticipant = null
 //                binding.videoView.videoStatusTextView.setText(getString(R.string.disconnected_from) + callerName)
-                binding.videoView.reconnectingProgressBar.setVisibility(View.GONE)
+                binding.videoView.reconnectingProgressBar.visibility = View.GONE
                 this@CallActivity.room = null
 
                 // Only reinitialize the UI if disconnect was not called from onDestroy()
@@ -435,15 +434,15 @@ class CallActivity : BaseActivity() {
     }
 
     private fun moveLocalVideoToPrimaryView() {
-        if (binding.videoView.thumbnailVideoView.getVisibility() == View.VISIBLE) {
-            binding.videoView.thumbnailVideoView.setVisibility(View.GONE)
+        if (binding.videoView.thumbnailVideoView.visibility == View.VISIBLE) {
+            binding.videoView.thumbnailVideoView.visibility = View.GONE
             if (localVideoTrack != null) {
                 localVideoTrack!!.removeRenderer(binding.videoView.thumbnailVideoView)
                 localVideoTrack!!.addRenderer(binding.videoView.primaryVideoView)
             }
             localVideoView = binding.videoView.primaryVideoView
-            binding.videoView.primaryVideoView.setMirror(cameraCapturerCompat!!.cameraSource ===
-                    CameraCapturer.CameraSource.FRONT_CAMERA)
+            binding.videoView.primaryVideoView.mirror = cameraCapturerCompat!!.cameraSource ===
+                    CameraCapturer.CameraSource.FRONT_CAMERA
         }
     }
 
@@ -451,7 +450,7 @@ class CallActivity : BaseActivity() {
         /*
          * This app only displays video for one additional participant per Room
          */
-        if (binding.videoView.thumbnailVideoView.getVisibility() == View.VISIBLE) {
+        if (binding.videoView.thumbnailVideoView.visibility == View.VISIBLE) {
             Snackbar.make(binding.connectActionFab,
                 "Multiple participants are not currently support in this UI",
                 Snackbar.LENGTH_LONG)
@@ -480,18 +479,18 @@ class CallActivity : BaseActivity() {
 
     private fun addRemoteParticipantVideo(videoTrack: VideoTrack) {
         moveLocalVideoToThumbnailView()
-        binding.videoView.primaryVideoView.setMirror(false)
+        binding.videoView.primaryVideoView.mirror = false
         videoTrack.addRenderer(binding.videoView.primaryVideoView)
     }
 
     private fun moveLocalVideoToThumbnailView() {
-        if (binding.videoView.thumbnailVideoView.getVisibility() == View.GONE) {
-            binding.videoView.thumbnailVideoView.setVisibility(View.VISIBLE)
+        if (binding.videoView.thumbnailVideoView.visibility == View.GONE) {
+            binding.videoView.thumbnailVideoView.visibility = View.VISIBLE
             localVideoTrack!!.removeRenderer(binding.videoView.primaryVideoView)
             localVideoTrack!!.addRenderer(binding.videoView.thumbnailVideoView)
             localVideoView = binding.videoView.thumbnailVideoView
-            binding.videoView.thumbnailVideoView.setMirror(cameraCapturerCompat!!.cameraSource ===
-                    CameraCapturer.CameraSource.FRONT_CAMERA)
+            binding.videoView.thumbnailVideoView.mirror = cameraCapturerCompat!!.cameraSource ===
+                    CameraCapturer.CameraSource.FRONT_CAMERA
         }
     }
 
@@ -545,7 +544,7 @@ class CallActivity : BaseActivity() {
 
     private fun retrieveAccessTokenfromServer() {
         val postRequest = StringRequest(Request.Method.GET,
-            Constants.TWILIO_ACCESS_TOKEN_SERVER+"?identity=" + identity + "?roomname=" + roomName,
+            Constants.TWILIO_ACCESS_TOKEN_SERVER + "?identity=" + identity + "?roomname=" + roomName,
             object : Response.Listener<String?> {
                 override fun onResponse(response: String?) {
                     Log.d("resp", response!!)
@@ -563,10 +562,10 @@ class CallActivity : BaseActivity() {
             }
         )
         val requestQueue: RequestQueue = Volley.newRequestQueue(this)
-        postRequest.setRetryPolicy(DefaultRetryPolicy(30000,
+        postRequest.retryPolicy = DefaultRetryPolicy(30000,
             DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
-            DefaultRetryPolicy.DEFAULT_BACKOFF_MULT))
-        requestQueue.getCache().clear()
+            DefaultRetryPolicy.DEFAULT_BACKOFF_MULT)
+        requestQueue.cache.clear()
         requestQueue.add(postRequest)
     }
 
@@ -579,9 +578,9 @@ class CallActivity : BaseActivity() {
                 cameraCapturerCompat = CameraCapturerCompat(this, getAvailableCameraSource())
                 localVideoTrack = LocalVideoTrack.create(this,
                     true,
-                    cameraCapturerCompat!!.getVideoCapturer(),
+                    cameraCapturerCompat!!.videoCapturer,
                     LOCAL_VIDEO_TRACK_NAME)
-                binding.videoView.primaryVideoView.setMirror(true)
+                binding.videoView.primaryVideoView.mirror = true
                 if (localVideoTrack != null) {
                     localVideoTrack!!.addRenderer(binding.videoView.primaryVideoView)
                     localVideoView = binding.videoView.primaryVideoView
@@ -613,12 +612,13 @@ class CallActivity : BaseActivity() {
         if (callType.equals("video_call")) {
             isSpeakerPhoneEnabled = true
             audioManager!!.isSpeakerphoneOn = isSpeakerPhoneEnabled
-        } else{
+        } else {
             audioManager!!.isSpeakerphoneOn = isSpeakerPhoneEnabled
         }
 
-        if (!callerImage.isNullOrEmpty()){
-            Glide.with(this).load(callerImage).placeholder(R.drawable.ic_default).error(R.drawable.ic_default).diskCacheStrategy(
+        if (!callerImage.isNullOrEmpty()) {
+            Glide.with(this).load(callerImage).placeholder(R.drawable.ic_default)
+                .error(R.drawable.ic_default).diskCacheStrategy(
                 DiskCacheStrategy.DATA)
                 .into(binding.userimage)
         }
@@ -631,14 +631,14 @@ class CallActivity : BaseActivity() {
         if (callStatus == callPick) {
             if (accessToken != null && binding.callingUserInfoLayout != null) {
                 Stop_timer()
-                if (callType == "video_call") binding.callingUserInfoLayout.setVisibility(View.GONE)  else {
-                    binding.switchCameraActionFab.setVisibility(View.GONE)
-                    binding.localVideoActionFab.setVisibility(View.GONE)
+                if (callType == "video_call") binding.callingUserInfoLayout.visibility = View.GONE else {
+                    binding.switchCameraActionFab.visibility = View.GONE
+                    binding.localVideoActionFab.visibility = View.GONE
                     binding.receiveDisconnectLayout.visibility = View.GONE
                     binding.cancelCall.visibility = View.GONE
                     binding.username.setTextColor(getColor(R.color.white))
                 }
-                binding.callingActionButtons.setVisibility(View.VISIBLE)
+                binding.callingActionButtons.visibility = View.VISIBLE
                 connectToRoom(roomName)
                 Toast.makeText(this, "Pick call", Toast.LENGTH_SHORT).show()
             }
@@ -997,7 +997,7 @@ class CallActivity : BaseActivity() {
         encodingParameters = newEncodingParameters
         audioManager!!.isSpeakerphoneOn = isSpeakerPhoneEnabled
         if (room != null) {
-            binding.videoView.reconnectingProgressBar.setVisibility(if (room!!.state != Room.State.RECONNECTING) View.GONE else View.VISIBLE)
+            binding.videoView.reconnectingProgressBar.visibility = if (room!!.state != Room.State.RECONNECTING) View.GONE else View.VISIBLE
 //            binding.videoView.videoStatusTextView.setText(getString(R.string.connected_to) + " " + callerName)
         }
         super.onStart()
@@ -1011,7 +1011,7 @@ class CallActivity : BaseActivity() {
     }
 
     fun getAudioCodecPreference(key: String, defaultValue: String): AudioCodec? {
-        val audioCodecName: String =  defaultValue
+        val audioCodecName: String = defaultValue
         return when (audioCodecName) {
             IsacCodec.NAME -> IsacCodec()
             OpusCodec.NAME -> OpusCodec()
@@ -1075,7 +1075,7 @@ class CallActivity : BaseActivity() {
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<out String>,
-        grantResults: IntArray
+        grantResults: IntArray,
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == CAMERA_MIC_PERMISSION_REQUEST_CODE) {

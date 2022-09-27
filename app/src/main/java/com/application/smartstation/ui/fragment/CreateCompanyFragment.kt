@@ -12,7 +12,8 @@ import com.application.smartstation.util.viewBinding
 import com.application.smartstation.view.ImageSelectorDialog
 import com.bumptech.glide.Glide
 
-class CreateCompanyFragment : BaseFragment(R.layout.fragment_create_company),ImageSelectorDialog.Action {
+class CreateCompanyFragment : BaseFragment(R.layout.fragment_create_company),
+    ImageSelectorDialog.Action {
 
     private val binding by viewBinding(FragmentCreateCompanyBinding::bind)
     var imageSelectorDialog: ImageSelectorDialog? = null
@@ -30,7 +31,7 @@ class CreateCompanyFragment : BaseFragment(R.layout.fragment_create_company),Ima
     private fun setOnClickListener() {
         binding.imgProfile.setOnClickListener {
             imagePermission {
-                imageSelectorDialog = ImageSelectorDialog(this, this,"")
+                imageSelectorDialog = ImageSelectorDialog(this, this, "")
             }
         }
 

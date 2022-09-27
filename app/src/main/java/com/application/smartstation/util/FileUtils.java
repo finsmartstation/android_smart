@@ -9,7 +9,6 @@ import android.database.Cursor;
 import android.database.DatabaseUtils;
 import android.graphics.Bitmap;
 import android.graphics.pdf.PdfRenderer;
-import android.media.ThumbnailUtils;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
@@ -30,29 +29,69 @@ import java.text.DecimalFormat;
 import java.util.Comparator;
 
 public class FileUtils {
-    private FileUtils() {} //private constructor to enforce Singleton pattern
-
-    /** TAG for log messages. */
-    static final String TAG = "FileUtils";
-    private static final boolean DEBUG = false; // Set to true to enable logging
-
     public static final String MIME_TYPE_AUDIO = "audio/*";
     public static final String MIME_TYPE_TEXT = "text/*";
     public static final String MIME_TYPE_IMAGE = "image/*";
     public static final String MIME_TYPE_VIDEO = "video/*";
     public static final String MIME_TYPE_APP = "application/*";
+    public static final String HIDDEN_PREFIX = ".";
+    /**
+     * TAG for log messages.
+     */
+    static final String TAG = "FileUtils";
+    private static final boolean DEBUG = false; // Set to true to enable logging
     public static ParcelFileDescriptor mFileDescriptor;
     public static PdfRenderer mPdfRenderer;
+    /**
+     * File and folder comparator. TODO Expose sorting option method
+     *
+     * @author paulburke
+     */
+    public static Comparator<File> sComparator = new Comparator<File>() {
+        @Override
+        public int compare(File f1, File f2) {
+            // Sort alphabetically by lower case, which is much cleaner
+            return f1.getName().toLowerCase().compareTo(
+                    f2.getName().toLowerCase());
+        }
+    };
+    /**
+     * File (not directories) filter.
+     *
+     * @author paulburke
+     */
+    public static FileFilter sFileFilter = new FileFilter() {
+        @Override
+        public boolean accept(File file) {
+            final String fileName = file.getName();
+            // Return files only (not directories) and skip hidden files
+            return file.isFile() && !fileName.startsWith(HIDDEN_PREFIX);
+        }
+    };
+    /**
+     * Folder (directories) filter.
+     *
+     * @author paulburke
+     */
+    public static FileFilter sDirFilter = new FileFilter() {
+        @Override
+        public boolean accept(File file) {
+            final String fileName = file.getName();
+            // Return directories only and skip hidden directories
+            return file.isDirectory() && !fileName.startsWith(HIDDEN_PREFIX);
+        }
+    };
     private static PdfRenderer.Page mCurrentPage;
 
-    public static final String HIDDEN_PREFIX = ".";
+    private FileUtils() {
+    } //private constructor to enforce Singleton pattern
 
     /**
      * Gets the extension of a file name, like ".png" or ".jpg".
      *
      * @param uri
      * @return Extension including the dot("."); "" if there is no extension;
-     *         null if uri was null.
+     * null if uri was null.
      */
     public static String getExtension(String uri) {
         if (uri == null) {
@@ -72,10 +111,7 @@ public class FileUtils {
      * @return Whether the URI is a local one.
      */
     public static boolean isLocal(String url) {
-        if (url != null && !url.startsWith("http://") && !url.startsWith("https://")) {
-            return true;
-        }
-        return false;
+        return url != null && !url.startsWith("http://") && !url.startsWith("https://");
     }
 
     /**
@@ -195,9 +231,9 @@ public class FileUtils {
      * Get the value of the data column for this Uri. This is useful for
      * MediaStore Uris, and other file-based ContentProviders.
      *
-     * @param context The context.
-     * @param uri The Uri to query.
-     * @param selection (Optional) Filter used in the query.
+     * @param context       The context.
+     * @param uri           The Uri to query.
+     * @param selection     (Optional) Filter used in the query.
      * @param selectionArgs (Optional) Selection arguments used in the query.
      * @return The value of the _data column, which is typically a file path.
      * @author paulburke
@@ -232,7 +268,7 @@ public class FileUtils {
         Cursor cursor = null;
         final String column = "_data";
         final String column2 = "_id";
-        final String[] projection = {column,column2};
+        final String[] projection = {column, column2};
         try {
             cursor = context.getContentResolver().query(uri, projection, selection, selectionArgs, null);
 
@@ -249,11 +285,9 @@ public class FileUtils {
 
                 return strTest;
             }
-        } catch(Exception e)
-        {
+        } catch (Exception e) {
             String strError = e.getMessage();
-        }
-        finally {
+        } finally {
             if (cursor != null)
                 cursor.close();
         }
@@ -269,10 +303,10 @@ public class FileUtils {
      * represents a local file.
      *
      * @param context The context.
-     * @param uri The Uri to query.
+     * @param uri     The Uri to query.
+     * @author paulburke
      * @see #isLocal(String)
      * @see #getFile(Context, Uri)
-     * @author paulburke
      */
     @SuppressLint("NewApi")
     public static String getPath(final Context context, final Uri uri) {
@@ -342,7 +376,7 @@ public class FileUtils {
                                 return path;
                             }
                         } catch (Exception e) {
-                            Log.e("FileUtils", "Downloads provider returned unexpected uri " + uri.toString(), e);
+                            Log.e("FileUtils", "Downloads provider returned unexpected uri " + uri, e);
                             return null;
                         }
                     }
@@ -367,12 +401,12 @@ public class FileUtils {
                     contentUri = MediaStore.Video.Media.EXTERNAL_CONTENT_URI;
                 } else if ("audio".equals(type)) {
                     contentUri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
-                }else {
+                } else {
                     return DocPathUtils.Companion.getSourceDocPath(context, uri);
                 }
 
                 final String selection = "_id=?";
-                final String[] selectionArgs = new String[] {
+                final String[] selectionArgs = new String[]{
                         split[1]
                 };
 
@@ -400,9 +434,9 @@ public class FileUtils {
      * Convert Uri into File, if possible.
      *
      * @return file A local file that the Uri was pointing to, or null if the
-     *         Uri is unsupported or pointed to a remote resource.
-     * @see #getPath(Context, Uri)
+     * Uri is unsupported or pointed to a remote resource.
      * @author paulburke
+     * @see #getPath(Context, Uri)
      */
     public static File getFile(Context context, Uri uri) {
         if (uri != null) {
@@ -442,7 +476,7 @@ public class FileUtils {
                 }
             }
         }
-        return String.valueOf(dec.format(fileSize) + suffix);
+        return dec.format(fileSize) + suffix;
     }
 
     /**
@@ -507,8 +541,7 @@ public class FileUtils {
                                 id,
                                 MediaStore.Video.Thumbnails.MINI_KIND,
                                 null);
-                    }
-                    else if (mimeType.contains(com.application.smartstation.util.FileUtils.MIME_TYPE_IMAGE)) {
+                    } else if (mimeType.contains(com.application.smartstation.util.FileUtils.MIME_TYPE_IMAGE)) {
                         bm = MediaStore.Images.Thumbnails.getThumbnail(
                                 resolver,
                                 id,
@@ -526,48 +559,6 @@ public class FileUtils {
         }
         return bm;
     }
-
-    /**
-     * File and folder comparator. TODO Expose sorting option method
-     *
-     * @author paulburke
-     */
-    public static Comparator<File> sComparator = new Comparator<File>() {
-        @Override
-        public int compare(File f1, File f2) {
-            // Sort alphabetically by lower case, which is much cleaner
-            return f1.getName().toLowerCase().compareTo(
-                    f2.getName().toLowerCase());
-        }
-    };
-
-    /**
-     * File (not directories) filter.
-     *
-     * @author paulburke
-     */
-    public static FileFilter sFileFilter = new FileFilter() {
-        @Override
-        public boolean accept(File file) {
-            final String fileName = file.getName();
-            // Return files only (not directories) and skip hidden files
-            return file.isFile() && !fileName.startsWith(HIDDEN_PREFIX);
-        }
-    };
-
-    /**
-     * Folder (directories) filter.
-     *
-     * @author paulburke
-     */
-    public static FileFilter sDirFilter = new FileFilter() {
-        @Override
-        public boolean accept(File file) {
-            final String fileName = file.getName();
-            // Return directories only and skip hidden directories
-            return file.isDirectory() && !fileName.startsWith(HIDDEN_PREFIX);
-        }
-    };
 
     /**
      * Get the Intent for selecting content to be used in an Intent Chooser.
@@ -597,7 +588,7 @@ public class FileUtils {
 
     public static void openDocument(Context context, String filePath) {
         try {
-            Uri uri = FileProvider.getUriForFile(context, BuildConfig.APPLICATION_ID+ ".provider", new File(filePath));
+            Uri uri = FileProvider.getUriForFile(context, BuildConfig.APPLICATION_ID + ".provider", new File(filePath));
             Intent intent = new Intent(Intent.ACTION_VIEW);
             if (filePath.contains(".doc") || filePath.contains(".docx")) {
                 intent.setDataAndType(uri, "application/msword");

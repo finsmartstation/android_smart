@@ -32,16 +32,15 @@ android {
     }
 
     buildTypes {
-        debug{
-            buildConfigField "String", "APP_BASE_URL", "\"https://finsmartstation.com\""
-//            buildConfigField "String", "APP_BASE_URL", "\"http://ec2-3-13-92-3.us-east-2.compute.amazonaws.com\""
+        debug {
+//            buildConfigField "String", "APP_BASE_URL", "\"https://finsmartstation.com\""
+            buildConfigField "String", "APP_BASE_URL", "\"http://ec2-18-117-114-243.us-east-2.compute.amazonaws.com\""
             buildConfigField "String", "SOCKET_BASE_URL", "\"https://fsssocket.herokuapp.com\""
         }
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-//            buildConfigField "String", "APP_BASE_URL", "\"http://ec2-3-13-92-3.us-east-2.compute.amazonaws.com\""
-            buildConfigField "String", "APP_BASE_URL", "\"https://finsmartstation.com\""
+            buildConfigField "String", "APP_BASE_URL", "\"http://ec2-18-117-114-243.us-east-2.compute.amazonaws.com\""
             buildConfigField "String", "SOCKET_BASE_URL", "\"https://fsssocket.herokuapp.com\""
 //            buildConfigField "String", "SOCKET_BASE_URL", "\"http://ec2-3-13-92-3.us-east-2.compute.amazonaws.com:3000\""
         }

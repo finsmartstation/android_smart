@@ -13,7 +13,7 @@ import com.application.smartstation.util.ToastUtils
 import com.application.smartstation.util.UtilInterface
 import com.application.smartstation.util.UtilsDefault
 
-open class BaseFragment (layoutId:Int) : Fragment(layoutId), UtilInterface {
+open class BaseFragment(layoutId: Int) : Fragment(layoutId), UtilInterface {
 
 
     override fun toast(message: String) {
@@ -22,7 +22,7 @@ open class BaseFragment (layoutId:Int) : Fragment(layoutId), UtilInterface {
 
     override fun requestPermission(
         vararg permissions: String,
-        result: (permissionGranted: Boolean) -> Unit
+        result: (permissionGranted: Boolean) -> Unit,
     ) {
         (activity as UtilInterface).requestPermission(*permissions, result = result)
     }
@@ -31,60 +31,62 @@ open class BaseFragment (layoutId:Int) : Fragment(layoutId), UtilInterface {
         (activity as BaseActivity?)?.showProgress()
     }
 
-    fun isLoggedIn() : Boolean {
+    fun isLoggedIn(): Boolean {
         return UtilsDefault.getSharedPreferenceString(Constants.LOGIN_STATUS) != null
     }
 
-    override fun isProgressShowing(): Boolean = (activity as BaseActivity?)?.isProgressShowing() ?: false
+    override fun isProgressShowing(): Boolean =
+        (activity as BaseActivity?)?.isProgressShowing() ?: false
 
     override fun dismissProgress() {
         (activity as BaseActivity?)?.dismissProgress()
     }
 
 
-    fun imagePermission(action: () -> Unit){
+    fun imagePermission(action: () -> Unit) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             requestPermission(
                 Manifest.permission.READ_EXTERNAL_STORAGE,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                Manifest.permission.CAMERA){
-                if(it){
+                Manifest.permission.CAMERA) {
+                if (it) {
                     action()
-                }else{
+                } else {
                     toast("Need Camera and Storage Permission!")
                 }
             }
-        }else{
+        } else {
             action()
         }
     }
 
-    fun phnPermission(action: () -> Unit){
+    fun phnPermission(action: () -> Unit) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             requestPermission(
-                Manifest.permission.READ_CONTACTS,Manifest.permission.WRITE_CONTACTS){
-                if(it){
+                Manifest.permission.READ_CONTACTS, Manifest.permission.WRITE_CONTACTS) {
+                if (it) {
                     action()
-                }else{
+                } else {
                     toast("Need Phone Permission!")
                 }
             }
-        }else{
+        } else {
             action()
         }
     }
 
 
-
-    fun setStatusBar(){
+    fun setStatusBar() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if (UtilsDefault.getSharedPreferenceValuefcm(Constants.THEME)== "dark"){
+            if (UtilsDefault.getSharedPreferenceValuefcm(Constants.THEME) == "dark") {
                 activity?.window!!.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_VISIBLE
-                activity?.window!!.statusBarColor = ContextCompat.getColor(requireActivity(), R.color.purple_200)
-            }
-            else {
-                activity?.window!!.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
-                activity?.window!!.statusBarColor = ContextCompat.getColor(requireActivity(),R.color.purple_200)
+                activity?.window!!.statusBarColor =
+                    ContextCompat.getColor(requireActivity(), R.color.purple_200)
+            } else {
+                activity?.window!!.decorView.systemUiVisibility =
+                    View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
+                activity?.window!!.statusBarColor =
+                    ContextCompat.getColor(requireActivity(), R.color.purple_200)
             }
 
 
@@ -96,7 +98,6 @@ open class BaseFragment (layoutId:Int) : Fragment(layoutId), UtilInterface {
         v.setText("")
 
     }
-
 
 
 }

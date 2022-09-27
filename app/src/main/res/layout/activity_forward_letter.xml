@@ -10,54 +10,49 @@
     <ImageView
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        android:alpha="0.4"
+        android:scaleType="centerCrop"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:scaleType="centerCrop"
-        android:alpha="0.4"
-        app:srcCompat="@drawable/ic_splash_bg_use"
-        />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_splash_bg_use" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        >
+        android:orientation="vertical">
 
-        <include layout="@layout/header_layout_mail"
+        <include
             android:id="@+id/ilHeader"
-            />
+            layout="@layout/header_layout_mail" />
 
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:scrollbars="none"
-            >
+            android:scrollbars="none">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="vertical"
-                >
+                android:orientation="vertical">
 
                 <LinearLayout
-                    android:visibility="gone"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
                     android:layout_marginTop="26dp"
                     android:gravity="center"
-                    >
+                    android:orientation="horizontal"
+                    android:visibility="gone">
+
                     <com.application.smartstation.view.CustomTextViewBold
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/black"
-                        android:text="@string/from"
-                        android:textSize="18sp"
                         android:layout_marginStart="26dp"
-                        >
+                        android:text="@string/from"
+                        android:textColor="@color/black"
+                        android:textSize="18sp">
 
                     </com.application.smartstation.view.CustomTextViewBold>
 
@@ -65,49 +60,47 @@
                         android:id="@+id/edtFrom"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:background="@null"
-                        android:hint="@string/from"
-                        android:minHeight="50dp"
-                        android:maxHeight="100dp"
-                        android:enabled="true"
                         android:layout_marginStart="16dp"
                         android:layout_marginEnd="26dp"
-                        android:imeOptions="actionDone"
-                        android:textCursorDrawable="@drawable/cusor_bg"
+                        android:background="@null"
+                        android:enabled="true"
                         android:fontFamily="@font/dinmedium"
+                        android:hint="@string/from"
+                        android:imeOptions="actionDone"
                         android:inputType="textEmailAddress"
+                        android:maxHeight="100dp"
+                        android:minHeight="50dp"
                         android:singleLine="true"
-
                         android:textColor="@color/black"
+
                         android:textColorHint="@color/viewgrey"
+                        android:textCursorDrawable="@drawable/cusor_bg"
                         android:textSize="18sp" />
 
 
                 </LinearLayout>
 
                 <View
-                    android:visibility="gone"
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:layout_marginTop="10dp"
                     android:background="@color/color_chat_popup_gray"
-                    />
+                    android:visibility="gone" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
                     android:layout_marginTop="26dp"
                     android:gravity="center"
-                    >
+                    android:orientation="horizontal">
+
                     <com.application.smartstation.view.CustomTextViewBold
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/black"
-                        android:text="@string/to"
-                        android:textSize="18sp"
                         android:layout_marginStart="26dp"
-                        >
+                        android:text="@string/to"
+                        android:textColor="@color/black"
+                        android:textSize="18sp">
 
                     </com.application.smartstation.view.CustomTextViewBold>
 
@@ -116,28 +109,27 @@
                         android:id="@+id/edtTo"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:background="@null"
-                        android:minHeight="50dp"
-                        android:hint="@string/to"
-                        android:layout_weight="1"
-                        android:bufferType="spannable"
                         android:layout_marginStart="16dp"
                         android:layout_marginEnd="8dp"
-                        android:imeOptions="actionDone"
-                        android:textCursorDrawable="@drawable/cusor_bg"
+                        android:layout_weight="1"
+                        android:background="@null"
+                        android:bufferType="spannable"
                         android:fontFamily="@font/dinregular"
+                        android:hint="@string/to"
+                        android:imeOptions="actionDone"
                         android:inputType="textMultiLine"
+                        android:minHeight="50dp"
                         android:textColor="@color/black"
                         android:textColorHint="@color/viewgrey"
+                        android:textCursorDrawable="@drawable/cusor_bg"
                         android:textSize="18sp" />
 
                     <ImageView
                         android:id="@+id/imgToArrow"
                         android:layout_width="25dp"
                         android:layout_height="25dp"
-                        android:src="@drawable/ic_down_arrow"
                         android:layout_marginEnd="26dp"
-                        />
+                        android:src="@drawable/ic_down_arrow" />
 
                 </LinearLayout>
 
@@ -145,41 +137,37 @@
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:layout_marginTop="10dp"
-                    android:background="@color/color_chat_popup_gray"
-                    />
+                    android:background="@color/color_chat_popup_gray" />
 
                 <LinearLayout
                     android:id="@+id/llTo"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="end"
-                    android:visibility="gone"
-                    android:layout_marginEnd="16dp"
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="8dp"
-                    >
+                    android:layout_marginEnd="16dp"
+                    android:gravity="end"
+                    android:visibility="gone">
 
                     <com.application.smartstation.view.CustomTextViewNormal
+                        android:id="@+id/txtCcVisible"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/button_blue"
-                        android:id="@+id/txtCcVisible"
-                        android:text="@string/cc"
                         android:layout_marginEnd="8dp"
-                        android:textSize="18sp"
-                        >
+                        android:text="@string/cc"
+                        android:textColor="@color/button_blue"
+                        android:textSize="18sp">
 
                     </com.application.smartstation.view.CustomTextViewNormal>
 
                     <com.application.smartstation.view.CustomTextViewNormal
+                        android:id="@+id/txtBccVisible"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/button_blue"
-                        android:id="@+id/txtBccVisible"
-                        android:text="@string/bcc"
                         android:layout_marginStart="8dp"
-                        android:textSize="18sp"
-                        >
+                        android:text="@string/bcc"
+                        android:textColor="@color/button_blue"
+                        android:textSize="18sp">
 
                     </com.application.smartstation.view.CustomTextViewNormal>
 
@@ -190,30 +178,28 @@
                     android:id="@+id/ivTo"
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:visibility="gone"
                     android:layout_marginTop="10dp"
                     android:background="@color/color_chat_popup_gray"
-                    />
+                    android:visibility="gone" />
 
                 <LinearLayout
                     android:id="@+id/llCc"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
                     android:layout_gravity="center"
-                    android:visibility="gone"
-                    android:layout_marginTop="10dp">
+                    android:layout_marginTop="10dp"
+                    android:orientation="horizontal"
+                    android:visibility="gone">
 
                     <com.application.smartstation.view.CustomTextViewBold
+                        android:id="@+id/txtCc"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/black"
-                        android:id="@+id/txtCc"
-                        android:text="@string/cc"
-                        android:visibility="visible"
-                        android:textSize="18sp"
                         android:layout_marginStart="26dp"
-                        >
+                        android:text="@string/cc"
+                        android:textColor="@color/black"
+                        android:textSize="18sp"
+                        android:visibility="visible">
 
                     </com.application.smartstation.view.CustomTextViewBold>
 
@@ -221,18 +207,18 @@
                         android:id="@+id/edtCc"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:minHeight="50dp"
-                        android:background="@null"
-                        android:hint="@string/cc"
-                        android:textCursorDrawable="@drawable/cusor_bg"
-                        android:imeOptions="actionDone"
-                        android:fontFamily="@font/dinregular"
-                        android:inputType="textMultiLine"
-                        android:singleLine="true"
                         android:layout_marginStart="16dp"
                         android:layout_marginEnd="26dp"
+                        android:background="@null"
+                        android:fontFamily="@font/dinregular"
+                        android:hint="@string/cc"
+                        android:imeOptions="actionDone"
+                        android:inputType="textMultiLine"
+                        android:minHeight="50dp"
+                        android:singleLine="true"
                         android:textColor="@color/black"
                         android:textColorHint="@color/viewgrey"
+                        android:textCursorDrawable="@drawable/cusor_bg"
                         android:textSize="18sp" />
 
 
@@ -243,29 +229,27 @@
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:layout_marginTop="10dp"
-                    android:visibility="gone"
                     android:background="@color/color_chat_popup_gray"
-                    />
+                    android:visibility="gone" />
 
                 <LinearLayout
                     android:id="@+id/llBcc"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
                     android:layout_gravity="center"
-                    android:visibility="gone"
-                    android:layout_marginTop="10dp">
+                    android:layout_marginTop="10dp"
+                    android:orientation="horizontal"
+                    android:visibility="gone">
 
                     <com.application.smartstation.view.CustomTextViewBold
+                        android:id="@+id/txtBcc"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/black"
-                        android:text="@string/bcc"
-                        android:visibility="visible"
-                        android:id="@+id/txtBcc"
-                        android:textSize="18sp"
                         android:layout_marginStart="26dp"
-                        >
+                        android:text="@string/bcc"
+                        android:textColor="@color/black"
+                        android:textSize="18sp"
+                        android:visibility="visible">
 
                     </com.application.smartstation.view.CustomTextViewBold>
 
@@ -273,18 +257,18 @@
                         android:id="@+id/edtBcc"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:background="@null"
-                        android:hint="@string/bcc"
-                        android:minHeight="50dp"
-                        android:textCursorDrawable="@drawable/cusor_bg"
-                        android:fontFamily="@font/dinregular"
-                        android:imeOptions="actionDone"
-                        android:inputType="textMultiLine"
-                        android:singleLine="true"
                         android:layout_marginStart="16dp"
                         android:layout_marginEnd="26dp"
+                        android:background="@null"
+                        android:fontFamily="@font/dinregular"
+                        android:hint="@string/bcc"
+                        android:imeOptions="actionDone"
+                        android:inputType="textMultiLine"
+                        android:minHeight="50dp"
+                        android:singleLine="true"
                         android:textColor="@color/black"
                         android:textColorHint="@color/viewgrey"
+                        android:textCursorDrawable="@drawable/cusor_bg"
                         android:textSize="18sp" />
 
                 </LinearLayout>
@@ -294,26 +278,24 @@
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:layout_marginTop="10dp"
-                    android:visibility="gone"
                     android:background="@color/color_chat_popup_gray"
-                    />
+                    android:visibility="gone" />
 
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
                     android:layout_gravity="center"
-                    android:layout_marginTop="10dp">
+                    android:layout_marginTop="10dp"
+                    android:orientation="horizontal">
 
                     <com.application.smartstation.view.CustomTextViewBold
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/black"
-                        android:text="@string/subject"
-                        android:textSize="18sp"
                         android:layout_marginStart="26dp"
-                        >
+                        android:text="@string/subject"
+                        android:textColor="@color/black"
+                        android:textSize="18sp">
 
                     </com.application.smartstation.view.CustomTextViewBold>
 
@@ -321,17 +303,17 @@
                         android:id="@+id/edtSubject"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:minHeight="50dp"
-                        android:background="@null"
-                        android:hint="@string/subject"
-                        android:textCursorDrawable="@drawable/cusor_bg"
-                        android:fontFamily="@font/dinregular"
-                        android:inputType="textMultiLine"
-                        android:imeOptions="actionNext"
                         android:layout_marginStart="16dp"
                         android:layout_marginEnd="26dp"
+                        android:background="@null"
+                        android:fontFamily="@font/dinregular"
+                        android:hint="@string/subject"
+                        android:imeOptions="actionNext"
+                        android:inputType="textMultiLine"
+                        android:minHeight="50dp"
                         android:textColor="@color/black"
                         android:textColorHint="@color/viewgrey"
+                        android:textCursorDrawable="@drawable/cusor_bg"
                         android:textSize="18sp" />
 
                 </LinearLayout>
@@ -340,19 +322,17 @@
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:layout_marginTop="10dp"
-                    android:background="@color/color_chat_popup_gray"
-                    />
+                    android:background="@color/color_chat_popup_gray" />
 
                 <com.application.smartstation.view.CustomTextViewBold
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/black"
-                    android:text="@string/body"
-                    android:textSize="18sp"
-                    android:layout_marginTop="16dp"
                     android:layout_marginStart="26dp"
+                    android:layout_marginTop="16dp"
                     android:layout_marginEnd="26dp"
-                    >
+                    android:text="@string/body"
+                    android:textColor="@color/black"
+                    android:textSize="18sp">
 
                 </com.application.smartstation.view.CustomTextViewBold>
 
@@ -360,40 +340,39 @@
                     android:id="@+id/edtBody"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@null"
-                    android:layout_marginTop="16dp"
-                    android:hint="@string/body"
-                    android:overScrollMode="always"
-                    android:minHeight="50dp"
-                    android:textCursorDrawable="@drawable/cusor_bg"
-                    android:fontFamily="@font/dinregular"
-                    android:focusable="true"
-                    android:inputType="textMultiLine"
-                    android:imeOptions="actionDone"
                     android:layout_marginStart="26dp"
+                    android:layout_marginTop="16dp"
                     android:layout_marginEnd="26dp"
                     android:layout_marginBottom="20dp"
+                    android:background="@null"
+                    android:focusable="true"
+                    android:fontFamily="@font/dinregular"
+                    android:hint="@string/body"
+                    android:imeOptions="actionDone"
+                    android:inputType="textMultiLine"
+                    android:minHeight="50dp"
+                    android:overScrollMode="always"
                     android:textColor="@color/black"
                     android:textColorHint="@color/viewgrey"
+                    android:textCursorDrawable="@drawable/cusor_bg"
                     android:textSize="18sp" />
 
                 <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/clPdf"
                     android:layout_width="match_parent"
                     android:layout_height="130dp"
-                    android:id="@+id/clPdf"
-                    android:visibility="gone"
                     android:layout_marginStart="26dp"
                     android:layout_marginEnd="26dp"
                     android:layout_marginBottom="12dp"
-                    >
+                    android:visibility="gone">
 
                     <ImageView
                         android:id="@+id/imgPath"
                         android:layout_width="0dp"
                         android:layout_height="130dp"
                         android:layout_marginStart="4dp"
-                        android:layout_marginEnd="4dp"
                         android:layout_marginTop="4dp"
+                        android:layout_marginEnd="4dp"
                         android:layout_marginBottom="4dp"
                         android:src="@drawable/pdf_icon"
                         app:layout_constraintBottom_toBottomOf="parent"
@@ -407,21 +386,20 @@
                         android:layout_height="30dp"
                         android:background="#80000000"
                         android:gravity="center"
-                        app:layout_constraintStart_toStartOf="@+id/imgPath"
+                        app:layout_constraintBottom_toBottomOf="@+id/imgPath"
                         app:layout_constraintEnd_toEndOf="@+id/imgPath"
-                        app:layout_constraintBottom_toBottomOf="@+id/imgPath">
+                        app:layout_constraintStart_toStartOf="@+id/imgPath">
 
                         <com.application.smartstation.view.CustomTextViewMedium
+                            android:id="@+id/txtFileName"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:id="@+id/txtFileName"
-                            android:singleLine="true"
                             android:maxLines="1"
                             android:paddingStart="4dp"
                             android:paddingEnd="4dp"
-                            android:textSize="16sp"
+                            android:singleLine="true"
                             android:textColor="@color/white"
-                            />
+                            android:textSize="16sp" />
 
 
                     </LinearLayout>
@@ -432,31 +410,28 @@
                     android:id="@+id/llAttach"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
                     android:layout_marginStart="26dp"
-                    android:visibility="gone"
                     android:layout_marginEnd="26dp"
                     android:layout_marginBottom="26dp"
-                    >
+                    android:orientation="horizontal"
+                    android:visibility="gone">
 
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:id="@+id/clSignature"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:visibility="gone"
                         android:layout_marginEnd="4dp"
-                        >
+                        android:layout_weight="1"
+                        android:visibility="gone">
 
                         <ImageView
                             android:id="@+id/imgSignature"
                             android:layout_width="match_parent"
                             android:layout_height="100dp"
-                            app:layout_constraintTop_toTopOf="parent"
                             app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
-                            />
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
 
                         <ImageView
                             android:id="@+id/imgSignatureClose"
@@ -473,20 +448,18 @@
                         android:id="@+id/clStamp"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:visibility="gone"
                         android:layout_marginStart="4dp"
-                        >
+                        android:layout_weight="1"
+                        android:visibility="gone">
 
                         <ImageView
                             android:id="@+id/imgStamp"
                             android:layout_width="match_parent"
                             android:layout_height="100dp"
-                            app:layout_constraintTop_toTopOf="parent"
                             app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
-                            />
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
 
                         <ImageView
                             android:id="@+id/imgStampClose"
@@ -502,7 +475,6 @@
                 </LinearLayout>
 
 
-
             </LinearLayout>
 
 
@@ -511,89 +483,80 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:background="@drawable/letter_signature_bg"
             android:layout_marginStart="26dp"
             android:layout_marginEnd="26dp"
             android:layout_marginBottom="8dp"
-            android:visibility="gone"
-            >
+            android:background="@drawable/letter_signature_bg"
+            android:orientation="horizontal"
+            android:visibility="gone">
 
             <LinearLayout
                 android:id="@+id/llSignature"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
                 android:layout_weight="1"
-                android:paddingTop="8dp"
-                android:paddingBottom="8dp"
+                android:orientation="horizontal"
                 android:paddingStart="10dp"
+                android:paddingTop="8dp"
                 android:paddingEnd="10dp"
-                >
+                android:paddingBottom="8dp">
 
                 <com.application.smartstation.view.CustomTextViewMedium
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/black"
-                    android:layout_weight="1"
                     android:layout_gravity="center"
+                    android:layout_weight="1"
                     android:text="@string/signature"
-                    android:textSize="18sp"
-                    >
+                    android:textColor="@color/black"
+                    android:textSize="18sp">
 
                 </com.application.smartstation.view.CustomTextViewMedium>
 
                 <ImageView
                     android:layout_width="30dp"
                     android:layout_height="30dp"
-                    android:src="@drawable/ic_arrow_drop_down_use"
                     android:layout_gravity="center"
-                    />
+                    android:src="@drawable/ic_arrow_drop_down_use" />
 
             </LinearLayout>
 
             <View
                 android:layout_width="1dp"
                 android:layout_height="match_parent"
-                android:visibility="visible"
                 android:background="@color/viewgrey"
-                />
+                android:visibility="visible" />
 
             <LinearLayout
                 android:id="@+id/llStamp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
                 android:layout_weight="1"
-                android:paddingTop="8dp"
-                android:paddingBottom="8dp"
-                android:paddingStart="10dp"
-                android:paddingEnd="10dp"
                 android:gravity="center"
-                >
+                android:orientation="horizontal"
+                android:paddingStart="10dp"
+                android:paddingTop="8dp"
+                android:paddingEnd="10dp"
+                android:paddingBottom="8dp">
 
                 <ImageView
                     android:layout_width="30dp"
                     android:layout_height="30dp"
-                    android:src="@drawable/ic_arrow_drop_down_use"
                     android:layout_gravity="center"
-                    />
+                    android:src="@drawable/ic_arrow_drop_down_use" />
 
                 <com.application.smartstation.view.CustomTextViewMedium
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:textColor="@color/black"
                     android:text="@string/stamp"
-                    android:textSize="18sp"
                     android:textAlignment="textEnd"
-                    >
+                    android:textColor="@color/black"
+                    android:textSize="18sp">
 
                 </com.application.smartstation.view.CustomTextViewMedium>
 
 
             </LinearLayout>
-
 
 
         </LinearLayout>

@@ -1,19 +1,15 @@
 package com.application.smartstation.ui.activity
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import androidx.activity.viewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.application.smartstation.R
-import com.application.smartstation.databinding.ActivityChatBinding
 import com.application.smartstation.databinding.ActivityChatInfoBinding
 import com.application.smartstation.service.Status
-import com.application.smartstation.ui.adapter.ChatHistoryAdapter
 import com.application.smartstation.ui.adapter.UserListGrpAdapter
-import com.application.smartstation.ui.model.GrpUserListRes
 import com.application.smartstation.ui.model.InputParams
 import com.application.smartstation.ui.model.UserListGrp
 import com.application.smartstation.util.Constants
@@ -35,9 +31,11 @@ class ChatInfoActivity : BaseActivity() {
     var profilePic = ""
     var chatType = ""
     var room = ""
+
     companion object {
         var list = ArrayList<UserListGrp>()
     }
+
     var userListGrpAdapter: UserListGrpAdapter? = null
     var more = true
 
@@ -50,22 +48,23 @@ class ChatInfoActivity : BaseActivity() {
 
     private fun initView() {
 
-        if (intent != null){
+        if (intent != null) {
             name = intent.getStringExtra(Constants.NAME)!!
             profilePic = intent.getStringExtra(Constants.PROFILE_PIC)!!
 
-            if (intent.getStringExtra(Constants.CHAT_TYPE) != null){
+            if (intent.getStringExtra(Constants.CHAT_TYPE) != null) {
                 chatType = intent.getStringExtra(Constants.CHAT_TYPE)!!
-            }else{
+            } else {
                 chatType = "private"
             }
 
-            if (intent.getStringExtra(Constants.ROOM) != null){
+            if (intent.getStringExtra(Constants.ROOM) != null) {
                 room = intent.getStringExtra(Constants.ROOM)!!
             }
 
             binding.txtName.text = name
-            Glide.with(this).load(profilePic).placeholder(R.drawable.ic_default).error(R.drawable.ic_default).diskCacheStrategy(
+            Glide.with(this).load(profilePic).placeholder(R.drawable.ic_default)
+                .error(R.drawable.ic_default).diskCacheStrategy(
                 DiskCacheStrategy.DATA).into(binding.imgProfile)
         }
 
@@ -91,7 +90,7 @@ class ChatInfoActivity : BaseActivity() {
                 } else if (isShow) {
                     if (chatType.equals("private")) {
                         binding.toolbar.txtHeader.text = resources.getString(R.string.contact_info)
-                    }else{
+                    } else {
                         binding.toolbar.txtHeader.text = resources.getString(R.string.group_info)
                     }
                     isShow = false
@@ -109,28 +108,33 @@ class ChatInfoActivity : BaseActivity() {
 
         apiViewModel.getGrpUserList(inputParams).observe(this, Observer {
             it.let {
-                when(it.status) {
+                when (it.status) {
                     Status.LOADING -> {
                         showProgress()
                     }
                     Status.SUCCESS -> {
                         dismissProgress()
-                        if (it.data!!.status){
-                            if (it.data.data.size != 0){ 
+                        if (it.data!!.status) {
+                            if (it.data.data.size != 0) {
                                 setData(it.data.data)
-                                binding.txtParticipants.text =resources.getString(R.string.group)+" " +it.data.data.size+" "+resources.getString(R.string.participants)
-                                binding.txtParticipants1.text = it.data.data.size.toString()+" "+resources.getString(R.string.participants)
-                                for (i in 0 until it.data.data.size){
-                                    if (UtilsDefault.getSharedPreferenceString(Constants.USER_ID)!!.equals(it.data.data[i].user_id)){
-                                        if (it.data.data[i].type.equals("admin")){
+                                binding.txtParticipants.text =
+                                    resources.getString(R.string.group) + " " + it.data.data.size + " " + resources.getString(
+                                        R.string.participants)
+                                binding.txtParticipants1.text =
+                                    it.data.data.size.toString() + " " + resources.getString(R.string.participants)
+                                for (i in 0 until it.data.data.size) {
+                                    if (UtilsDefault.getSharedPreferenceString(Constants.USER_ID)!!
+                                            .equals(it.data.data[i].user_id)
+                                    ) {
+                                        if (it.data.data[i].type.equals("admin")) {
                                             binding.llAddContact.visibility = View.VISIBLE
-                                        }else{
+                                        } else {
                                             binding.llAddContact.visibility = View.GONE
                                         }
                                     }
                                 }
                             }
-                        }else{
+                        } else {
                             toast(it.data.message)
                         }
                     }
@@ -145,10 +149,10 @@ class ChatInfoActivity : BaseActivity() {
 
     private fun setData(data: ArrayList<UserListGrp>) {
         list = data
-        if (list.size>10){
+        if (list.size > 10) {
             binding.txtView.visibility = View.VISIBLE
-            userListGrpAdapter!!.setUser(list.subList(0,10))
-        }else{
+            userListGrpAdapter!!.setUser(list.subList(0, 10))
+        } else {
             binding.txtView.visibility = View.GONE
             userListGrpAdapter!!.setUser(list)
         }
@@ -175,8 +179,8 @@ class ChatInfoActivity : BaseActivity() {
 //            }
         }
 
-        binding.llAddContact.setOnClickListener{
-            startActivity(Intent(this,ExtraAddGroupActivity::class.java).putExtra("room",room))
+        binding.llAddContact.setOnClickListener {
+            startActivity(Intent(this, ExtraAddGroupActivity::class.java).putExtra("room", room))
         }
     }
 
@@ -185,7 +189,7 @@ class ChatInfoActivity : BaseActivity() {
         if (chatType.equals("private")) {
             binding.toolbar.txtHeader.text = resources.getString(R.string.contact_info)
             binding.llGrpPart.visibility = View.GONE
-        }else{
+        } else {
             binding.toolbar.txtHeader.text = resources.getString(R.string.group_info)
             binding.llGrpPart.visibility = View.VISIBLE
             getUserListGrp()

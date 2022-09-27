@@ -47,24 +47,26 @@ class FingerPrintHelper {
 
 
 
-        biometricPrompt = BiometricPrompt(fragmentActivity, executor, object : BiometricPrompt.AuthenticationCallback() {
+        biometricPrompt = BiometricPrompt(fragmentActivity,
+            executor,
+            object : BiometricPrompt.AuthenticationCallback() {
 
                 override fun onAuthenticationError(errorCode: Int, errString: CharSequence) {
                     super.onAuthenticationError(errorCode, errString)
 
-                    if (errorCode ==  BiometricManager.BIOMETRIC_ERROR_NONE_ENROLLED){
+                    if (errorCode == BiometricManager.BIOMETRIC_ERROR_NONE_ENROLLED) {
                         fragmentActivity.startActivity(Intent(Settings.ACTION_SECURITY_SETTINGS))
                         action!!.onFailed(errString.toString())
-                        Log.d("TAG", "onAuthenticationError: "+errString.toString())
+                        Log.d("TAG", "onAuthenticationError: " + errString.toString())
                     }
-                    if (errorCode ==  BiometricManager.BIOMETRIC_ERROR_HW_UNAVAILABLE){
+                    if (errorCode == BiometricManager.BIOMETRIC_ERROR_HW_UNAVAILABLE) {
                         action!!.onSuccess(errString.toString())
-                        Log.d("TAG", "onAuthenticationError1: "+errString.toString())
+                        Log.d("TAG", "onAuthenticationError1: " + errString.toString())
 
                     }
-                    if (errorCode == BiometricManager.BIOMETRIC_ERROR_NO_HARDWARE){
+                    if (errorCode == BiometricManager.BIOMETRIC_ERROR_NO_HARDWARE) {
                         action!!.onSuccess(errString.toString())
-                        Log.d("TAG", "onAuthenticationError2: "+errString.toString())
+                        Log.d("TAG", "onAuthenticationError2: " + errString.toString())
 
                     }
 

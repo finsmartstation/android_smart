@@ -11,15 +11,15 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scaleType="fitXY"
-        android:visibility="gone"
-        android:src="@drawable/product_test_page" />
+        android:src="@drawable/product_test_page"
+        android:visibility="gone" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:visibility="visible"
-        >
+        android:visibility="visible">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="80dp"
@@ -40,8 +40,8 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginStart="16dp"
-                android:text="@string/e_shop"
                 android:singleLine="true"
+                android:text="@string/e_shop"
                 android:textColor="@color/white"
                 android:textSize="18sp" />
 
@@ -58,9 +58,9 @@
                     android:id="@+id/llSearch"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
+                    android:layout_gravity="center"
                     android:layout_marginEnd="16dp"
                     android:layout_weight="1"
-                    android:layout_gravity="center"
                     android:background="@drawable/search_bg_use"
                     android:backgroundTint="@color/phn_bg_color"
                     android:orientation="horizontal"
@@ -97,8 +97,8 @@
                     android:layout_height="22dp"
                     android:layout_gravity="center_vertical"
                     android:layout_marginEnd="16dp"
-                    app:tint="@color/white"
-                    android:src="@drawable/ic_search_use" />
+                    android:src="@drawable/ic_search_use"
+                    app:tint="@color/white" />
 
                 <ImageView
                     android:id="@+id/imgCancel"
@@ -120,20 +120,19 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="20dp"
             android:layout_marginEnd="16dp"
-            android:text="@string/category"
             android:singleLine="true"
+            android:text="@string/category"
             android:textColor="@color/black"
             android:textSize="18sp" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvCat"
-            android:layout_marginTop="8dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_weight="1"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-             />
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_weight="1" />
 
         <RelativeLayout
             android:id="@+id/rlBottom"

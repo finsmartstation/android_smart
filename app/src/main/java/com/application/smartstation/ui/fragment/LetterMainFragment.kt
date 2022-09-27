@@ -6,7 +6,6 @@ import com.application.smartstation.R
 import com.application.smartstation.databinding.FragmentLetterMainBinding
 import com.application.smartstation.ui.helper.FragmentHelper
 import com.application.smartstation.util.viewBinding
-import dagger.hilt.android.AndroidEntryPoint
 
 class LetterMainFragment : BaseFragment(R.layout.fragment_letter_main) {
 

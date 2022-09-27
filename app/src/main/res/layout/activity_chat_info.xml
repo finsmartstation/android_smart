@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -14,15 +13,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:fitsSystemWindows="true"
-        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-        >
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
         <com.google.android.material.appbar.CollapsingToolbarLayout
             android:id="@+id/collapsingToolbar"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:fitsSystemWindows="true"
             android:background="@color/white"
+            android:fitsSystemWindows="true"
             app:layout_scrollFlags="scroll|exitUntilCollapsed|snap">
 
             <LinearLayout
@@ -34,13 +32,12 @@
                 app:layout_collapseMode="none">
 
                 <com.google.android.material.imageview.ShapeableImageView
+                    android:id="@id/imgProfile"
                     android:layout_width="100dp"
                     android:layout_height="100dp"
-                    android:id="@id/imgProfile"
                     android:layout_gravity="center"
                     android:layout_margin="26dp"
-                    app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize16Percent"
-                    />
+                    app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize16Percent" />
 
                 <com.vanniktech.emoji.EmojiTextView
                     android:id="@+id/txtName"
@@ -50,12 +47,12 @@
                     android:layout_marginStart="26dp"
                     android:layout_marginEnd="26dp"
                     android:layout_weight="1"
-                    android:singleLine="true"
-                    android:textStyle="bold"
                     android:fontFamily="@font/dinbold"
+                    android:singleLine="true"
                     android:textAlignment="center"
                     android:textColor="@color/black"
-                    android:textSize="20sp" />
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
 
             </LinearLayout>
 
@@ -63,24 +60,23 @@
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="70dp"
-                app:layout_collapseMode="pin"
                 android:background="@color/color_chat_popup_gray"
-                app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-                >
+                app:layout_collapseMode="pin"
+                app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="horizontal">
 
-                <ImageView
-                    android:id="@+id/imgBack"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:layout_gravity="center"
-                    android:layout_marginTop="16dp"
-                    android:layout_marginBottom="16dp"
-                    android:src="@drawable/ic_back" />
+                    <ImageView
+                        android:id="@+id/imgBack"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="16dp"
+                        android:layout_marginBottom="16dp"
+                        android:src="@drawable/ic_back" />
 
                     <com.vanniktech.emoji.EmojiTextView
                         android:id="@+id/txtHeader"
@@ -92,13 +88,13 @@
                         android:layout_marginEnd="16dp"
                         android:layout_marginBottom="16dp"
                         android:layout_weight="1"
-                        android:singleLine="true"
-                        android:textStyle="bold"
                         android:fontFamily="@font/dinbold"
+                        android:singleLine="true"
                         android:text="@string/contact_info"
                         android:textAlignment="center"
                         android:textColor="@color/white"
-                        android:textSize="18sp" />
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
 
                     <com.application.smartstation.view.CustomTextViewBold
                         android:id="@+id/txtEdit"
@@ -108,8 +104,8 @@
                         android:layout_marginTop="16dp"
                         android:layout_marginEnd="16dp"
                         android:layout_marginBottom="16dp"
-                        android:text="@string/edit"
                         android:singleLine="true"
+                        android:text="@string/edit"
                         android:textAlignment="center"
                         android:textColor="@color/white"
                         android:textSize="18sp" />
@@ -125,29 +121,27 @@
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scrollbars="none"
-        android:fillViewport="true"
-        android:clipToPadding="false"
         android:layout_marginBottom="50dp"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        >
+        android:clipToPadding="false"
+        android:fillViewport="true"
+        android:scrollbars="none"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical"
             android:layout_gravity="fill_vertical"
             android:background="@color/white"
-            >
+            android:orientation="vertical">
 
             <com.application.smartstation.view.CustomTextViewBold
                 android:id="@+id/txtParticipants"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:layout_marginStart="26dp"
                 android:layout_marginTop="26dp"
                 android:layout_marginEnd="26dp"
-                android:layout_marginStart="26dp"
                 android:layout_marginBottom="26dp"
                 android:singleLine="true"
                 android:textAlignment="center"
@@ -157,28 +151,25 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
                 android:layout_marginStart="26dp"
                 android:layout_marginEnd="26dp"
                 android:gravity="center"
-                >
+                android:orientation="horizontal">
 
                 <LinearLayout
                     android:id="@+id/llAudio"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
                     android:layout_marginEnd="8dp"
                     android:layout_weight="1"
                     android:gravity="center"
-                    >
+                    android:orientation="vertical">
 
                     <ImageView
                         android:id="@+id/imgAudio"
                         android:layout_width="50dp"
                         android:layout_height="50dp"
-                        android:src="@drawable/ic_voice_chat_use"
-                        />
+                        android:src="@drawable/ic_voice_chat_use" />
 
                     <com.application.smartstation.view.CustomTextViewBold
                         android:id="@+id/txtAudio"
@@ -186,8 +177,8 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_marginTop="8dp"
-                        android:text="@string/audio"
                         android:singleLine="true"
+                        android:text="@string/audio"
                         android:textAlignment="center"
                         android:textColor="@color/color_green"
                         android:textSize="18sp" />
@@ -198,18 +189,16 @@
                     android:id="@+id/llVideo"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
                     android:layout_marginStart="8dp"
                     android:layout_weight="1"
                     android:gravity="center"
-                    >
+                    android:orientation="vertical">
 
                     <ImageView
                         android:id="@+id/imgVideo"
                         android:layout_width="50dp"
                         android:layout_height="50dp"
-                        android:src="@drawable/ic_video_chat_use"
-                        />
+                        android:src="@drawable/ic_video_chat_use" />
 
                     <com.application.smartstation.view.CustomTextViewBold
                         android:id="@+id/txtVideo"
@@ -217,8 +206,8 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_marginTop="8dp"
-                        android:text="@string/video"
                         android:singleLine="true"
+                        android:text="@string/video"
                         android:textAlignment="center"
                         android:textColor="@color/color_green"
                         android:textSize="18sp" />
@@ -231,30 +220,28 @@
                 android:layout_width="match_parent"
                 android:layout_height="20dp"
                 android:layout_marginTop="26dp"
-                android:background="@color/view_chat_info"
-                />
+                android:background="@color/view_chat_info" />
 
             <com.application.smartstation.view.CustomTextViewBold
                 android:id="@+id/txtAddDes"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="26dp"
                 android:layout_marginStart="26dp"
+                android:layout_marginTop="26dp"
                 android:layout_marginEnd="26dp"
                 android:layout_marginBottom="26dp"
-                android:visibility="gone"
-                android:text="@string/add_desc_grp"
                 android:singleLine="true"
+                android:text="@string/add_desc_grp"
                 android:textColor="@color/black"
-                android:textSize="18sp" />
+                android:textSize="18sp"
+                android:visibility="gone" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
                 android:layout_margin="26dp"
-                android:visibility="visible"
-                >
+                android:orientation="vertical"
+                android:visibility="visible">
 
                 <com.application.smartstation.view.CustomTextViewBold
                     android:id="@+id/txtViewDes"
@@ -279,67 +266,61 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="20dp"
-                android:background="@color/view_chat_info"
-                />
+                android:background="@color/view_chat_info" />
 
             <LinearLayout
                 android:id="@+id/llGrpPart"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                >
+                android:orientation="vertical">
 
-            <com.application.smartstation.view.CustomTextViewBold
-                android:id="@+id/txtParticipants1"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:layout_marginStart="26dp"
-                android:layout_marginEnd="26dp"
-                android:singleLine="true"
-                android:textColor="@color/txt_chat_info"
-                android:textSize="16sp" />
+                <com.application.smartstation.view.CustomTextViewBold
+                    android:id="@+id/txtParticipants1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="26dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="26dp"
+                    android:singleLine="true"
+                    android:textColor="@color/txt_chat_info"
+                    android:textSize="16sp" />
 
                 <LinearLayout
                     android:id="@+id/llAddContact"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_marginTop="26dp"
                     android:layout_marginStart="26dp"
+                    android:layout_marginTop="26dp"
                     android:layout_marginEnd="26dp"
                     android:gravity="center"
-                    android:visibility="gone"
-                    >
+                    android:orientation="horizontal"
+                    android:visibility="gone">
 
                     <ImageView
                         android:layout_width="30dp"
                         android:layout_height="30dp"
-                        android:src="@drawable/ic_plus"
-                        app:tint="@color/color_green"
                         android:padding="4dp"
-                        />
+                        android:src="@drawable/ic_plus"
+                        app:tint="@color/color_green" />
 
                     <com.application.smartstation.view.CustomTextViewBold
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@string/add_participants"
                         android:layout_marginStart="8dp"
                         android:singleLine="true"
+                        android:text="@string/add_participants"
                         android:textColor="@color/black"
                         android:textSize="18sp" />
 
                 </LinearLayout>
 
 
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:nestedScrollingEnabled="true"
-                android:id="@+id/rvChatInfo"
-                android:layout_margin="26dp"
-                />
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rvChatInfo"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="26dp"
+                    android:nestedScrollingEnabled="true" />
 
                 <com.application.smartstation.view.CustomTextViewBold
                     android:id="@+id/txtView"
@@ -348,18 +329,17 @@
                     android:layout_marginStart="26dp"
                     android:layout_marginEnd="26dp"
                     android:layout_marginBottom="26dp"
-                    android:visibility="gone"
-                    android:text="@string/view_all"
                     android:gravity="center"
                     android:singleLine="true"
+                    android:text="@string/view_all"
                     android:textColor="@color/color_green"
-                    android:textSize="16sp" />
+                    android:textSize="16sp"
+                    android:visibility="gone" />
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="20dp"
-                    android:background="@color/view_chat_info"
-                    />
+                    android:background="@color/view_chat_info" />
 
             </LinearLayout>
 
@@ -367,27 +347,25 @@
                 android:id="@+id/llExit"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginTop="26dp"
                 android:layout_marginStart="26dp"
+                android:layout_marginTop="26dp"
                 android:layout_marginEnd="26dp"
-                >
+                android:orientation="horizontal">
 
                 <ImageView
                     android:id="@+id/imgExit"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
-                    android:src="@drawable/ic_exit_group"
-                    />
+                    android:src="@drawable/ic_exit_group" />
 
                 <com.application.smartstation.view.CustomTextViewBold
                     android:id="@+id/txtExit"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center"
                     android:layout_marginStart="26dp"
                     android:text="@string/exit"
                     android:textColor="@color/red"
-                    android:layout_gravity="center"
                     android:textSize="18sp" />
 
 
@@ -396,25 +374,23 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginTop="16dp"
                 android:layout_marginStart="26dp"
+                android:layout_marginTop="16dp"
                 android:layout_marginEnd="26dp"
                 android:layout_marginBottom="26dp"
-                >
+                android:orientation="horizontal">
 
                 <ImageView
                     android:id="@+id/imgReport"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
-                    android:src="@drawable/ic_report_group"
-                    />
+                    android:src="@drawable/ic_report_group" />
 
                 <com.application.smartstation.view.CustomTextViewBold
                     android:id="@+id/txtReport"
                     android:layout_width="wrap_content"
-                    android:layout_gravity="center"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center"
                     android:layout_marginStart="26dp"
                     android:text="@string/report_grp"
                     android:textColor="@color/red"
@@ -425,9 +401,8 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center"
                 android:background="@color/view_chat_info"
-                >
+                android:gravity="center">
 
                 <ImageView
                     android:layout_width="80dp"

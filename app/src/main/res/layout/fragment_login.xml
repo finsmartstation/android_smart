@@ -1,107 +1,98 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/white"
     tools:context=".ui.fragment.LoginFragment">
 
     <ImageView
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:scaleType="centerCrop"
         android:alpha="0.4"
+        android:scaleType="centerCrop"
         android:src="@drawable/ic_splash_bg_use"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
-        >
+        android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:layout_weight="1"
             android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"
             android:layout_marginTop="16dp"
+            android:layout_marginEnd="8dp"
             android:layout_marginBottom="16dp"
-            >
+            android:layout_weight="1"
+            android:orientation="vertical">
 
             <com.application.smartstation.view.CustomTextViewBold
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="36dp"
+                android:layout_weight="1"
+                android:gravity="center"
                 android:text="@string/enter_mobile_num"
                 android:textColor="@color/color_dark_green"
                 android:textSize="23sp"
-                android:gravity="center"
-                android:layout_weight="1"
-                android:layout_marginTop="36dp"
-                android:textStyle="bold"
-                >
+                android:textStyle="bold">
 
             </com.application.smartstation.view.CustomTextViewBold>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_weight="1"
                 android:layout_marginTop="36dp"
-                >
+                android:layout_weight="1"
+                android:orientation="horizontal">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:layout_weight="1.2"
-                    android:layout_marginEnd="4dp"
                     android:layout_marginStart="1dp"
-                    >
+                    android:layout_marginEnd="4dp"
+                    android:layout_weight="1.2"
+                    android:orientation="vertical">
 
                     <com.application.smartstation.view.CustomTextViewMedium
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@string/country_code"
-                        android:textSize="11sp"
                         android:letterSpacing="0.05"
+                        android:text="@string/country_code"
                         android:textAlignment="textStart"
                         android:textColor="@color/color_gray"
-                        />
+                        android:textSize="11sp" />
 
                     <LinearLayout
                         android:id="@+id/llCountry"
                         android:layout_width="match_parent"
                         android:layout_height="45dp"
                         android:layout_marginTop="8dp"
+                        android:background="@drawable/num_bg"
+                        android:gravity="center"
                         android:orientation="horizontal"
                         android:paddingStart="4dp"
-                        android:paddingEnd="4dp"
-                        android:gravity="center"
-                        android:background="@drawable/num_bg"
-                        >
+                        android:paddingEnd="4dp">
 
                         <com.application.smartstation.view.CustomTextViewNormal
                             android:id="@+id/txtCountry"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_margin="4dp"
-                            android:gravity="center"
-                            android:textSize="14sp"
-                            android:textColor="@color/black"
                             android:drawableEnd="@drawable/ic_spinner_down"
-                            />
+                            android:gravity="center"
+                            android:textColor="@color/black"
+                            android:textSize="14sp" />
 
                     </LinearLayout>
 
@@ -110,49 +101,47 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:layout_weight=".8"
                     android:layout_marginStart="4dp"
                     android:layout_marginEnd="1dp"
-                    >
+                    android:layout_weight=".8"
+                    android:orientation="vertical">
 
                     <com.application.smartstation.view.CustomTextViewMedium
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@string/mobile_num"
-                        android:textSize="11sp"
                         android:letterSpacing="0.05"
+                        android:text="@string/mobile_num"
                         android:textAlignment="textEnd"
                         android:textColor="@color/color_gray"
-                        />
+                        android:textSize="11sp" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="45dp"
                         android:layout_marginTop="8dp"
-                        android:orientation="horizontal"
                         android:background="@drawable/num_bg"
+                        android:orientation="horizontal"
 
                         >
 
                         <com.application.smartstation.view.CustomEditText
+                            android:id="@+id/edtMobile"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:textColor="@color/black"
-                            android:background="@null"
-                            android:id="@+id/edtMobile"
-                            android:textSize="15sp"
-                            android:digits="0123456789"
-                            android:textCursorDrawable="@drawable/cusor_bg"
                             android:layout_margin="8dp"
+                            android:background="@null"
+                            android:digits="0123456789"
                             android:focusable="true"
-                            android:textAlignment="textEnd"
                             android:focusableInTouchMode="true"
-                            android:imeOptions="actionDone"
-                            android:textColorHint="@color/grey"
                             android:hint="@string/mobile_num"
+                            android:imeOptions="actionDone"
                             android:inputType="phone"
-                            android:maxLength="17">
+                            android:maxLength="17"
+                            android:textAlignment="textEnd"
+                            android:textColor="@color/black"
+                            android:textColorHint="@color/grey"
+                            android:textCursorDrawable="@drawable/cusor_bg"
+                            android:textSize="15sp">
 
 
                         </com.application.smartstation.view.CustomEditText>
@@ -164,13 +153,12 @@
                         android:id="@+id/txtLost"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@string/lost_my_phone"
-                        android:textSize="14sp"
                         android:layout_marginTop="9dp"
                         android:letterSpacing="0.05"
+                        android:text="@string/lost_my_phone"
                         android:textAlignment="textEnd"
                         android:textColor="@color/color_gray"
-                        />
+                        android:textSize="14sp" />
 
                 </LinearLayout>
 
@@ -178,66 +166,62 @@
             </LinearLayout>
 
             <com.application.smartstation.view.CustomTextViewBold
+                android:id="@+id/txtLoginSub"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="36dp"
+                android:layout_marginEnd="16dp"
                 android:text="@string/login_sub"
-                android:textSize="18sp"
-                android:id="@+id/txtLoginSub"
                 android:textAlignment="center"
                 android:textColor="@color/color_dark_green"
-                android:layout_marginTop="36dp"
-                android:layout_marginStart="16dp"
-                android:layout_marginEnd="16dp"
-                />
+                android:textSize="18sp" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
                 android:layout_marginTop="36dp"
-                >
+                android:layout_weight="1"
+                android:gravity="center">
 
-            <ImageView
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:layout_margin="16dp"
-                android:src="@drawable/login_logo_use"/>
+                <ImageView
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:layout_margin="16dp"
+                    android:src="@drawable/login_logo_use" />
 
             </LinearLayout>
 
             <androidx.cardview.widget.CardView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:cardElevation="8dp"
-                android:layout_marginTop="36dp"
                 android:layout_gravity="center"
+                android:layout_marginTop="36dp"
                 android:layout_marginBottom="36dp"
                 app:cardCornerRadius="30dp"
-                >
+                app:cardElevation="8dp">
 
-            <LinearLayout
-                android:id="@+id/btnLogin"
-                android:layout_width="230dp"
-                android:layout_height="wrap_content"
-                android:background="@drawable/btn_bg_use_gran"
-                android:orientation="vertical"
-                >
-
-                <com.application.smartstation.view.CustomTextViewBold
-                    android:layout_width="match_parent"
+                <LinearLayout
+                    android:id="@+id/btnLogin"
+                    android:layout_width="230dp"
                     android:layout_height="wrap_content"
-                    android:text="@string/send"
-                    android:visibility="visible"
-                    android:textColor="@color/white"
-                    android:textSize="18sp"
-                    android:gravity="center"
-                    android:textAlignment="center"
-                    android:layout_margin="8dp">
+                    android:background="@drawable/btn_bg_use_gran"
+                    android:orientation="vertical">
 
-                </com.application.smartstation.view.CustomTextViewBold>
+                    <com.application.smartstation.view.CustomTextViewBold
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="8dp"
+                        android:gravity="center"
+                        android:text="@string/send"
+                        android:textAlignment="center"
+                        android:textColor="@color/white"
+                        android:textSize="18sp"
+                        android:visibility="visible">
 
-            </LinearLayout>
+                    </com.application.smartstation.view.CustomTextViewBold>
+
+                </LinearLayout>
 
             </androidx.cardview.widget.CardView>
 

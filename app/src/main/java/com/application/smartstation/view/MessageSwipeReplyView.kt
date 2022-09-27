@@ -18,7 +18,11 @@ import com.application.smartstation.ui.model.ChatDetailsRes
 import com.application.smartstation.util.AndroidUtils
 import com.application.smartstation.util.SwipeControllerActions
 
-class MessageSwipeReplyView(private val context: Context, private val list:ArrayList<ChatDetailsRes>, private val swipeControllerActions: SwipeControllerActions) :
+class MessageSwipeReplyView(
+    private val context: Context,
+    private val list: ArrayList<ChatDetailsRes>,
+    private val swipeControllerActions: SwipeControllerActions,
+) :
     ItemTouchHelper.Callback() {
 
     private lateinit var imageDrawable: Drawable
@@ -34,7 +38,10 @@ class MessageSwipeReplyView(private val context: Context, private val list:Array
     private var isVibrate = false
     private var startTracking = false
 
-    override fun getMovementFlags(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder): Int {
+    override fun getMovementFlags(
+        recyclerView: RecyclerView,
+        viewHolder: RecyclerView.ViewHolder,
+    ): Int {
         if (!list.isNullOrEmpty()) {
             if (!list[viewHolder.adapterPosition].type.equals("date")) {
                 if (!list[viewHolder.adapterPosition].type.equals("notification")) {
@@ -42,10 +49,10 @@ class MessageSwipeReplyView(private val context: Context, private val list:Array
                     imageDrawable = context.getDrawable(R.drawable.ic_reply_black_24dp)!!
                     shareRound = context.getDrawable(R.drawable.ic_round_shape)!!
                     return ItemTouchHelper.Callback.makeMovementFlags(ACTION_STATE_IDLE, RIGHT)
-                }else{
+                } else {
                     return makeMovementFlags(0, 0)
                 }
-            }else{
+            } else {
                 return makeMovementFlags(0, 0)
             }
         }
@@ -55,7 +62,7 @@ class MessageSwipeReplyView(private val context: Context, private val list:Array
     override fun onMove(
         recyclerView: RecyclerView,
         viewHolder: RecyclerView.ViewHolder,
-        target: RecyclerView.ViewHolder
+        target: RecyclerView.ViewHolder,
     ): Boolean {
         return false
     }
@@ -77,7 +84,7 @@ class MessageSwipeReplyView(private val context: Context, private val list:Array
         dX: Float,
         dY: Float,
         actionState: Int,
-        isCurrentlyActive: Boolean
+        isCurrentlyActive: Boolean,
     ) {
 
         if (actionState == ACTION_STATE_SWIPE) {
@@ -96,7 +103,8 @@ class MessageSwipeReplyView(private val context: Context, private val list:Array
     @SuppressLint("ClickableViewAccessibility")
     private fun setTouchListener(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder) {
         recyclerView.setOnTouchListener { _, event ->
-            swipeBack = event.action == MotionEvent.ACTION_CANCEL || event.action == MotionEvent.ACTION_UP
+            swipeBack =
+                event.action == MotionEvent.ACTION_CANCEL || event.action == MotionEvent.ACTION_UP
             if (swipeBack) {
                 if (Math.abs(mView.translationX) >= this@MessageSwipeReplyView.convertTodp(100)) {
                     swipeControllerActions.showReplyUI(viewHolder.adapterPosition)
@@ -173,7 +181,8 @@ class MessageSwipeReplyView(private val context: Context, private val list:Array
 
         val y = (mView.top + mView.measuredHeight / 2).toFloat()
         shareRound.colorFilter =
-            PorterDuffColorFilter(ContextCompat.getColor(context, R.color.colorE), PorterDuff.Mode.MULTIPLY)
+            PorterDuffColorFilter(ContextCompat.getColor(context, R.color.colorE),
+                PorterDuff.Mode.MULTIPLY)
 
         shareRound.setBounds(
             (x - convertTodp(18) * scale).toInt(),

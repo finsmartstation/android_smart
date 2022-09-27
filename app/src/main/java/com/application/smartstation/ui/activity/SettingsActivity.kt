@@ -1,11 +1,8 @@
 package com.application.smartstation.ui.activity
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.View
 import com.application.smartstation.R
-import com.application.smartstation.databinding.ActivityLoginBinding
 import com.application.smartstation.databinding.ActivitySettingsBinding
 import com.application.smartstation.util.Constants
 import com.application.smartstation.util.UtilsDefault
@@ -35,15 +32,15 @@ class SettingsActivity : BaseActivity() {
         }
 
         binding.llProfile.setOnClickListener {
-            startActivity(Intent(this,EditProfileActivity::class.java))
+            startActivity(Intent(this, EditProfileActivity::class.java))
         }
 
         binding.llAcc.setOnClickListener {
-            startActivity(Intent(this,AccountActivity::class.java))
+            startActivity(Intent(this, AccountActivity::class.java))
         }
 
         binding.llNotification.setOnClickListener {
-            startActivity(Intent(this,NotificationActivity::class.java))
+            startActivity(Intent(this, NotificationActivity::class.java))
         }
     }
 
@@ -55,7 +52,9 @@ class SettingsActivity : BaseActivity() {
         Glide.with(this).applyDefaultRequestOptions(
             RequestOptions()
                 .error(R.drawable.ic_default)
-        ).load(UtilsDefault.getSharedPreferenceString(Constants.PROFILE_PIC)).placeholder(R.drawable.ic_default).diskCacheStrategy(DiskCacheStrategy.DATA).into(binding.ilHeader.imgProfilePic)
+        ).load(UtilsDefault.getSharedPreferenceString(Constants.PROFILE_PIC))
+            .placeholder(R.drawable.ic_default).diskCacheStrategy(DiskCacheStrategy.DATA)
+            .into(binding.ilHeader.imgProfilePic)
 
     }
 }
