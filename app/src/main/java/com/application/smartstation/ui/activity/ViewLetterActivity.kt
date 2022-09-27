@@ -169,7 +169,7 @@ class ViewLetterActivity : BaseActivity() {
 
 
         binding.btnForwardMail.setOnClickListener {
-            UtilsDefault.downloadFile(this, path,object : MailCallback {
+            UtilsDefault.downloadFile(this, path,"Letter",object : MailCallback {
                 override fun success(resp: String?, status: Boolean?) {
                     if (status!!){
                         startActivity(Intent(this@ViewLetterActivity,NewMailActivity::class.java)
@@ -216,7 +216,7 @@ class ViewLetterActivity : BaseActivity() {
 
 
         binding.clPdf.setOnClickListener {
-            UtilsDefault.downloadFile(this, path,object : MailCallback {
+            UtilsDefault.downloadFile(this, path,"Letter",object : MailCallback {
                 override fun success(resp: String?, status: Boolean?) {
                     if (status!!){
                         if (resp!!.contains(".pdf")){

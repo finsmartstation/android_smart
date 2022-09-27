@@ -61,5 +61,6 @@ object ApiUrl {
     const val CREATE_FOLDER_CREATE_CLOUD =API+"create_cloud_parent_folder"
     const val CREATE_SUB_FOLDER_CREATE_CLOUD =API+"create_cloud_sub_folder"
     const val UPLOAD_FILE_CLOUD =API+"upload_cloud_files"
+    const val GET_FILE_CLOUD =API+"get_subcloud_subfolders"
 
 }

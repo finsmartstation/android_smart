@@ -376,6 +376,13 @@ class ApiRepository @Inject constructor(val apiService: ApiService) {
         }.flowOn(Dispatchers.IO)
     }
 
+    fun getCloudFile(inputParams: InputParams): Flow<GetCloudFileRes> {
+        return flow {
+            val response = apiService.getCloudFile(inputParams)
+            emit(response)
+        }.flowOn(Dispatchers.IO)
+    }
+
     fun grpCreate(
         user_id:RequestBody,
         accessToken:RequestBody,

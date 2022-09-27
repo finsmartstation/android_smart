@@ -106,7 +106,7 @@ class CloudSendFragment(var phn: String) : BaseFragment(R.layout.fragment_cloud_
                     .putExtra("type","send"))
             }else {
                 UtilsDefault.downloadFile(requireActivity(),
-                    model.file_path,
+                    model.file_path,"Cloud",
                     object : MailCallback {
                         override fun success(resp: String?, status: Boolean?) {
                             if (status!!) {

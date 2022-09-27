@@ -52,7 +52,7 @@ class ViewLetterDetails(var status: Boolean, var statuscode: Int,var message: St
 class CloudDetailsRes(var status: Boolean, var statuscode: Int,var message: String, var send_datas:ArrayList<CloudDetailListRes>, var received_datas:ArrayList<CloudDetailListRes>)
 class CloudDetailListRes(var id:String, var user_id:String, var cloud_upload_id:String, var parent_folder_id:String, var created_datetime:String, var file_type:String, var name:String, var file_path:String, var receiver_id:String, var view_type:String, var time_period:String ,var end_datetime:String ,var status:String)
 class ContactListRes(var name: String,var Phn:String)
-
+class GetCloudFileRes(var status: Boolean, var statuscode: Int,var message: String, var datas:ArrayList<CloudDetailListRes>)
 
 class SendMsgResponse(var status:Boolean, var message:String)
 class PostResponse(var ip:String)

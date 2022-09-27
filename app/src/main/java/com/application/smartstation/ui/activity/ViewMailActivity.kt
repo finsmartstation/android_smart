@@ -71,7 +71,7 @@ class ViewMailActivity : BaseActivity() {
         binding.rvMailList.adapter = mailFilesAdapter
         mailFilesAdapter!!.onItemClick = { model ->
 
-            UtilsDefault.downloadFile(this, attachmentList!![model],object :MailCallback{
+            UtilsDefault.downloadFile(this, attachmentList!![model],"Mail",object :MailCallback{
                 override fun success(resp: String?, status: Boolean?) {
                     if (status!!){
                         if (resp!!.contains(".pdf")){

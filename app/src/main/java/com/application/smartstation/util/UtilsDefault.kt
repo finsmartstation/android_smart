@@ -891,9 +891,9 @@ object UtilsDefault {
     }
 
 
-    fun downloadFile(context: Context,url: String,mailCallback: MailCallback){
+    fun downloadFile(context: Context,url: String,value: String,mailCallback: MailCallback){
         val file =
-            File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM),"com.smartstation"+"/Smart Station/Media/Smart Station Download")
+            File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM),"com.smartstation"+"/Smart Station/Media/Smart Station Download/+$value")
         if (!file.exists()) {
             file.mkdirs()
         }
@@ -902,7 +902,7 @@ object UtilsDefault {
         val mgr = context.getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
         val downloadUri: Uri = Uri.parse(url)
         val file1 =
-            File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).absolutePath+"/com.smartstation"+"/Smart Station/Media/Smart Station Download/"+downloadUri.lastPathSegment)
+            File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).absolutePath+"/com.smartstation"+"/Smart Station/Media/Smart Station Download/+$value"+downloadUri.lastPathSegment)
 
         if (file1.isFile){
             return mailCallback.success(file1.absolutePath,true)

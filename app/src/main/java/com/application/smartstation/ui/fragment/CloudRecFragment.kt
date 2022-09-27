@@ -52,7 +52,8 @@ class CloudRecFragment(var phn: String) : BaseFragment(R.layout.fragment_cloud_r
 
             }else {
                 UtilsDefault.downloadFile(requireActivity(),
-                    model.file_path,
+                    model.file_path
+                    ,"Cloud",
                     object : MailCallback {
                         override fun success(resp: String?, status: Boolean?) {
                             if (status!!) {

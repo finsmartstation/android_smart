@@ -165,6 +165,9 @@ interface ApiService {
     @POST(ApiUrl.GET_CLOUD_DETAILS)
     suspend fun getCloudDetails(@Body inputParams: InputParams): CloudDetailsRes
 
+    @POST(ApiUrl.GET_FILE_CLOUD)
+    suspend fun getCloudFile(@Body inputParams: InputParams): GetCloudFileRes
+
     @Multipart
     @POST(ApiUrl.SIGNATURE_UPLOAD)
     suspend fun uploadSignature(@Part("user_id") user_id:RequestBody, @Part("accessToken") accessToken:RequestBody,@Part("name") group_name:RequestBody,@Part signature: MultipartBody.Part): BaseResponse
