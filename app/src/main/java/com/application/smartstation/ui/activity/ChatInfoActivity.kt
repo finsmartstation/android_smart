@@ -1,7 +1,11 @@
 package com.application.smartstation.ui.activity
 
+import android.annotation.SuppressLint
 import android.content.Intent
+import android.database.Cursor
 import android.os.Bundle
+import android.provider.ContactsContract
+import android.telephony.PhoneNumberUtils
 import android.view.View
 import androidx.activity.viewModels
 import androidx.lifecycle.Observer
@@ -10,6 +14,8 @@ import com.application.smartstation.R
 import com.application.smartstation.databinding.ActivityChatInfoBinding
 import com.application.smartstation.service.Status
 import com.application.smartstation.ui.adapter.UserListGrpAdapter
+import com.application.smartstation.ui.model.ContactListRes
+import com.application.smartstation.ui.model.DataUserList
 import com.application.smartstation.ui.model.InputParams
 import com.application.smartstation.ui.model.UserListGrp
 import com.application.smartstation.util.Constants
@@ -31,6 +37,7 @@ class ChatInfoActivity : BaseActivity() {
     var profilePic = ""
     var chatType = ""
     var room = ""
+    var contactList: ArrayList<ContactListRes> = ArrayList()
 
     companion object {
         var list = ArrayList<UserListGrp>()
@@ -97,6 +104,10 @@ class ChatInfoActivity : BaseActivity() {
                 }
             }
         })
+
+        phnPermission {
+            getContactList()
+        }
     }
 
     private fun getUserListGrp() {
@@ -115,6 +126,7 @@ class ChatInfoActivity : BaseActivity() {
                     Status.SUCCESS -> {
                         dismissProgress()
                         if (it.data!!.status) {
+                            binding.txtDesTime.text = UtilsDefault.monthName(UtilsDefault.localTimeConvert(it.data.created_datetime)!!)!!
                             if (it.data.data.size != 0) {
                                 setData(it.data.data)
                                 binding.txtParticipants.text =
@@ -149,6 +161,25 @@ class ChatInfoActivity : BaseActivity() {
 
     private fun setData(data: ArrayList<UserListGrp>) {
         list = data
+        for (a in contactList) {
+            for (b in 0 until list.size) {
+                if (PhoneNumberUtils.compare(a.Phn, list[b].phone)) {
+                    list.set(b,UserListGrp(list[b].user_id,
+                        a.name,
+                        list[b].type,
+                        list[b].about,
+                        list[b].phone,
+                        list[b].profile_pic))
+                }else{
+                    list.set(b,UserListGrp(list[b].user_id,
+                        list[b].phone,
+                        list[b].type,
+                        list[b].about,
+                        list[b].phone,
+                        list[b].profile_pic))
+                }
+            }
+        }
         if (list.size > 10) {
             binding.txtView.visibility = View.VISIBLE
             userListGrpAdapter!!.setUser(list.subList(0, 10))
@@ -164,19 +195,19 @@ class ChatInfoActivity : BaseActivity() {
         }
 
         binding.txtView.setOnClickListener {
-//            if (more){
-//                binding.txtView.text = resources.getString(R.string.show_more)
-//                more = false
-//                userListGrpAdapter!!.setUser(list)
-//            }else{
-//                binding.txtView.text = resources.getString(R.string.view_all)
-//                more = true
-//                if (list.size>10){
-//                    userListGrpAdapter!!.setUser(list.subList(0,9))
-//                }else{
-//                    userListGrpAdapter!!.setUser(list)
-//                }
-//            }
+            if (more){
+                binding.txtView.text = resources.getString(R.string.show_more)
+                more = false
+                userListGrpAdapter!!.setUser(list)
+            }else{
+                binding.txtView.text = resources.getString(R.string.view_all)
+                more = true
+                if (list.size>10){
+                    userListGrpAdapter!!.setUser(list.subList(0,10))
+                }else{
+                    userListGrpAdapter!!.setUser(list)
+                }
+            }
         }
 
         binding.llAddContact.setOnClickListener {
@@ -193,6 +224,40 @@ class ChatInfoActivity : BaseActivity() {
             binding.toolbar.txtHeader.text = resources.getString(R.string.group_info)
             binding.llGrpPart.visibility = View.VISIBLE
             getUserListGrp()
+        }
+    }
+
+    @SuppressLint("Range")
+    private fun getContactList() {
+        val cr = contentResolver
+        val cur: Cursor? = cr.query(ContactsContract.Contacts.CONTENT_URI,
+            null, null, null, null)
+        if ((if (cur != null) cur.count else 0) > 0) {
+            while (cur != null && cur.moveToNext()) {
+                val id: String = cur.getString(
+                    cur.getColumnIndex(ContactsContract.Contacts._ID))
+                val name: String = cur.getString(cur.getColumnIndex(
+                    ContactsContract.Contacts.DISPLAY_NAME))
+                if (cur.getInt(cur.getColumnIndex(
+                        ContactsContract.Contacts.HAS_PHONE_NUMBER)) > 0
+                ) {
+                    val pCur: Cursor? = cr.query(
+                        ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
+                        null,
+                        ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = ?",
+                        arrayOf(id),
+                        null)
+                    while (pCur!!.moveToNext()) {
+                        val phoneNo: String = pCur.getString(pCur.getColumnIndex(
+                            ContactsContract.CommonDataKinds.Phone.NUMBER))
+                        contactList.add(ContactListRes(name, phoneNo))
+                    }
+                    pCur.close()
+                }
+            }
+        }
+        if (cur != null) {
+            cur.close()
         }
     }
 }

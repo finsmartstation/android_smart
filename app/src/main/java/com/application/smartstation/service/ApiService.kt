@@ -176,6 +176,7 @@ interface ApiService {
     @POST(ApiUrl.GET_FILE_CLOUD)
     suspend fun getCloudFile(@Body inputParams: InputParams): GetCloudFileRes
 
+
     @Multipart
     @POST(ApiUrl.SIGNATURE_UPLOAD)
     suspend fun uploadSignature(
@@ -183,6 +184,24 @@ interface ApiService {
         @Part("accessToken") accessToken: RequestBody,
         @Part("name") group_name: RequestBody,
         @Part signature: MultipartBody.Part,
+    ): BaseResponse
+
+    @Multipart
+    @POST(ApiUrl.LETTER_HEADER_UPLOAD)
+    suspend fun uploadLetterHeader(
+        @Part("user_id") user_id: RequestBody,
+        @Part("accessToken") accessToken: RequestBody,
+        @Part("name") group_name: RequestBody,
+        @Part header: MultipartBody.Part,
+    ): BaseResponse
+
+    @Multipart
+    @POST(ApiUrl.LETTER_FOOTER_UPLOAD)
+    suspend fun uploadLetterFooter(
+        @Part("user_id") user_id: RequestBody,
+        @Part("accessToken") accessToken: RequestBody,
+        @Part("name") group_name: RequestBody,
+        @Part footer: MultipartBody.Part,
     ): BaseResponse
 
     @Multipart

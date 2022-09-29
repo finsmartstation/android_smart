@@ -51,6 +51,7 @@ class UserDetailsActivity : BaseActivity() {
         contactAdapter!!.onItemClick = { model ->
             val intent = Intent()
             intent.putExtra("id", model.user_id)
+            intent.putExtra("name", model.name)
             setResult(RESULT_OK, intent)
             finish()
         }

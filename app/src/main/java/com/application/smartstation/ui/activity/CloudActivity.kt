@@ -40,6 +40,7 @@ class CloudActivity : BaseActivity() {
     var hideBtn: Animation? = null
     var showLay: Animation? = null
     var hideLay: Animation? = null
+    var name = ""
 
     companion object {
         val RESULT_CODE = 124
@@ -210,6 +211,7 @@ class CloudActivity : BaseActivity() {
             124 -> {
                 if (data != null) {
                     val id = data.getStringExtra("id")
+                    name = data.getStringExtra("name")!!
                     createCloudFolder(id)
                 }
             }
@@ -233,7 +235,12 @@ class CloudActivity : BaseActivity() {
                         if (it.data!!.status) {
                             getCloud()
                         } else {
-                            toast(it.data.message)
+                            if(it.data.message.equals("Folder already exist")){
+                                startActivity(Intent(this, CloudViewActivity::class.java).putExtra("name", name)
+                                    .putExtra("id", it.data.cloud_id))
+                            }else {
+                                toast(it.data.message)
+                            }
                         }
                     }
                     Status.ERROR -> {

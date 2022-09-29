@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white_bg"
     tools:context=".ui.fragment.CloudRecFragment">
 
     <androidx.recyclerview.widget.RecyclerView
@@ -50,7 +51,7 @@
                 android:layout_marginEnd="16dp"
                 android:gravity="center"
                 android:text="@string/upload_folder"
-                android:textColor="@color/black"
+                android:textColor="@color/txt_color"
                 android:textSize="18sp"
                 android:visibility="visible">
 
@@ -86,7 +87,7 @@
                 android:layout_marginEnd="16dp"
                 android:gravity="center"
                 android:text="@string/upload_file"
-                android:textColor="@color/black"
+                android:textColor="@color/txt_color"
                 android:textSize="18sp"
                 android:visibility="visible">
 

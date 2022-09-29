@@ -36,7 +36,11 @@ class ContactGroupAdapter(val context: Context) :
         val model = list[position]
 
         with(holder) {
-            binding.txtName.text = model.name
+            if (model.name.isNotEmpty()){
+                binding.txtName.text = model.name
+            }else{
+                binding.txtName.text = model.phone
+            }
             binding.txtMsg.text = model.about
 
             if (model.profile_pic != "") {

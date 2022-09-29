@@ -41,7 +41,6 @@ class SplashActivity : AppCompatActivity() {
             } else {
                 val intent = Intent(this, LoginActivity::class.java)
                 startActivity(intent)
-                overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out)
                 finish()
             }
         }).start()

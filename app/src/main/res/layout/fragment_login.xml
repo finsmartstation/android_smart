@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
+    android:background="@color/white_bg"
     tools:context=".ui.fragment.LoginFragment">
 
     <ImageView
@@ -188,7 +188,8 @@
                     android:layout_width="100dp"
                     android:layout_height="100dp"
                     android:layout_margin="16dp"
-                    android:src="@drawable/login_logo_use" />
+                    android:src="@drawable/login_logo_use"
+                    app:tint="@color/logo_color" />
 
             </LinearLayout>
 

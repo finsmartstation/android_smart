@@ -12,6 +12,7 @@ import com.application.smartstation.R
 import com.application.smartstation.databinding.FragmentInboxBinding
 import com.application.smartstation.service.Status
 import com.application.smartstation.service.background.SocketService
+import com.application.smartstation.ui.activity.MainActivity
 import com.application.smartstation.ui.activity.ViewMailActivity
 import com.application.smartstation.ui.adapter.InboxAdapter
 import com.application.smartstation.ui.model.DataMailList
@@ -67,6 +68,15 @@ class InboxFragment : BaseFragment(R.layout.fragment_inbox) {
     private fun initView() {
 
         emitInbox()
+
+        (activity as MainActivity?)!!.setSendData(object : MainActivity.SearchInterface {
+            override fun searchData(searchTxt: String, type: String) {
+                if (type.equals("mail")) {
+                    filterList(searchTxt)
+                }
+            }
+
+        })
 
     }
 
@@ -153,16 +163,16 @@ class InboxFragment : BaseFragment(R.layout.fragment_inbox) {
             val templist: ArrayList<DataMailList> = ArrayList()
 
             for (items in list) {
-                val coinsy = items.datetime.toLowerCase()
+                val coinsy = items.from.toLowerCase()+items.subject.toLowerCase()
                 if (coinsy.contains(searchtext)) {
                     templist.add(items)
                 }
 
             }
 
-//            chatAdapter?.setChat(templist)
+            inboxAdapter!!.setMail(templist)
         } else {
-//            chatAdapter?.setChat(list)
+            inboxAdapter!!.setMail(list.reversed())
         }
     }
 

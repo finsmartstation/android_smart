@@ -43,8 +43,12 @@ class UploadSignatureActivity : BaseActivity(), ImageSelectorDialog.Action {
             type = intent.getIntExtra("type", 0)
             if (type.equals(1)) {
                 binding.ilHeader.txtHeader.text = resources.getString(R.string.signature)
-            } else {
+            } else if (type.equals(2)) {
                 binding.ilHeader.txtHeader.text = resources.getString(R.string.stamp)
+            }else if (type.equals(3)) {
+                binding.ilHeader.txtHeader.text = resources.getString(R.string.letter_header)
+            }else  {
+                binding.ilHeader.txtHeader.text = resources.getString(R.string.letter_footer)
             }
         }
     }
@@ -87,7 +91,7 @@ class UploadSignatureActivity : BaseActivity(), ImageSelectorDialog.Action {
                             requestBody)
 
                         uploadSignature(user_id, accessToken, name, signature)
-                    } else {
+                    } else if (type.equals(2)){
                         val user_id: RequestBody =
                             UtilsDefault.getSharedPreferenceString(
                                 Constants.USER_ID)!!
@@ -105,11 +109,98 @@ class UploadSignatureActivity : BaseActivity(), ImageSelectorDialog.Action {
                             requestBody)
 
                         uploadStamp(user_id, accessToken, name, stamp)
+                    } else if (type.equals(3)){
+                        val user_id: RequestBody =
+                            UtilsDefault.getSharedPreferenceString(
+                                Constants.USER_ID)!!
+                                .toRequestBody("text/plain".toMediaTypeOrNull())
+                        val accessToken: RequestBody =
+                            UtilsDefault.getSharedPreferenceString(Constants.ACCESS_TOKEN)!!
+                                .toRequestBody("text/plain".toMediaTypeOrNull())
+                        val name: RequestBody = name
+                            .toRequestBody("text/plain".toMediaTypeOrNull())
+                        val file = File(pics)
+                        val requestBody =
+                            file.asRequestBody("multipart/form-data".toMediaTypeOrNull())
+                        val header = MultipartBody.Part.createFormData("header",
+                            file.name,
+                            requestBody)
+
+                        uploadHeader(user_id, accessToken, name, header)
+                    }
+                    else {
+                        val user_id: RequestBody =
+                            UtilsDefault.getSharedPreferenceString(
+                                Constants.USER_ID)!!
+                                .toRequestBody("text/plain".toMediaTypeOrNull())
+                        val accessToken: RequestBody =
+                            UtilsDefault.getSharedPreferenceString(Constants.ACCESS_TOKEN)!!
+                                .toRequestBody("text/plain".toMediaTypeOrNull())
+                        val name: RequestBody = name
+                            .toRequestBody("text/plain".toMediaTypeOrNull())
+                        val file = File(pics)
+                        val requestBody =
+                            file.asRequestBody("multipart/form-data".toMediaTypeOrNull())
+                        val footer = MultipartBody.Part.createFormData("footer",
+                            file.name,
+                            requestBody)
+
+                        uploadFooter(user_id, accessToken, name, footer)
                     }
                 }
             }
         }
 
+    }
+
+    private fun uploadFooter(userId: RequestBody, accessToken: RequestBody, name: RequestBody, footer: MultipartBody.Part) {
+        apiViewModel.uploadLetterFooter(userId, accessToken, name, footer).observe(this, Observer {
+            it.let {
+                when (it.status) {
+                    Status.LOADING -> {
+                        showProgress()
+                    }
+                    Status.SUCCESS -> {
+                        dismissProgress()
+                        if (it.data!!.status) {
+                            finish()
+                            toast(it.data.message)
+                        } else {
+                            toast(it.data.message)
+                        }
+                    }
+                    Status.ERROR -> {
+                        dismissProgress()
+                        toast(it.message!!)
+                    }
+                }
+            }
+        })
+    }
+
+    private fun uploadHeader(userId: RequestBody, accessToken: RequestBody, name: RequestBody, header: MultipartBody.Part) {
+        apiViewModel.uploadLetterHeader(userId, accessToken, name, header).observe(this, Observer {
+            it.let {
+                when (it.status) {
+                    Status.LOADING -> {
+                        showProgress()
+                    }
+                    Status.SUCCESS -> {
+                        dismissProgress()
+                        if (it.data!!.status) {
+                            finish()
+                            toast(it.data.message)
+                        } else {
+                            toast(it.data.message)
+                        }
+                    }
+                    Status.ERROR -> {
+                        dismissProgress()
+                        toast(it.message!!)
+                    }
+                }
+            }
+        })
     }
 
     private fun uploadStamp(

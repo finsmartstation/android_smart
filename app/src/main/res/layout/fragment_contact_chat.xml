@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white_bg"
     tools:context=".ui.fragment.ContactChatFragment">
 
     <ScrollView
@@ -63,20 +64,22 @@
 
     </ScrollView>
 
-    <com.application.smartstation.view.CustomTextViewNormal
+    <com.application.smartstation.view.CustomTextViewBold
         android:id="@+id/txtNoFound"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="@dimen/_60sdp"
+        android:layout_marginTop="@dimen/_16sdp"
         android:layout_marginEnd="16dp"
-        android:layout_marginBottom="@dimen/_60sdp"
+        android:layout_marginBottom="@dimen/_16sdp"
         android:gravity="center"
         android:text="@string/no_chat_found"
-        android:textColor="@color/black"
-        android:textSize="18sp"
+        android:textColor="@color/colorE"
+        android:textSize="30sp"
         android:visibility="gone">
 
-    </com.application.smartstation.view.CustomTextViewNormal>
+    </com.application.smartstation.view.CustomTextViewBold>
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

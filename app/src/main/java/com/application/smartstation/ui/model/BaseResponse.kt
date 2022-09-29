@@ -65,6 +65,7 @@ class BaseResponse(
     var message: String,
     var statuscode: String,
     var filepath: String,
+    var cloud_id: String,
 )
 
 class UpdateProfilePicResponse(
@@ -159,7 +160,7 @@ class DataUserList(
 )
 
 class GetChatDetailsListResponse(var status: Boolean, var message: String, var data: ChatListRes)
-class ChatListRes(var list: ArrayList<ChatDetailsRes>)
+class ChatListRes(var id:String,var list: ArrayList<ChatDetailsRes>)
 class ChatDetailsRes(
     var id: String,
     var date: String,
@@ -195,6 +196,7 @@ class GrpUserListRes(
     var message: String,
     var statuscode: String,
     var group_name: String,
+    var created_datetime: String,
     var group_profile: String,
     var number_of_members: String,
     var data: ArrayList<UserListGrp>,
@@ -205,6 +207,7 @@ class UserListGrp(
     var username: String,
     var type: String,
     var about: String,
+    var phone: String,
     var profile_pic: String,
 )
 

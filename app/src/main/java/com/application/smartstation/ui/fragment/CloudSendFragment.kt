@@ -62,7 +62,7 @@ class CloudSendFragment(var phn: String) : BaseFragment(R.layout.fragment_cloud_
     var hrs = "life_time"
     var timeFolder = ""
     var hrsFolder = "life_time"
-    var hrsArray = arrayOf("hourly", "days", "months", "year")
+    var hrsArray = arrayOf("Hour(s)", "Day(s)", "Month(s)", "Year(s)")
     val timeArray = IntArray(100) { (it + 1) }
     var path: MultipartBody.Part? = null
     var uris: Uri? = null
@@ -525,11 +525,33 @@ class CloudSendFragment(var phn: String) : BaseFragment(R.layout.fragment_cloud_
     override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
         (p0!!.getChildAt(0) as TextView).setTextColor(Color.BLACK)
         if (p0.id == R.id.spHrs) {
-            hrs = hrsArray[p2]
+            if(hrsArray[p2].equals("Hour(s)")){
+                hrs = "hourly"
+            }
+            if(hrsArray[p2].equals("Day(s)")){
+                hrs = "days"
+            }
+            if(hrsArray[p2].equals("Month(s)")){
+                hrs = "months"
+            }
+            if(hrsArray[p2].equals("Year(s)")){
+                hrs = "year"
+            }
         }
 
         if (p0.id == R.id.spHrsFolder) {
-            hrsFolder = hrsArray[p2]
+            if(hrsArray[p2].equals("Hour(s)")){
+                hrsFolder = "hourly"
+            }
+            if(hrsArray[p2].equals("Day(s)")){
+                hrsFolder = "days"
+            }
+            if(hrsArray[p2].equals("Month(s)")){
+                hrsFolder = "months"
+            }
+            if(hrsArray[p2].equals("Year(s)")){
+                hrsFolder = "year"
+            }
         }
 
         if (p0.id == R.id.spTime) {

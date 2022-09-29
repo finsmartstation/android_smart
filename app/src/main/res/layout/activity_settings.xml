@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
+    android:background="@color/white_bg"
     android:orientation="vertical"
     tools:context=".ui.activity.SettingsActivity">
 
@@ -13,6 +13,7 @@
         android:layout_height="match_parent"
         android:alpha="0.4"
         android:scaleType="centerCrop"
+        android:visibility="invisible"
         android:src="@drawable/ic_splash_bg_use" />
 
     <LinearLayout
@@ -55,7 +56,7 @@
                     android:layout_marginBottom="3dp"
                     android:layout_weight="1"
                     android:text="@string/profile"
-                    android:textColor="@color/black"
+                    android:textColor="@color/txt_color"
                     android:textSize="18sp">
 
                 </com.application.smartstation.view.CustomTextViewBold>
@@ -106,7 +107,7 @@
                     android:layout_marginBottom="3dp"
                     android:layout_weight="1"
                     android:text="@string/acc"
-                    android:textColor="@color/black"
+                    android:textColor="@color/txt_color"
                     android:textSize="18sp">
 
                 </com.application.smartstation.view.CustomTextViewBold>
@@ -158,7 +159,7 @@
                     android:layout_marginBottom="3dp"
                     android:layout_weight="1"
                     android:text="@string/notification"
-                    android:textColor="@color/black"
+                    android:textColor="@color/txt_color"
                     android:textSize="18sp">
 
                 </com.application.smartstation.view.CustomTextViewBold>
@@ -211,7 +212,7 @@
                     android:layout_marginBottom="3dp"
                     android:layout_weight="1"
                     android:text="@string/help"
-                    android:textColor="@color/black"
+                    android:textColor="@color/txt_color"
                     android:textSize="18sp">
 
                 </com.application.smartstation.view.CustomTextViewBold>

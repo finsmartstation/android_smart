@@ -78,6 +78,8 @@ class ChatFragment : BaseFragment(R.layout.fragment_chat) {
             getContactList()
         }
 
+
+
         emitRecentChat()
 
 //        binding.edtSearch.addTextChangedListener(object : TextWatcher {
@@ -197,10 +199,6 @@ class ChatFragment : BaseFragment(R.layout.fragment_chat) {
         chatAdapter!!.setChat(list)
     }
 
-    override fun onResume() {
-        super.onResume()
-        getChatList()
-    }
 
     private fun filterList(txt: String) {
         if (txt != "") {
@@ -300,6 +298,11 @@ class ChatFragment : BaseFragment(R.layout.fragment_chat) {
             }
 
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        getChatList()
     }
 
 

@@ -105,6 +105,7 @@
                         android:layout_marginEnd="16dp"
                         android:layout_marginBottom="16dp"
                         android:singleLine="true"
+                        android:visibility="invisible"
                         android:text="@string/edit"
                         android:textAlignment="center"
                         android:textColor="@color/white"
@@ -249,6 +250,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="6dp"
                     android:textAlignment="textStart"
+                    android:text="@string/grp_create_date"
                     android:textColor="@color/dec_chat_info"
                     android:textSize="18sp" />
 

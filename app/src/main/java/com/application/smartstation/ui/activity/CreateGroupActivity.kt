@@ -42,6 +42,7 @@ class CreateGroupActivity : BaseActivity() {
     var layoutManager: LinearLayoutManager? = null
     var user = ""
     var contactList: ArrayList<ContactListRes> = ArrayList()
+    var lists = ArrayList<DataUserList>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -84,9 +85,9 @@ class CreateGroupActivity : BaseActivity() {
                 binding.llSelectUser.visibility = View.GONE
             }
 
-            for (i in 0 until list.size) {
-                if (model.user_id.equals(list[i].user_id)) {
-                    list.set(i,
+            for (i in 0 until lists.size) {
+                if (model.user_id.equals(lists[i].user_id)) {
+                    lists.set(i,
                         DataUserList(model.user_id,
                             model.name,
                             model.profile_pic,
@@ -107,7 +108,7 @@ class CreateGroupActivity : BaseActivity() {
 
     private fun addGrp(model: DataUserList, pos: Int) {
         if (!model.statusSelected) {
-            list.set(pos,
+            lists.set(pos,
                 DataUserList(model.user_id,
                     model.name,
                     model.profile_pic,
@@ -131,13 +132,13 @@ class CreateGroupActivity : BaseActivity() {
                     break
                 }
             }
-            list.set(pos,
+            lists.set(pos,
                 DataUserList(model.user_id,
                     model.name,
                     model.profile_pic,
-                    model.about,
                     model.phone,
                     model.country,
+                    model.about,
                     false))
             user = user.replace("," + model.user_id, "")
             Log.d("TAG", "addGrp: " + user)
@@ -210,10 +211,11 @@ class CreateGroupActivity : BaseActivity() {
     }
 
     private fun setData(list: ArrayList<DataUserList>) {
+        lists.clear()
         for (a in contactList) {
             for (b in 0 until list.size) {
                 if (PhoneNumberUtils.compare(a.Phn, list[b].phone)) {
-                    list.add(DataUserList(list[b].user_id,
+                    lists.add(DataUserList(list[b].user_id,
                         a.name,
                         list[b].profile_pic,
                         list[b].phone,
@@ -222,7 +224,7 @@ class CreateGroupActivity : BaseActivity() {
                 }
             }
         }
-        contactAdapter!!.setChat(list)
+        contactAdapter!!.setChat(lists)
     }
 
     override fun onBackPressed() {

@@ -10,9 +10,11 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.application.smartstation.R
 import com.application.smartstation.databinding.FragmentLetterInboxBinding
 import com.application.smartstation.service.Status
+import com.application.smartstation.ui.activity.MainActivity
 import com.application.smartstation.ui.activity.ViewLetterActivity
 import com.application.smartstation.ui.adapter.ReceivedLetterAdapter
 import com.application.smartstation.ui.model.DataLetter
+import com.application.smartstation.ui.model.DataMailList
 import com.application.smartstation.ui.model.InputParams
 import com.application.smartstation.util.Constants
 import com.application.smartstation.util.UtilsDefault
@@ -61,6 +63,34 @@ class LetterInboxFragment : BaseFragment(R.layout.fragment_letter_inbox) {
             intent.putExtra("boxType", 1)
             intent.putExtra("id", model.id)
             requireActivity().startActivity(intent)
+        }
+
+        (activity as MainActivity?)!!.setSendData(object : MainActivity.SearchInterface {
+            override fun searchData(searchTxt: String, type: String) {
+                if (type.equals("letter")) {
+                    filterList(searchTxt)
+                }
+            }
+
+        })
+    }
+
+    private fun filterList(txt: String) {
+        if (txt != "") {
+            val searchtext = txt.toLowerCase()
+            val templist: ArrayList<DataLetter> = ArrayList()
+
+            for (items in list) {
+                val coinsy = items.from.toLowerCase()+items.subject.toLowerCase()
+                if (coinsy.contains(searchtext)) {
+                    templist.add(items)
+                }
+
+            }
+
+            receivedLetterAdapter!!.setReceivedLetter(templist)
+        } else {
+            receivedLetterAdapter!!.setReceivedLetter(list.reversed())
         }
     }
 

@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
+    android:background="@color/white_bg"
     android:orientation="vertical"
     tools:context=".ui.activity.NotificationActivity">
 
@@ -46,7 +46,7 @@
                 android:layout_marginEnd="16dp"
                 android:layout_weight="1"
                 android:text="@string/show_notification"
-                android:textColor="@color/black"
+                android:textColor="@color/txt_color"
                 android:textSize="18sp">
 
             </com.application.smartstation.view.CustomTextViewMedium>
@@ -78,7 +78,7 @@
                 android:layout_marginEnd="16dp"
                 android:layout_weight="1"
                 android:text="@string/sound"
-                android:textColor="@color/black"
+                android:textColor="@color/txt_color"
                 android:textSize="18sp">
 
             </com.application.smartstation.view.CustomTextViewMedium>
@@ -110,7 +110,7 @@
                 android:layout_marginEnd="16dp"
                 android:layout_weight="1"
                 android:text="@string/vibrate"
-                android:textColor="@color/black"
+                android:textColor="@color/txt_color"
                 android:textSize="18sp">
 
             </com.application.smartstation.view.CustomTextViewMedium>
@@ -147,7 +147,8 @@
                     android:layout_width="80dp"
                     android:layout_height="60dp"
                     android:layout_gravity="bottom"
-                    android:src="@drawable/login_logo_use" />
+                    android:src="@drawable/login_logo_use"
+                    app:tint="@color/logo_color" />
 
             </LinearLayout>
 

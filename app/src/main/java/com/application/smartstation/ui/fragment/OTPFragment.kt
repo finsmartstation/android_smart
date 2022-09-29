@@ -138,6 +138,7 @@ class OTPFragment : BaseFragment(R.layout.fragment_o_t_p) {
                         dismissProgress()
                         if (it.data!!.status) {
                             toast(it.data.message)
+                            otpData = it.data.otp.toString()
                             binding.otpView.setOTP(otpData!!)
                         } else {
                             toast(it.data.message)

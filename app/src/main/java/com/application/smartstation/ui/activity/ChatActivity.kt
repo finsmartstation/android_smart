@@ -606,9 +606,18 @@ class ChatActivity : BaseActivity(), ImageVideoSelectorDialog.Action {
         val messageSocketModel: GetChatDetailsListResponse = gson.fromJson(jsonObject.toString(),
             GetChatDetailsListResponse::class.java)
         if (messageSocketModel.status) {
-//            if (messageSocketModel)
-            if (!messageSocketModel.data.list.isNullOrEmpty()) {
-                setData(messageSocketModel.data.list, false)
+            if(!room.isNullOrEmpty()){
+            if (messageSocketModel.data.id.equals(room)) {
+                if (!messageSocketModel.data.list.isNullOrEmpty()) {
+                    setData(messageSocketModel.data.list, false)
+                }
+            }
+            }else{
+                if (messageSocketModel.data.id.equals(receiverId)) {
+                    if (!messageSocketModel.data.list.isNullOrEmpty()) {
+                        setData(messageSocketModel.data.list, false)
+                    }
+                }
             }
         } else {
             toast(messageSocketModel.message)

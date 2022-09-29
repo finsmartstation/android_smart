@@ -341,6 +341,52 @@ class ApiViewModel @Inject constructor(
 
     }
 
+    fun uploadLetterHeader(
+        user_id: RequestBody,
+        accessToken: RequestBody,
+        name: RequestBody,
+        header: MultipartBody.Part,
+    ) = liveData<Resource<BaseResponse>> {
+        if (UtilsDefault.isOnline()) {
+            repository.uploadLetterHeader(user_id, accessToken, name, header)
+                .onStart {
+                    emit(Resource.loading(data = null))
+                }
+                .catch {
+                    emit(Resource.error(data = null, msg = "Cannot reach server..try again"))
+                }
+                .collect {
+                    emit(Resource.success(it))
+                }
+        } else {
+            emit(Resource.error(data = null, msg = "No internet connection"))
+        }
+
+    }
+
+    fun uploadLetterFooter(
+        user_id: RequestBody,
+        accessToken: RequestBody,
+        name: RequestBody,
+        footer: MultipartBody.Part,
+    ) = liveData<Resource<BaseResponse>> {
+        if (UtilsDefault.isOnline()) {
+            repository.uploadLetterFooter(user_id, accessToken, name, footer)
+                .onStart {
+                    emit(Resource.loading(data = null))
+                }
+                .catch {
+                    emit(Resource.error(data = null, msg = "Cannot reach server..try again"))
+                }
+                .collect {
+                    emit(Resource.success(it))
+                }
+        } else {
+            emit(Resource.error(data = null, msg = "No internet connection"))
+        }
+
+    }
+
     fun stampUpload(
         user_id: RequestBody,
         accessToken: RequestBody,

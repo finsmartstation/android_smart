@@ -34,6 +34,14 @@ class AccountActivity : BaseActivity() {
             startActivity(Intent(this, SignatureActivity::class.java).putExtra("type", 1))
         }
 
+        binding.llLetterHeader.setOnClickListener {
+            startActivity(Intent(this, SignatureActivity::class.java).putExtra("type", 3))
+        }
+
+        binding.llLetterFooter.setOnClickListener {
+            startActivity(Intent(this, SignatureActivity::class.java).putExtra("type", 4))
+        }
+
         binding.llStamp.setOnClickListener {
             startActivity(Intent(this, SignatureActivity::class.java).putExtra("type", 2))
         }

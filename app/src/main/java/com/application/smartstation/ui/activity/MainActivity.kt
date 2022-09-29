@@ -1,7 +1,10 @@
 package com.application.smartstation.ui.activity
 
 import android.annotation.SuppressLint
+import android.app.ActivityManager
 import android.app.Dialog
+import android.content.ComponentCallbacks2
+import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
 import android.database.Cursor
@@ -54,7 +57,6 @@ class MainActivity : BaseActivity(), InboxFragment.OnUnreadMailCountListener,
     val binding: ActivityMainBinding by viewBinding()
     val apiViewModel: ApiViewModel by viewModels()
     var fragmentHelper: FragmentHelper? = null
-    var mBottomDialogLogout: Dialog? = null
     var rootref: DatabaseReference? = null
     var type = "chat"
     var searchInterface: SearchInterface? = null
@@ -65,8 +67,6 @@ class MainActivity : BaseActivity(), InboxFragment.OnUnreadMailCountListener,
     var listChat: ArrayList<DataChatList> = java.util.ArrayList()
     var chatAdapter: ChatAdapter? = null
     val emitters: SocketService.Emitters = SocketService.Emitters(this)
-
-    val REQUEST_READ_CONTACTS = 79
 
     interface SearchInterface {
         fun searchData(searchTxt: String, type: String)
@@ -262,7 +262,7 @@ class MainActivity : BaseActivity(), InboxFragment.OnUnreadMailCountListener,
             binding.imgNewMail.visibility = View.VISIBLE
             binding.imgPlus.visibility = View.INVISIBLE
             binding.llMail.visibility = View.VISIBLE
-            binding.imgBack.setImageResource(R.drawable.ic_mail_main_use)
+            binding.imgMail.setImageResource(R.drawable.ic_mail_main_use)
             type = "mail"
         }
 
@@ -282,7 +282,7 @@ class MainActivity : BaseActivity(), InboxFragment.OnUnreadMailCountListener,
             binding.imgNewMail.visibility = View.VISIBLE
             binding.imgPlus.visibility = View.INVISIBLE
             binding.llMail.visibility = View.VISIBLE
-            binding.imgBack.setImageResource(R.drawable.ic_letter_24)
+            binding.imgMail.setImageResource(R.drawable.ic_letter_24)
             type = "letter"
         }
 
@@ -291,6 +291,7 @@ class MainActivity : BaseActivity(), InboxFragment.OnUnreadMailCountListener,
             binding.imgSearch.visibility = View.GONE
             binding.imgCancel.visibility = View.VISIBLE
 
+            if (type.equals("chat")) {
             binding.llTab.visibility = View.GONE
             binding.mainFrameContainer.visibility = View.GONE
             binding.rlBottom.visibility = View.GONE
@@ -298,8 +299,9 @@ class MainActivity : BaseActivity(), InboxFragment.OnUnreadMailCountListener,
             binding.imgMenu.visibility = View.GONE
             binding.llSearchView.visibility = View.VISIBLE
 
-            getUserDetails()
-            getChatList()
+                getUserDetails()
+                getChatList()
+            }
         }
 
         binding.imgBack.setOnClickListener {
@@ -383,8 +385,8 @@ class MainActivity : BaseActivity(), InboxFragment.OnUnreadMailCountListener,
         if (type.equals("chat")) {
             bind.txtNewGrp.visibility = View.VISIBLE
             bind.imgNewGrp.visibility = View.VISIBLE
-            bind.txtStarMsg.visibility = View.VISIBLE
-            bind.imgStarMsg.visibility = View.VISIBLE
+            bind.txtStarMsg.visibility = View.GONE
+            bind.imgStarMsg.visibility = View.GONE
             bind.txtSendMail.visibility = View.GONE
             bind.imgSent.visibility = View.GONE
         } else {
@@ -637,7 +639,6 @@ class MainActivity : BaseActivity(), InboxFragment.OnUnreadMailCountListener,
         }
     }
 
-    @SuppressLint("Range")
     private fun getContactList() {
         try {
             val cr = contentResolver

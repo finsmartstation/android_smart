@@ -5,7 +5,7 @@
     android:id="@+id/dlView"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
+    android:background="@color/white_bg"
     tools:context=".ui.activity.MainActivity">
 
     <RelativeLayout
@@ -94,7 +94,8 @@
                         android:layout_height="22dp"
                         android:layout_gravity="center_vertical"
                         android:layout_marginEnd="16dp"
-                        android:src="@drawable/ic_search_use" />
+                        android:src="@drawable/ic_search"
+                        app:tint="@color/color_green" />
 
                     <ImageView
                         android:id="@+id/imgCancel"
@@ -216,59 +217,6 @@
 
                 </RelativeLayout>
 
-                <RelativeLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginEnd="16dp"
-                    android:layout_marginBottom="8dp"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:visibility="gone">
-
-                    <LinearLayout
-                        android:id="@+id/llSettings"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_horizontal"
-                        android:background="@drawable/chat_edt_bg"
-                        android:backgroundTint="@color/black"
-                        android:orientation="horizontal"
-                        android:paddingStart="12dp"
-                        android:paddingTop="4dp"
-                        android:paddingEnd="12dp"
-                        android:paddingBottom="4dp"
-                        android:visibility="gone">
-
-                        <ImageView
-                            android:layout_width="25dp"
-                            android:layout_height="25dp"
-                            android:src="@drawable/ic_settings"
-                            app:tint="@color/white" />
-
-                        <com.application.smartstation.view.CustomTextViewNormal
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:layout_marginStart="8dp"
-                            android:text="@string/settings"
-                            android:textColor="@color/white"
-                            android:textSize="14sp" />
-
-                    </LinearLayout>
-
-                    <ImageView
-                        android:id="@+id/imgSettings"
-                        android:layout_width="25dp"
-                        android:layout_height="25dp"
-                        android:layout_centerInParent="true"
-                        android:layout_marginTop="4dp"
-                        android:layout_marginBottom="4dp"
-                        android:scaleType="fitXY"
-                        android:src="@drawable/ic_settings"
-                        app:tint="@color/white" />
-
-                </RelativeLayout>
 
             </LinearLayout>
 
@@ -431,17 +379,5 @@
         </LinearLayout>
 
     </RelativeLayout>
-
-    <com.google.android.material.navigation.NavigationView
-        android:id="@+id/nvMenu"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_gravity="start"
-        android:background="@color/white"
-        android:visibility="gone"
-        app:headerLayout="@layout/nav_header_main"
-        app:itemIconTint="@color/color_green"
-        app:itemTextColor="@color/black"
-        app:menu="@menu/nav_menu" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

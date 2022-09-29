@@ -307,6 +307,7 @@ class NewLetterActivity : BaseActivity(), TokenCompleteTextView.TokenListener<Pe
             LinearLayoutManager.VERTICAL, false)
 
         if (i.equals(1)) {
+            bind.txtHeader.text = resources.getString(R.string.signature)
             signatureAdapter = SignatureAdapter(this, 2)
             bind.rvSignStamp.adapter = signatureAdapter
             signatureAdapter!!.setSignature(signatureList)
@@ -331,6 +332,7 @@ class NewLetterActivity : BaseActivity(), TokenCompleteTextView.TokenListener<Pe
             }
 
         } else {
+            bind.txtHeader.text = resources.getString(R.string.stamp)
             stampAdapter = StampAdapter(this, 2)
             bind.rvSignStamp.adapter = stampAdapter
             stampAdapter!!.setStamp(stampList)

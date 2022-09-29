@@ -48,6 +48,7 @@ class SettingsActivity : BaseActivity() {
         super.onResume()
 
         binding.ilHeader.txtName.text = UtilsDefault.getSharedPreferenceString(Constants.NAME)
+        binding.ilHeader.txtAbout.text = UtilsDefault.getSharedPreferenceString(Constants.ABOUT)
 
         Glide.with(this).applyDefaultRequestOptions(
             RequestOptions()

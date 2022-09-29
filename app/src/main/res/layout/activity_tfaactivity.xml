@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
+    android:background="@color/white_bg"
     tools:context=".ui.activity.TFAActivity">
 
     <ImageView
@@ -43,7 +43,7 @@
             android:layout_weight="1"
             android:text="@string/on"
             android:textAllCaps="true"
-            android:textColor="@color/black"
+            android:textColor="@color/txt_color"
             android:textSize="18sp">
 
         </com.application.smartstation.view.CustomTextViewMedium>
@@ -98,7 +98,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="@dimen/_15sdp"
-        android:layout_marginTop="@dimen/_15sdp"
+        android:layout_marginTop="16dp"
         app:cardBackgroundColor="@color/white"
         app:cardCornerRadius="@dimen/_5sdp"
         app:cardElevation="@dimen/_5sdp"
@@ -117,6 +117,7 @@
                 android:hint="Two Factor Key"
                 android:inputType="text"
                 android:maxLines="1"
+                android:textColorHint="@color/grey"
                 android:padding="@dimen/_10sdp"
                 android:textColor="@color/black"
                 android:textSize="14sp">
@@ -144,7 +145,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="@dimen/_15sdp"
-        android:layout_marginTop="@dimen/_15sdp"
+        android:layout_marginTop="16dp"
         app:cardBackgroundColor="@color/white"
         app:cardCornerRadius="@dimen/_5sdp"
         app:cardElevation="@dimen/_5sdp"
@@ -162,6 +163,7 @@
                 android:background="@null"
                 android:hint="Enter 6 digit code"
                 android:inputType="number"
+                android:textColorHint="@color/grey"
                 android:maxLength="6"
                 android:maxLines="1"
                 android:padding="@dimen/_10sdp"
@@ -193,7 +195,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="30dp"
         android:layout_marginEnd="16dp"
-        android:layout_marginBottom="30dp"
+        android:layout_marginBottom="20dp"
         android:layout_weight="1"
         android:gravity="bottom"
         android:orientation="vertical"
@@ -228,7 +230,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginTop="@dimen/_30sdp"
+        android:layout_marginTop="@dimen/_20sdp"
         app:cardCornerRadius="30dp"
         app:cardElevation="8dp"
         app:layout_constraintEnd_toEndOf="parent"

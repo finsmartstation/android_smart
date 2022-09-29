@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
+    android:background="@color/white_bg"
     tools:context=".ui.activity.AccountActivity">
 
     <ImageView
@@ -43,8 +43,8 @@
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginBottom="16dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
                 android:src="@drawable/ic_privacy_icon" />
 
             <com.application.smartstation.view.CustomTextViewBold
@@ -55,7 +55,7 @@
                 android:layout_marginEnd="16dp"
                 android:layout_weight="1"
                 android:text="@string/privacy"
-                android:textColor="@color/black"
+                android:textColor="@color/txt_color"
                 android:textSize="18sp">
 
             </com.application.smartstation.view.CustomTextViewBold>
@@ -77,8 +77,8 @@
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginBottom="16dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
                 android:src="@drawable/ic_security_use" />
 
             <com.application.smartstation.view.CustomTextViewBold
@@ -89,7 +89,7 @@
                 android:layout_marginEnd="16dp"
                 android:layout_weight="1"
                 android:text="@string/security"
-                android:textColor="@color/black"
+                android:textColor="@color/txt_color"
                 android:textSize="18sp">
 
             </com.application.smartstation.view.CustomTextViewBold>
@@ -109,8 +109,8 @@
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginBottom="16dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
                 android:src="@drawable/ic_change_phone_number_use" />
 
             <com.application.smartstation.view.CustomTextViewBold
@@ -121,7 +121,73 @@
                 android:layout_marginEnd="16dp"
                 android:layout_weight="1"
                 android:text="@string/change_number"
-                android:textColor="@color/black"
+                android:textColor="@color/txt_color"
+                android:textSize="18sp">
+
+            </com.application.smartstation.view.CustomTextViewBold>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/llLetterHeader"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginEnd="16dp"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:padding="2dp"
+                android:src="@drawable/ic_letter_use" />
+
+            <com.application.smartstation.view.CustomTextViewBold
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_weight="1"
+                android:text="@string/letter_header"
+                android:textColor="@color/txt_color"
+                android:textSize="18sp">
+
+            </com.application.smartstation.view.CustomTextViewBold>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/llLetterFooter"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginEnd="16dp"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:padding="2dp"
+                android:src="@drawable/ic_letter_use" />
+
+            <com.application.smartstation.view.CustomTextViewBold
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_weight="1"
+                android:text="@string/letter_footer"
+                android:textColor="@color/txt_color"
                 android:textSize="18sp">
 
             </com.application.smartstation.view.CustomTextViewBold>
@@ -141,8 +207,9 @@
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginBottom="16dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:padding="2dp"
                 android:src="@drawable/ic_signature_icon_use" />
 
             <com.application.smartstation.view.CustomTextViewBold
@@ -153,7 +220,7 @@
                 android:layout_marginEnd="16dp"
                 android:layout_weight="1"
                 android:text="@string/upload_signature"
-                android:textColor="@color/black"
+                android:textColor="@color/txt_color"
                 android:textSize="18sp">
 
             </com.application.smartstation.view.CustomTextViewBold>
@@ -173,8 +240,9 @@
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginBottom="16dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:padding="2dp"
                 android:src="@drawable/ic_stamp_icon_use" />
 
 
@@ -186,7 +254,7 @@
                 android:layout_marginEnd="16dp"
                 android:layout_weight="1"
                 android:text="@string/stamp_upload"
-                android:textColor="@color/black"
+                android:textColor="@color/txt_color"
                 android:textSize="18sp">
 
             </com.application.smartstation.view.CustomTextViewBold>

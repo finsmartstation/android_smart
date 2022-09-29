@@ -145,6 +145,30 @@ class ApiRepository @Inject constructor(val apiService: ApiService) {
         }.flowOn(Dispatchers.IO)
     }
 
+    fun uploadLetterHeader(
+        user_id: RequestBody,
+        accessToken: RequestBody,
+        name: RequestBody,
+        header: MultipartBody.Part,
+    ): Flow<BaseResponse> {
+        return flow {
+            val response = apiService.uploadLetterHeader(user_id, accessToken, name, header)
+            emit(response)
+        }.flowOn(Dispatchers.IO)
+    }
+
+    fun uploadLetterFooter(
+        user_id: RequestBody,
+        accessToken: RequestBody,
+        name: RequestBody,
+        footer: MultipartBody.Part,
+    ): Flow<BaseResponse> {
+        return flow {
+            val response = apiService.uploadLetterFooter(user_id, accessToken, name, footer)
+            emit(response)
+        }.flowOn(Dispatchers.IO)
+    }
+
     fun stampUpload(
         user_id: RequestBody,
         accessToken: RequestBody,

@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
+    android:background="@color/white_bg"
     tools:context=".ui.activity.ForwardLetterActivity">
 
     <ImageView
@@ -99,7 +99,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="26dp"
                         android:text="@string/to"
-                        android:textColor="@color/black"
+                        android:textColor="@color/txt_color"
                         android:textSize="18sp">
 
                     </com.application.smartstation.view.CustomTextViewBold>
@@ -119,7 +119,7 @@
                         android:imeOptions="actionDone"
                         android:inputType="textMultiLine"
                         android:minHeight="50dp"
-                        android:textColor="@color/black"
+                        android:textColor="@color/txt_color"
                         android:textColorHint="@color/viewgrey"
                         android:textCursorDrawable="@drawable/cusor_bg"
                         android:textSize="18sp" />
@@ -294,7 +294,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="26dp"
                         android:text="@string/subject"
-                        android:textColor="@color/black"
+                        android:textColor="@color/txt_color"
                         android:textSize="18sp">
 
                     </com.application.smartstation.view.CustomTextViewBold>
@@ -311,7 +311,7 @@
                         android:imeOptions="actionNext"
                         android:inputType="textMultiLine"
                         android:minHeight="50dp"
-                        android:textColor="@color/black"
+                        android:textColor="@color/txt_color"
                         android:textColorHint="@color/viewgrey"
                         android:textCursorDrawable="@drawable/cusor_bg"
                         android:textSize="18sp" />
@@ -331,7 +331,7 @@
                     android:layout_marginTop="16dp"
                     android:layout_marginEnd="26dp"
                     android:text="@string/body"
-                    android:textColor="@color/black"
+                    android:textColor="@color/txt_color"
                     android:textSize="18sp">
 
                 </com.application.smartstation.view.CustomTextViewBold>
@@ -352,7 +352,7 @@
                     android:inputType="textMultiLine"
                     android:minHeight="50dp"
                     android:overScrollMode="always"
-                    android:textColor="@color/black"
+                    android:textColor="@color/txt_color"
                     android:textColorHint="@color/viewgrey"
                     android:textCursorDrawable="@drawable/cusor_bg"
                     android:textSize="18sp" />

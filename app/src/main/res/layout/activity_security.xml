@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
+    android:background="@color/white_bg"
     tools:context=".ui.activity.SecurityActivity">
 
     <ImageView
@@ -44,7 +44,7 @@
                 android:layout_marginEnd="16dp"
                 android:layout_weight="1"
                 android:text="@string/passcode"
-                android:textColor="@color/black"
+                android:textColor="@color/txt_color"
                 android:textSize="18sp">
 
             </com.application.smartstation.view.CustomTextViewMedium>
@@ -77,7 +77,7 @@
                 android:layout_marginEnd="16dp"
                 android:layout_weight="1"
                 android:text="@string/fingerprint"
-                android:textColor="@color/black"
+                android:textColor="@color/txt_color"
                 android:textSize="18sp">
 
             </com.application.smartstation.view.CustomTextViewMedium>
@@ -109,7 +109,7 @@
                 android:layout_marginEnd="16dp"
                 android:layout_weight="1"
                 android:text="@string/tfa"
-                android:textColor="@color/black"
+                android:textColor="@color/txt_color"
                 android:textSize="18sp">
 
             </com.application.smartstation.view.CustomTextViewMedium>

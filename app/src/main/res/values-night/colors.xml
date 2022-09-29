@@ -6,10 +6,10 @@
     <color name="teal_200">#FF03DAC5</color>
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
-    <color name="txt_color">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-    <color name="white_bg">#FFFFFFFF</color>
-    <color name="bg">#e5e5e5</color>
+    <color name="txt_color">#FFFFFFFF</color>
+    <color name="white_bg">#FF000000</color>
+    <color name="bg">#E5E5E5</color>
     <color name="app_blue_color">#14558d</color>
     <color name="light_grey">#f5f5f5</color>
     <color name="viewgrey">#d3d3d3</color>
@@ -25,7 +25,7 @@
     <color name="color_green">#00c412</color>
     <color name="color_green1">#8600C412</color>
     <color name="color_dark_green">#18937b</color>
-    <color name="color_gray">#424242</color>
+    <color name="color_gray">#BCBCBC</color>
     <color name="color_lite_gray">#f7f7f7</color>
     <color name="color_gray_1">#dbdbdb</color>
     <color name="color_tab_bg">#eeeeee</color>
@@ -34,17 +34,17 @@
     <color name="color_gray_txt">#424242</color>
     <color name="color_view">#f3f7f9</color>
     <color name="color_chat_bg">#eee7df</color>
-    <color name="color_chat_popup_gray">#999999</color>
-    <color name="color_settings_gray">#606060</color>
+    <color name="color_chat_popup_gray">#656565</color>
+    <color name="color_settings_gray">#A1A1A1</color>
     <color name="color_lost_gray">#101010</color>
     <color name="color_chat_time">#FDF9F9</color>
     <color name="colorE">#c4c4c4</color>
     <color name="replyBackground">#97F7F7F7</color>
-    <color name="mail_date_coloe">#525659</color>
+    <color name="mail_date_coloe">#CDCDCD</color>
     <color name="mail_unread_red">#FF0000</color>
     <color name="txt_chat_info">#879197</color>
     <color name="view_chat_info">#f7f8fa</color>
     <color name="dec_chat_info">#776463</color>
     <color name="dec_time_chat_info">#acb2b3</color>
-    <color name="logo_color">#c4c4c4</color>
+    <color name="logo_color">#EAEAEA</color>
 </resources>

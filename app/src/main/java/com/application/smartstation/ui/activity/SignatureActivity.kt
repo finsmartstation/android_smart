@@ -43,8 +43,12 @@ class SignatureActivity : BaseActivity() {
             type = intent.getIntExtra("type", 0)
             if (type.equals(1)) {
                 binding.ilHeader.txtHeader.text = resources.getString(R.string.signature)
-            } else {
+            } else if (type.equals(2)) {
                 binding.ilHeader.txtHeader.text = resources.getString(R.string.stamp)
+            }else if (type.equals(3)) {
+                binding.ilHeader.txtHeader.text = resources.getString(R.string.letter_header)
+            }else  {
+                binding.ilHeader.txtHeader.text = resources.getString(R.string.letter_footer)
             }
             binding.ilHeader.imgAudio.visibility = View.VISIBLE
         }
@@ -181,9 +185,21 @@ class SignatureActivity : BaseActivity() {
         super.onResume()
         if (type.equals(1)) {
             getSignature()
-        } else {
+        } else if (type.equals(2)){
             getStamp()
+        }else if (type.equals(3)){
+            getHeader()
+        }else {
+            getFooter()
         }
+
+    }
+
+    private fun getFooter() {
+
+    }
+
+    private fun getHeader() {
 
     }
 
