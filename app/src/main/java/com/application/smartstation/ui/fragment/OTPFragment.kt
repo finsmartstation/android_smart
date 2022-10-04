@@ -83,16 +83,16 @@ class OTPFragment : BaseFragment(R.layout.fragment_o_t_p) {
 
         binding.otpView.setOTP(otpData!!)
 
-        binding.otpView.otpListener = object : OTPListener {
-            override fun onInteractionListener() {
-
-            }
-
-            override fun onOTPComplete(otp: String) {
-                completeOTP(otp)
-            }
-
-        }
+//        binding.otpView.otpListener = object : OTPListener {
+//            override fun onInteractionListener() {
+//
+//            }
+//
+//            override fun onOTPComplete(otp: String) {
+//                completeOTP(otp)
+//            }
+//
+//        }
 
         val SpanString = SpannableString(
             binding.txtResend.text.toString()

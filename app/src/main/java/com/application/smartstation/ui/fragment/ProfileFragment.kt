@@ -61,7 +61,7 @@ class ProfileFragment : BaseFragment(R.layout.fragment_profile), ImageSelectorDi
             when {
                 TextUtils.isEmpty(name) -> toast(requireActivity().resources.getString(R.string.please_ceo))
                 name.length < 3 -> toast(requireActivity().resources.getString(R.string.please_name_min))
-                TextUtils.isEmpty(profilePic) -> toast(requireActivity().resources.getString(R.string.please_upload_profile))
+//                TextUtils.isEmpty(profilePic) -> toast(requireActivity().resources.getString(R.string.please_upload_profile))
 
                 else -> {
                     if (!profilePic.isNullOrEmpty()) {

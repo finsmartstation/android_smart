@@ -1,6 +1,7 @@
 package com.application.smartstation.app
 
 
+import android.content.Context
 import androidx.multidex.MultiDex
 import androidx.multidex.MultiDexApplication
 import com.vanniktech.emoji.EmojiManager
@@ -13,6 +14,11 @@ class App : MultiDexApplication() {
     companion object {
         lateinit var instance: App
             private set
+
+        @JvmStatic
+        fun context(): Context {
+            return instance!!.applicationContext
+        }
     }
 
     override fun onCreate() {
@@ -21,5 +27,7 @@ class App : MultiDexApplication() {
         MultiDex.install(this)
         EmojiManager.install(IosEmojiProvider())
     }
+
+
 
 }

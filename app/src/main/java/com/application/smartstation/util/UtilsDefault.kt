@@ -7,6 +7,7 @@ import android.content.*
 import android.content.res.Configuration
 import android.database.Cursor
 import android.graphics.BitmapFactory
+import android.media.MediaMetadataRetriever
 import android.media.RingtoneManager
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
@@ -39,6 +40,7 @@ import java.time.OffsetDateTime
 import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
 import java.util.*
+import java.util.concurrent.TimeUnit
 import java.util.regex.Matcher
 import java.util.regex.Pattern
 import javax.crypto.Cipher
@@ -691,7 +693,7 @@ object UtilsDefault {
 
     fun todayDate(date: String?): String? {
         val readFormat: DateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
-        val writeFormat: DateFormat = SimpleDateFormat("HH:mm aa")
+        val writeFormat: DateFormat = SimpleDateFormat("hh:mm aa")
         var dateVal: Date? = null
         try {
             dateVal = readFormat.parse(date)
@@ -888,7 +890,7 @@ object UtilsDefault {
     fun downloadFile(context: Context, url: String, value: String, mailCallback: MailCallback) {
         val file =
             File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM),
-                "com.smartstation" + "/Smart Station/Media/Smart Station Download/+$value")
+                "com.smartstation" + "/Smart Station/Media/Smart Station Download/$value/")
         if (!file.exists()) {
             file.mkdirs()
         }
@@ -897,7 +899,7 @@ object UtilsDefault {
         val mgr = context.getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
         val downloadUri: Uri = Uri.parse(url)
         val file1 =
-            File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).absolutePath + "/com.smartstation" + "/Smart Station/Media/Smart Station Download/+$value" + downloadUri.lastPathSegment)
+            File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).absolutePath + "/com.smartstation" + "/Smart Station/Media/Smart Station Download/$value/" + downloadUri.lastPathSegment)
 
         if (file1.isFile) {
             return mailCallback.success(file1.absolutePath, true)
@@ -951,6 +953,53 @@ object UtilsDefault {
         context.registerReceiver(receiver, IntentFilter(
             DownloadManager.ACTION_DOWNLOAD_COMPLETE))
 
+    }
+
+    fun milliSecondsToTimer(milliseconds: Long): String? {
+        return String.format(Locale.US, "%02d:%02d",
+            TimeUnit.MILLISECONDS.toMinutes(milliseconds),
+            TimeUnit.MILLISECONDS.toSeconds(milliseconds) -
+                    TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(milliseconds))
+        )
+    }
+
+    fun getDuration(file: String): String? {
+        val mediaMetadataRetriever = MediaMetadataRetriever()
+        mediaMetadataRetriever.setDataSource(file)
+        val durationStr =
+            mediaMetadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION)
+        return formateMilliSeccond(durationStr!!.toLong())
+    }
+
+    fun formateMilliSeccond(milliseconds: Long): String? {
+        var finalTimerString = ""
+        var secondsString = ""
+
+        // Convert total duration into time
+        val hours = (milliseconds / (1000 * 60 * 60)).toInt()
+        val minutes = (milliseconds % (1000 * 60 * 60)).toInt() / (1000 * 60)
+        val seconds = (milliseconds % (1000 * 60 * 60) % (1000 * 60) / 1000).toInt()
+
+        // Add hours if there
+        if (hours > 0) {
+            finalTimerString = "$hours:"
+        }
+
+        // Prepending 0 to seconds if it is one digit
+        secondsString = if (seconds < 10) {
+            "0$seconds"
+        } else {
+            "" + seconds
+        }
+        finalTimerString = "$finalTimerString$minutes:$secondsString"
+
+        //      return  String.format("%02d Min, %02d Sec",
+        //                TimeUnit.MILLISECONDS.toMinutes(milliseconds),
+        //                TimeUnit.MILLISECONDS.toSeconds(milliseconds) -
+        //                        TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(milliseconds)));
+
+        // return timer string
+        return finalTimerString
     }
 
 }

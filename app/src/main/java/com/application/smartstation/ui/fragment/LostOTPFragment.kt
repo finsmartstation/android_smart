@@ -48,7 +48,7 @@ class LostOTPFragment : BaseFragment(R.layout.fragment_lost_o_t_p) {
             mail = it.getString(Constants.MAIL_ID)
         }
 
-        binding.otpView.setOTP(otpData!!)
+//        binding.otpView.setOTP(otpData!!)
 
         binding.otpView.otpListener = object : OTPListener {
             override fun onInteractionListener() {
@@ -142,13 +142,19 @@ class LostOTPFragment : BaseFragment(R.layout.fragment_lost_o_t_p) {
         binding.ilHeader.imgBack.setOnClickListener {
             (activity as LoginActivity).fragmentHelper?.push(LostMailFragment())
         }
+
+        binding.llSubmit.setOnClickListener {
+            if (binding.otpView.otp!!.length.equals(6)) {
+                val inputParams = InputParams()
+                inputParams.otp = otpData
+                verifyOTP(inputParams)
+            }
+        }
     }
 
     private fun completeOTP(otp: String) {
         UtilsDefault.hideKeyboardForFocusedView(requireActivity())
-        val inputParams = InputParams()
-        inputParams.otp = otp
-        verifyOTP(inputParams)
+        otpData = otp
     }
 
     private fun verifyOTP(inputParams: InputParams) {

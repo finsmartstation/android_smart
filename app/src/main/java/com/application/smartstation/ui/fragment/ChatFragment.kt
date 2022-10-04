@@ -110,36 +110,15 @@ class ChatFragment : BaseFragment(R.layout.fragment_chat) {
     @SuppressLint("Range")
     private fun getContactList() {
         try {
-            val cr = requireActivity().contentResolver
-            val cur: Cursor? = cr.query(ContactsContract.Contacts.CONTENT_URI,
-                null, null, null, null)
-            if ((if (cur != null) cur.count else 0) > 0) {
-                while (cur != null && cur.moveToNext()) {
-                    val id: String = cur.getString(
-                        cur.getColumnIndex(ContactsContract.Contacts._ID))
-                    val name: String = cur.getString(cur.getColumnIndex(
-                        ContactsContract.Contacts.DISPLAY_NAME))
-                    if (cur.getInt(cur.getColumnIndex(
-                            ContactsContract.Contacts.HAS_PHONE_NUMBER)) > 0
-                    ) {
-                        val pCur: Cursor? = cr.query(
-                            ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
-                            null,
-                            ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = ?",
-                            arrayOf(id),
-                            null)
-                        while (pCur!!.moveToNext()) {
-                            val phoneNo: String = pCur.getString(pCur.getColumnIndex(
-                                ContactsContract.CommonDataKinds.Phone.NUMBER))
-                            contactList.add(ContactListRes(name, phoneNo))
-                        }
-                        pCur.close()
-                    }
-                }
+            val phones = requireActivity().contentResolver.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, null, null, ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME + " ASC")
+            while (phones!!.moveToNext()) {
+                val name = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME))
+                val phoneNumber = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER))
+
+                contactList.add(ContactListRes(name,phoneNumber))
+                Log.d("name>>", name + "  " + phoneNumber)
             }
-            if (cur != null) {
-                cur.close()
-            }
+            phones.close()
         } catch (e: Exception) {
             Log.d("TAG", "getContactList: " + e)
         }
@@ -147,6 +126,7 @@ class ChatFragment : BaseFragment(R.layout.fragment_chat) {
     }
 
     private fun getChatList() {
+        try{
         val inputParams = InputParams()
         inputParams.user_id = UtilsDefault.getSharedPreferenceString(Constants.USER_ID)
         inputParams.accessToken = UtilsDefault.getSharedPreferenceString(Constants.ACCESS_TOKEN)
@@ -161,6 +141,7 @@ class ChatFragment : BaseFragment(R.layout.fragment_chat) {
                         dismissProgress()
                         if (it.data!!.status) {
                             list = it.data.data
+                            try {
                             if (list.isNotEmpty()) {
                                 binding.rvChat.visibility = View.VISIBLE
                                 binding.txtNoFound.visibility = View.GONE
@@ -168,6 +149,10 @@ class ChatFragment : BaseFragment(R.layout.fragment_chat) {
                             } else {
                                 binding.rvChat.visibility = View.GONE
                                 binding.txtNoFound.visibility = View.VISIBLE
+
+                            }
+                            } catch (e:Exception){
+                                Log.d("TAG", "getChatList: "+e)
                             }
                         } else {
                             toast(it.data.message)
@@ -180,22 +165,25 @@ class ChatFragment : BaseFragment(R.layout.fragment_chat) {
                 }
             }
         })
+        }catch (e:Exception){
+            Log.d("TAG", "getChatList: "+e)
+        }
     }
 
     private fun setData(list: ArrayList<DataChatList>) {
-        for (a in contactList) {
-            for (b in 0 until list.size) {
-                if (PhoneNumberUtils.compare(a.Phn, list[b].phone)) {
-                    list.set(b, DataChatList(list[b].id,
-                        list[b].date,
-                        list[b].message,
-                        list[b].phone,
-                        list[b].message_type,
-                        list[b].unread_message,
-                        list[b].userid, a.name, list[b].profile, list[b].room, list[b].chat_type))
-                }
-            }
-        }
+//        for (a in contactList) {
+//            for (b in 0 until list.size) {
+//                if (PhoneNumberUtils.compare(a.Phn, list[b].phone)) {
+//                    list.set(b, DataChatList(list[b].id,
+//                        list[b].date,
+//                        list[b].message,
+//                        list[b].phone,
+//                        list[b].message_type,
+//                        list[b].unread_message,
+//                        list[b].userid, a.name, list[b].profile, list[b].room, list[b].chat_type))
+//                }
+//            }
+//        }
         chatAdapter!!.setChat(list)
     }
 

@@ -56,6 +56,22 @@ class PermissionUtils {
             }
         }
 
+        fun externalStoragePermission(activity: BaseActivity, action: () -> Unit) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                activity.requestPermission(
+                    Manifest.permission.MANAGE_EXTERNAL_STORAGE,
+                   ) {
+                    if (it) {
+                        action()
+                    } else {
+                        activity.toast("Need Camera and Storage Permission!")
+                    }
+                }
+            } else {
+                action()
+            }
+        }
+
         fun locationPermission(activity: BaseActivity, action: () -> Unit) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 activity.requestPermission(

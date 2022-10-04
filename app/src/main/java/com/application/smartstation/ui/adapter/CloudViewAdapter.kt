@@ -41,6 +41,16 @@ class CloudViewAdapter(val context: Context) : RecyclerView.Adapter<CloudViewAda
                 binding.llView.visibility = View.VISIBLE
                 binding.clView.visibility = View.GONE
                 binding.txtFolderName.text = model.name
+
+                binding.txtFolderDate.text = UtilsDefault.dateConvert(model.created_datetime)
+
+                if (model.view_type.equals("life_time")){
+                    binding.txtFolderDateExp.visibility = View.GONE
+                }else{
+                    binding.txtFolderDateExp.visibility = View.VISIBLE
+                    binding.txtFolderDateExp.text = "Exp : "+UtilsDefault.dateConvert(model.end_datetime)+" "+UtilsDefault.todayDate(model.end_datetime)
+                }
+
             } else {
                 val fileName = FileUtils.getFileNameFromPath(model.file_path).replace("/", "")
                 var type = ""
@@ -51,6 +61,16 @@ class CloudViewAdapter(val context: Context) : RecyclerView.Adapter<CloudViewAda
                 } else {
                     type = ""
                 }
+
+                if (model.view_type.equals("life_time")){
+                    binding.txtDateExp.visibility = View.GONE
+                }else{
+                    binding.txtDateExp.visibility = View.VISIBLE
+                    binding.txtDateExp.text = "Exp : "+UtilsDefault.dateConvert(model.end_datetime)+" "+UtilsDefault.todayDate(model.end_datetime)
+                }
+
+                binding.txtDate.text = UtilsDefault.dateConvert(model.created_datetime)
+
                 binding.llView.visibility = View.GONE
                 binding.clView.visibility = View.VISIBLE
                 if (type.equals("img")) {

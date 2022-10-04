@@ -97,7 +97,7 @@ class CloudFolderActivity : BaseActivity(), AdapterView.OnItemSelectedListener {
             binding.ilHeader.txtHeader.text = name
         }
 
-        binding.rvCloudView.layoutManager = GridLayoutManager(this, 3)
+        binding.rvCloudView.layoutManager = GridLayoutManager(this, 2)
         cloudViewAdapter = CloudViewAdapter(this)
         binding.rvCloudView.adapter = cloudViewAdapter
 
@@ -197,14 +197,16 @@ class CloudFolderActivity : BaseActivity(), AdapterView.OnItemSelectedListener {
 
             bind.btnFile.setOnClickListener {
                 UtilsDefault.hideKeyboardForFocusedView(this)
-                val paths = FileUtils.getPath(this, uris)
-                var type = ""
-                if (UtilsDefault.isImageFile(paths)) {
-                    type = "image"
-                }
-                if (UtilsDefault.isPdfFile(paths)) {
-                    type = "pdf"
-                }
+                if (uris != null) {
+                    val paths = FileUtils.getPath(this, uris)
+                    var type = ""
+                    if (paths != null) {
+                        if (UtilsDefault.isImageFile(paths)) {
+                            type = "image"
+                        }
+                        if (UtilsDefault.isPdfFile(paths)) {
+                            type = "pdf"
+                        }
 
                 when {
                     TextUtils.isEmpty(paths) -> toast(resources.getString(R.string.please_upload))
@@ -246,6 +248,12 @@ class CloudFolderActivity : BaseActivity(), AdapterView.OnItemSelectedListener {
                             file)
                         dialogFile.dismiss()
                     }
+                }
+                } else {
+                        toast(resources.getString(R.string.please_upload))
+                    }
+                }else {
+                    toast(resources.getString(R.string.please_upload))
                 }
             }
 
@@ -296,6 +304,9 @@ class CloudFolderActivity : BaseActivity(), AdapterView.OnItemSelectedListener {
                     Status.SUCCESS -> {
                         dismissProgress()
                         if (it.data!!.status) {
+                            uris = Uri.parse("")
+                            this.hrs = ""
+                            this.time = ""
                             toast(it.data.message)
                             getCloudFiles()
                         } else {
@@ -441,7 +452,7 @@ class CloudFolderActivity : BaseActivity(), AdapterView.OnItemSelectedListener {
     }
 
     private fun setData(list: ArrayList<CloudDetailListRes>) {
-        cloudViewAdapter!!.setCloud(list)
+        cloudViewAdapter!!.setCloud(list.reversed())
     }
 
 }

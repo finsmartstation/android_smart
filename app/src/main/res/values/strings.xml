@@ -1030,6 +1030,7 @@
     <string name="is_this_ok_or_would_you_like">Is this OK, or would you like to edit the number?</string>
     <string name="ok">OK</string>
     <string name="edit">EDIT</string>
+    <string name="edit1">Edit</string>
     <string name="verify_your_num">Verifying your number</string>
     <string name="enter_digits">Enter 6-digits code</string>
     <string name="edit_profile">Edit Profile</string>
@@ -1070,7 +1071,7 @@
     <string name="nxt">Next</string>
     <string name="logout">Logout</string>
     <string name="acc">Account</string>
-    <string name="notification">Notification</string>
+    <string name="notification">Notifications</string>
     <string name="cms">CMS</string>
     <string name="show_notification">Show Notification</string>
     <string name="on">On</string>
@@ -1087,7 +1088,7 @@
     <string name="star_msg">Starred message</string>
     <string name="payment">Payment</string>
     <string name="acc_name">Privacy, Security, Change number</string>
-    <string name="notify_name">Notification ON / OFF</string>
+    <string name="notify_name">Notifications ON / OFF</string>
     <string name="help">Help</string>
     <string name="help_name">Help centre, contactus, privacy policy</string>
     <string name="yes">Yes</string>
@@ -1166,7 +1167,7 @@
     <string name="pay">Pay</string>
     <string name="folder">Folder</string>
     <string name="message">Message</string>
-    <string name="default_notification_channel_id">SMART_STATION_CHANNEL_ID</string>
+    <string name="notification_channel_id">SMART_STATION_CHANNEL_ID</string>
     <string name="typing">typing ...</string>
     <string name="create_grp">New Group</string>
     <string name="add_participants">Add Participants</string>
@@ -1232,5 +1233,13 @@
     <string name="addressed_to">Addressed To</string>
     <string name="add_footer">Add Footer</string>
     <string name="grp_create_date">Group Create Date</string>
+    <string name="no_header">No Header</string>
+    <string name="no_footer">No Footer</string>
+    <string name="please_enter_addressed_to">Please enter Addressed To</string>
+    <string name="voice_message_is_short_toast"><![CDATA[<string name=\"voice_message_is_short_toast\">Voice Message is Too Short</string>]]></string>
+    <string name="folder_name_internal">com.smartstation</string>
+    <string name="edit_grp">Edit Group</string>
+    <string name="done">Done</string>
+    <string name="enter_grp_name">Enter group name</string>
 
 </resources>

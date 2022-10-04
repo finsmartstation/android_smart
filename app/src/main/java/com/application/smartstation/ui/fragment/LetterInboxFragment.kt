@@ -141,7 +141,7 @@ class LetterInboxFragment : BaseFragment(R.layout.fragment_letter_inbox) {
     }
 
     private fun setData(list: ArrayList<DataLetter>) {
-        receivedLetterAdapter!!.setReceivedLetter(list.reversed())
+        receivedLetterAdapter!!.setReceivedLetter(list)
     }
 
     fun unreadLetter(count: String) {

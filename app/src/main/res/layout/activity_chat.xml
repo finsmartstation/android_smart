@@ -26,14 +26,22 @@
             layout="@layout/chat_header_layout" />
 
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <LinearLayout
             android:id="@+id/clChat"
             android:layout_width="match_parent"
             android:layout_height="0dp"
+            android:orientation="vertical"
             android:layout_marginBottom="4dp"
             android:layout_weight="1">
 
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                >
+
             <ImageView
+                android:id="@+id/imageView6"
                 android:layout_width="40dp"
                 android:layout_height="30dp"
                 android:layout_marginStart="16dp"
@@ -48,40 +56,53 @@
                 android:id="@+id/rvChatRoom"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:nestedScrollingEnabled="false"
-                app:layout_constraintBottom_toTopOf="@+id/typeindicator"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
             <LinearLayout
-                android:id="@+id/typeindicator"
-                android:layout_width="wrap_content"
+                android:id="@+id/linearLayout6"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
                 android:orientation="horizontal"
-                android:visibility="gone"
+                android:gravity="center"
+                app:layout_constraintTop_toBottomOf="@+id/rvChatRoom"
                 app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent">
 
-                <ImageView
-                    android:layout_width="55dp"
-                    android:layout_height="50dp"
-                    android:background="@drawable/ic_type_indicator"
-                    android:visibility="visible" />
+                <com.devlomi.record_view.RecordView
+                    android:id="@+id/recordView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_toLeftOf="@id/imgRec"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:visibility="invisible"
+                    app:counter_time_color="#ff0000"
+                    app:slide_to_cancel_arrow="@drawable/recv_ic_arrow"
+                    app:slide_to_cancel_arrow_color="#000000"
+                    app:slide_to_cancel_bounds="8dp"
+                    app:slide_to_cancel_margin_right="10dp"
+                    app:slide_to_cancel_text="Slide To Cancel" />
+
+                <com.devlomi.record_view.RecordButton
+                    android:id="@+id/imgRec"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:scaleType="centerInside"
+                    android:visibility="visible"
+                    app:mic_icon="@drawable/ic_microphone_rec_use" />
+
             </LinearLayout>
 
-            <ImageView
-                android:id="@+id/imgRec"
-                android:layout_width="40dp"
-                android:layout_height="50dp"
-                android:layout_marginEnd="6dp"
-                android:src="@drawable/ic_microphone_rec_use"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent" />
-
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
+        </LinearLayout>
 
         <LinearLayout
             android:id="@+id/llMsg"
@@ -163,6 +184,7 @@
 
 
             <LinearLayout
+                android:id="@+id/llTying"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"

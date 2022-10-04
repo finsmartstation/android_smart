@@ -64,5 +64,11 @@ object ApiUrl {
     const val GET_FILE_CLOUD = API + "get_subcloud_subfolders"
     const val LETTER_HEADER_UPLOAD = API + "header_upload"
     const val LETTER_FOOTER_UPLOAD = API + "footer_upload"
+    const val GET_LETTER_HEADER = API + "getheader"
+    const val GET_LETTER_FOOTER = API + "getfooter"
+    const val SET_LETTER_HEADER = API + "set_default_header"
+    const val SET_LETTER_FOOTER = API + "set_default_footer"
+    const val CHANGE_GRP_PROFILE = API + "change_group_profile_pic"
+    const val CHANGE_GRP_DETAILS = API + "update_group_profile_details"
 
 }

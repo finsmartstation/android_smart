@@ -1,5 +1,6 @@
 package com.application.smartstation.ui.activity
 
+import android.Manifest
 import android.annotation.SuppressLint
 import android.app.ActivityManager
 import android.app.Dialog
@@ -7,11 +8,15 @@ import android.content.ComponentCallbacks2
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.database.Cursor
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.provider.ContactsContract
+import android.provider.Settings
 import android.telephony.PhoneNumberUtils
 import android.text.Editable
 import android.text.TextWatcher
@@ -20,6 +25,7 @@ import android.view.*
 import android.widget.LinearLayout
 import android.widget.PopupWindow
 import androidx.activity.viewModels
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.application.smartstation.R
@@ -67,6 +73,7 @@ class MainActivity : BaseActivity(), InboxFragment.OnUnreadMailCountListener,
     var listChat: ArrayList<DataChatList> = java.util.ArrayList()
     var chatAdapter: ChatAdapter? = null
     val emitters: SocketService.Emitters = SocketService.Emitters(this)
+    var CAMERA_MIC_PERMISSION_REQUEST_CODE = 791
 
     interface SearchInterface {
         fun searchData(searchTxt: String, type: String)
@@ -95,6 +102,10 @@ class MainActivity : BaseActivity(), InboxFragment.OnUnreadMailCountListener,
 
         phnPermission {
             getContactList()
+        }
+
+        if (!checkPermissionForCameraAndMicrophone()) {
+            requestPermissionForCameraAndMicrophone()
         }
 
         binding.rvSearch.layoutManager = LinearLayoutManager(this,
@@ -608,7 +619,7 @@ class MainActivity : BaseActivity(), InboxFragment.OnUnreadMailCountListener,
         try {
             jsonObject.put("s_id", UtilsDefault.getSharedPreferenceString(Constants.USER_ID))
             Log.d("TAG", "offline: " + jsonObject)
-            emitters.offline(jsonObject)
+//            emitters.offline(jsonObject)
         } catch (e: java.lang.Exception) {
             e.printStackTrace()
         }
@@ -639,40 +650,51 @@ class MainActivity : BaseActivity(), InboxFragment.OnUnreadMailCountListener,
         }
     }
 
+    @SuppressLint("Range")
     private fun getContactList() {
         try {
-            val cr = contentResolver
-            val cur: Cursor? = cr.query(ContactsContract.Contacts.CONTENT_URI,
-                null, null, null, null)
-            if ((if (cur != null) cur.count else 0) > 0) {
-                while (cur != null && cur.moveToNext()) {
-                    val id: String = cur.getString(
-                        cur.getColumnIndex(ContactsContract.Contacts._ID))
-                    val name: String = cur.getString(cur.getColumnIndex(
-                        ContactsContract.Contacts.DISPLAY_NAME))
-                    if (cur.getInt(cur.getColumnIndex(
-                            ContactsContract.Contacts.HAS_PHONE_NUMBER)) > 0
-                    ) {
-                        val pCur: Cursor? = cr.query(
-                            ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
-                            null,
-                            ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = ?",
-                            arrayOf(id),
-                            null)
-                        while (pCur!!.moveToNext()) {
-                            val phoneNo: String = pCur.getString(pCur.getColumnIndex(
-                                ContactsContract.CommonDataKinds.Phone.NUMBER))
-                            contactList.add(ContactListRes(name, phoneNo))
-                        }
-                        pCur.close()
-                    }
-                }
+            val phones = contentResolver.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, null, null, ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME + " ASC")
+            while (phones!!.moveToNext()) {
+                val name = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME))
+                val phoneNumber = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER))
+
+                contactList!!.add(ContactListRes(name,phoneNumber))
+                Log.d("name>>", name + "  " + phoneNumber)
             }
-            if (cur != null) {
-                cur.close()
-            }
+            phones.close()
         } catch (e: Exception) {
             Log.d("TAG", "getContactList: " + e)
+        }
+    }
+
+    fun checkPermissionForCameraAndMicrophone(): Boolean {
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            val resultCamera =
+                ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
+            val resultMic =
+                ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO)
+            resultCamera == PackageManager.PERMISSION_GRANTED &&
+                    resultMic == PackageManager.PERMISSION_GRANTED
+        } else {
+            true
+        }
+    }
+
+    private fun requestPermissionForCameraAndMicrophone() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (shouldShowRequestPermissionRationale(Manifest.permission.CAMERA) ||
+                shouldShowRequestPermissionRationale(
+                    Manifest.permission.RECORD_AUDIO)
+            ) {
+                val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+                val uri = Uri.fromParts("package", packageName, null)
+                intent.data = uri
+                startActivity(intent)
+            } else {
+                requestPermissions(arrayOf(Manifest.permission.CAMERA,
+                    Manifest.permission.RECORD_AUDIO),
+                    CAMERA_MIC_PERMISSION_REQUEST_CODE)
+            }
         }
     }
 

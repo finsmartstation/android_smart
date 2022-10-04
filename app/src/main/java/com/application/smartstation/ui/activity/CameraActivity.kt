@@ -86,8 +86,7 @@ class CameraActivity : BaseActivity(), SurfaceHolder.Callback {
         runTimePermission!!.requestPermission(arrayOf(Manifest.permission.CAMERA,
             Manifest.permission.RECORD_AUDIO,
             Manifest.permission.READ_EXTERNAL_STORAGE,
-            Manifest.permission.WRITE_EXTERNAL_STORAGE
-        ), object : RunTimePermission.RunTimePermissionListener {
+            Manifest.permission.WRITE_EXTERNAL_STORAGE), object : RunTimePermission.RunTimePermissionListener {
             override fun permissionGranted() {
                 // First we need to check availability of play services
                 initControls()

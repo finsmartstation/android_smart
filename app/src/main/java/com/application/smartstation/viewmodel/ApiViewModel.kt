@@ -1042,6 +1042,96 @@ class ApiViewModel @Inject constructor(
 
     }
 
+    fun getLetterHeader(inputParams: InputParams) = liveData<Resource<GetLetterHeaderFooterRes>> {
+        if (UtilsDefault.isOnline()) {
+            repository.getLetterHeader(inputParams)
+                .onStart {
+                    emit(Resource.loading(data = null))
+                }
+                .catch {
+                    emit(Resource.error(data = null, msg = "Cannot reach server..try again"))
+                }
+                .collect {
+                    emit(Resource.success(it))
+                }
+        } else {
+            emit(Resource.error(data = null, msg = "No internet connection"))
+        }
+
+    }
+
+    fun getLetterFooter(inputParams: InputParams) = liveData<Resource<GetLetterHeaderFooterRes>> {
+        if (UtilsDefault.isOnline()) {
+            repository.getLetterFooter(inputParams)
+                .onStart {
+                    emit(Resource.loading(data = null))
+                }
+                .catch {
+                    emit(Resource.error(data = null, msg = "Cannot reach server..try again"))
+                }
+                .collect {
+                    emit(Resource.success(it))
+                }
+        } else {
+            emit(Resource.error(data = null, msg = "No internet connection"))
+        }
+
+    }
+
+    fun setLetterHeader(inputParams: InputParams) = liveData<Resource<BaseResponse>> {
+        if (UtilsDefault.isOnline()) {
+            repository.setLetterHeader(inputParams)
+                .onStart {
+                    emit(Resource.loading(data = null))
+                }
+                .catch {
+                    emit(Resource.error(data = null, msg = "Cannot reach server..try again"))
+                }
+                .collect {
+                    emit(Resource.success(it))
+                }
+        } else {
+            emit(Resource.error(data = null, msg = "No internet connection"))
+        }
+
+    }
+
+    fun setLetterFooter(inputParams: InputParams) = liveData<Resource<BaseResponse>> {
+        if (UtilsDefault.isOnline()) {
+            repository.setLetterFooter(inputParams)
+                .onStart {
+                    emit(Resource.loading(data = null))
+                }
+                .catch {
+                    emit(Resource.error(data = null, msg = "Cannot reach server..try again"))
+                }
+                .collect {
+                    emit(Resource.success(it))
+                }
+        } else {
+            emit(Resource.error(data = null, msg = "No internet connection"))
+        }
+
+    }
+
+    fun changeGrpDetails(inputParams: InputParams) = liveData<Resource<BaseResponse>> {
+        if (UtilsDefault.isOnline()) {
+            repository.changeGrpDetails(inputParams)
+                .onStart {
+                    emit(Resource.loading(data = null))
+                }
+                .catch {
+                    emit(Resource.error(data = null, msg = "Cannot reach server..try again"))
+                }
+                .collect {
+                    emit(Resource.success(it))
+                }
+        } else {
+            emit(Resource.error(data = null, msg = "No internet connection"))
+        }
+
+    }
+
     fun grpCreate(
         user_id: RequestBody,
         accessToken: RequestBody,
@@ -1168,6 +1258,32 @@ class ApiViewModel @Inject constructor(
                 period_limit,
                 file_type,
                 file)
+                .onStart {
+                    emit(Resource.loading(data = null))
+                }
+                .catch {
+                    emit(Resource.error(data = null, msg = "Cannot reach server..try again"))
+                }
+                .collect {
+                    emit(Resource.success(it))
+                }
+        } else {
+            emit(Resource.error(data = null, msg = "No internet connection"))
+        }
+
+    }
+
+    fun changeGrpProfile(
+        user_id: RequestBody,
+        accessToken: RequestBody,
+        group_id: RequestBody,
+        group_profile: MultipartBody.Part,
+    ) = liveData<Resource<BaseResponse>> {
+        if (UtilsDefault.isOnline()) {
+            repository.changeGrpProfile(user_id,
+                accessToken,
+                group_id,
+                group_profile)
                 .onStart {
                     emit(Resource.loading(data = null))
                 }

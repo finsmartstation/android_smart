@@ -37,7 +37,7 @@ class CloudRecFragment(var phn: String) : BaseFragment(R.layout.fragment_cloud_r
     }
 
     private fun initView() {
-        binding.rvCloudView.layoutManager = GridLayoutManager(requireActivity(), 3)
+        binding.rvCloudView.layoutManager = GridLayoutManager(requireActivity(), 2)
         cloudViewAdapter = CloudViewAdapter(requireActivity())
         binding.rvCloudView.adapter = cloudViewAdapter
 
@@ -114,7 +114,7 @@ class CloudRecFragment(var phn: String) : BaseFragment(R.layout.fragment_cloud_r
     }
 
     private fun setData(list: ArrayList<CloudDetailListRes>) {
-        cloudViewAdapter!!.setCloud(list)
+        cloudViewAdapter!!.setCloud(list.reversed())
     }
 
 }

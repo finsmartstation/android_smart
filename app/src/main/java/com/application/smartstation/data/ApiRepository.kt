@@ -426,6 +426,42 @@ class ApiRepository @Inject constructor(val apiService: ApiService) {
         }.flowOn(Dispatchers.IO)
     }
 
+    fun getLetterHeader(inputParams: InputParams): Flow<GetLetterHeaderFooterRes> {
+        return flow {
+            val response = apiService.getLetterHeader(inputParams)
+            emit(response)
+        }.flowOn(Dispatchers.IO)
+    }
+
+    fun getLetterFooter(inputParams: InputParams): Flow<GetLetterHeaderFooterRes> {
+        return flow {
+            val response = apiService.getLetterFooter(inputParams)
+            emit(response)
+        }.flowOn(Dispatchers.IO)
+    }
+
+    fun setLetterHeader(inputParams: InputParams): Flow<BaseResponse> {
+        return flow {
+            val response = apiService.setLetterHeader(inputParams)
+            emit(response)
+        }.flowOn(Dispatchers.IO)
+    }
+
+    fun setLetterFooter(inputParams: InputParams): Flow<BaseResponse> {
+        return flow {
+            val response = apiService.setLetterFooter(inputParams)
+            emit(response)
+        }.flowOn(Dispatchers.IO)
+    }
+
+    fun changeGrpDetails(inputParams: InputParams): Flow<BaseResponse> {
+        return flow {
+            val response = apiService.changeGrpDetails(inputParams)
+            emit(response)
+        }.flowOn(Dispatchers.IO)
+    }
+
+
     fun grpCreate(
         user_id: RequestBody,
         accessToken: RequestBody,
@@ -512,6 +548,21 @@ class ApiRepository @Inject constructor(val apiService: ApiService) {
                 period_limit,
                 file_type,
                 file)
+            emit(response)
+        }.flowOn(Dispatchers.IO)
+    }
+
+    fun changeGrpProfile(
+        user_id: RequestBody,
+        accessToken: RequestBody,
+        group_id: RequestBody,
+        group_profile: MultipartBody.Part,
+    ): Flow<BaseResponse> {
+        return flow {
+            val response = apiService.changeGrpProfile(user_id,
+                accessToken,
+                group_id,
+                group_profile)
             emit(response)
         }.flowOn(Dispatchers.IO)
     }

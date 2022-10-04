@@ -34,37 +34,44 @@ class SentboxAdapter(val context: Context) : RecyclerView.Adapter<SentboxAdapter
         val model = list[position]
 
         with(holder) {
-            val str: String = TextUtils.join(",", model.to)
-            binding.txtTitle.text = str
-            binding.txtDate.text =
-                UtilsDefault.dateMail(UtilsDefault.localTimeConvert(model.createdAt)!!)
-            binding.txtTime.text =
-                UtilsDefault.todayDate(UtilsDefault.localTimeConvert(model.createdAt))
-            binding.txtSub.text = model.subject
-            binding.txtBody.text = Html.fromHtml(model.body)
+            if (model.type.equals("date")){
+                binding.txtDate.visibility = View.VISIBLE
+                binding.llLetterView.visibility = View.GONE
+                binding.txtDate.text =
+                    UtilsDefault.dateMail(UtilsDefault.localTimeConvert(model.createdAt)!!)
+            }else {
+                binding.txtDate.visibility = View.GONE
+                binding.llLetterView.visibility =View.VISIBLE
+                val str: String = TextUtils.join(",", model.to)
+                binding.txtTitle.text = str
+                binding.txtTime.text =
+                    UtilsDefault.todayDate(UtilsDefault.localTimeConvert(model.createdAt))
+                binding.txtSub.text = model.subject
+                binding.txtBody.text = Html.fromHtml(model.body)
 
-            if (model.attachments != null) {
-                if (!model.attachments.isNullOrEmpty()) {
-                    binding.imgAttach.visibility = View.VISIBLE
+                if (model.attachments != null) {
+                    if (!model.attachments.isNullOrEmpty()) {
+                        binding.imgAttach.visibility = View.VISIBLE
+                    } else {
+                        binding.imgAttach.visibility = View.GONE
+                    }
                 } else {
                     binding.imgAttach.visibility = View.GONE
                 }
-            } else {
-                binding.imgAttach.visibility = View.GONE
-            }
 
-            Glide.with(context).load(model.profile_pic).placeholder(R.drawable.ic_default)
-                .error(R.drawable.ic_default).diskCacheStrategy(
-                DiskCacheStrategy.DATA).into(binding.imgMailProfile)
+                Glide.with(context).load(model.profile_pic).placeholder(R.drawable.ic_default)
+                    .error(R.drawable.ic_default).diskCacheStrategy(
+                        DiskCacheStrategy.DATA).into(binding.imgMailProfile)
 
 //            if (model.mail_read_status == "1"){
-            binding.txtTitle.setTextColor(context.resources.getColor(R.color.black))
+                binding.txtTitle.setTextColor(context.resources.getColor(R.color.black))
 //            }else{
 //                binding.txtTitle.setTextColor(context.resources.getColor(R.color.mail_date_coloe))
 //            }
 
-            itemView.setOnClickListener {
-                onItemClick!!.invoke(model)
+                itemView.setOnClickListener {
+                    onItemClick!!.invoke(model)
+                }
             }
 
         }

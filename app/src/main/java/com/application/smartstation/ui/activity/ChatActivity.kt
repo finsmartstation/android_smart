@@ -24,6 +24,7 @@ import android.view.View.OnFocusChangeListener
 import android.view.inputmethod.InputMethodManager
 import android.widget.LinearLayout
 import android.widget.PopupWindow
+import android.widget.Toast
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
@@ -35,18 +36,18 @@ import com.application.smartstation.databinding.ActivityChatBinding
 import com.application.smartstation.databinding.DialogBottomChatDocumentBinding
 import com.application.smartstation.databinding.MenuChatMorePopupBinding
 import com.application.smartstation.databinding.MenuChatPopupBinding
+import com.application.smartstation.service.MailCallback
 import com.application.smartstation.service.Status
 import com.application.smartstation.service.background.SocketService
 import com.application.smartstation.ui.adapter.ChatHistoryAdapter
 import com.application.smartstation.ui.model.*
-import com.application.smartstation.util.Constants
-import com.application.smartstation.util.RunTimePermission
-import com.application.smartstation.util.UtilsDefault
-import com.application.smartstation.util.viewBinding
+import com.application.smartstation.util.*
 import com.application.smartstation.view.ImageVideoSelectorDialog
 import com.application.smartstation.viewmodel.*
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.devlomi.record_view.OnBasketAnimationEnd
+import com.devlomi.record_view.OnRecordListener
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.gson.Gson
 import com.vanniktech.emoji.EmojiImageView
@@ -58,6 +59,10 @@ import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import okhttp3.RequestBody.Companion.asRequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
+import omrecorder.AudioChunk
+import omrecorder.OmRecorder
+import omrecorder.PullTransport
+import omrecorder.Recorder
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
@@ -81,9 +86,14 @@ class ChatActivity : BaseActivity(), ImageVideoSelectorDialog.Action {
     var receiverName = ""
     var receiverProfile = ""
     var room = ""
+    var timerStr = ""
     var chatType = ""
     var CAMERA_MIC_PERMISSION_REQUEST_CODE = 791
     var imageVideoSelectorDialog: ImageVideoSelectorDialog? = null
+    var recorder: Recorder? = null
+    var recordFile: File? = null
+    val RECORD_START_AUDIO_LENGTH = 575
+
 
     val mimeTypes = arrayOf(
         "image/jpeg", // jpeg or jpg
@@ -170,10 +180,6 @@ class ChatActivity : BaseActivity(), ImageVideoSelectorDialog.Action {
             }
         }
 
-        binding.imgRec.setOnClickListener {
-
-        }
-
         binding.ibtnCancel.setOnClickListener {
             binding.replyLayout.visibility = View.GONE
         }
@@ -198,6 +204,8 @@ class ChatActivity : BaseActivity(), ImageVideoSelectorDialog.Action {
                 val jsonObject = JSONObject()
                 try {
                     jsonObject.put("sid", UtilsDefault.getSharedPreferenceString(Constants.USER_ID))
+                    jsonObject.put("accessToken",
+                        UtilsDefault.getSharedPreferenceString(Constants.ACCESS_TOKEN))
                     jsonObject.put("rid", receiverId)
                     jsonObject.put("type", type)
                     jsonObject.put("message", msg)
@@ -310,10 +318,13 @@ class ChatActivity : BaseActivity(), ImageVideoSelectorDialog.Action {
         if (chatType.equals("private")) {
             getChatDetails()
             roomEmit(receiverId)
+            room = ""
         } else {
             getGrpChatDetails()
             grpRoomEmit(room)
         }
+
+
 
         runTimePermission = RunTimePermission(this)
 
@@ -342,6 +353,18 @@ class ChatActivity : BaseActivity(), ImageVideoSelectorDialog.Action {
 //            binding.rvChatRoom.smoothScrollToPosition(it - 1)
 //            chatHistoryAdapter!!.blinkItem(it)
 //        }
+
+        chatHistoryAdapter!!.onItemClickImage = { pos ->
+            if (!pos.message_type.equals("text")){
+                if (pos.message_type.contains(".pdf")) {
+                    startActivity(Intent(this@ChatActivity,
+                        PdfViewActivity::class.java).putExtra("path", pos.message_type))
+                } else {
+                    FileUtils.openDocument(this@ChatActivity, pos.message_type)
+                }
+
+            }
+        }
 
         emojiPopup = EmojiPopup.Builder.fromRootView(binding.llChat)
             .setOnEmojiBackspaceClickListener { ignore: View? ->
@@ -405,6 +428,92 @@ class ChatActivity : BaseActivity(), ImageVideoSelectorDialog.Action {
             }
         }
 
+
+        //record
+        binding.recordView.cancelBounds = 0F
+        binding.recordView.setSlideToCancelArrowColor(ContextCompat.getColor(this, R.color.grey))
+        binding.recordView.setCounterTimeColor(ContextCompat.getColor(this, R.color.txt_color))
+        binding.recordView.setSlideToCancelTextColor(ContextCompat.getColor(this, R.color.txt_color))
+        binding.imgRec.setRecordView(binding.recordView)
+
+        binding.recordView.setOnRecordListener(object : OnRecordListener {
+            override fun onStart() {
+                hideOrShowRecord(false)
+                handleRecord()
+            }
+
+            override fun onCancel() {
+                stopRecord(true, -1)
+            }
+
+            override fun onFinish(recordTime: Long) {
+                hideOrShowRecord(true)
+                stopRecord(false, recordTime)
+//                requestEditTextFocus()
+            }
+
+            override fun onLessThanSecond() {
+                Toast.makeText(this@ChatActivity,
+                    R.string.voice_message_is_short_toast,
+                    Toast.LENGTH_SHORT).show()
+                hideOrShowRecord(true)
+                stopRecord(true, -1)
+//                requestEditTextFocus()
+            }
+        })
+
+        binding.recordView.setOnBasketAnimationEndListener(OnBasketAnimationEnd {
+            hideOrShowRecord(true)
+//            requestEditTextFocus()
+        })
+
+    }
+
+    private fun stopRecord(isCancelled: Boolean, recordTime: Long) {
+        try {
+            if (recorder != null) recorder!!.stopRecording()
+        } catch (e: java.lang.Exception) {
+            e.printStackTrace()
+        }
+
+        //if it's cancelled (the user swiped to cancel) then delete the recordFile
+
+        //if it's cancelled (the user swiped to cancel) then delete the recordFile
+        if (isCancelled) {
+            recordFile!!.delete()
+        } else {
+            //otherwise get the recordTime and convert it to Readable String and send the message
+            timerStr = UtilsDefault.milliSecondsToTimer(recordTime)!!
+            val filePath = recordFile!!.path
+            Log.e("TAG", "stopRecord: "+filePath )
+//            sendVoiceMessage(filePath, timerStr)
+        }
+    }
+
+    private fun handleRecord() {
+        recordFile = DirManager.generateFile(MessageType.SENT_VOICE_MESSAGE)
+        recorder = OmRecorder.wav(
+            PullTransport.Default(RecorderSettings.getMic(), object : PullTransport.OnAudioChunkPulledListener {
+                override fun onAudioChunkPulled(audioChunk: AudioChunk?) {}
+            }), recordFile)
+
+
+        //start record when the record sound "BEEP" finishes
+
+
+        //start record when the record sound "BEEP" finishes
+        Handler().postDelayed({ recorder!!.startRecording() },
+            RECORD_START_AUDIO_LENGTH.toLong())
+    }
+
+    private fun hideOrShowRecord(hideRecord: Boolean) {
+        if (hideRecord) {
+            binding.recordView.setVisibility(View.INVISIBLE)
+            binding.llTying.setVisibility(View.VISIBLE)
+        } else {
+            binding.recordView.setVisibility(View.VISIBLE)
+            binding.llTying.setVisibility(View.GONE)
+        }
     }
 
     private fun getGrpChatDetails() {
@@ -557,7 +666,7 @@ class ChatActivity : BaseActivity(), ImageVideoSelectorDialog.Action {
                 runTimePermission!!.requestPermission(arrayOf(Manifest.permission.CAMERA,
                     Manifest.permission.RECORD_AUDIO,
                     Manifest.permission.READ_EXTERNAL_STORAGE,
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE,
                 ), object : RunTimePermission.RunTimePermissionListener {
                     override fun permissionGranted() {
                         // First we need to check availability of play services
@@ -586,6 +695,12 @@ class ChatActivity : BaseActivity(), ImageVideoSelectorDialog.Action {
                 imagePermission {
                     startFilePicker()
                 }
+            }
+
+            bind.llFolder.setOnClickListener {
+                binding.llMsg.visibility = View.VISIBLE
+                mBottomDialogDocument!!.dismiss()
+
             }
 
         } catch (e: Exception) {
@@ -654,7 +769,7 @@ class ChatActivity : BaseActivity(), ImageVideoSelectorDialog.Action {
         EventBus.getDefault().unregister(this)
     }
 
-    private fun checkPermissionForCameraAndMicrophone(): Boolean {
+    fun checkPermissionForCameraAndMicrophone(): Boolean {
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             val resultCamera =
                 ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
@@ -826,7 +941,7 @@ class ChatActivity : BaseActivity(), ImageVideoSelectorDialog.Action {
                         dismissProgress()
                         if (it.data!!.status) {
                             toast(it.data.message)
-                            sendMessage(it.data.filepath, "image")
+//                            sendMessage(it.data.filepath, "image")
                         } else {
                             toast(it.data.message)
                         }

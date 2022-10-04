@@ -10,12 +10,14 @@
         android:id="@+id/txtDate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="end"
+        android:visibility="visible"
+        android:layout_gravity="center"
         android:layout_marginTop="5dp"
         android:textColor="@color/mail_date_coloe"
         android:textSize="13sp" />
 
     <LinearLayout
+        android:id="@+id/llLetterView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"

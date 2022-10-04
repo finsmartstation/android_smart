@@ -87,7 +87,7 @@ class CloudSendFragment(var phn: String) : BaseFragment(R.layout.fragment_cloud_
     }
 
     private fun initView() {
-        binding.rvCloudView.layoutManager = GridLayoutManager(requireActivity(), 3)
+        binding.rvCloudView.layoutManager = GridLayoutManager(requireActivity(), 2)
         cloudViewAdapter = CloudViewAdapter(requireActivity())
         binding.rvCloudView.adapter = cloudViewAdapter
 
@@ -163,6 +163,7 @@ class CloudSendFragment(var phn: String) : BaseFragment(R.layout.fragment_cloud_
 
     private fun folderDialog() {
         try {
+            hrsFolder = "life_time"
             val view = layoutInflater.inflate(R.layout.dialog_folder, null)
             val dialogFile = BottomSheetDialog(requireActivity())
             dialogFile.setOnShowListener {
@@ -246,6 +247,8 @@ class CloudSendFragment(var phn: String) : BaseFragment(R.layout.fragment_cloud_
                     Status.SUCCESS -> {
                         dismissProgress()
                         if (it.data!!.status) {
+                            hrsFolder = ""
+                            timeFolder = ""
                             getCloudRec()
                         } else {
                             toast(it.data.message)
@@ -262,6 +265,7 @@ class CloudSendFragment(var phn: String) : BaseFragment(R.layout.fragment_cloud_
 
     private fun fileDialog() {
         try {
+            this.hrs = "life_time"
             val view = layoutInflater.inflate(R.layout.dialog_file, null)
             val dialogFile = BottomSheetDialog(requireActivity())
 
@@ -300,54 +304,67 @@ class CloudSendFragment(var phn: String) : BaseFragment(R.layout.fragment_cloud_
 
             bind.btnFile.setOnClickListener {
                 UtilsDefault.hideKeyboardForFocusedView(requireActivity())
-                val paths = FileUtils.getPath(requireActivity(), uris)
-                var type = ""
-                if (UtilsDefault.isImageFile(paths)) {
-                    type = "image"
-                }
-                if (UtilsDefault.isPdfFile(paths)) {
-                    type = "pdf"
-                }
+                if (uris != null) {
+                    val paths = FileUtils.getPath(requireActivity(), uris)
+                    var type = ""
+                    if (paths != null) {
+                        if (UtilsDefault.isImageFile(paths)) {
+                            type = "image"
+                        }
+                        if (UtilsDefault.isPdfFile(paths)) {
+                            type = "pdf"
+                        }
 
-                when {
-                    TextUtils.isEmpty(paths) -> toast(requireActivity().resources.getString(R.string.please_upload))
+                        when {
+                            TextUtils.isEmpty(paths) -> toast(requireActivity().resources.getString(
+                                R.string.please_upload))
 
-                    else -> {
-                        val user_id: RequestBody =
-                            UtilsDefault.getSharedPreferenceString(Constants.USER_ID)!!
-                                .toRequestBody("text/plain".toMediaTypeOrNull())
-                        val accessToken: RequestBody =
-                            UtilsDefault.getSharedPreferenceString(Constants.ACCESS_TOKEN)!!
-                                .toRequestBody("text/plain".toMediaTypeOrNull())
-                        val parent_folder_id: RequestBody =
-                            phn
-                                .toRequestBody("text/plain".toMediaTypeOrNull())
-                        val access_period: RequestBody =
-                            this.hrs
-                                .toRequestBody("text/plain".toMediaTypeOrNull())
-                        val period_limit: RequestBody =
-                            this.time
-                                .toRequestBody("text/plain".toMediaTypeOrNull())
+                            else -> {
+                                val user_id: RequestBody =
+                                    UtilsDefault.getSharedPreferenceString(Constants.USER_ID)!!
+                                        .toRequestBody("text/plain".toMediaTypeOrNull())
+                                val accessToken: RequestBody =
+                                    UtilsDefault.getSharedPreferenceString(Constants.ACCESS_TOKEN)!!
+                                        .toRequestBody("text/plain".toMediaTypeOrNull())
+                                val parent_folder_id: RequestBody =
+                                    phn
+                                        .toRequestBody("text/plain".toMediaTypeOrNull())
+                                val access_period: RequestBody =
+                                    this.hrs
+                                        .toRequestBody("text/plain".toMediaTypeOrNull())
+                                val period_limit: RequestBody =
+                                    this.time
+                                        .toRequestBody("text/plain".toMediaTypeOrNull())
 
-                        val file_type: RequestBody =
-                            type
-                                .toRequestBody("text/plain".toMediaTypeOrNull())
+                                val file_type: RequestBody =
+                                    type
+                                        .toRequestBody("text/plain".toMediaTypeOrNull())
 
-                        val files = File(paths)
-                        val requestBody =
-                            files.asRequestBody("multipart/form-data".toMediaTypeOrNull())
-                        val file =
-                            MultipartBody.Part.createFormData("file", files.name, requestBody)
+                                val files = File(paths)
+                                val requestBody =
+                                    files.asRequestBody("multipart/form-data".toMediaTypeOrNull())
+                                val file =
+                                    MultipartBody.Part.createFormData("file",
+                                        files.name,
+                                        requestBody)
 
-                        createFile(user_id,
-                            accessToken,
-                            parent_folder_id,
-                            access_period,
-                            period_limit,
-                            file_type,
-                            file)
-                        dialogFile.dismiss()
+                                Log.d("TAG", "fileDialog: "+phn+" "+this.hrs+" "+this.time+" "+type+" "+files.name)
+
+                                createFile(user_id,
+                                    accessToken,
+                                    parent_folder_id,
+                                    access_period,
+                                    period_limit,
+                                    file_type,
+                                    file)
+                                dialogFile.dismiss()
+                            }
+                        }
+                    } else {
+                        toast(requireActivity().resources.getString(R.string.please_upload))
                     }
+                }else {
+                    toast(requireActivity().resources.getString(R.string.please_upload))
                 }
             }
 
@@ -398,6 +415,9 @@ class CloudSendFragment(var phn: String) : BaseFragment(R.layout.fragment_cloud_
                     Status.SUCCESS -> {
                         dismissProgress()
                         if (it.data!!.status) {
+                            uris = Uri.parse("")
+                            this.hrs = ""
+                            this.time = ""
                             toast(it.data.message)
                             getCloudRec()
                         } else {
@@ -444,11 +464,19 @@ class CloudSendFragment(var phn: String) : BaseFragment(R.layout.fragment_cloud_
                 val uri = singleUri
                 try {
                     uris = singleUri
-                    Glide.with(requireActivity()).load(uri).placeholder(R.drawable.ic_default)
-                        .error(R.drawable.ic_default).diskCacheStrategy(
-                        DiskCacheStrategy.DATA).into(imgUpload!!)
                     val paths = FileUtils.getPath(requireActivity(), uri)
                     val fileName = FileUtils.getFileNameFromPath(paths).replace("/", "")
+                    if (UtilsDefault.isImageFile(paths)) {
+                        Glide.with(requireActivity()).load(uri).placeholder(R.drawable.ic_default)
+                            .error(R.drawable.ic_default).diskCacheStrategy(
+                                DiskCacheStrategy.DATA).into(imgUpload!!)
+                    }
+                    if (UtilsDefault.isPdfFile(paths)) {
+                        Glide.with(requireActivity()).load(R.drawable.pdf_icon).placeholder(R.drawable.ic_default)
+                            .error(R.drawable.ic_default).diskCacheStrategy(
+                                DiskCacheStrategy.DATA).into(imgUpload!!)
+                    }
+
                     txtFileName!!.text = fileName
                 } catch (e: Exception) {
                     Log.d("TAG", "onFilePickerResult: " + e)
@@ -519,7 +547,7 @@ class CloudSendFragment(var phn: String) : BaseFragment(R.layout.fragment_cloud_
     }
 
     private fun setData(list: ArrayList<CloudDetailListRes>) {
-        cloudViewAdapter!!.setCloud(list)
+        cloudViewAdapter!!.setCloud(list.reversed())
     }
 
     override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {

@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_marginStart="16dp"
     android:layout_marginEnd="16dp"
     android:orientation="vertical">
@@ -309,6 +310,7 @@
                 android:layout_gravity="right|bottom"
                 android:gravity="left|center_vertical"
                 android:padding="8dp"
+                android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -352,6 +354,130 @@
                 </LinearLayout>
 
             </com.application.smartstation.view.ImFlexboxLayout>
+
+            <LinearLayout
+                android:id="@+id/llAudio"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/replyLayoutSend"
+                >
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <FrameLayout
+                        android:id="@+id/profile_image_container"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="5dp"
+                        android:paddingRight="4dp">
+
+                        <de.hdodenhof.circleimageview.CircleImageView
+                            android:id="@+id/imgProfileRecSend"
+                            android:layout_width="50dp"
+                            android:layout_height="50dp"
+                            android:src="@drawable/ic_default"
+                            app:civ_border_color="@color/white_bg"
+                            app:civ_border_width="1dp" />
+
+                        <ImageView
+                            android:id="@+id/voice_message_stat"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:layout_gravity="right|bottom"
+                            android:layout_marginLeft="30dp"
+                            tools:src="@drawable/ic_mic_white_24dp" />
+
+                    </FrameLayout>
+
+                    <com.github.abdularis.buttonprogress.DownloadButtonProgress
+                        android:id="@+id/pbRecSend"
+                        android:layout_width="35dp"
+                        android:layout_height="35dp"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="8dp"
+                        android:layout_toRightOf="@id/profile_image_container"
+                        android:padding="5dp"
+                        android:visibility="invisible" />
+
+
+                    <ImageView
+                        android:id="@+id/imgPlayRecSend"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginRight="4dp"
+                        android:layout_toRightOf="@id/profile_image_container"
+                        android:background="@drawable/btn_play_bg"
+                        android:padding="6dp"
+                        android:visibility="visible"
+                        app:srcCompat="@drawable/play_icon"
+                        app:tint="@color/white" />
+
+                    <ImageView
+                        android:id="@+id/imgPauseRecSend"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginRight="4dp"
+                        android:layout_toRightOf="@id/profile_image_container"
+                        android:background="@drawable/btn_play_bg"
+                        android:padding="6dp"
+                        android:visibility="gone"
+                        app:srcCompat="@drawable/pause_icon"
+                        app:tint="@color/white" />
+
+
+                    <SeekBar
+                        android:id="@+id/sbRecSend"
+                        android:layout_width="150dp"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginBottom="20dp"
+                        android:layout_toRightOf="@id/imgPlayRecSend"
+                        android:progress="0"
+                        />
+
+                    <com.application.smartstation.view.CustomTextViewBold
+                        android:id="@+id/txtDurationRecSend"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/sbRecSend"
+                        android:layout_alignLeft="@id/sbRecSend"
+                        android:layout_marginTop="2dp"
+                        android:text="00:00"
+                        android:textColor="@color/white"
+                        android:textSize="12sp" />
+
+
+                    <com.application.smartstation.view.CustomTextViewBold
+                        android:id="@+id/txtTimeRecSend"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/sbRecSend"
+                        android:layout_alignRight="@id/sbRecSend"
+                        android:layout_marginTop="4dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_marginBottom="4dp"
+                        android:textColor="@color/white"
+                        android:textSize="12sp" />
+
+
+                </RelativeLayout>
+
+            </LinearLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

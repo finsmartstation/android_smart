@@ -34,13 +34,13 @@ android {
     buildTypes {
         debug {
 //            buildConfigField "String", "APP_BASE_URL", "\"https://finsmartstation.com\""
-            buildConfigField "String", "APP_BASE_URL", "\"http://ec2-13-58-229-248.us-east-2.compute.amazonaws.com\""
+            buildConfigField "String", "APP_BASE_URL", "\"http://ec2-3-143-158-60.us-east-2.compute.amazonaws.com\""
             buildConfigField "String", "SOCKET_BASE_URL", "\"https://fsssocket.herokuapp.com\""
         }
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-            buildConfigField "String", "APP_BASE_URL", "\"http://ec2-13-58-229-248.us-east-2.compute.amazonaws.com\""
+            buildConfigField "String", "APP_BASE_URL", "\"http://ec2-3-143-158-60.us-east-2.compute.amazonaws.com\""
             buildConfigField "String", "SOCKET_BASE_URL", "\"https://fsssocket.herokuapp.com\""
 //            buildConfigField "String", "SOCKET_BASE_URL", "\"http://ec2-3-13-92-3.us-east-2.compute.amazonaws.com:3000\""
         }
@@ -144,7 +144,7 @@ dependencies {
 
     //firebase
     implementation 'com.google.firebase:firebase-core:18.0.0'
-    implementation 'com.google.firebase:firebase-messaging:21.0.0'
+    implementation 'com.google.firebase:firebase-messaging:23.0.8'
     implementation 'com.google.android.gms:play-services-vision:20.1.2'
     implementation 'com.google.firebase:firebase-crashlytics:18.0.0'
 
@@ -178,7 +178,7 @@ dependencies {
     implementation "com.google.android.gms:play-services-auth-api-phone:18.0.1"
 
     //event bus
-    implementation 'org.greenrobot:eventbus:3.2.0'
+    implementation("org.greenrobot:eventbus:3.3.1")
 
     //substring
     implementation 'org.apache.commons:commons-lang3:3.11'
@@ -215,6 +215,12 @@ dependencies {
     //pdf viewer
     implementation 'com.github.barteksc:android-pdf-viewer:2.8.2'
 
+    //recordview
+    implementation 'com.devlomi.record-view:record-view:2.0.1'
+    implementation 'com.kailashdabhi:om-recorder:1.1.5'
+
+    //progress
+    implementation 'com.github.abdularis:androidbuttonprogress:1.0.2'
 
 }
 kapt {

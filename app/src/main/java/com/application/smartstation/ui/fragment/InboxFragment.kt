@@ -135,7 +135,7 @@ class InboxFragment : BaseFragment(R.layout.fragment_inbox) {
             LinearLayoutManager.VERTICAL, false)
         inboxAdapter = InboxAdapter(requireActivity())
         binding.rvInbox.adapter = inboxAdapter
-        inboxAdapter!!.setMail(list.reversed())
+        inboxAdapter!!.setMail(list)
 
         if (list.isNullOrEmpty()) {
             unreadMail("0")

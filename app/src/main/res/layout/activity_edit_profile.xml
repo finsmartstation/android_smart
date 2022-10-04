@@ -67,10 +67,23 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <com.application.smartstation.view.CustomTextViewBold
+            android:id="@+id/txtEmail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="26dp"
             android:layout_marginTop="26dp"
+            android:layout_marginEnd="16dp"
+            android:textAlignment="center"
+            android:textColor="@color/txt_color"
+            android:textSize="18sp">
+
+        </com.application.smartstation.view.CustomTextViewBold>
+
+        <com.application.smartstation.view.CustomTextViewBold
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="26dp"
+            android:layout_marginTop="16dp"
             android:layout_marginEnd="16dp"
             android:text="@string/enter_your_name"
             android:textAlignment="textStart"

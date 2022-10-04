@@ -73,6 +73,7 @@ class EditProfileActivity : BaseActivity(), ImageSelectorDialog.Action {
                             binding.edtName.setText(it.data.data.name)
                             binding.edtEmail.setText(it.data.data.email)
                             binding.edtAbout.setText(it.data.data.about)
+                            binding.txtEmail.setText(it.data.data.company_mail)
 
                             UtilsDefault.updateSharedPreferenceString(Constants.PROFILE_PIC,
                                 it.data.data.profile_pic)

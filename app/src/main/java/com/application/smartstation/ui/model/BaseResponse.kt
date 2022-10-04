@@ -137,8 +137,9 @@ class DataMailList(
     var attachments: ArrayList<MailAttachmentList>,
     var subject: String,
     var body: String,
-    var mail_read_status: Int,
+    var mail_read_status: String,
     var profile_pic: String,
+    var type: String,
 )
 
 class ProfileRes(var profile_pic: String)
@@ -234,6 +235,7 @@ class SendMailListRes(
     var bodyMD5Hash: String,
     var virtualSend: String,
     var profile_pic: String,
+    var type: String,
 )
 
 class MailImageSelect(var imagePath: String, var type: String)
@@ -285,6 +287,8 @@ class SignatureStampRes(
     var default_stamp: String,
     var signature: ArrayList<SignatureListData>,
     var stamp: ArrayList<StampList>,
+    var header: ArrayList<ListHeaderFooterRes>,
+    var footer: ArrayList<ListHeaderFooterRes>,
 )
 
 class CloudRes(
@@ -336,7 +340,8 @@ class DataLetter(
     var body: String,
     var letter_path: String,
     var profile_pic: String,
-    var mail_read_status: Int,
+    var mail_read_status: String,
+    var type: String,
 )
 
 class SentLetterDetailsRes(
@@ -359,6 +364,7 @@ class DataSentLetter(
     var body: String,
     var letter_path: String,
     var profile_pic: String,
+    var type: String,
 )
 
 class ViewLetterDetails(
@@ -393,6 +399,7 @@ class CloudDetailListRes(
 )
 
 class ContactListRes(var name: String, var Phn: String)
+
 class GetCloudFileRes(
     var status: Boolean,
     var statuscode: Int,
@@ -400,6 +407,10 @@ class GetCloudFileRes(
     var datas: ArrayList<CloudDetailListRes>,
 )
 
+class GetLetterHeaderFooterRes(var status: Boolean, var message: String, var statuscode:Int, var data:ArrayList<ListHeaderFooterRes>)
+class ListHeaderFooterRes(var id:String, var user_id: String, var name: String, var image: String,var default:Boolean)
+
+//un use
 class SendMsgResponse(var status: Boolean, var message: String)
 class PostResponse(var ip: String)
 class CountryList(var countryCode: String, var countryNum: String, var countryName: String)

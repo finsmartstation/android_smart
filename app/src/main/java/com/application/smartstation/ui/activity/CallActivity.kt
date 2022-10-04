@@ -899,7 +899,7 @@ class CallActivity : BaseActivity() {
                         remoteParticipant.identity,
                         remoteVideoTrack.isEnabled,
                         remoteVideoTrack.name))
-                binding.videoView.videoStatusTextView.setText(R.string.video_subscribed)
+//                binding.videoView.videoStatusTextView.setText(R.string.video_subscribed)
                 addRemoteParticipantVideo(remoteVideoTrack)
             }
 

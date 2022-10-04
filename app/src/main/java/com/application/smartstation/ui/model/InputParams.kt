@@ -58,10 +58,13 @@ class InputParams {
 
     //compose mail
     var to_mail: String? = null
+    var address_to: String? = null
     var cc_mail: String? = null
     var bcc_mail: String? = null
     var subject: String? = null
     var body: String? = null
+    var header_url_path: String? = null
+    var footer_url_path: String? = null
 
     //inbox details
     var id: String? = null
@@ -87,5 +90,8 @@ class InputParams {
     var access_period: String? = null
     var period_limit: String? = null
     var sub_parent_folder_id: String? = null
+
+    //change grp details
+    var group_name:String? = null
 
 }

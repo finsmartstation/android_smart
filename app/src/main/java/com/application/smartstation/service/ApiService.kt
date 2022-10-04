@@ -176,6 +176,21 @@ interface ApiService {
     @POST(ApiUrl.GET_FILE_CLOUD)
     suspend fun getCloudFile(@Body inputParams: InputParams): GetCloudFileRes
 
+    @POST(ApiUrl.GET_LETTER_HEADER)
+    suspend fun getLetterHeader(@Body inputParams: InputParams): GetLetterHeaderFooterRes
+
+    @POST(ApiUrl.GET_LETTER_FOOTER)
+    suspend fun getLetterFooter(@Body inputParams: InputParams): GetLetterHeaderFooterRes
+
+    @POST(ApiUrl.SET_LETTER_HEADER)
+    suspend fun setLetterHeader(@Body inputParams: InputParams): BaseResponse
+
+    @POST(ApiUrl.SET_LETTER_FOOTER)
+    suspend fun setLetterFooter(@Body inputParams: InputParams): BaseResponse
+
+    @POST(ApiUrl.CHANGE_GRP_DETAILS)
+    suspend fun changeGrpDetails(@Body inputParams: InputParams): BaseResponse
+
 
     @Multipart
     @POST(ApiUrl.SIGNATURE_UPLOAD)
@@ -266,6 +281,15 @@ interface ApiService {
         @Part("period_limit") period_limit: RequestBody,
         @Part("file_type") file_type: RequestBody,
         @Part file: MultipartBody.Part,
+    ): BaseResponse
+
+    @Multipart
+    @POST(ApiUrl.CHANGE_GRP_PROFILE)
+    suspend fun changeGrpProfile(
+        @Part("user_id") user_id: RequestBody,
+        @Part("accessToken") accessToken: RequestBody,
+        @Part("group_id") subparent_folder_id: RequestBody,
+        @Part group_profile: MultipartBody.Part,
     ): BaseResponse
 
 

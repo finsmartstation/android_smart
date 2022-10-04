@@ -15,12 +15,10 @@ import com.application.smartstation.databinding.BottomSheetDialogSignatureBindin
 import com.application.smartstation.service.Status
 import com.application.smartstation.tokenautocomplete.CharacterTokenizer
 import com.application.smartstation.tokenautocomplete.TokenCompleteTextView
+import com.application.smartstation.ui.adapter.HeaderFooterAdapter
 import com.application.smartstation.ui.adapter.SignatureAdapter
 import com.application.smartstation.ui.adapter.StampAdapter
-import com.application.smartstation.ui.model.InputParams
-import com.application.smartstation.ui.model.Person
-import com.application.smartstation.ui.model.SignatureListData
-import com.application.smartstation.ui.model.StampList
+import com.application.smartstation.ui.model.*
 import com.application.smartstation.util.Constants
 import com.application.smartstation.util.UtilsDefault
 import com.application.smartstation.util.viewBinding
@@ -47,10 +45,15 @@ class NewLetterActivity : BaseActivity(), TokenCompleteTextView.TokenListener<Pe
     var bccList = ArrayList<String>()
     var signatureList = ArrayList<SignatureListData>()
     var stampList = ArrayList<StampList>()
+    var listHeader = ArrayList<ListHeaderFooterRes>()
+    var listFooter = ArrayList<ListHeaderFooterRes>()
     var signature = ""
     var stamp = ""
+    var header = ""
+    var footer = ""
     var signatureAdapter: SignatureAdapter? = null
     var stampAdapter: StampAdapter? = null
+    var headerFooterAdapter: HeaderFooterAdapter? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -97,22 +100,30 @@ class NewLetterActivity : BaseActivity(), TokenCompleteTextView.TokenListener<Pe
                                 stampList = it.data.data.stamp
                             }
 
-                            if (!it.data.data.default_signature.isNullOrEmpty()) {
-                                binding.clSignature.visibility = View.VISIBLE
-                                signature = it.data.data.default_signature
-                                Glide.with(this).load(signature).placeholder(R.drawable.ic_default)
-                                    .error(R.drawable.ic_default)
-                                    .diskCacheStrategy(DiskCacheStrategy.DATA)
-                                    .into(binding.imgSignature)
+                            if (!it.data.data.header.isNullOrEmpty()) {
+                                listHeader = it.data.data.header
                             }
-                            if (!it.data.data.default_stamp.isNullOrEmpty()) {
-                                binding.clStamp.visibility = View.VISIBLE
-                                stamp = it.data.data.default_stamp
-                                Glide.with(this).load(stamp).placeholder(R.drawable.ic_default)
-                                    .error(R.drawable.ic_default)
-                                    .diskCacheStrategy(DiskCacheStrategy.DATA)
-                                    .into(binding.imgStamp)
+
+                            if (!it.data.data.footer.isNullOrEmpty()) {
+                                listFooter = it.data.data.footer
                             }
+//
+//                            if (!it.data.data.default_signature.isNullOrEmpty()) {
+//                                binding.clSignature.visibility = View.VISIBLE
+//                                signature = it.data.data.default_signature
+//                                Glide.with(this).load(signature).placeholder(R.drawable.ic_default)
+//                                    .error(R.drawable.ic_default)
+//                                    .diskCacheStrategy(DiskCacheStrategy.DATA)
+//                                    .into(binding.imgSignature)
+//                            }
+//                            if (!it.data.data.default_stamp.isNullOrEmpty()) {
+//                                binding.clStamp.visibility = View.VISIBLE
+//                                stamp = it.data.data.default_stamp
+//                                Glide.with(this).load(stamp).placeholder(R.drawable.ic_default)
+//                                    .error(R.drawable.ic_default)
+//                                    .diskCacheStrategy(DiskCacheStrategy.DATA)
+//                                    .into(binding.imgStamp)
+//                            }
 
                             if (it.data.data.default_signature.isNullOrEmpty() && it.data.data.default_stamp.isNullOrEmpty()) {
                                 binding.llAttach.visibility = View.GONE
@@ -226,6 +237,22 @@ class NewLetterActivity : BaseActivity(), TokenCompleteTextView.TokenListener<Pe
             }
         }
 
+        binding.txtHeaderSelect.setOnClickListener {
+            if (listHeader.isNullOrEmpty()) {
+                toast("Please upload your Header")
+            } else {
+                showSignatureBottomDialog(3)
+            }
+        }
+
+        binding.txtFooterSelect.setOnClickListener {
+            if (listFooter.isNullOrEmpty()) {
+                toast("Please upload your Footer")
+            } else {
+                showSignatureBottomDialog(4)
+            }
+        }
+
         binding.ilHeader.imgSend.setOnClickListener {
             UtilsDefault.hideKeyboardForFocusedView(this)
 
@@ -266,9 +293,11 @@ class NewLetterActivity : BaseActivity(), TokenCompleteTextView.TokenListener<Pe
             }
 
             val subject = binding.edtSubject.text.toString().trim()
+            val addressTo = binding.edtAddressedTo.text.toString().trim()
             val bodys = binding.edtBody.text.toString().trim()
             when {
                 TextUtils.isEmpty(toMail) -> toast(resources.getString(R.string.please_enter_to))
+                TextUtils.isEmpty(addressTo) -> toast(resources.getString(R.string.please_enter_addressed_to))
                 TextUtils.isEmpty(subject) -> toast(resources.getString(R.string.please_enter_subject))
                 TextUtils.isEmpty(bodys) -> toast(resources.getString(R.string.please_enter_body))
 
@@ -278,6 +307,9 @@ class NewLetterActivity : BaseActivity(), TokenCompleteTextView.TokenListener<Pe
                     inputParams.accessToken =
                         UtilsDefault.getSharedPreferenceString(Constants.ACCESS_TOKEN)
                     inputParams.to_mail = toMail
+                    inputParams.address_to = addressTo
+                    inputParams.header_url_path = header
+                    inputParams.footer_url_path = footer
                     inputParams.cc_mail = ccMail
                     inputParams.bcc_mail = bccMail
                     inputParams.subject = subject
@@ -331,7 +363,7 @@ class NewLetterActivity : BaseActivity(), TokenCompleteTextView.TokenListener<Pe
                     .into(binding.imgSignature)
             }
 
-        } else {
+        } else if (i.equals(2)) {
             bind.txtHeader.text = resources.getString(R.string.stamp)
             stampAdapter = StampAdapter(this, 2)
             bind.rvSignStamp.adapter = stampAdapter
@@ -354,6 +386,52 @@ class NewLetterActivity : BaseActivity(), TokenCompleteTextView.TokenListener<Pe
                 Glide.with(this).load(stamp).placeholder(R.drawable.ic_default)
                     .error(R.drawable.ic_default).diskCacheStrategy(DiskCacheStrategy.DATA)
                     .into(binding.imgStamp)
+            }
+        } else if (i.equals(3)) {
+            bind.txtHeader.text = resources.getString(R.string.letter_header)
+            headerFooterAdapter = HeaderFooterAdapter(this, 2)
+            bind.rvSignStamp.adapter = headerFooterAdapter
+            headerFooterAdapter!!.setHeaderFooter(listHeader)
+
+            headerFooterAdapter!!.onItemDeleteClick = { model ->
+
+            }
+
+            headerFooterAdapter!!.onItemClick = { model ->
+
+            }
+
+
+            headerFooterAdapter!!.onItemSelectClick = { model ->
+                dialog.dismiss()
+                binding.imgHeader.visibility = View.VISIBLE
+                header = model.image
+                Glide.with(this).load(header).placeholder(R.drawable.ic_default)
+                    .error(R.drawable.ic_default).diskCacheStrategy(DiskCacheStrategy.DATA)
+                    .into(binding.imgHeader)
+            }
+        }else {
+            bind.txtHeader.text = resources.getString(R.string.letter_footer)
+            headerFooterAdapter = HeaderFooterAdapter(this, 2)
+            bind.rvSignStamp.adapter = headerFooterAdapter
+            headerFooterAdapter!!.setHeaderFooter(listFooter)
+
+            headerFooterAdapter!!.onItemDeleteClick = { model ->
+
+            }
+
+            headerFooterAdapter!!.onItemClick = { model ->
+
+            }
+
+
+            headerFooterAdapter!!.onItemSelectClick = { model ->
+                dialog.dismiss()
+                binding.imgFooter.visibility = View.VISIBLE
+                footer = model.image
+                Glide.with(this).load(footer).placeholder(R.drawable.ic_default)
+                    .error(R.drawable.ic_default).diskCacheStrategy(DiskCacheStrategy.DATA)
+                    .into(binding.imgFooter)
             }
         }
         dialog.show()

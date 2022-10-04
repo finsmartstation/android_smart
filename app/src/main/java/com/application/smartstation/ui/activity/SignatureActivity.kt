@@ -9,9 +9,11 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.application.smartstation.R
 import com.application.smartstation.databinding.ActivitySignatureBinding
 import com.application.smartstation.service.Status
+import com.application.smartstation.ui.adapter.HeaderFooterAdapter
 import com.application.smartstation.ui.adapter.SignatureAdapter
 import com.application.smartstation.ui.adapter.StampAdapter
 import com.application.smartstation.ui.model.InputParams
+import com.application.smartstation.ui.model.ListHeaderFooterRes
 import com.application.smartstation.ui.model.SignatureListData
 import com.application.smartstation.ui.model.StampList
 import com.application.smartstation.util.Constants
@@ -26,8 +28,10 @@ class SignatureActivity : BaseActivity() {
     val binding: ActivitySignatureBinding by viewBinding()
     var list: ArrayList<SignatureListData> = ArrayList()
     var listStamp: ArrayList<StampList> = ArrayList()
+    var listHeaderFooter: ArrayList<ListHeaderFooterRes> = ArrayList()
     var signatureAdapter: SignatureAdapter? = null
     var stampAdapter: StampAdapter? = null
+    var headerFooterAdapter: HeaderFooterAdapter? = null
     val apiViewModel: ApiViewModel by viewModels()
     var type = 0
 
@@ -196,10 +200,173 @@ class SignatureActivity : BaseActivity() {
     }
 
     private fun getFooter() {
+        val inputParams = InputParams()
+        inputParams.user_id = UtilsDefault.getSharedPreferenceString(Constants.USER_ID)
+        inputParams.accessToken = UtilsDefault.getSharedPreferenceString(Constants.ACCESS_TOKEN)
 
+        apiViewModel.getLetterFooter(inputParams).observe(this, Observer {
+            it.let {
+                when (it.status) {
+                    Status.LOADING -> {
+                        showProgress()
+                    }
+                    Status.SUCCESS -> {
+                        dismissProgress()
+                        if (it.data!!.status) {
+                            listHeaderFooter = it.data.data
+                            if (listHeaderFooter.isNotEmpty()) {
+                                binding.rvSignatureList.visibility = View.VISIBLE
+                                binding.txtNoFound.visibility = View.GONE
+                                setDataHeaderFooter(listHeaderFooter)
+                            } else {
+                                binding.txtNoFound.text = resources.getString(R.string.no_footer)
+                                binding.rvSignatureList.visibility = View.GONE
+                                binding.txtNoFound.visibility = View.VISIBLE
+                            }
+                        } else {
+                            toast(it.data.message)
+                        }
+                    }
+                    Status.ERROR -> {
+                        dismissProgress()
+                        toast(it.message!!)
+                    }
+                }
+            }
+        })
     }
 
     private fun getHeader() {
+        val inputParams = InputParams()
+        inputParams.user_id = UtilsDefault.getSharedPreferenceString(Constants.USER_ID)
+        inputParams.accessToken = UtilsDefault.getSharedPreferenceString(Constants.ACCESS_TOKEN)
+
+        apiViewModel.getLetterHeader(inputParams).observe(this, Observer {
+            it.let {
+                when (it.status) {
+                    Status.LOADING -> {
+                        showProgress()
+                    }
+                    Status.SUCCESS -> {
+                        dismissProgress()
+                        if (it.data!!.status) {
+                            listHeaderFooter = it.data.data
+                            if (listHeaderFooter.isNotEmpty()) {
+                                binding.rvSignatureList.visibility = View.VISIBLE
+                                binding.txtNoFound.visibility = View.GONE
+                                setDataHeaderFooter(listHeaderFooter)
+                            } else {
+                                binding.txtNoFound.text = resources.getString(R.string.no_header)
+                                binding.rvSignatureList.visibility = View.GONE
+                                binding.txtNoFound.visibility = View.VISIBLE
+                            }
+                        } else {
+                            toast(it.data.message)
+                        }
+                    }
+                    Status.ERROR -> {
+                        dismissProgress()
+                        toast(it.message!!)
+                    }
+                }
+            }
+        })
+    }
+
+    private fun setDataHeaderFooter(listHeaderFooter: ArrayList<ListHeaderFooterRes>) {
+        binding.rvSignatureList.layoutManager = LinearLayoutManager(this,
+            LinearLayoutManager.VERTICAL, false)
+        headerFooterAdapter = HeaderFooterAdapter(this, 1)
+        binding.rvSignatureList.adapter = headerFooterAdapter
+
+        headerFooterAdapter!!.onItemDeleteClick = { model ->
+            if (type.equals(3)){
+                deleteHeader(model.id)
+            }else {
+                deleteFooter(model.id)
+            }
+
+        }
+
+        headerFooterAdapter!!.onItemSelectClick = { model ->
+
+        }
+
+        headerFooterAdapter!!.onItemClick = { model ->
+            if (type.equals(3)){
+                setHeader(model.id)
+            }else {
+                setFooter(model.id)
+            }
+        }
+        headerFooterAdapter!!.setHeaderFooter(listHeaderFooter)
+    }
+
+    private fun setHeader(id: String) {
+        val inputParams = InputParams()
+        inputParams.user_id = UtilsDefault.getSharedPreferenceString(Constants.USER_ID)
+        inputParams.accessToken = UtilsDefault.getSharedPreferenceString(Constants.ACCESS_TOKEN)
+        inputParams.id = id
+
+        apiViewModel.setLetterHeader(inputParams).observe(this, Observer {
+            it.let {
+                when (it.status) {
+                    Status.LOADING -> {
+                        showProgress()
+                    }
+                    Status.SUCCESS -> {
+                        dismissProgress()
+                        if (it.data!!.status) {
+                            toast(it.data.message)
+                            getHeader()
+                        } else {
+                            toast(it.data.message)
+                        }
+                    }
+                    Status.ERROR -> {
+                        dismissProgress()
+                        toast(it.message!!)
+                    }
+                }
+            }
+        })
+    }
+
+    private fun setFooter(id: String) {
+        val inputParams = InputParams()
+        inputParams.user_id = UtilsDefault.getSharedPreferenceString(Constants.USER_ID)
+        inputParams.accessToken = UtilsDefault.getSharedPreferenceString(Constants.ACCESS_TOKEN)
+        inputParams.id = id
+
+        apiViewModel.setLetterFooter(inputParams).observe(this, Observer {
+            it.let {
+                when (it.status) {
+                    Status.LOADING -> {
+                        showProgress()
+                    }
+                    Status.SUCCESS -> {
+                        dismissProgress()
+                        if (it.data!!.status) {
+                            toast(it.data.message)
+                            getFooter()
+                        } else {
+                            toast(it.data.message)
+                        }
+                    }
+                    Status.ERROR -> {
+                        dismissProgress()
+                        toast(it.message!!)
+                    }
+                }
+            }
+        })
+    }
+
+    private fun deleteHeader(id: String) {
+
+    }
+
+    private fun deleteFooter(id: String) {
 
     }
 

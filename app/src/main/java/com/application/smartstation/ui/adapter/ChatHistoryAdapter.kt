@@ -1,11 +1,15 @@
 package com.application.smartstation.ui.adapter
 
 import android.content.Context
+import android.media.AudioManager
+import android.media.MediaPlayer
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AlphaAnimation
 import android.view.animation.Animation
+import android.widget.ImageButton
+import android.widget.RelativeLayout
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.NO_POSITION
 import com.application.smartstation.R
@@ -15,14 +19,18 @@ import com.application.smartstation.util.Constants
 import com.application.smartstation.util.UtilsDefault
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
+import java.io.IOException
+
 
 class ChatHistoryAdapter(val context: Context) :
     RecyclerView.Adapter<ChatHistoryAdapter.ViewHolder>() {
 
     private var list = emptyList<ChatDetailsRes>()
     var onItemClick: ((pos: Int) -> Unit)? = null
+    var onItemClickImage: ((pos: ChatDetailsRes) -> Unit)? = null
     var blinkItem = NO_POSITION
     var chatType = false
+    var mediaPlayer: MediaPlayer? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
 
@@ -94,7 +102,55 @@ class ChatHistoryAdapter(val context: Context) :
                             binding.imgChatSend.visibility = View.GONE
                             binding.txtTimeImgSend.visibility = View.GONE
                             binding.txtMsgSend.text = model.message
-                        } else {
+                        }
+
+//                        else if (model.message_type.equals("audio")) {
+//                            binding.flMsgSend.visibility = View.GONE
+//                            binding.imgChatSend.visibility = View.GONE
+//                            binding.txtTimeImgSend.visibility = View.GONE
+//                            binding.llAudio.visibility = View.VISIBLE
+//                            binding.sbRecSend.progress = 0
+//
+//                            binding.txtDurationRecSend.text = UtilsDefault.getDuration("")
+//                            binding.txtTimeRecSend.text =
+//                                UtilsDefault.todayDate(UtilsDefault.localTimeConvert(model.date))
+//
+//                            mediaPlayer = MediaPlayer()
+//                            mediaPlayer!!.setAudioStreamType(AudioManager.STREAM_MUSIC)
+//                            try {
+//                                mediaPlayer!!.setDataSource("")
+//                                mediaPlayer!!.prepareAsync()
+//                            } catch (e: IOException) {
+//                                e.printStackTrace()
+//                            }
+//
+//                            mediaPlayer!!.setOnPreparedListener { /* show media player layout */
+//                                binding.sbRecSend.setMax(mediaPlayer!!.duration)
+//                                 mediaPlayer!!.start()
+//                            }
+//
+//                            binding.imgPlayRecSend.setOnClickListener {
+//                                if (!mediaPlayer!!.isPlaying()) {
+//                                    mediaPlayer!!.start()
+//                                    binding.imgPlayRecSend.visibility = View.GONE
+//                                    binding.imgPauseRecSend.visibility = View.VISIBLE
+//
+//                                }
+//                            }
+//
+//                            binding.imgPauseRecSend.setOnClickListener {
+//                                if (mediaPlayer!!.isPlaying()) {
+//                                    mediaPlayer!!.stop();
+//                                    mediaPlayer!!.reset();
+//                                    mediaPlayer!!.release();
+//                                    binding.imgPlayRecSend.visibility = View.VISIBLE
+//                                    binding.imgPauseRecSend.visibility = View.GONE
+//                                }
+//                            }
+//
+//                        }
+
+                        else {
                             binding.flMsgSend.visibility = View.GONE
                             binding.imgChatSend.visibility = View.VISIBLE
                             binding.txtTimeImgSend.visibility = View.VISIBLE
@@ -139,6 +195,10 @@ class ChatHistoryAdapter(val context: Context) :
                 onItemClick!!.invoke(position)
             }
 
+            binding.imgChat.setOnClickListener {
+                onItemClickImage!!.invoke(model)
+            }
+
 //            itemView.setOnClickListener {
 //                onItemClick!!.invoke(1)
 //            }
@@ -165,6 +225,7 @@ class ChatHistoryAdapter(val context: Context) :
 
         }
     }
+
 
     internal fun setChatHis(chat: List<ChatDetailsRes>, chatType: Boolean) {
         this.list = chat
