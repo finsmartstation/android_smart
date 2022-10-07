@@ -19,6 +19,7 @@ import com.application.smartstation.databinding.FragmentChatBinding
 import com.application.smartstation.service.Status
 import com.application.smartstation.service.background.SocketService
 import com.application.smartstation.ui.activity.ChatActivity
+import com.application.smartstation.ui.activity.ChatViewActivity
 import com.application.smartstation.ui.activity.MainActivity
 import com.application.smartstation.ui.adapter.ChatAdapter
 import com.application.smartstation.ui.model.*
@@ -68,7 +69,7 @@ class ChatFragment : BaseFragment(R.layout.fragment_chat) {
 
         chatAdapter!!.onItemClick = { model ->
             startActivity(Intent(requireActivity(),
-                ChatActivity::class.java).putExtra(Constants.REC_ID, model.userid)
+                ChatViewActivity::class.java).putExtra(Constants.REC_ID, model.userid)
                 .putExtra(Constants.NAME, model.name).putExtra(Constants.PROFILE, model.profile)
                 .putExtra(Constants.CHAT_TYPE, model.chat_type)
                 .putExtra(Constants.ROOM, model.room))

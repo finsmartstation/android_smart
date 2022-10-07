@@ -13,6 +13,7 @@
         <entry key="..\:/smartstation/app/src/main/res/drawable-v24/ic_reply_black_24dp.xml" value="0.134" />
         <entry key="..\:/smartstation/app/src/main/res/drawable-v24/num_bg.xml" value="0.134" />
         <entry key="..\:/smartstation/app/src/main/res/drawable-v24/otp_bg.xml" value="0.134" />
+        <entry key="..\:/smartstation/app/src/main/res/drawable/add_button_bg.xml" value="0.134" />
         <entry key="..\:/smartstation/app/src/main/res/drawable/bg_mail.xml" value="0.134" />
         <entry key="..\:/smartstation/app/src/main/res/drawable/bottom_main_dialog_bg.xml" value="0.134" />
         <entry key="..\:/smartstation/app/src/main/res/drawable/btn_bg_use_gran.xml" value="0.134" />
@@ -22,6 +23,7 @@
         <entry key="..\:/smartstation/app/src/main/res/drawable/chat_date_bg.xml" value="0.134" />
         <entry key="..\:/smartstation/app/src/main/res/drawable/chat_edt_bg.xml" value="0.134" />
         <entry key="..\:/smartstation/app/src/main/res/drawable/chat_rec_bg.xml" value="0.134" />
+        <entry key="..\:/smartstation/app/src/main/res/drawable/circle_bg.xml" value="0.134" />
         <entry key="..\:/smartstation/app/src/main/res/drawable/cusor_bg.xml" value="0.134" />
         <entry key="..\:/smartstation/app/src/main/res/drawable/dot_bg.xml" value="0.134" />
         <entry key="..\:/smartstation/app/src/main/res/drawable/dot_bg_green.xml" value="0.134" />
@@ -40,9 +42,11 @@
         <entry key="..\:/smartstation/app/src/main/res/drawable/ic_compose_mail_use.xml" value="0.134" />
         <entry key="..\:/smartstation/app/src/main/res/drawable/ic_keyboard.xml" value="0.134" />
         <entry key="..\:/smartstation/app/src/main/res/drawable/ic_letter_24.xml" value="0.134" />
+        <entry key="..\:/smartstation/app/src/main/res/drawable/ic_location_on.xml" value="0.134" />
         <entry key="..\:/smartstation/app/src/main/res/drawable/ic_mail_main_use.xml" value="0.134" />
         <entry key="..\:/smartstation/app/src/main/res/drawable/ic_mic_off_black_24dp.xml" value="0.134" />
         <entry key="..\:/smartstation/app/src/main/res/drawable/ic_mic_white_24dp.xml" value="0.134" />
+        <entry key="..\:/smartstation/app/src/main/res/drawable/ic_my_location_black_24dp.xml" value="0.134" />
         <entry key="..\:/smartstation/app/src/main/res/drawable/ic_rec_side_use.xml" value="0.134" />
         <entry key="..\:/smartstation/app/src/main/res/drawable/ic_search.xml" value="0.134" />
         <entry key="..\:/smartstation/app/src/main/res/drawable/ic_settings.xml" value="0.134" />
@@ -50,6 +54,7 @@
         <entry key="..\:/smartstation/app/src/main/res/drawable/ic_smile_use.xml" value="0.134" />
         <entry key="..\:/smartstation/app/src/main/res/drawable/ic_splash_bg_use.xml" value="0.134" />
         <entry key="..\:/smartstation/app/src/main/res/drawable/ic_stamp_use.xml" value="0.134" />
+        <entry key="..\:/smartstation/app/src/main/res/drawable/ic_sticker.xml" value="0.134" />
         <entry key="..\:/smartstation/app/src/main/res/drawable/ic_switch_camera_white_24dp.xml" value="0.134" />
         <entry key="..\:/smartstation/app/src/main/res/drawable/ic_top_gry_01.xml" value="0.134" />
         <entry key="..\:/smartstation/app/src/main/res/drawable/ic_top_gry_chat_use.xml" value="0.134" />
@@ -65,6 +70,8 @@
         <entry key="..\:/smartstation/app/src/main/res/drawable/letter_signature_bg.xml" value="0.134" />
         <entry key="..\:/smartstation/app/src/main/res/drawable/mail_bg.xml" value="0.134" />
         <entry key="..\:/smartstation/app/src/main/res/drawable/mail_img_bg.xml" value="0.134" />
+        <entry key="..\:/smartstation/app/src/main/res/drawable/message_bg.xml" value="0.134" />
+        <entry key="..\:/smartstation/app/src/main/res/drawable/message_bg_right.xml" value="0.134" />
         <entry key="..\:/smartstation/app/src/main/res/drawable/passcode_select.xml" value="0.134" />
         <entry key="..\:/smartstation/app/src/main/res/drawable/popup_bg_chat.xml" value="0.134" />
         <entry key="..\:/smartstation/app/src/main/res/drawable/profile_name_bg.xml" value="0.134" />
@@ -82,6 +89,7 @@
         <entry key="..\:/smartstation/app/src/main/res/layout/activity_camera.xml" value="0.2125" />
         <entry key="..\:/smartstation/app/src/main/res/layout/activity_chat.xml" value="0.165" />
         <entry key="..\:/smartstation/app/src/main/res/layout/activity_chat_info.xml" value="0.165" />
+        <entry key="..\:/smartstation/app/src/main/res/layout/activity_chat_view.xml" value="0.165" />
         <entry key="..\:/smartstation/app/src/main/res/layout/activity_cloud.xml" value="0.165" />
         <entry key="..\:/smartstation/app/src/main/res/layout/activity_cloud_folder.xml" value="0.165" />
         <entry key="..\:/smartstation/app/src/main/res/layout/activity_cloud_view.xml" value="0.309375" />
@@ -99,8 +107,10 @@
         <entry key="..\:/smartstation/app/src/main/res/layout/activity_notification.xml" value="0.1" />
         <entry key="..\:/smartstation/app/src/main/res/layout/activity_passcode.xml" value="0.25" />
         <entry key="..\:/smartstation/app/src/main/res/layout/activity_pdf_view.xml" value="0.309375" />
+        <entry key="..\:/smartstation/app/src/main/res/layout/activity_places_picker.xml" value="0.165" />
         <entry key="..\:/smartstation/app/src/main/res/layout/activity_product.xml" value="0.165" />
         <entry key="..\:/smartstation/app/src/main/res/layout/activity_security.xml" value="0.32135416666666666" />
+        <entry key="..\:/smartstation/app/src/main/res/layout/activity_select_contact_numbers.xml" value="0.2953125" />
         <entry key="..\:/smartstation/app/src/main/res/layout/activity_select_country.xml" value="0.309375" />
         <entry key="..\:/smartstation/app/src/main/res/layout/activity_sent_letter.xml" value="0.20555555555555555" />
         <entry key="..\:/smartstation/app/src/main/res/layout/activity_sent_mail.xml" value="0.165" />
@@ -148,6 +158,9 @@
         <entry key="..\:/smartstation/app/src/main/res/layout/item_chat.xml" value="0.26378794356562635" />
         <entry key="..\:/smartstation/app/src/main/res/layout/item_chat_his.xml" value="0.375" />
         <entry key="..\:/smartstation/app/src/main/res/layout/item_chat_his_date.xml" value="0.309375" />
+        <entry key="..\:/smartstation/app/src/main/res/layout/item_chat_new.xml" value="0.30833333333333335" />
+        <entry key="..\:/smartstation/app/src/main/res/layout/item_chat_new_left.xml" value="0.30833333333333335" />
+        <entry key="..\:/smartstation/app/src/main/res/layout/item_chat_new_right.xml" value="0.309375" />
         <entry key="..\:/smartstation/app/src/main/res/layout/item_cloud.xml" value="0.25" />
         <entry key="..\:/smartstation/app/src/main/res/layout/item_cloud_view.xml" value="0.165" />
         <entry key="..\:/smartstation/app/src/main/res/layout/item_country.xml" value="0.309375" />
@@ -164,9 +177,15 @@
         <entry key="..\:/smartstation/app/src/main/res/layout/menu_chat_popup.xml" value="0.309375" />
         <entry key="..\:/smartstation/app/src/main/res/layout/menu_popup.xml" value="0.309375" />
         <entry key="..\:/smartstation/app/src/main/res/layout/nav_header_main.xml" value="0.309375" />
+        <entry key="..\:/smartstation/app/src/main/res/layout/places_bottomsheet.xml" value="0.125" />
         <entry key="..\:/smartstation/app/src/main/res/layout/progress_load.xml" value="0.309375" />
+        <entry key="..\:/smartstation/app/src/main/res/layout/row_contact_picker.xml" value="0.30833333333333335" />
+        <entry key="..\:/smartstation/app/src/main/res/layout/row_phone_number.xml" value="0.30833333333333335" />
+        <entry key="..\:/smartstation/app/src/main/res/layout/row_place.xml" value="0.30833333333333335" />
         <entry key="..\:/smartstation/app/src/main/res/layout/selected_bottom_dialog.xml" value="0.309375" />
         <entry key="..\:/smartstation/app/src/main/res/layout/settings_header_layout.xml" value="0.32135416666666666" />
+        <entry key="..\:/smartstation/app/src/main/res/layout/shop_recyclerview.xml" value="0.14583333333333334" />
+        <entry key="..\:/smartstation/app/src/main/res/layout/shop_sticker_item.xml" value="0.309375" />
         <entry key="..\:/smartstation/app/src/main/res/menu/nav_menu.xml" value="0.309375" />
         <entry key="..\:/smartstation/app/src/main/res/mipmap-anydpi-v26/app_logo_round.xml" value="0.134" />
       </map>

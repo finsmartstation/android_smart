@@ -219,6 +219,9 @@ class ChatInfoActivity : BaseActivity(), ImageSelectorDialog.Action {
 
     private fun setOnClickListener() {
         binding.toolbar.imgBack.setOnClickListener {
+            intent.putExtra("profile", profilePic)
+            intent.putExtra("name", name)
+            setResult(1, intent)
             finish()
         }
 
@@ -350,12 +353,6 @@ class ChatInfoActivity : BaseActivity(), ImageSelectorDialog.Action {
         }
     }
 
-    private fun setupFullHeight(bottomSheet: View) {
-        val layoutParams = bottomSheet.layoutParams
-        layoutParams.height = WindowManager.LayoutParams.MATCH_PARENT
-        bottomSheet.layoutParams = layoutParams
-    }
-
     private fun changeGrpDetails(inputParams: InputParams) {
         apiViewModel.changeGrpDetails(inputParams).observe(this, Observer {
             it.let {
@@ -368,6 +365,7 @@ class ChatInfoActivity : BaseActivity(), ImageSelectorDialog.Action {
                         if (it.data!!.status) {
                            toast(it.data.message)
                             mBottomDialogDocument!!.dismiss()
+                            getUserListGrp()
                         } else {
                             toast(it.data.message)
                         }

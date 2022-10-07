@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    app:cardBackgroundColor="@color/white"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+
+        <CheckedTextView
+            android:textColor="@color/black"
+            android:id="@+id/check_text_view_number"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:checkMark="?android:attr/listChoiceIndicatorMultiple"
+            android:checked="true"
+            android:drawableLeft="@drawable/ic_call_1"
+            android:drawableTint="@color/grey"
+            android:drawablePadding="20dp"
+            android:fontFamily="@font/dinbold"
+            android:gravity="center"
+            android:padding="15dp"
+            tools:text="Test" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#e1e1e1" />
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>

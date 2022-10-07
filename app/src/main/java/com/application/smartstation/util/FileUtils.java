@@ -25,6 +25,11 @@ import com.application.smartstation.BuildConfig;
 
 import java.io.File;
 import java.io.FileFilter;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.text.DecimalFormat;
 import java.util.Comparator;
 
@@ -227,17 +232,6 @@ public class FileUtils {
         return "com.google.android.apps.photos.content".equals(uri.getAuthority());
     }
 
-    /**
-     * Get the value of the data column for this Uri. This is useful for
-     * MediaStore Uris, and other file-based ContentProviders.
-     *
-     * @param context       The context.
-     * @param uri           The Uri to query.
-     * @param selection     (Optional) Filter used in the query.
-     * @param selectionArgs (Optional) Selection arguments used in the query.
-     * @return The value of the _data column, which is typically a file path.
-     * @author paulburke
-     */
     public static String getDataColumn(Context context, Uri uri, String selection,
                                        String[] selectionArgs) {
 
@@ -621,5 +615,24 @@ public class FileUtils {
         } catch (Exception e) {
             Log.d("openDocument", "Exception-------->" + e.getMessage());
         }
+    }
+
+    public static boolean writeToFileFromContentUri(ContentResolver contentResolver,File file, Uri uri) {
+        if (file == null || uri == null) return false;
+        try {
+            InputStream stream = contentResolver.openInputStream(uri);
+            OutputStream output = new FileOutputStream(file);
+            if (stream == null) return false;
+            byte[] buffer = new byte[4 * 1024];
+            int read;
+            while ((read = stream.read(buffer)) != -1) output.write(buffer, 0, read);
+            output.flush();
+            output.close();
+            stream.close();
+            return true;
+        } catch (FileNotFoundException e) {
+        } catch (IOException e) {
+        }
+        return false;
     }
 }

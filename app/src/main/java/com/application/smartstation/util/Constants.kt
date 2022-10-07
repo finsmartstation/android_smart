@@ -66,6 +66,24 @@ object Constants {
     @JvmField
     var ROOM_NAME = "ROOM_NAME"
     @JvmField
+    var TEXT = "text"
+    @JvmField
+    var IMAGE = "image"
+    @JvmField
+    var DOCS = "doc"
+    @JvmField
+    var PDF = "pdf"
+    @JvmField
+    var LOCATION = "location"
+    @JvmField
+    var VIDEO = "video"
+    @JvmField
+    var AUDIO = "voice"
+    @JvmField
+    var STICKERS = "stickers"
+    @JvmField
+    var EXTRA_CONTACT_LIST = "contactList"
+    @JvmField
     var PUSHNOTIFICATION = "PUSHNOTIFICATION"
 
     //twilio

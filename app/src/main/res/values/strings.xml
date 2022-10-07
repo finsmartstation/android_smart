@@ -1241,5 +1241,26 @@
     <string name="edit_grp">Edit Group</string>
     <string name="done">Done</string>
     <string name="enter_grp_name">Enter group name</string>
+    <string name="side_to_cancel">Slide To Cancel</string>
+    <string name="could_not_get_audio_file">could not get audio file</string>
+    <string name="missing_permissions">Missing Permissions</string>
+    <string name="select_this_location">Select this Location</string>
+    <string name="nearby_places">Nearby Places</string>
+    <string name="foursquare_client_id">3IBIXAJJLDMPDZUUNDQ1VGYHBCZHRWDPDOWQBZHHAQ1RPNNE</string>
+    <string name="foursquare_client_secret">OB45BFUZ4LMUPKJJZXBNI1KIQZGAD0MV40ZEZJTRTC2JMF30</string>
+    <string name="now">Now</string>
+    <string name="minutes_ago">minutes ago</string>
+    <string name="hours_ago">hours ago</string>
+    <string name="yesterday_at">Yesterday at</string>
+    <string name="today_at">Today at</string>
+    <string name="days_ago">days ago</string>
+    <string name="just_now">Just now</string>
+    <string name="today">Today</string>
+    <string name="yesterday">Yesterday</string>
+    <string name="at">at</string>
+    <string name="user_this_location">Use this location?</string>
+    <string name="change_location">Change location</string>
+    <string name="select">Select</string>
+    <string name="map">AIzaSyB8fyqDLGRu_OxR5SYuM0H_6VUO_MUB7pY</string>
 
 </resources>

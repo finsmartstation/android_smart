@@ -108,7 +108,7 @@ class UserDetailsActivity : BaseActivity() {
                     Status.SUCCESS -> {
                         dismissProgress()
                         if (it.data!!.status) {
-                            var list1 = it.data.data
+                            val list1 = it.data.data
                             if (list1.isNotEmpty()) {
                                 list.clear()
                                 for (a in contactList) {

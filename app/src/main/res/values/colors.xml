@@ -47,4 +47,5 @@
     <color name="dec_chat_info">#776463</color>
     <color name="dec_time_chat_info">#acb2b3</color>
     <color name="logo_color">#c4c4c4</color>
+    <color name="nearby_places_bg">#F1F1F1</color>
 </resources>

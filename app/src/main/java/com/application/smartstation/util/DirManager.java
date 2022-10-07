@@ -34,12 +34,6 @@ public class DirManager {
         if (!file.exists())
             file.mkdir();
 
-//        file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM),
-//                        "com.smartstation" + "/Smart Station/Media/Smart station+");
-//        if (!file.exists()) {
-//            file.mkdirs();
-//        }
-
 
 
         return file.getAbsolutePath();
@@ -156,7 +150,7 @@ public class DirManager {
 
 
     public static String sentVoiceMessageDir() {
-        File file = new File(mainAppFolder()+ "/" + APP_FOLDER_NAME + " " + "Audio");
+        File file = new File(mainAppFolders()+"/Audio");
         if (!file.exists()) {
             file.mkdirs();
         }

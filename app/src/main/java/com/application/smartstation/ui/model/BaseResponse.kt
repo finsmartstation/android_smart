@@ -1,5 +1,8 @@
 package com.application.smartstation.ui.model
 
+import android.location.Location
+import com.google.android.gms.maps.model.LatLng
+
 class LoginResponse(var status: Boolean, var message: String, var otp: Int, var statuscode: Int)
 class OTPVerifyResponse(var status: Boolean, var message: String, var data: DataOtp)
 class DataOtp(
@@ -161,7 +164,7 @@ class DataUserList(
 )
 
 class GetChatDetailsListResponse(var status: Boolean, var message: String, var data: ChatListRes)
-class ChatListRes(var id:String,var list: ArrayList<ChatDetailsRes>)
+class ChatListRes(var group_name:String,var group_profile:String,var id:String,var list: ArrayList<ChatDetailsRes>)
 class ChatDetailsRes(
     var id: String,
     var date: String,
@@ -434,3 +437,7 @@ class DataResChat(
     var imgUrl: Int,
     var readStatus: Int,
 )
+
+fun Location.toLatLng(): LatLng = LatLng(this.latitude, this.longitude)
+fun LatLng.toLatLngString(): String = "${this.latitude},${this.longitude}"
+

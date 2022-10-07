@@ -15,6 +15,7 @@ import android.net.Uri
 import android.os.Build
 import android.os.Environment
 import android.preference.PreferenceManager
+import android.provider.MediaStore
 import android.provider.Settings
 import android.text.Html
 import android.util.Base64
@@ -1000,6 +1001,27 @@ object UtilsDefault {
 
         // return timer string
         return finalTimerString
+    }
+
+    fun getAudioPathAndDuration(context: Context, uri: Uri?): Array<String?>? {
+        val cursor = context.contentResolver.query(uri!!,
+            arrayOf(MediaStore.Audio.AudioColumns.DATA, MediaStore.Audio.AudioColumns.DURATION),
+            null,
+            null,
+            null)
+        val audioArray = arrayOfNulls<String>(2)
+        try {
+            cursor!!.moveToFirst()
+            val path = cursor.getString(0)
+            val durationInMs = cursor.getInt(1)
+            val duration: String = milliSecondsToTimer(durationInMs.toLong())!!
+            audioArray[0] = path
+            audioArray[1] = duration
+        } catch (e: java.lang.Exception) {
+        } finally {
+            cursor!!.close()
+        }
+        return audioArray
     }
 
 }

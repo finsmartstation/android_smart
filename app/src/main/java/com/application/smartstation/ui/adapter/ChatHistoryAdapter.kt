@@ -199,6 +199,10 @@ class ChatHistoryAdapter(val context: Context) :
                 onItemClickImage!!.invoke(model)
             }
 
+            binding.imgChatSend.setOnClickListener {
+                onItemClickImage!!.invoke(model)
+            }
+
 //            itemView.setOnClickListener {
 //                onItemClick!!.invoke(1)
 //            }

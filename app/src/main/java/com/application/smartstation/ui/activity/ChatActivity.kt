@@ -128,10 +128,10 @@ class ChatActivity : BaseActivity(), ImageVideoSelectorDialog.Action {
 
         binding.ilHeader.rlChat.setOnClickListener {
             if (!chatType.equals("private")) {
-                startActivity(Intent(this, ChatInfoActivity::class.java)
+                startActivityForResult(Intent(this, ChatInfoActivity::class.java)
                     .putExtra(Constants.NAME, receiverName)
                     .putExtra(Constants.PROFILE_PIC, receiverProfile)
-                    .putExtra(Constants.CHAT_TYPE, chatType).putExtra(Constants.ROOM, room))
+                    .putExtra(Constants.CHAT_TYPE, chatType).putExtra(Constants.ROOM, room),1)
             }
         }
 
@@ -148,7 +148,9 @@ class ChatActivity : BaseActivity(), ImageVideoSelectorDialog.Action {
             if (!checkPermissionForCameraAndMicrophone()) {
                 requestPermissionForCameraAndMicrophone()
             } else {
-                calling("voice_call")
+                if (chatType.equals("private")) {
+                    calling("voice_call")
+                }
             }
         }
 
@@ -156,14 +158,11 @@ class ChatActivity : BaseActivity(), ImageVideoSelectorDialog.Action {
             if (!checkPermissionForCameraAndMicrophone()) {
                 requestPermissionForCameraAndMicrophone()
             } else {
-                calling("video_call")
+                if (chatType.equals("private")) {
+                    calling("video_call")
+                }
             }
         }
-
-//        binding.imgCamera.setOnClickListener {
-
-//
-//        }
 
         binding.imgPlus.setOnClickListener {
             binding.llMsg.visibility = View.GONE
@@ -356,13 +355,19 @@ class ChatActivity : BaseActivity(), ImageVideoSelectorDialog.Action {
 
         chatHistoryAdapter!!.onItemClickImage = { pos ->
             if (!pos.message_type.equals("text")){
-                if (pos.message_type.contains(".pdf")) {
-                    startActivity(Intent(this@ChatActivity,
-                        PdfViewActivity::class.java).putExtra("path", pos.message_type))
-                } else {
-                    FileUtils.openDocument(this@ChatActivity, pos.message_type)
-                }
+                UtilsDefault.downloadFile(this, pos.message, "Chat", object : MailCallback {
+                    override fun success(resp: String?, status: Boolean?) {
+                        if (status!!) {
+                            if (resp!!.contains(".pdf")) {
+                                startActivity(Intent(this@ChatActivity,
+                                    PdfViewActivity::class.java).putExtra("path", resp))
+                            } else {
+                                FileUtils.openDocument(this@ChatActivity, resp)
+                            }
+                        }
+                    }
 
+                })
             }
         }
 
@@ -562,6 +567,7 @@ class ChatActivity : BaseActivity(), ImageVideoSelectorDialog.Action {
                     Status.SUCCESS -> {
                         dismissProgress()
                         if (it.data!!.status) {
+
                             if (it.data.data.list.isNotEmpty()) {
                                 setData(it.data.data.list, false)
                             }
@@ -662,6 +668,12 @@ class ChatActivity : BaseActivity(), ImageVideoSelectorDialog.Action {
                 mBottomDialogDocument!!.dismiss()
             }
 
+            bind.llFolder.setOnClickListener {
+                binding.llMsg.visibility = View.VISIBLE
+                startActivity(Intent(this,CloudActivity::class.java))
+                mBottomDialogDocument!!.dismiss()
+            }
+
             bind.llCamera.setOnClickListener {
                 runTimePermission!!.requestPermission(arrayOf(Manifest.permission.CAMERA,
                     Manifest.permission.RECORD_AUDIO,
@@ -724,15 +736,15 @@ class ChatActivity : BaseActivity(), ImageVideoSelectorDialog.Action {
             if(!room.isNullOrEmpty()){
             if (messageSocketModel.data.id.equals(room)) {
                 if (!messageSocketModel.data.list.isNullOrEmpty()) {
-                    setData(messageSocketModel.data.list, false)
+                    setData(messageSocketModel.data.list, true)
                 }
             }
             }else{
-                if (messageSocketModel.data.id.equals(receiverId)) {
+//                if (messageSocketModel.data.id.equals(receiverId)) {
                     if (!messageSocketModel.data.list.isNullOrEmpty()) {
                         setData(messageSocketModel.data.list, false)
                     }
-                }
+//                }
             }
         } else {
             toast(messageSocketModel.message)
@@ -807,6 +819,17 @@ class ChatActivity : BaseActivity(), ImageVideoSelectorDialog.Action {
                 if (data != null) {
                     val value = data.getStringExtra("file_url")
                     sendMessage(value!!, "image")
+                }
+            }
+            1 -> {
+                if (data != null) {
+                    if (!chatType.equals("private")){
+                        binding.ilHeader.txtName.text = data.getStringExtra("name")
+                        Glide.with(this).load(data.getStringExtra("profile"))
+                            .placeholder(R.drawable.ic_default).error(R.drawable.ic_default).diskCacheStrategy(
+                                DiskCacheStrategy.DATA)
+                            .into(binding.ilHeader.imgProfile)
+                    }
                 }
             }
             else -> {

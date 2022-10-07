@@ -48,14 +48,19 @@ class ImageVideoSelectorDialog {
                 when (requestCode) {
                     GALLERY -> {
                         if (data != null) {
-                            val uri = data.data
-                            val imagePath = FileUtils.getPath(getContext(), uri!!)
-                            if (!TextUtils.isEmpty(imagePath)) {
-                                val file = File(imagePath!!)
-                                imagePath.let {
-                                    action.onImageSelected(imagePath, file.name)
+                            try {
+                                val uri = data.data
+                                val imagePath = FileUtils.getPath(getContext(), uri!!)
+                                if (!TextUtils.isEmpty(imagePath)) {
+                                    val file = File(imagePath!!)
+                                    imagePath.let {
+                                        action.onImageSelected(imagePath, file.name)
+                                    }
                                 }
+                            }catch (e:Exception){
+
                             }
+
                         } else {
                             ((activity
                                 ?: fragment) as UtilInterface).toast("Image or Video not Selected!")

@@ -111,18 +111,22 @@ open class FirebaseMessagingService : FirebaseMessagingService() {
         val channelName = "SMART_STATION"
         Log.d(TAG, "sendNotification: " + "aaaaaaa")
 
-        val intent = if (type != null && (type == "video_call" || type == "voice_call")) {
-            Intent(this, CallActivity::class.java)
-            intent!!.putExtra(Constants.REC_ID, id)
-            intent!!.putExtra(Constants.REC_NAME, title)
-            intent!!.putExtra(Constants.REC_PROFILE, image)
-            intent!!.putExtra(Constants.STATUS, action)
-            intent!!.putExtra(Constants.CALL_TYPE, type)
-            intent!!.putExtra(Constants.ROOM_NAME, roomName)
+        var intent:Intent? = null
+
+         if (type != null && (type == "video_call" || type == "voice_call")) {
+            if (action == CallActivity.callReceive || CallActivity.is_calling_activity_open) {
+                intent = Intent(this, CallActivity::class.java)
+                intent.putExtra(Constants.REC_ID, id)
+                intent.putExtra(Constants.REC_NAME, title)
+                intent.putExtra(Constants.REC_PROFILE, image)
+                intent.putExtra(Constants.STATUS, action)
+                intent.putExtra(Constants.CALL_TYPE, type)
+                intent.putExtra(Constants.ROOM_NAME, roomName)
+            }
         } else {
-            Intent(this, MainActivity::class.java)
+             intent =  Intent(this, MainActivity::class.java)
         }
-        intent.flags =
+        intent!!.flags =
             Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
 
         val pendingIntent =
