@@ -171,6 +171,12 @@ class AdapterChat(val context: Context) : RecyclerView.Adapter<AdapterChat.ViewH
                     binding.icSender.main.visibility = View.VISIBLE
                     binding.icReceiver.main.visibility = View.GONE
 
+                    if (model.message_status.equals("0")) {
+                        binding.icSender.main.setBackgroundResource(R.drawable.send_chat_bg_blue)
+                    }else{
+                        binding.icSender.main.setBackgroundResource(R.drawable.message_bg)
+                    }
+
                     //txt
                     if (model.message_type.equals(Constants.TEXT)){
                         binding.icSender.txtMsg.visibility = View.VISIBLE
@@ -279,6 +285,13 @@ class AdapterChat(val context: Context) : RecyclerView.Adapter<AdapterChat.ViewH
                     }
                 }
             }
+
+            //click event
+            itemView.setOnClickListener {
+                onItemClick!!.invoke(model)
+            }
+
+
         }
 
     }

@@ -105,16 +105,17 @@
                     android:layout_height="200dp"
                     />
 
-            </androidx.cardview.widget.CardView>
+                <ImageView
+                    android:id="@+id/play"
+                    android:visibility="gone"
+                    android:layout_centerInParent="true"
+                    android:src="@drawable/play_icon"
+                    android:layout_gravity="center"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    tools:ignore="ContentDescription" />
 
-            <ImageView
-                android:id="@+id/play"
-                android:visibility="gone"
-                android:layout_centerInParent="true"
-                android:src="@drawable/play_icon"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                tools:ignore="ContentDescription" />
+            </androidx.cardview.widget.CardView>
 
             <me.jagar.chatvoiceplayerlibrary.VoicePlayerView
                 android:visibility="gone"

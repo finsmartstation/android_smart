@@ -60,8 +60,8 @@ class PlacesPickerActivity : ScopedActivity(), OnMapReadyCallback,NearbyPlacesAd
             .get(PlacesPickerViewModel::class.java)
 
 
-        val mapFragment = supportFragmentManager
-            .findFragmentById(R.id.map) as SupportMapFragment
+        val mapFragment = fragmentManager
+            .findFragmentById(R.id.map) as MapFragment
         mapFragment.getMapAsync(this)
 
 
@@ -84,29 +84,29 @@ class PlacesPickerActivity : ScopedActivity(), OnMapReadyCallback,NearbyPlacesAd
 
 
         viewModel.nearbyPlacesLiveData.observe(this, Observer {
-            if (binding.swNearBy.isChecked) {
-                places.clear()
-                places.addAll(it)
-                mAdapter.notifyDataSetChanged()
-            }
+//            if (binding.swNearBy.isChecked) {
+//                places.clear()
+//                places.addAll(it)
+//                mAdapter.notifyDataSetChanged()
+//            }
         })
         viewModel.showLocationDialogLiveData.observe(this, Observer {
             enableGps()
         })
 
-        binding.swNearBy.setOnCheckedChangeListener { switch, isChecked ->
-            if (isChecked) {
-                if (!PermissionsUtil.hasLocationPermissions(this@PlacesPickerActivity)) {
-                    switch.toggle()
-                    Toast.makeText(this@PlacesPickerActivity, R.string.missing_permissions, Toast.LENGTH_SHORT).show()
-                } else {
-                    viewModel.markerMoved(mMap.cameraPosition.target)
-                }
-            } else {
-                places.clear()
-                mAdapter.notifyDataSetChanged()
-            }
-        }
+//        binding.swNearBy.setOnCheckedChangeListener { switch, isChecked ->
+//            if (isChecked) {
+//                if (!PermissionsUtil.hasLocationPermissions(this@PlacesPickerActivity)) {
+//                    switch.toggle()
+//                    Toast.makeText(this@PlacesPickerActivity, R.string.missing_permissions, Toast.LENGTH_SHORT).show()
+//                } else {
+//                    viewModel.markerMoved(mMap.cameraPosition.target)
+//                }
+//            } else {
+//                places.clear()
+//                mAdapter.notifyDataSetChanged()
+//            }
+//        }
 
         mAdapter.onClickListener = this
 
@@ -163,18 +163,18 @@ class PlacesPickerActivity : ScopedActivity(), OnMapReadyCallback,NearbyPlacesAd
             checkPermissions()
         }
 
-        binding.txtSelectThisLocation.setOnClickListener {
-            showDialog()
-        }
+//        binding.txtSelectThisLocation.setOnClickListener {
+//            showDialog()
+//        }
     }
 
     override fun onMapReady(map: GoogleMap?) {
         mMap = map!!
         mMap.setOnCameraMoveListener {
             mMarker?.position = mMap.cameraPosition.target
-            if (binding.swNearBy.isChecked) {
-                viewModel.markerMoved(map.cameraPosition.target)
-            }
+//            if (binding.swNearBy.isChecked) {
+//                viewModel.markerMoved(map.cameraPosition.target)
+//            }
         }
         checkPermissions()
     }
@@ -207,9 +207,9 @@ class PlacesPickerActivity : ScopedActivity(), OnMapReadyCallback,NearbyPlacesAd
             if (resultCode == RESULT_OK) {
                 // All required changes were successfully made
                 viewModel.getCurrentLocation()
-                if (binding.swNearBy.isChecked) {
-                    viewModel.markerMoved(mMap.cameraPosition.target)
-                }
+//                if (binding.swNearBy.isChecked) {
+//                    viewModel.markerMoved(mMap.cameraPosition.target)
+//                }
 
             } else {
                 //GPS NOT ENABLED BY USER

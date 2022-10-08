@@ -16,7 +16,7 @@
             android:id="@+id/map"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            class="com.google.android.gms.maps.SupportMapFragment" />
+            class="com.google.android.gms.maps.MapFragment" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -24,65 +24,64 @@
 <!--    <include layout="@layout/places_bottomsheet"-->
 <!--        android:id="@+id/placeBottom"/>-->
 <!--    -->
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/nearby_places_bg"
-        android:orientation="vertical"
-        android:id="@+id/bottomSheet"
-        app:behavior_hideable="false"
-        app:behavior_peekHeight="50dp"
-        app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
-        >
+<!--    <LinearLayout-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="match_parent"-->
+<!--        android:background="@color/nearby_places_bg"-->
+<!--        android:orientation="vertical"-->
+<!--        android:id="@+id/bottomSheet"-->
+<!--        app:behavior_hideable="false"-->
+<!--        app:behavior_peekHeight="50dp"-->
+<!--        app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"-->
+<!--        >-->
 
-        <com.application.smartstation.view.CustomTextViewBold
-            android:id="@+id/txtSelectThisLocation"
-            android:layout_width="match_parent"
-            android:layout_height="80dp"
-            android:background="@color/white"
-            android:clickable="true"
-            android:drawablePadding="20dp"
-            android:focusable="true"
-            android:gravity="center_vertical"
-            android:paddingStart="8dp"
-            android:text="@string/select_this_location"
-            android:textColor="@color/black"
-            android:textSize="18sp"
-            android:drawableStart="@drawable/ic_location_on"
-            />
+<!--        <com.application.smartstation.view.CustomTextViewBold-->
+<!--            android:id="@+id/txtSelectThisLocation"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="80dp"-->
+<!--            android:background="@color/white"-->
+<!--            android:clickable="true"-->
+<!--            android:drawablePadding="20dp"-->
+<!--            android:focusable="true"-->
+<!--            android:gravity="center_vertical"-->
+<!--            android:paddingStart="8dp"-->
+<!--            android:text="@string/select_this_location"-->
+<!--            android:textColor="@color/black"-->
+<!--            android:textSize="18sp"-->
+<!--            android:drawableStart="@drawable/ic_location_on"-->
+<!--            />-->
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+<!--        <LinearLayout-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content">-->
 
-            <com.application.smartstation.view.CustomTextViewBold
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:paddingStart="8dp"
-                android:paddingTop="8dp"
-                android:text="@string/nearby_places"
-                android:textColor="#80858A" />
+<!--            <com.application.smartstation.view.CustomTextViewBold-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_weight="1"-->
+<!--                android:paddingStart="8dp"-->
+<!--                android:paddingTop="8dp"-->
+<!--                android:text="@string/nearby_places"-->
+<!--                android:textColor="#80858A" />-->
 
-            <androidx.appcompat.widget.SwitchCompat
-                android:id="@+id/swNearBy"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingBottom="8dp"
-                android:layout_marginRight="8dp" />
-        </LinearLayout>
+<!--            <androidx.appcompat.widget.SwitchCompat-->
+<!--                android:id="@+id/swNearBy"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:paddingBottom="8dp"-->
+<!--                android:layout_marginRight="8dp" />-->
+<!--        </LinearLayout>-->
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv_places"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="8dp" />
+<!--        <androidx.recyclerview.widget.RecyclerView-->
+<!--            android:id="@+id/rv_places"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="match_parent"-->
+<!--            android:layout_marginTop="8dp" />-->
 
-    </LinearLayout>
+<!--    </LinearLayout>-->
 
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        app:layout_anchor="@id/bottomSheet"
         app:layout_anchorGravity="right"
         android:id="@+id/getLocation"
         android:layout_width="wrap_content"

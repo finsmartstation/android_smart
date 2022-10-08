@@ -3,6 +3,10 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/smartstation/SimplePlacePicker-master/src/main/res/drawable/small_button_shape.xml" value="0.134" />
+        <entry key="..\:/smartstation/SimplePlacePicker-master/src/main/res/layout/activity_map.xml" value="0.2953125" />
+        <entry key="..\:/smartstation/SimplePlacePicker-master/src/main/res/layout/map_content_main.xml" value="0.165" />
+        <entry key="..\:/smartstation/app/SimplePlacePicker-master/src/main/res/drawable/small_button_shape.xml" value="0.134" />
         <entry key="..\:/smartstation/app/src/main/res/drawable-v24/button_blue_bg.xml" value="0.134" />
         <entry key="..\:/smartstation/app/src/main/res/drawable-v24/dialog_file_bg_use.xml" value="0.134" />
         <entry key="..\:/smartstation/app/src/main/res/drawable-v24/ic_backspace.xml" value="0.134" />
@@ -102,6 +106,7 @@
         <entry key="..\:/smartstation/app/src/main/res/layout/activity_letter_view.xml" value="0.309375" />
         <entry key="..\:/smartstation/app/src/main/res/layout/activity_login.xml" value="0.309375" />
         <entry key="..\:/smartstation/app/src/main/res/layout/activity_main.xml" value="0.25" />
+        <entry key="..\:/smartstation/app/src/main/res/layout/activity_media_view.xml" value="0.25" />
         <entry key="..\:/smartstation/app/src/main/res/layout/activity_new_letter.xml" value="0.165" />
         <entry key="..\:/smartstation/app/src/main/res/layout/activity_new_mail.xml" value="0.2057460611677479" />
         <entry key="..\:/smartstation/app/src/main/res/layout/activity_notification.xml" value="0.1" />

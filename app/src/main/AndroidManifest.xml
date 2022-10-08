@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.application.smartstation">
 
     <uses-sdk
@@ -39,13 +40,16 @@
 
     <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
 
-    <permission
-        android:name="com.example.mapdemo.permission.MAPS_RECEIVE"
-        android:protectionLevel="signature" />
+    <queries>
+        <package android:name="com.google.android.apps.maps" />
+    </queries>
 
-    <uses-permission android:name="com.example.mapdemo.permission.MAPS_RECEIVE" />
-    <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES" />
-
+    <uses-feature
+        android:name="android.hardware.location.network"
+        android:required="false" />
+    <uses-feature
+        android:name="android.hardware.location.gps"
+        android:required="false" />
     <uses-feature
         android:glEsVersion="0x00020000"
         android:required="true" />
@@ -60,11 +64,15 @@
         android:requestLegacyExternalStorage="true"
         android:roundIcon="@mipmap/app_logo"
         android:supportsRtl="true"
-        android:theme="@style/Theme.SmartStation">
+        android:theme="@style/Theme.SmartStation"
+        tools:replace="android:icon,android:roundIcon,android:theme">
+        <activity
+            android:name=".ui.activity.MediaViewActivity"
+            android:exported="false" />
         <activity
             android:name=".ui.activity.PlacesPickerActivity"
             android:exported="false"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".ui.activity.SelectContactNumbersActivity"
             android:exported="false"
@@ -264,11 +272,12 @@
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_channel_id"
             android:value="@string/notification_channel_id" />
-
-        <meta-data android:name="com.google.android.maps.v2.API_KEY"
-            android:value="@string/map"
-            />
-
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="@string/map" />
     </application>
 
 </manifest>

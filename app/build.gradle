@@ -241,6 +241,10 @@ dependencies {
     implementation 'com.google.android.gms:play-services-maps:17.0.0'
     implementation 'com.google.android.gms:play-services-location:17.0.0'
 
+    implementation project(path: ':SimplePlacePicker-master')
+
+    //photoview
+    implementation 'com.github.chrisbanes:PhotoView:2.3.0'
 }
 kapt {
     correctErrorTypes true

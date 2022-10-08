@@ -9,14 +9,19 @@ import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
+import android.os.Looper
 import android.os.Parcelable
 import android.provider.MediaStore
 import android.text.Editable
 import android.text.TextUtils
 import android.text.TextWatcher
 import android.util.Log
+import android.view.Gravity
+import android.view.LayoutInflater
 import android.view.View
 import android.view.inputmethod.EditorInfo
+import android.widget.LinearLayout
+import android.widget.PopupWindow
 import android.widget.TextView.OnEditorActionListener
 import android.widget.Toast
 import androidx.activity.result.ActivityResult
@@ -38,6 +43,9 @@ import com.aghajari.emojiview.view.AXStickerView
 import com.application.smartstation.R
 import com.application.smartstation.databinding.ActivityChatViewBinding
 import com.application.smartstation.databinding.DialogBottomChatDocumentBinding
+import com.application.smartstation.databinding.MenuChatMorePopupBinding
+import com.application.smartstation.databinding.MenuChatPopupBinding
+import com.application.smartstation.service.MailCallback
 import com.application.smartstation.service.Status
 import com.application.smartstation.service.background.SocketService
 import com.application.smartstation.ui.adapter.AdapterChat
@@ -49,6 +57,8 @@ import com.application.smartstation.view.sticker.FireStickerProvider
 import com.application.smartstation.view.sticker.StickerLoader
 import com.application.smartstation.viewmodel.ApiViewModel
 import com.application.smartstation.viewmodel.ChatEvent
+import com.application.smartstation.viewmodel.OnlineChatEvent
+import com.application.smartstation.viewmodel.TypingEvent
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.devlomi.record_view.OnBasketAnimationEnd
@@ -61,6 +71,8 @@ import com.karumi.dexter.listener.PermissionDeniedResponse
 import com.karumi.dexter.listener.PermissionGrantedResponse
 import com.karumi.dexter.listener.PermissionRequest
 import com.karumi.dexter.listener.single.PermissionListener
+import com.smartstation.simpleplacepicker.MapActivity
+import com.smartstation.simpleplacepicker.utils.SimplePlacePicker
 import com.thoughtbot.expandablecheckrecyclerview.models.MultiCheckExpandableGroup
 import com.wafflecopter.multicontactpicker.ContactResult
 import com.wafflecopter.multicontactpicker.MultiContactPicker
@@ -183,6 +195,51 @@ class ChatViewActivity : BaseActivity(), ImageVideoSelectorDialog.Action {
         chatHistoryAdapter = AdapterChat(this)
         binding.rvChatRoom.adapter = chatHistoryAdapter
 
+        chatHistoryAdapter!!.onItemClick = {it ->
+            if (Constants.IMAGE.equals(it.message_type)){
+                if (it.senter_id.equals(UtilsDefault.getSharedPreferenceString(Constants.USER_ID))) {
+                    val intent = Intent(this,MediaViewActivity::class.java)
+                    intent.putExtra("name","You")
+                    intent.putExtra("date",it.date)
+                    intent.putExtra("msg",it.message)
+                    intent.putExtra("type",it.message_type)
+                    startActivity(intent)
+                } else {
+                    val intent = Intent(this,MediaViewActivity::class.java)
+                    intent.putExtra("name",receiverName)
+                    intent.putExtra("date",it.date)
+                    intent.putExtra("msg",it.message)
+                    intent.putExtra("type",it.message_type)
+                    startActivity(intent)
+                }
+
+            }else if (Constants.VIDEO.equals(it.message_type)){
+                UtilsDefault.downloadFile(this, it.message, "video", object : MailCallback {
+                    override fun success(resp: String?, status: Boolean?) {
+                        if (status!!) {
+                            if (it.senter_id.equals(UtilsDefault.getSharedPreferenceString(Constants.USER_ID))) {
+                                val intent = Intent(this@ChatViewActivity,MediaViewActivity::class.java)
+                                intent.putExtra("name","You")
+                                intent.putExtra("date",it.date)
+                                intent.putExtra("msg",resp)
+                                intent.putExtra("type",it.message_type)
+                                startActivity(intent)
+                            } else {
+                                val intent = Intent(this@ChatViewActivity,MediaViewActivity::class.java)
+                                intent.putExtra("name",receiverName)
+                                intent.putExtra("date",it.date)
+                                intent.putExtra("msg",resp)
+                                intent.putExtra("type",it.message_type)
+                                startActivity(intent)
+                            }
+                        }
+                    }
+
+                })
+
+            }
+        }
+
 
         binding.rvChatRoom.addOnLayoutChangeListener(View.OnLayoutChangeListener { v, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom ->
             if (bottom < oldBottom) {
@@ -243,6 +300,12 @@ class ChatViewActivity : BaseActivity(), ImageVideoSelectorDialog.Action {
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {}
             override fun afterTextChanged(s: Editable) {
                 val text = s.toString()
+                if (s!!.length == 0) {
+                    sendTypingIndicator(false)
+                } else {
+                    sendTypingIndicator(true)
+                    typingHandler()
+                }
                 if (text != "") {
                     binding.imgPlus.visibility = View.GONE
                     binding.llSend.visibility = View.VISIBLE
@@ -255,6 +318,12 @@ class ChatViewActivity : BaseActivity(), ImageVideoSelectorDialog.Action {
 
 
 
+    }
+
+    fun typingHandler() {
+        Handler(Looper.getMainLooper()).postDelayed({
+            sendTypingIndicator(false)
+        }, 2000)
     }
 
     private fun sendImage(img: String, docs: String) {
@@ -509,6 +578,68 @@ class ChatViewActivity : BaseActivity(), ImageVideoSelectorDialog.Action {
             }
         }
 
+        binding.ilHeader.imgMenu.setOnClickListener { v ->
+            binding.ilHeader.imgMenu.visibility = View.INVISIBLE
+            menuPopup(v)
+        }
+
+    }
+
+    fun menuPopup(v: View?) {
+
+        val inflater = getSystemService(LAYOUT_INFLATER_SERVICE) as LayoutInflater
+        val popupView = inflater.inflate(R.layout.menu_chat_popup, null)
+        val width = LinearLayout.LayoutParams.WRAP_CONTENT
+        val height = LinearLayout.LayoutParams.WRAP_CONTENT
+        val popupWindow = PopupWindow(popupView, width, height, true)
+        popupWindow.isFocusable = true
+        popupWindow.isOutsideTouchable = true
+        popupWindow.showAtLocation(v, Gravity.TOP or Gravity.RIGHT, 0, 0)
+
+        val bind = MenuChatPopupBinding.bind(popupView)
+
+        var i = 0
+
+        bind.llMore.setOnClickListener {
+            morePopup(v)
+            i = 1
+            popupWindow.dismiss()
+        }
+
+        bind.txtViewContact.setOnClickListener {
+            if (!chatType.equals("private")) {
+                startActivity(Intent(this, ChatInfoActivity::class.java)
+                    .putExtra(Constants.NAME, receiverName)
+                    .putExtra(Constants.PROFILE_PIC, receiverProfile)
+                    .putExtra(Constants.CHAT_TYPE, chatType).putExtra(Constants.ROOM, room))
+            }
+            popupWindow.dismiss()
+        }
+
+
+
+        popupWindow.setOnDismissListener(PopupWindow.OnDismissListener {
+            if (i == 0) {
+                binding.ilHeader.imgMenu.visibility = View.VISIBLE
+            }
+        })
+    }
+
+    fun morePopup(v: View?) {
+        val inflater = getSystemService(LAYOUT_INFLATER_SERVICE) as LayoutInflater
+        val popupView = inflater.inflate(R.layout.menu_chat_more_popup, null)
+        val width = LinearLayout.LayoutParams.WRAP_CONTENT
+        val height = LinearLayout.LayoutParams.WRAP_CONTENT
+        val popupWindow = PopupWindow(popupView, width, height, true)
+        popupWindow.isFocusable = true
+        popupWindow.isOutsideTouchable = true
+        popupWindow.showAtLocation(v, Gravity.TOP or Gravity.RIGHT, 0, 0)
+
+        val bind = MenuChatMorePopupBinding.bind(popupView)
+
+        popupWindow.setOnDismissListener(PopupWindow.OnDismissListener {
+            binding.ilHeader.imgMenu.visibility = View.VISIBLE
+        })
     }
 
     private fun showDialogChat() {
@@ -605,8 +736,12 @@ class ChatViewActivity : BaseActivity(), ImageVideoSelectorDialog.Action {
     }
 
     private fun pickLocation() {
-        startActivityForResult(Intent(this, PlacesPickerActivity::class.java),
-            PICK_LOCATION_REQUEST)
+        val intent = Intent(this, MapActivity::class.java)
+        val bundle = Bundle()
+        bundle.putString(SimplePlacePicker.API_KEY, "AIzaSyCoezJQ7_58c0bLHXF5wBCjA8-5W0BzJ30")
+        intent.putExtras(bundle)
+        //noinspection deprecation
+        startActivityForResult(intent, SimplePlacePicker.SELECT_LOCATION_REQUEST_CODE)
     }
 
     private fun pickContact() {
@@ -801,10 +936,11 @@ class ChatViewActivity : BaseActivity(), ImageVideoSelectorDialog.Action {
                 }
             }
 
-            PICK_LOCATION_REQUEST -> {
+            SimplePlacePicker.SELECT_LOCATION_REQUEST_CODE -> {
                 if (data != null) {
-                    val place: Place = data.getParcelableExtra(Place.EXTRA_PLACE)!!
-                    Log.d("TAG", "onActivityResult: "+place.name)
+                    val lon = data.getDoubleExtra(SimplePlacePicker.LOCATION_LNG_EXTRA, 0.0)
+                    val lat = data.getDoubleExtra(SimplePlacePicker.LOCATION_LAT_EXTRA, 0.0)
+
                 }
             }
 
@@ -908,6 +1044,75 @@ class ChatViewActivity : BaseActivity(), ImageVideoSelectorDialog.Action {
 
         val requestFile: RequestBody = file.asRequestBody("*/*".toMediaTypeOrNull())
         return MultipartBody.Part.createFormData(s, file.name, requestFile)
+    }
+
+    fun sendTypingIndicator(indicate: Boolean) {
+        if (indicate) {
+            typingEmit("1")
+        } else {
+            typingEmit("0")
+        }
+    }
+
+    fun typingEmit(s: String) {
+        if (UtilsDefault.isOnline()) {
+            val jsonObject = JSONObject()
+            try {
+                jsonObject.put("sid", UtilsDefault.getSharedPreferenceString(Constants.USER_ID))
+                jsonObject.put("rid", receiverId)
+                jsonObject.put("status", s)
+                Log.d("TAG", "typing: " + jsonObject)
+                emitters.typingStatus(jsonObject)
+            } catch (e: java.lang.Exception) {
+                e.printStackTrace()
+            }
+        }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun onTypingEvent(event: TypingEvent) {
+        var jsonObject: JSONObject? = JSONObject()
+        jsonObject = event.getJsonObject()
+        setTypingEvent(jsonObject)
+        Log.d("TAG", "TYPINGEVENT: " + jsonObject)
+    }
+
+    fun setTypingEvent(jsonObject: JSONObject?) {
+        val gson = Gson()
+        val typingModel: TypingRes = gson.fromJson(jsonObject.toString(),
+            TypingRes::class.java)
+        if (typingModel.status) {
+                if (typingModel.user_id.equals(receiverId)) {
+                    if (typingModel.typing.equals("1")) {
+                        binding.ilHeader.txtStatus.visibility = View.GONE
+                        binding.ilHeader.txtTypingStatus.visibility = View.VISIBLE
+                    } else {
+                        binding.ilHeader.txtStatus.visibility = View.VISIBLE
+                        binding.ilHeader.txtTypingStatus.visibility = View.GONE
+                    }
+                }
+        }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun onOnlineChatEvent(event: OnlineChatEvent) {
+        var jsonObject: JSONObject? = JSONObject()
+        jsonObject = event.getJsonObject()
+        setOnlineEvent(jsonObject)
+        Log.d("TAG", "ONONLINEEVENT: " + jsonObject)
+    }
+
+    private fun setOnlineEvent(jsonObject: JSONObject?) {
+        val gson = Gson()
+        val onlineSocketModel: OnlineRes = gson.fromJson(jsonObject.toString(),
+            OnlineRes::class.java)
+        if (onlineSocketModel.online_status.equals("0")) {
+            binding.ilHeader.txtStatus.text = UtilsDefault.dateLastSeen(onlineSocketModel.last_seen)
+            Log.d("TAG",
+                "setOnlineEvent: " + UtilsDefault.dateLastSeen(onlineSocketModel.last_seen))
+        } else {
+            binding.ilHeader.txtStatus.text = "Online"
+        }
     }
 
 }
