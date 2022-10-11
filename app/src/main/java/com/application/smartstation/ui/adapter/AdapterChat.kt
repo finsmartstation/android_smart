@@ -105,7 +105,7 @@ class AdapterChat(val context: Context) : RecyclerView.Adapter<AdapterChat.ViewH
                         binding.icReceiver.txtTime1.visibility = View.VISIBLE
                         binding.icReceiver.voicePlayerView.visibility = View.GONE
 
-                        Glide.with(context).load(model.message).diskCacheStrategy(DiskCacheStrategy.ALL)
+                        Glide.with(context).load(model.message)
                             .into(binding.icReceiver.media)
                         binding.icReceiver.txtTime1.text =
                             UtilsDefault.todayDate(UtilsDefault.localTimeConvert(model.date))
@@ -122,7 +122,7 @@ class AdapterChat(val context: Context) : RecyclerView.Adapter<AdapterChat.ViewH
                         binding.icReceiver.txtTime1.visibility = View.VISIBLE
                         binding.icReceiver.voicePlayerView.visibility = View.GONE
 
-                        Glide.with(context).asBitmap().load(model.message).diskCacheStrategy(DiskCacheStrategy.ALL)
+                        Glide.with(context).asBitmap().load(model.message)
                             .thumbnail(0.1f).into(binding.icReceiver.media)
                         binding.icReceiver.txtTime1.text =
                             UtilsDefault.todayDate(UtilsDefault.localTimeConvert(model.date))
@@ -221,7 +221,7 @@ class AdapterChat(val context: Context) : RecyclerView.Adapter<AdapterChat.ViewH
                         binding.icSender.txtTime1.visibility = View.VISIBLE
                         binding.icSender.voicePlayerView.visibility = View.GONE
 
-                        Glide.with(context).load(model.message).diskCacheStrategy(DiskCacheStrategy.ALL)
+                        Glide.with(context).load(model.message)
                             .into(binding.icSender.media)
                         binding.icSender.txtTime1.text =
                             UtilsDefault.todayDate(UtilsDefault.localTimeConvert(model.date))
@@ -238,7 +238,7 @@ class AdapterChat(val context: Context) : RecyclerView.Adapter<AdapterChat.ViewH
                         binding.icSender.voicePlayerView.visibility = View.GONE
                         binding.icSender.txtTime.visibility = View.GONE
 
-                        Glide.with(context).asBitmap().load(model.message).diskCacheStrategy(DiskCacheStrategy.ALL)
+                        Glide.with(context).asBitmap().load(model.message)
                             .thumbnail(0.1f).into(binding.icSender.media)
                         binding.icSender.txtTime1.text =
                             UtilsDefault.todayDate(UtilsDefault.localTimeConvert(model.date))

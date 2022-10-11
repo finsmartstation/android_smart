@@ -1262,5 +1262,14 @@
     <string name="change_location">Change location</string>
     <string name="select">Select</string>
     <string name="map">AIzaSyDF9NisUWrgCiRYUI3hSUThTVKLttUzK18</string>
+    <string name="share_contact">Share Contact</string>
+    <string name="exit_grp">Exit this group?</string>
+    <string name="exit_grp_des">Only you and group admins will be notified that you left the group.</string>
+    <string name="exit_grp_1">Exit Group</string>
+    <string name="make_grp_admin">Make group admin</string>
+    <string name="view">View</string>
+    <string name="remove">Remove</string>
+    <string name="grp_in_common">Group in Common</string>
+    <string name="with">with</string>
 
 </resources>

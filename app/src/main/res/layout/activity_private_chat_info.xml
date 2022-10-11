@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/view_chat_info"
-    tools:context=".ui.activity.ChatInfoActivity">
+    tools:context=".ui.activity.PrivateChatInfoActivity">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appBarLayout"
@@ -249,7 +249,6 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="6dp"
                     android:textAlignment="textStart"
-                    android:text="@string/grp_create_date"
                     android:textColor="@color/dec_chat_info"
                     android:textSize="18sp" />
 
@@ -274,7 +273,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="26dp"
-                android:orientation="vertical"
+                android:orientation="horizontal"
                 android:visibility="visible">
 
                 <com.application.smartstation.view.CustomTextViewBold
@@ -283,7 +282,17 @@
                     android:layout_height="wrap_content"
                     android:textAlignment="textStart"
                     android:text="@string/media_link"
+                    android:layout_marginEnd="10dp"
+                    android:layout_weight="1"
                     android:textColor="@color/black"
+                    android:textSize="18sp" />
+
+                <com.application.smartstation.view.CustomTextViewBold
+                    android:id="@+id/txtMediaCount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAlignment="textStart"
+                    android:textColor="@color/grey"
                     android:textSize="18sp" />
 
 
@@ -320,7 +329,7 @@
                     android:layout_marginEnd="26dp"
                     android:gravity="center"
                     android:orientation="horizontal"
-                    android:visibility="gone">
+                    android:visibility="visible">
 
                     <ImageView
                         android:layout_width="30dp"
@@ -330,11 +339,11 @@
                         app:tint="@color/color_green" />
 
                     <com.application.smartstation.view.CustomTextViewBold
+                        android:id="@+id/txtCreateGrp"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
                         android:singleLine="true"
-                        android:text="@string/add_participants"
                         android:textColor="@color/black"
                         android:textSize="18sp" />
 
@@ -367,10 +376,114 @@
                     android:layout_height="20dp"
                     android:background="@color/view_chat_info" />
 
+
             </LinearLayout>
 
+
             <LinearLayout
-                android:id="@+id/llExit"
+                android:id="@+id/llShareContact"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="26dp"
+                android:layout_marginTop="26dp"
+                android:layout_marginEnd="26dp"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:src="@drawable/select_contact"
+                    />
+
+                <com.application.smartstation.view.CustomTextViewBold
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="26dp"
+                    android:text="@string/share_contact"
+                    android:textColor="@color/black"
+                    android:textSize="18sp" />
+
+
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="10dp"
+                android:background="@color/view_chat_info" />
+
+            <LinearLayout
+                android:id="@+id/llExportChat"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="26dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="26dp"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:src="@drawable/select_contact"
+                    />
+
+                <com.application.smartstation.view.CustomTextViewBold
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="26dp"
+                    android:text="@string/export_chat"
+                    android:textColor="@color/black"
+                    android:textSize="18sp" />
+
+
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="10dp"
+                android:background="@color/view_chat_info" />
+
+            <LinearLayout
+                android:id="@+id/llClearChat"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="26dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="26dp"
+                android:layout_marginBottom="26dp"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:src="@drawable/select_contact"
+                    />
+
+                <com.application.smartstation.view.CustomTextViewBold
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="26dp"
+                    android:text="@string/clear_chat"
+                    android:textColor="@color/black"
+                    android:textSize="18sp" />
+
+
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="20dp"
+                android:background="@color/view_chat_info" />
+
+            <LinearLayout
+                android:id="@+id/llBlock"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="26dp"
@@ -385,12 +498,12 @@
                     android:src="@drawable/ic_exit_group" />
 
                 <com.application.smartstation.view.CustomTextViewBold
-                    android:id="@+id/txtExit"
+                    android:id="@+id/txtBlock"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_marginStart="26dp"
-                    android:text="@string/exit"
+                    android:text="@string/block"
                     android:textColor="@color/red"
                     android:textSize="18sp" />
 
@@ -398,6 +511,7 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/llReport"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="26dp"

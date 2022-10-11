@@ -164,7 +164,7 @@ class DataUserList(
 )
 
 class GetChatDetailsListResponse(var status: Boolean, var message: String, var data: ChatListRes)
-class ChatListRes(var group_name:String,var group_profile:String,var id:String,var list: ArrayList<ChatDetailsRes>)
+class ChatListRes(var group_name:String,var group_profile:String,var id:String,var user_left_status:String,var list: ArrayList<ChatDetailsRes>)
 class ChatDetailsRes(
     var id: String,
     var date: String,
@@ -412,6 +412,15 @@ class GetCloudFileRes(
 
 class GetLetterHeaderFooterRes(var status: Boolean, var message: String, var statuscode:Int, var data:ArrayList<ListHeaderFooterRes>)
 class ListHeaderFooterRes(var id:String, var user_id: String, var name: String, var image: String,var default:Boolean)
+
+class GetPrivateInfo(var status: Boolean, var message: String, var statuscode:Int, var data:PrivateInfoRes)
+class PrivateInfoRes(var receiver_data:DataReceiverResInfo, var common_group_data:CommonGrpData, var media_count:Int)
+class CommonGrpData(var no_of_groups:Int, var data:ArrayList<CommonGrpList>)
+class CommonGrpList(var group_id:String, var group_name:String, var group_profile_pic:String, var group_users:String)
+class DataReceiverResInfo(var name:String, var profile_pic:String, var phone:String, var about:String, var about_updated_datetime:String)
+
+
+
 
 //un use
 class SendMsgResponse(var status: Boolean, var message: String)

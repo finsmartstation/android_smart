@@ -536,6 +536,13 @@ class ChatActivity : BaseActivity(), ImageVideoSelectorDialog.Action {
                     Status.SUCCESS -> {
                         dismissProgress()
                         if (it.data!!.status) {
+                            if (it.data.data.user_left_status.equals("1")){
+                                binding.linearLayout6.visibility = View.GONE
+                                binding.llMsg.visibility = View.GONE
+                            }else{
+                                binding.linearLayout6.visibility = View.VISIBLE
+                                binding.llMsg.visibility = View.VISIBLE
+                            }
                             if (it.data.data.list.isNotEmpty()) {
                                 setData(it.data.data.list, true)
                             }

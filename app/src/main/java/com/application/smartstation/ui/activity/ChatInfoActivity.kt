@@ -1,23 +1,26 @@
 package com.application.smartstation.ui.activity
 
 import android.annotation.SuppressLint
+import android.app.Dialog
 import android.content.Intent
 import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.Bundle
 import android.provider.ContactsContract
 import android.telephony.PhoneNumberUtils
 import android.text.TextUtils
 import android.util.Log
+import android.view.Gravity
 import android.view.View
+import android.view.Window
 import android.view.WindowManager
 import android.widget.ImageView
 import androidx.activity.viewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.application.smartstation.R
-import com.application.smartstation.databinding.ActivityChatInfoBinding
-import com.application.smartstation.databinding.DialogBottomChatInfoEditBinding
+import com.application.smartstation.databinding.*
 import com.application.smartstation.service.Status
 import com.application.smartstation.ui.adapter.UserListGrpAdapter
 import com.application.smartstation.ui.model.ContactListRes
@@ -54,7 +57,9 @@ class ChatInfoActivity : BaseActivity(), ImageSelectorDialog.Action {
     var profilePic = ""
     var chatType = ""
     var room = ""
+    var adminID = ""
     var contactList: ArrayList<ContactListRes> = ArrayList()
+    var grpUserList: ArrayList<UserListGrp> = ArrayList()
     var mBottomDialogDocument: BottomSheetDialog? = null
     var imageSelectorDialog: ImageSelectorDialog? = null
     var pics = ""
@@ -103,6 +108,23 @@ class ChatInfoActivity : BaseActivity(), ImageSelectorDialog.Action {
         binding.rvChatInfo.adapter = userListGrpAdapter
         binding.rvChatInfo.setHasFixedSize(false)
 
+        userListGrpAdapter!!.onItemClick = { model ->
+            for (i in 0 until grpUserList.size) {
+                if (UtilsDefault.getSharedPreferenceString(Constants.USER_ID)!!
+                        .equals(grpUserList[i].user_id)
+                ) {
+                    if (grpUserList[i].type.equals("admin")) {
+                        openAdminPopup(model)
+                    }else{
+                        val intent = Intent(this,PrivateChatInfoActivity::class.java)
+                        intent.putExtra(Constants.REC_ID,model.user_id)
+                        startActivity(intent)
+                    }
+                }
+            }
+
+        }
+
 
         binding.appBarLayout.addOnOffsetChangedListener(object :
             AppBarLayout.OnOffsetChangedListener {
@@ -132,6 +154,81 @@ class ChatInfoActivity : BaseActivity(), ImageSelectorDialog.Action {
         }
     }
 
+    private fun openAdminPopup(model: UserListGrp) {
+        try {
+            val view = layoutInflater.inflate(R.layout.dialog_admin_grp, null)
+            val dialogLogout = Dialog(this)
+            val window: Window = dialogLogout.window!!
+            window.setGravity(Gravity.CENTER)
+            window.setLayout(WindowManager.LayoutParams.FILL_PARENT,
+                WindowManager.LayoutParams.FILL_PARENT)
+            window.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+            val bind = DialogAdminGrpBinding.bind(view)
+            dialogLogout.setCancelable(true)
+
+            dialogLogout.setContentView(view)
+            dialogLogout.show()
+
+            bind.txtMsg.text = resources.getString(R.string.message)+" "+model.username
+            bind.txtView.text = resources.getString(R.string.view)+" "+model.username
+            bind.txtRemove.text = resources.getString(R.string.remove)+" "+model.username
+
+            bind.txtGrpAdmin.setOnClickListener {
+                dialogLogout.dismiss()
+                val inputParams = InputParams()
+                inputParams.accessToken =
+                    UtilsDefault.getSharedPreferenceString(Constants.ACCESS_TOKEN)
+                inputParams.user_id = UtilsDefault.getSharedPreferenceString(Constants.USER_ID)
+                inputParams.group_id = room
+                inputParams.new_admin_user_id = model.user_id
+                addGrpAdmin(inputParams)
+            }
+
+           bind.txtMsg.setOnClickListener {
+               dialogLogout.dismiss()
+               val intent = Intent(this,ChatViewActivity::class.java)
+               intent.putExtra(Constants.REC_ID,model.user_id)
+               intent.putExtra(Constants.NAME,model.username)
+               intent.putExtra(Constants.PROFILE,model.profile_pic)
+               startActivity(intent)
+           }
+
+            bind.txtView.setOnClickListener {
+               dialogLogout.dismiss()
+               val intent = Intent(this,PrivateChatInfoActivity::class.java)
+               intent.putExtra(Constants.REC_ID,model.user_id)
+               startActivity(intent)
+           }
+
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
+
+    private fun addGrpAdmin(inputParams: InputParams) {
+        apiViewModel.addGrpAdmin(inputParams).observe(this, Observer {
+            it.let {
+                when (it.status) {
+                    Status.LOADING -> {
+                        showProgress()
+                    }
+                    Status.SUCCESS -> {
+                        dismissProgress()
+                        if (it.data!!.status) {
+                            getUserListGrp()
+                        } else {
+                            toast(it.data.message)
+                        }
+                    }
+                    Status.ERROR -> {
+                        dismissProgress()
+                        toast(it.message!!)
+                    }
+                }
+            }
+        })
+    }
+
     private fun getUserListGrp() {
 
         val inputParams = InputParams()
@@ -151,6 +248,7 @@ class ChatInfoActivity : BaseActivity(), ImageSelectorDialog.Action {
                             name = it.data.group_name
                             profilePic = it.data.group_profile
                             binding.txtName.text = it.data.group_name
+                            grpUserList = it.data.data
                             Glide.with(this).load(it.data.group_profile).placeholder(R.drawable.ic_default)
                                 .error(R.drawable.ic_default).diskCacheStrategy(
                                     DiskCacheStrategy.DATA).into(binding.imgProfile)
@@ -167,6 +265,7 @@ class ChatInfoActivity : BaseActivity(), ImageSelectorDialog.Action {
                                             .equals(it.data.data[i].user_id)
                                     ) {
                                         if (it.data.data[i].type.equals("admin")) {
+
                                             binding.llAddContact.visibility = View.VISIBLE
                                         } else {
                                             binding.llAddContact.visibility = View.GONE
@@ -248,7 +347,70 @@ class ChatInfoActivity : BaseActivity(), ImageSelectorDialog.Action {
         binding.llAddContact.setOnClickListener {
             startActivity(Intent(this, ExtraAddGroupActivity::class.java).putExtra("room", room))
         }
+
+        binding.llExit.setOnClickListener {
+            exitDialog()
+        }
     }
+
+    private fun exitDialog() {
+        try {
+            val view = layoutInflater.inflate(R.layout.dialog_exit_grp, null)
+            val dialogLogout = Dialog(this)
+            val window: Window = dialogLogout.window!!
+            window.setGravity(Gravity.CENTER)
+            window.setLayout(WindowManager.LayoutParams.FILL_PARENT,
+                WindowManager.LayoutParams.FILL_PARENT)
+            window.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+            val bind = DialogExitGrpBinding.bind(view)
+            dialogLogout.setCancelable(false)
+
+            dialogLogout.setContentView(view)
+            dialogLogout.show()
+
+            bind.txtYes.setOnClickListener {
+                dialogLogout.dismiss()
+                val inputParams = InputParams()
+                inputParams.accessToken =
+                    UtilsDefault.getSharedPreferenceString(Constants.ACCESS_TOKEN)
+                inputParams.user_id = UtilsDefault.getSharedPreferenceString(Constants.USER_ID)
+                inputParams.group_id = room
+                exitGrp(inputParams)
+            }
+
+            bind.txtNo.setOnClickListener {
+                dialogLogout.dismiss()
+            }
+
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
+
+    private fun exitGrp(inputParams: InputParams) {
+        apiViewModel.grpExit(inputParams).observe(this, Observer {
+            it.let {
+                when (it.status) {
+                    Status.LOADING -> {
+                        showProgress()
+                    }
+                    Status.SUCCESS -> {
+                        dismissProgress()
+                        if (it.data!!.status) {
+                           finish()
+                        } else {
+                            toast(it.data.message)
+                        }
+                    }
+                    Status.ERROR -> {
+                        dismissProgress()
+                        toast(it.message!!)
+                    }
+                }
+            }
+        })
+    }
+
 
     override fun onResume() {
         super.onResume()

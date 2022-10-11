@@ -8,6 +8,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.application.smartstation.R
 import com.application.smartstation.databinding.ItemUserListGrpBinding
 import com.application.smartstation.ui.model.UserListGrp
+import com.application.smartstation.util.Constants
+import com.application.smartstation.util.UtilsDefault
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 
@@ -33,7 +35,11 @@ class UserListGrpAdapter(val context: Context) :
         val model = list[position]
 
         with(holder) {
-            binding.txtTitle.text = model.username
+            if (UtilsDefault.getSharedPreferenceString(Constants.USER_ID).equals(model.user_id)){
+                binding.txtTitle.text = "You"
+            }else {
+                binding.txtTitle.text = model.username
+            }
             binding.txtSub.text = model.about
             Glide.with(context).load(model.profile_pic).placeholder(R.drawable.ic_default)
                 .error(R.drawable.ic_default).diskCacheStrategy(DiskCacheStrategy.DATA)
@@ -41,10 +47,20 @@ class UserListGrpAdapter(val context: Context) :
 
             if (model.type == "admin") {
                 binding.txtType.visibility = View.VISIBLE
-                binding.txtType.text = "Admin"
+                binding.txtType.text = "Group Admin"
             } else {
                 binding.txtType.visibility = View.GONE
             }
+
+
+            itemView.setOnLongClickListener{
+                if (!UtilsDefault.getSharedPreferenceString(Constants.USER_ID).equals(model.user_id)){
+                    onItemClick!!.invoke(model)
+                }
+                return@setOnLongClickListener true
+            }
+
+
 
         }
     }

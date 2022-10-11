@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="200dp"
+    android:layout_margin="16dp"
+    android:gravity="center"
+    android:background="@drawable/chat_round_use"
+    android:orientation="vertical">
+
+    <com.application.smartstation.view.CustomTextViewBold
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:text="@string/exit_grp"
+        android:textAlignment="center"
+        android:textColor="@color/black"
+        android:textSize="18sp">
+
+    </com.application.smartstation.view.CustomTextViewBold>
+
+    <com.application.smartstation.view.CustomTextViewBold
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:text="@string/exit_grp_des"
+        android:textAlignment="center"
+        android:textColor="@color/grey"
+        android:textSize="16sp">
+
+    </com.application.smartstation.view.CustomTextViewBold>
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="5dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:src="@drawable/dot_view_use"
+        app:tint="@color/color_settings_gray" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <com.application.smartstation.view.CustomTextViewBold
+            android:id="@+id/txtYes"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="4dp"
+            android:layout_weight="1"
+            android:text="@string/exit_grp_1"
+            android:textAlignment="center"
+            android:textColor="@color/color_green"
+            android:textSize="18sp"
+            android:textStyle="bold">
+
+        </com.application.smartstation.view.CustomTextViewBold>
+
+        <ImageView
+            android:layout_width="30dp"
+            android:layout_height="20dp"
+            android:rotation="90"
+            android:src="@drawable/dot_view_use"
+            app:tint="@color/color_settings_gray" />
+
+        <com.application.smartstation.view.CustomTextViewBold
+            android:id="@+id/txtNo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:layout_weight="1"
+            android:text="@string/cancel"
+            android:textAlignment="center"
+            android:textColor="@color/red"
+            android:textSize="18sp"
+            android:textStyle="bold">
+
+        </com.application.smartstation.view.CustomTextViewBold>
+
+    </LinearLayout>
+
+</LinearLayout>

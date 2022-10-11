@@ -76,6 +76,12 @@ class InputParams {
     //stamp details
     var stamp_id: String? = null
 
+    //header
+    var header_id:String? = null
+
+    //footer
+    var footer_id:String? = null
+
     //letter
     var mail_body: String? = null
     var cc: String? = null
@@ -93,5 +99,6 @@ class InputParams {
 
     //change grp details
     var group_name:String? = null
+    var new_admin_user_id:String? = null
 
 }

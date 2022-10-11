@@ -328,6 +328,27 @@ class ApiRepository @Inject constructor(val apiService: ApiService) {
         }.flowOn(Dispatchers.IO)
     }
 
+    fun removeHeader(inputParams: InputParams): Flow<BaseResponse> {
+        return flow {
+            val response = apiService.removeHeader(inputParams)
+            emit(response)
+        }.flowOn(Dispatchers.IO)
+    }
+
+  fun removeFooter(inputParams: InputParams): Flow<BaseResponse> {
+        return flow {
+            val response = apiService.removeFooter(inputParams)
+            emit(response)
+        }.flowOn(Dispatchers.IO)
+    }
+
+    fun getPrivateInfo(inputParams: InputParams): Flow<GetPrivateInfo> {
+        return flow {
+            val response = apiService.getPrivateInfo(inputParams)
+            emit(response)
+        }.flowOn(Dispatchers.IO)
+    }
+
     fun setSignature(inputParams: InputParams): Flow<BaseResponse> {
         return flow {
             val response = apiService.setSignature(inputParams)
@@ -457,6 +478,20 @@ class ApiRepository @Inject constructor(val apiService: ApiService) {
     fun changeGrpDetails(inputParams: InputParams): Flow<BaseResponse> {
         return flow {
             val response = apiService.changeGrpDetails(inputParams)
+            emit(response)
+        }.flowOn(Dispatchers.IO)
+    }
+
+    fun grpExit(inputParams: InputParams): Flow<BaseResponse> {
+        return flow {
+            val response = apiService.grpExit(inputParams)
+            emit(response)
+        }.flowOn(Dispatchers.IO)
+    }
+
+    fun addGrpAdmin(inputParams: InputParams): Flow<BaseResponse> {
+        return flow {
+            val response = apiService.addGrpAdmin(inputParams)
             emit(response)
         }.flowOn(Dispatchers.IO)
     }

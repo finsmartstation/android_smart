@@ -5,13 +5,12 @@ import android.Manifest.permission
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.Color
 import android.net.Uri
-import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
-import android.os.Parcelable
+import android.os.*
 import android.provider.MediaStore
+import android.provider.Settings
 import android.text.Editable
 import android.text.TextUtils
 import android.text.TextWatcher
@@ -51,6 +50,7 @@ import com.application.smartstation.service.background.SocketService
 import com.application.smartstation.ui.adapter.AdapterChat
 import com.application.smartstation.ui.model.*
 import com.application.smartstation.util.*
+import com.application.smartstation.util.FileUtils
 import com.application.smartstation.view.EmojiEditText.KeyBoardInputCallbackListener
 import com.application.smartstation.view.ImageVideoSelectorDialog
 import com.application.smartstation.view.sticker.FireStickerProvider
@@ -114,6 +114,7 @@ class ChatViewActivity : BaseActivity(), ImageVideoSelectorDialog.Action {
     val PICK_CONTACT_REQUEST: Int = 5491
     val PICK_NUMBERS_FOR_CONTACT_REQUEST = 5517
     val PICK_LOCATION_REQUEST = 7125
+    var CAMERA_MIC_PERMISSION_REQUEST_CODE = 791
 
     //emoji
     var emojiPopup: AXEmojiPopup? = null
@@ -205,12 +206,19 @@ class ChatViewActivity : BaseActivity(), ImageVideoSelectorDialog.Action {
                     intent.putExtra("type",it.message_type)
                     startActivity(intent)
                 } else {
-                    val intent = Intent(this,MediaViewActivity::class.java)
-                    intent.putExtra("name",receiverName)
-                    intent.putExtra("date",it.date)
-                    intent.putExtra("msg",it.message)
-                    intent.putExtra("type",it.message_type)
-                    startActivity(intent)
+                    UtilsDefault.downloadFile(this, it.message, "image", object : MailCallback {
+                        override fun success(resp: String?, status: Boolean?) {
+                            if (status!!) {
+                                val intent =
+                                    Intent(this@ChatViewActivity, MediaViewActivity::class.java)
+                                intent.putExtra("name", receiverName)
+                                intent.putExtra("date", it.date)
+                                intent.putExtra("msg", it.message)
+                                intent.putExtra("type", it.message_type)
+                                startActivity(intent)
+                            }
+                        }
+                    })
                 }
 
             }else if (Constants.VIDEO.equals(it.message_type)){
@@ -237,6 +245,28 @@ class ChatViewActivity : BaseActivity(), ImageVideoSelectorDialog.Action {
 
                 })
 
+            }else if (Constants.AUDIO.equals(it.message_type)){
+//                if (it.senter_id.equals(UtilsDefault.getSharedPreferenceString(Constants.USER_ID))) {
+//                    val intent = Intent(this@ChatViewActivity,MediaViewActivity::class.java)
+//                    intent.putExtra("name","You")
+//                    intent.putExtra("date",it.date)
+//                    intent.putExtra("msg",it.message)
+//                    intent.putExtra("type",it.message_type)
+//                    startActivity(intent)
+//                } else {
+//                    UtilsDefault.downloadFile(this, it.message, "image", object : MailCallback {
+//                        override fun success(resp: String?, status: Boolean?) {
+//                            if (status!!) {
+//                                val intent = Intent(this@ChatViewActivity, MediaViewActivity::class.java)
+//                                intent.putExtra("name", receiverName)
+//                                intent.putExtra("date", it.date)
+//                                intent.putExtra("msg", it.message)
+//                                intent.putExtra("type", it.message_type)
+//                                startActivity(intent)
+//                            }
+//                        }
+//                    })
+//                }
             }
         }
 
@@ -316,7 +346,9 @@ class ChatViewActivity : BaseActivity(), ImageVideoSelectorDialog.Action {
             }
         })
 
-
+        if (!checkPermissionForCameraAndMicrophone()) {
+            requestPermissionForCameraAndMicrophone()
+        }
 
     }
 
@@ -583,6 +615,34 @@ class ChatViewActivity : BaseActivity(), ImageVideoSelectorDialog.Action {
             menuPopup(v)
         }
 
+        binding.ilHeader.imgAudio.setOnClickListener {
+            if (!checkPermissionForCameraAndMicrophone()) {
+                requestPermissionForCameraAndMicrophone()
+            } else {
+                calling("voice_call")
+            }
+        }
+
+        binding.ilHeader.imgVideo.setOnClickListener {
+            if (!checkPermissionForCameraAndMicrophone()) {
+                requestPermissionForCameraAndMicrophone()
+            } else {
+                calling("video_call")
+            }
+        }
+
+
+    }
+
+    private fun calling(type: String) {
+        val intent = Intent(this@ChatViewActivity, CallActivity::class.java)
+        intent.putExtra(Constants.REC_ID, receiverId)
+        intent.putExtra(Constants.REC_NAME, receiverName)
+        intent.putExtra(Constants.REC_PROFILE, receiverProfile)
+        intent.putExtra(Constants.CALL_TYPE, type)
+        intent.putExtra(Constants.STATUS, "Call_Send")
+        intent.putExtra(Constants.ROOM_NAME, UtilsDefault.getRandomString(10))
+        startActivity(intent)
     }
 
     fun menuPopup(v: View?) {
@@ -607,12 +667,8 @@ class ChatViewActivity : BaseActivity(), ImageVideoSelectorDialog.Action {
         }
 
         bind.txtViewContact.setOnClickListener {
-            if (!chatType.equals("private")) {
-                startActivity(Intent(this, ChatInfoActivity::class.java)
-                    .putExtra(Constants.NAME, receiverName)
-                    .putExtra(Constants.PROFILE_PIC, receiverProfile)
-                    .putExtra(Constants.CHAT_TYPE, chatType).putExtra(Constants.ROOM, room))
-            }
+            startActivity(Intent(this, PrivateChatInfoActivity::class.java)
+                .putExtra(Constants.REC_ID, receiverId))
             popupWindow.dismiss()
         }
 
@@ -1112,6 +1168,37 @@ class ChatViewActivity : BaseActivity(), ImageVideoSelectorDialog.Action {
                 "setOnlineEvent: " + UtilsDefault.dateLastSeen(onlineSocketModel.last_seen))
         } else {
             binding.ilHeader.txtStatus.text = "Online"
+        }
+    }
+
+    fun checkPermissionForCameraAndMicrophone(): Boolean {
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            val resultCamera =
+                ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
+            val resultMic =
+                ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO)
+            resultCamera == PackageManager.PERMISSION_GRANTED &&
+                    resultMic == PackageManager.PERMISSION_GRANTED
+        } else {
+            true
+        }
+    }
+
+    private fun requestPermissionForCameraAndMicrophone() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (shouldShowRequestPermissionRationale(Manifest.permission.CAMERA) ||
+                shouldShowRequestPermissionRationale(
+                    Manifest.permission.RECORD_AUDIO)
+            ) {
+                val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+                val uri = Uri.fromParts("package", packageName, null)
+                intent.data = uri
+                startActivity(intent)
+            } else {
+                requestPermissions(arrayOf(Manifest.permission.CAMERA,
+                    Manifest.permission.RECORD_AUDIO),
+                    CAMERA_MIC_PERMISSION_REQUEST_CODE)
+            }
         }
     }
 

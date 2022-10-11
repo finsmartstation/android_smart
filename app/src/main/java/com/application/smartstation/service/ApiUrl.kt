@@ -70,5 +70,10 @@ object ApiUrl {
     const val SET_LETTER_FOOTER = API + "set_default_footer"
     const val CHANGE_GRP_PROFILE = API + "change_group_profile_pic"
     const val CHANGE_GRP_DETAILS = API + "update_group_profile_details"
+    const val EXIT_GRP = API + "exit_group_member"
+    const val ADD_GRP_ADMIN = API + "make_group_admin"
+    const val REMOVE_HEADER = API + "removeheader"
+    const val REMOVE_FOOTER = API + "removefooter"
+    const val GET_PRIVATE_INFO = API + "get_individual_pofile_details"
 
 }

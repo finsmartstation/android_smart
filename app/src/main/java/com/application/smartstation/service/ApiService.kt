@@ -134,6 +134,15 @@ interface ApiService {
     @POST(ApiUrl.REMOVE_STAMP)
     suspend fun removeStamp(@Body inputParams: InputParams): BaseResponse
 
+    @POST(ApiUrl.REMOVE_HEADER)
+    suspend fun removeHeader(@Body inputParams: InputParams): BaseResponse
+
+    @POST(ApiUrl.REMOVE_FOOTER)
+    suspend fun removeFooter(@Body inputParams: InputParams): BaseResponse
+
+    @POST(ApiUrl.GET_PRIVATE_INFO)
+    suspend fun getPrivateInfo(@Body inputParams: InputParams): GetPrivateInfo
+
     @POST(ApiUrl.SET_SIGNATURE)
     suspend fun setSignature(@Body inputParams: InputParams): BaseResponse
 
@@ -190,6 +199,12 @@ interface ApiService {
 
     @POST(ApiUrl.CHANGE_GRP_DETAILS)
     suspend fun changeGrpDetails(@Body inputParams: InputParams): BaseResponse
+
+    @POST(ApiUrl.EXIT_GRP)
+    suspend fun grpExit(@Body inputParams: InputParams): BaseResponse
+
+    @POST(ApiUrl.ADD_GRP_ADMIN)
+    suspend fun addGrpAdmin(@Body inputParams: InputParams): BaseResponse
 
 
     @Multipart
