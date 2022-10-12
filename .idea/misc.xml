@@ -94,6 +94,7 @@
         <entry key="..\:/smartstation/app/src/main/res/layout/activity_chat.xml" value="0.165" />
         <entry key="..\:/smartstation/app/src/main/res/layout/activity_chat_info.xml" value="0.165" />
         <entry key="..\:/smartstation/app/src/main/res/layout/activity_chat_view.xml" value="0.165" />
+        <entry key="..\:/smartstation/app/src/main/res/layout/activity_chat_view_grp.xml" value="0.165" />
         <entry key="..\:/smartstation/app/src/main/res/layout/activity_cloud.xml" value="0.165" />
         <entry key="..\:/smartstation/app/src/main/res/layout/activity_cloud_folder.xml" value="0.165" />
         <entry key="..\:/smartstation/app/src/main/res/layout/activity_cloud_view.xml" value="0.309375" />
@@ -166,9 +167,11 @@
         <entry key="..\:/smartstation/app/src/main/res/layout/item_chat.xml" value="0.26378794356562635" />
         <entry key="..\:/smartstation/app/src/main/res/layout/item_chat_his.xml" value="0.375" />
         <entry key="..\:/smartstation/app/src/main/res/layout/item_chat_his_date.xml" value="0.309375" />
+        <entry key="..\:/smartstation/app/src/main/res/layout/item_chat_his_grp.xml" value="0.23125" />
         <entry key="..\:/smartstation/app/src/main/res/layout/item_chat_new.xml" value="0.30833333333333335" />
         <entry key="..\:/smartstation/app/src/main/res/layout/item_chat_new_left.xml" value="0.30833333333333335" />
         <entry key="..\:/smartstation/app/src/main/res/layout/item_chat_new_right.xml" value="0.309375" />
+        <entry key="..\:/smartstation/app/src/main/res/layout/item_chat_new_right_grp.xml" value="0.23203125" />
         <entry key="..\:/smartstation/app/src/main/res/layout/item_cloud.xml" value="0.25" />
         <entry key="..\:/smartstation/app/src/main/res/layout/item_cloud_view.xml" value="0.165" />
         <entry key="..\:/smartstation/app/src/main/res/layout/item_country.xml" value="0.309375" />

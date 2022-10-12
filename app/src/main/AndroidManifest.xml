@@ -67,13 +67,17 @@
         android:theme="@style/Theme.SmartStation"
         tools:replace="android:icon,android:roundIcon,android:theme">
         <activity
-            android:name=".ui.activity.PrivateChatInfoActivity"
+            android:name=".ui.activity.ChatViewGrpActivity"
             android:exported="false"
             android:screenOrientation="portrait"/>
         <activity
+            android:name=".ui.activity.PrivateChatInfoActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".ui.activity.MediaViewActivity"
             android:exported="false"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".ui.activity.PlacesPickerActivity"
             android:exported="false"

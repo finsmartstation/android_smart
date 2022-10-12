@@ -47,6 +47,7 @@ import com.application.smartstation.databinding.MenuChatPopupBinding
 import com.application.smartstation.service.MailCallback
 import com.application.smartstation.service.Status
 import com.application.smartstation.service.background.SocketService
+import com.application.smartstation.ui.activity.ChatViewGrpActivity.Companion.RESULT_CODE
 import com.application.smartstation.ui.adapter.AdapterChat
 import com.application.smartstation.ui.model.*
 import com.application.smartstation.util.*
@@ -610,6 +611,12 @@ class ChatViewActivity : BaseActivity(), ImageVideoSelectorDialog.Action {
             }
         }
 
+        binding.ilHeader.rlChat.setOnClickListener {
+            startActivity(Intent(this, PrivateChatInfoActivity::class.java)
+                .putExtra(Constants.REC_ID, receiverId))
+        }
+
+
         binding.ilHeader.imgMenu.setOnClickListener { v ->
             binding.ilHeader.imgMenu.visibility = View.INVISIBLE
             menuPopup(v)
@@ -733,7 +740,7 @@ class ChatViewActivity : BaseActivity(), ImageVideoSelectorDialog.Action {
                     override fun permissionGranted() {
                         // First we need to check availability of play services
                         startActivityForResult(Intent(this@ChatViewActivity,
-                            CameraActivity::class.java), ChatActivity.RESULT_CODE)
+                            CameraActivity::class.java), RESULT_CODE)
                     }
 
                     override fun permissionDenied() {
@@ -911,13 +918,13 @@ class ChatViewActivity : BaseActivity(), ImageVideoSelectorDialog.Action {
                 ImagePerviewActivity::class.java)
             mIntent.putExtra(Constants.FILE_PATH, imagePath)
             mIntent.putExtra(Constants.TYPE, "img")
-            startActivityForResult(mIntent, ChatActivity.RESULT_CODE)
+            startActivityForResult(mIntent, RESULT_CODE)
         } else {
             val mIntent = Intent(this,
                 ImagePerviewActivity::class.java)
             mIntent.putExtra(Constants.FILE_PATH, imagePath)
             mIntent.putExtra(Constants.TYPE, "video")
-            startActivityForResult(mIntent, ChatActivity.RESULT_CODE)
+            startActivityForResult(mIntent, RESULT_CODE)
         }
     }
 
@@ -1051,11 +1058,7 @@ class ChatViewActivity : BaseActivity(), ImageVideoSelectorDialog.Action {
             GetChatDetailsListResponse::class.java)
         if (messageSocketModel.status) {
             if(!room.isNullOrEmpty()){
-                if (messageSocketModel.data.id.equals(room)) {
-                    if (!messageSocketModel.data.list.isNullOrEmpty()) {
-                        setData(messageSocketModel.data.list)
-                    }
-                }
+
             }else{
 //                if (messageSocketModel.data.id.equals(receiverId)) {
                 if (!messageSocketModel.data.list.isNullOrEmpty()) {

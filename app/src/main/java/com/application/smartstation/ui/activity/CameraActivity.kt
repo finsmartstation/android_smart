@@ -24,7 +24,7 @@ import android.view.View.OnTouchListener
 import android.widget.Toast
 import com.application.smartstation.R
 import com.application.smartstation.databinding.ActivityCameraBinding
-import com.application.smartstation.ui.activity.ChatActivity.Companion.RESULT_CODE
+import com.application.smartstation.ui.activity.ChatViewGrpActivity.Companion.RESULT_CODE
 import com.application.smartstation.util.Constants
 import com.application.smartstation.util.RunTimePermission
 import com.application.smartstation.util.viewBinding

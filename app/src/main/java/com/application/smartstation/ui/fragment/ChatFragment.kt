@@ -20,6 +20,7 @@ import com.application.smartstation.service.Status
 import com.application.smartstation.service.background.SocketService
 import com.application.smartstation.ui.activity.ChatActivity
 import com.application.smartstation.ui.activity.ChatViewActivity
+import com.application.smartstation.ui.activity.ChatViewGrpActivity
 import com.application.smartstation.ui.activity.MainActivity
 import com.application.smartstation.ui.adapter.ChatAdapter
 import com.application.smartstation.ui.model.*
@@ -68,11 +69,23 @@ class ChatFragment : BaseFragment(R.layout.fragment_chat) {
         binding.rvChat.adapter = chatAdapter
 
         chatAdapter!!.onItemClick = { model ->
-            startActivity(Intent(requireActivity(),
-                ChatViewActivity::class.java).putExtra(Constants.REC_ID, model.userid)
-                .putExtra(Constants.NAME, model.name).putExtra(Constants.PROFILE, model.profile)
-                .putExtra(Constants.CHAT_TYPE, model.chat_type)
-                .putExtra(Constants.ROOM, model.room))
+            if (!model.chat_type.isNullOrEmpty()) {
+                if (model.chat_type.equals("private")) {
+                    startActivity(Intent(requireActivity(),
+                        ChatViewActivity::class.java).putExtra(Constants.REC_ID, model.userid)
+                        .putExtra(Constants.NAME, model.name)
+                        .putExtra(Constants.PROFILE, model.profile)
+                        .putExtra(Constants.CHAT_TYPE, model.chat_type)
+                        .putExtra(Constants.ROOM, model.room))
+                } else {
+                    startActivity(Intent(requireActivity(),
+                        ChatViewGrpActivity::class.java).putExtra(Constants.REC_ID, model.userid)
+                        .putExtra(Constants.NAME, model.name)
+                        .putExtra(Constants.PROFILE, model.profile)
+                        .putExtra(Constants.CHAT_TYPE, model.chat_type)
+                        .putExtra(Constants.ROOM, model.room))
+                }
+            }
         }
 
         phnPermission {

@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.application.smartstation.R
 import com.application.smartstation.databinding.FragmentContactChatBinding
 import com.application.smartstation.ui.activity.ChatActivity
+import com.application.smartstation.ui.activity.ChatViewActivity
 import com.application.smartstation.ui.adapter.ChatAdapter
 import com.application.smartstation.ui.model.ChatResponse
 import com.application.smartstation.util.Constants
@@ -46,7 +47,7 @@ class ContactChatFragment : BaseFragment(R.layout.fragment_contact_chat) {
 
         chatAdapter!!.onItemClick = { model ->
             startActivity(Intent(requireActivity(),
-                ChatActivity::class.java).putExtra(Constants.NAME, model.name)
+                ChatViewActivity::class.java).putExtra(Constants.REC_ID, model.userid).putExtra(Constants.NAME, model.name)
                 .putExtra(Constants.PROFILE, model.profile))
         }
 

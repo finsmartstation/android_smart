@@ -121,7 +121,7 @@ class MainActivity : BaseActivity(), InboxFragment.OnUnreadMailCountListener,
         binding.rvSearch.adapter = contactAdapter
 
         contactAdapter!!.onItemClick = { model ->
-            startActivity(Intent(this, ChatActivity::class.java).putExtra(Constants.REC_ID,
+            startActivity(Intent(this, ChatViewActivity::class.java).putExtra(Constants.REC_ID,
                 model.user_id).putExtra(Constants.NAME, model.name)
                 .putExtra(Constants.PROFILE, model.profile_pic))
             UtilsDefault.hideKeyboardForFocusedView(this)
@@ -145,7 +145,7 @@ class MainActivity : BaseActivity(), InboxFragment.OnUnreadMailCountListener,
         binding.rvMessage.adapter = chatAdapter
 
         chatAdapter!!.onItemClick = { model ->
-            startActivity(Intent(this, ChatActivity::class.java).putExtra(Constants.REC_ID,
+            startActivity(Intent(this, ChatViewActivity::class.java).putExtra(Constants.REC_ID,
                 model.userid).putExtra(Constants.NAME, model.name)
                 .putExtra(Constants.PROFILE, model.profile))
             UtilsDefault.hideKeyboardForFocusedView(this)

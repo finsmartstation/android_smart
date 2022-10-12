@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.application.smartstation.R
 import com.application.smartstation.databinding.ItemChatBinding
 import com.application.smartstation.ui.model.DataChatList
+import com.application.smartstation.util.Constants
 import com.application.smartstation.util.UtilsDefault
 import com.application.smartstation.view.ViewBinderHelper
 import com.bumptech.glide.Glide
@@ -79,7 +80,7 @@ class ChatAdapter(val context: Context) : RecyclerView.Adapter<ChatAdapter.ViewH
                     binding.txtUnread.text = model.unread_message
                 }
                 if (!model.message_type.equals("")) {
-                    if (model.message_type.equals("text")) {
+                    if (model.message_type.equals(Constants.TEXT)) {
                         binding.txtMsg.text = UtilsDefault.chatBold(model.message)
                         binding.imgPht.visibility = View.GONE
                     } else {
