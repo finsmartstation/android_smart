@@ -1,5 +1,6 @@
 package com.application.smartstation.ui.activity
 
+import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Dialog
 import android.content.Intent
@@ -27,9 +28,11 @@ import com.application.smartstation.ui.model.ContactListRes
 import com.application.smartstation.ui.model.InputParams
 import com.application.smartstation.ui.model.UserListGrp
 import com.application.smartstation.util.Constants
+import com.application.smartstation.util.RunTimePermission
 import com.application.smartstation.util.UtilsDefault
 import com.application.smartstation.util.viewBinding
 import com.application.smartstation.view.ImageSelectorDialog
+import com.application.smartstation.view.ImageVideoSelectorDialog
 import com.application.smartstation.viewmodel.ApiViewModel
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
@@ -57,10 +60,12 @@ class ChatInfoActivity : BaseActivity(), ImageSelectorDialog.Action {
     var profilePic = ""
     var chatType = ""
     var room = ""
+    var desGrp = ""
     var adminID = ""
     var contactList: ArrayList<ContactListRes> = ArrayList()
     var grpUserList: ArrayList<UserListGrp> = ArrayList()
     var mBottomDialogDocument: BottomSheetDialog? = null
+    var mBottomDialogDes: BottomSheetDialog? = null
     var imageSelectorDialog: ImageSelectorDialog? = null
     var pics = ""
     var imageView:ImageView? = null
@@ -200,9 +205,44 @@ class ChatInfoActivity : BaseActivity(), ImageSelectorDialog.Action {
                startActivity(intent)
            }
 
+            bind.txtRemove.setOnClickListener {
+                dialogLogout.dismiss()
+                val inputParams = InputParams()
+                inputParams.accessToken =
+                    UtilsDefault.getSharedPreferenceString(Constants.ACCESS_TOKEN)
+                inputParams.user_id = UtilsDefault.getSharedPreferenceString(Constants.USER_ID)
+                inputParams.group_id = room
+                inputParams.remove_user_id = model.user_id
+                removeGrp(inputParams)
+            }
+
         } catch (e: Exception) {
             e.printStackTrace()
         }
+    }
+
+    private fun removeGrp(inputParams: InputParams) {
+        apiViewModel.removeGrpUser(inputParams).observe(this, Observer {
+            it.let {
+                when (it.status) {
+                    Status.LOADING -> {
+                        showProgress()
+                    }
+                    Status.SUCCESS -> {
+                        dismissProgress()
+                        if (it.data!!.status) {
+                            getUserListGrp()
+                        } else {
+                            toast(it.data.message)
+                        }
+                    }
+                    Status.ERROR -> {
+                        dismissProgress()
+                        toast(it.message!!)
+                    }
+                }
+            }
+        })
     }
 
     private fun addGrpAdmin(inputParams: InputParams) {
@@ -248,6 +288,17 @@ class ChatInfoActivity : BaseActivity(), ImageSelectorDialog.Action {
                             name = it.data.group_name
                             profilePic = it.data.group_profile
                             binding.txtName.text = it.data.group_name
+                            if (it.data.description.isNullOrEmpty()){
+                                binding.txtAddDes.visibility = View.VISIBLE
+                                binding.llDes.visibility = View.GONE
+                            }else{
+                                binding.txtAddDes.visibility = View.GONE
+                                binding.llDes.visibility = View.VISIBLE
+                                desGrp = it.data.description
+                                binding.txtViewDes.text = it.data.description
+                                binding.txtDesTime.text = UtilsDefault.dateConvert(UtilsDefault.localTimeConvert(it.data.description_updated_datetime))
+                            }
+                            binding.txtMediaCount.text = it.data.media_count.toString()
                             grpUserList = it.data.data
                             Glide.with(this).load(it.data.group_profile).placeholder(R.drawable.ic_default)
                                 .error(R.drawable.ic_default).diskCacheStrategy(
@@ -351,6 +402,14 @@ class ChatInfoActivity : BaseActivity(), ImageSelectorDialog.Action {
         binding.llExit.setOnClickListener {
             exitDialog()
         }
+
+        binding.txtAddDes.setOnClickListener {
+            showDialogChatDes()
+        }
+
+        binding.llDes.setOnClickListener {
+            showDialogChatDes()
+        }
     }
 
     private fun exitDialog() {
@@ -439,6 +498,78 @@ class ChatInfoActivity : BaseActivity(), ImageSelectorDialog.Action {
         } catch (e: Exception) {
             Log.d("TAG", "getContactList: " + e)
         }
+    }
+
+    fun showDialogChatDes(){
+
+        try {
+            val view = layoutInflater.inflate(R.layout.dialog_bottom_des_grp, null)
+            mBottomDialogDes = BottomSheetDialog(this)
+            val bind = DialogBottomDesGrpBinding.bind(view)
+            mBottomDialogDes!!.setCancelable(false)
+
+            mBottomDialogDes!!.setOnShowListener {
+                (view!!.parent as View).setBackgroundColor(Color.TRANSPARENT)
+            }
+
+            mBottomDialogDes!!.setContentView(view)
+            mBottomDialogDes!!.show()
+
+            if (!desGrp.isNullOrEmpty()){
+                bind.edtGrpDes.setText(desGrp)
+            }
+
+            bind.txtCancel.setOnClickListener {
+                bind.edtGrpDes.setText("")
+                mBottomDialogDes!!.dismiss()
+            }
+
+            bind.txtDone.setOnClickListener {
+                val des = bind.edtGrpDes.text.toString().trim()
+
+                when {
+                    TextUtils.isEmpty(des) -> toast(resources.getString(R.string.please_enter_grp_des))
+
+                    else -> {
+                        val inputParams = InputParams()
+                        inputParams.user_id = UtilsDefault.getSharedPreferenceString(Constants.USER_ID)
+                        inputParams.accessToken = UtilsDefault.getSharedPreferenceString(Constants.ACCESS_TOKEN)
+                        inputParams.group_id = room
+                        inputParams.description = des
+                        changeGrpDes(inputParams)
+                    }
+                }
+            }
+
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
+
+    private fun changeGrpDes(inputParams: InputParams) {
+        apiViewModel.updateGrpDes(inputParams).observe(this, Observer {
+            it.let {
+                when (it.status) {
+                    Status.LOADING -> {
+                        showProgress()
+                    }
+                    Status.SUCCESS -> {
+                        dismissProgress()
+                        if (it.data!!.status) {
+                            toast(it.data.message)
+                            mBottomDialogDes!!.dismiss()
+                            getUserListGrp()
+                        } else {
+                            toast(it.data.message)
+                        }
+                    }
+                    Status.ERROR -> {
+                        dismissProgress()
+                        toast(it.message!!)
+                    }
+                }
+            }
+        })
     }
 
     private fun showDialogChatInfo() {

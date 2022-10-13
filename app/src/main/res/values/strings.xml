@@ -1271,5 +1271,11 @@
     <string name="remove">Remove</string>
     <string name="grp_in_common">Group in Common</string>
     <string name="with">with</string>
+    <string name="unblk">Unblock</string>
+    <string name="please_unblk">Please Unblock</string>
+    <string name="grp_des">Group Description</string>
+    <string name="save">Save</string>
+    <string name="des_grp_1">The group description is visible to participants of this group and people invited to this group.</string>
+    <string name="please_enter_grp_des">Please enter group description</string>
 
 </resources>

@@ -110,6 +110,7 @@ class ChatViewActivity : BaseActivity(), ImageVideoSelectorDialog.Action {
     var imageParts: ArrayList<MultipartBody.Part?> = ArrayList()
     var chatHistoryAdapter: AdapterChat? = null
     var layoutManager: LinearLayoutManager? = null
+    var popupWindow:PopupWindow? = null
 
     //request
     val PICK_CONTACT_REQUEST: Int = 5491
@@ -134,6 +135,8 @@ class ChatViewActivity : BaseActivity(), ImageVideoSelectorDialog.Action {
 
     //random numbers just to identify requestCode
     val PICK_MUSIC_REQUEST = 159
+
+    var blkStatus = false
 
 
     val mimeTypes = arrayOf(
@@ -359,8 +362,17 @@ class ChatViewActivity : BaseActivity(), ImageVideoSelectorDialog.Action {
         }, 2000)
     }
 
+    fun statusBlk(status:Boolean):Boolean{
+        if (status){
+            toast(resources.getString(R.string.please_unblk))
+            return true
+        }
+        return false
+    }
+
     private fun sendImage(img: String, docs: String) {
         if (img.trim { it <= ' ' }.isEmpty()) return
+        if (statusBlk(blkStatus)) return
         emojiPopup!!.dismiss()
 
         if (UtilsDefault.isOnline()) {
@@ -395,7 +407,11 @@ class ChatViewActivity : BaseActivity(), ImageVideoSelectorDialog.Action {
                     Status.SUCCESS -> {
                         dismissProgress()
                         if (it.data!!.status) {
-
+                            if (it.data.data.user_block_chat.equals(0)){
+                                blkStatus = false
+                            }else{
+                                blkStatus = true
+                            }
                             if (it.data.data.list.isNotEmpty()) {
                                 setData(it.data.data.list)
                             }
@@ -415,6 +431,7 @@ class ChatViewActivity : BaseActivity(), ImageVideoSelectorDialog.Action {
     //send text message
     private fun sendMessage(txt: String) {
         if (txt.trim { it <= ' ' }.isEmpty()) return
+        if (statusBlk(blkStatus)) return
         emojiPopup!!.dismiss()
 
         if (UtilsDefault.isOnline()) {
@@ -642,6 +659,7 @@ class ChatViewActivity : BaseActivity(), ImageVideoSelectorDialog.Action {
     }
 
     private fun calling(type: String) {
+        if (statusBlk(blkStatus)) return
         val intent = Intent(this@ChatViewActivity, CallActivity::class.java)
         intent.putExtra(Constants.REC_ID, receiverId)
         intent.putExtra(Constants.REC_NAME, receiverName)
@@ -693,14 +711,28 @@ class ChatViewActivity : BaseActivity(), ImageVideoSelectorDialog.Action {
         val popupView = inflater.inflate(R.layout.menu_chat_more_popup, null)
         val width = LinearLayout.LayoutParams.WRAP_CONTENT
         val height = LinearLayout.LayoutParams.WRAP_CONTENT
-        val popupWindow = PopupWindow(popupView, width, height, true)
-        popupWindow.isFocusable = true
-        popupWindow.isOutsideTouchable = true
-        popupWindow.showAtLocation(v, Gravity.TOP or Gravity.RIGHT, 0, 0)
+        popupWindow  = PopupWindow(popupView, width, height, true)
+        popupWindow!!.isFocusable = true
+        popupWindow!!.isOutsideTouchable = true
+        popupWindow!!.showAtLocation(v, Gravity.TOP or Gravity.RIGHT, 0, 0)
 
         val bind = MenuChatMorePopupBinding.bind(popupView)
 
-        popupWindow.setOnDismissListener(PopupWindow.OnDismissListener {
+        if (blkStatus){
+            bind.txtBlock.text = resources.getString(R.string.unblk)
+        }else{
+            bind.txtBlock.text = resources.getString(R.string.block)
+        }
+
+        bind.txtBlock.setOnClickListener {
+            if (blkStatus){
+                userUnblock()
+            }else {
+                userBlock()
+            }
+        }
+
+        popupWindow!!.setOnDismissListener(PopupWindow.OnDismissListener {
             binding.ilHeader.imgMenu.visibility = View.VISIBLE
         })
     }
@@ -1060,6 +1092,11 @@ class ChatViewActivity : BaseActivity(), ImageVideoSelectorDialog.Action {
             if(!room.isNullOrEmpty()){
 
             }else{
+                if (messageSocketModel.data.user_block_chat.equals(0)){
+                    blkStatus = false
+                }else{
+                    blkStatus = true
+                }
 //                if (messageSocketModel.data.id.equals(receiverId)) {
                 if (!messageSocketModel.data.list.isNullOrEmpty()) {
                     setData(messageSocketModel.data.list)
@@ -1106,10 +1143,12 @@ class ChatViewActivity : BaseActivity(), ImageVideoSelectorDialog.Action {
     }
 
     fun sendTypingIndicator(indicate: Boolean) {
-        if (indicate) {
-            typingEmit("1")
-        } else {
-            typingEmit("0")
+        if (!blkStatus) {
+            if (indicate) {
+                typingEmit("1")
+            } else {
+                typingEmit("0")
+            }
         }
     }
 
@@ -1203,6 +1242,68 @@ class ChatViewActivity : BaseActivity(), ImageVideoSelectorDialog.Action {
                     CAMERA_MIC_PERMISSION_REQUEST_CODE)
             }
         }
+    }
+
+    private fun userUnblock() {
+        val inputParams = InputParams()
+        inputParams.accessToken =
+            UtilsDefault.getSharedPreferenceString(Constants.ACCESS_TOKEN)
+        inputParams.user_id = UtilsDefault.getSharedPreferenceString(Constants.USER_ID)
+        inputParams.receiver_id = receiverId
+
+        apiViewModel.userUnblock(inputParams).observe(this, Observer {
+            it.let {
+                when (it.status) {
+                    Status.LOADING -> {
+                        showProgress()
+                    }
+                    Status.SUCCESS -> {
+                        dismissProgress()
+                        if (it.data!!.status) {
+                            blkStatus = false
+                            popupWindow!!.dismiss()
+                        } else {
+                            toast(it.data.message)
+                        }
+                    }
+                    Status.ERROR -> {
+                        dismissProgress()
+                        toast(it.message!!)
+                    }
+                }
+            }
+        })
+    }
+
+    private fun userBlock() {
+        val inputParams = InputParams()
+        inputParams.accessToken =
+            UtilsDefault.getSharedPreferenceString(Constants.ACCESS_TOKEN)
+        inputParams.user_id = UtilsDefault.getSharedPreferenceString(Constants.USER_ID)
+        inputParams.receiver_id = receiverId
+
+        apiViewModel.userBlock(inputParams).observe(this, Observer {
+            it.let {
+                when (it.status) {
+                    Status.LOADING -> {
+                        showProgress()
+                    }
+                    Status.SUCCESS -> {
+                        dismissProgress()
+                        if (it.data!!.status) {
+                            blkStatus = true
+                            popupWindow!!.dismiss()
+                        } else {
+                            toast(it.data.message)
+                        }
+                    }
+                    Status.ERROR -> {
+                        dismissProgress()
+                        toast(it.message!!)
+                    }
+                }
+            }
+        })
     }
 
 }

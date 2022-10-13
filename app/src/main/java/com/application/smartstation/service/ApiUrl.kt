@@ -75,5 +75,9 @@ object ApiUrl {
     const val REMOVE_HEADER = API + "removeheader"
     const val REMOVE_FOOTER = API + "removefooter"
     const val GET_PRIVATE_INFO = API + "get_individual_pofile_details"
+    const val BLOCK_USER = API + "block_user_chat"
+    const val UNBLOCK_USER = API + "un_block_user_chat"
+    const val REMOVE_USER_GRP = API + "remove_group_member"
+    const val UPDATE_GRP_DES = API + "update_group_description"
 
 }

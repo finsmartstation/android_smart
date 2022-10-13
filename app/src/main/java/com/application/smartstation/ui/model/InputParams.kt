@@ -100,5 +100,7 @@ class InputParams {
     //change grp details
     var group_name:String? = null
     var new_admin_user_id:String? = null
+    var remove_user_id:String? = null
+    var description:String? = null
 
 }

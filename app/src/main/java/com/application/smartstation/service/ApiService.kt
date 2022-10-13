@@ -140,6 +140,18 @@ interface ApiService {
     @POST(ApiUrl.REMOVE_FOOTER)
     suspend fun removeFooter(@Body inputParams: InputParams): BaseResponse
 
+    @POST(ApiUrl.BLOCK_USER)
+    suspend fun userBlock(@Body inputParams: InputParams): BaseResponse
+
+    @POST(ApiUrl.UNBLOCK_USER)
+    suspend fun userUnblock(@Body inputParams: InputParams): BaseResponse
+
+    @POST(ApiUrl.REMOVE_USER_GRP)
+    suspend fun removeGrpUser(@Body inputParams: InputParams): BaseResponse
+
+    @POST(ApiUrl.UPDATE_GRP_DES)
+    suspend fun updateGrpDes(@Body inputParams: InputParams): BaseResponse
+
     @POST(ApiUrl.GET_PRIVATE_INFO)
     suspend fun getPrivateInfo(@Body inputParams: InputParams): GetPrivateInfo
 

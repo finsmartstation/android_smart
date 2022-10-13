@@ -106,6 +106,7 @@
             android:layout_marginTop="16dp"
             android:layout_marginEnd="16dp"
             android:text="@string/wallpaper"
+            android:visibility="gone"
             android:textColor="@color/white"
             android:textSize="16sp">
 
@@ -117,6 +118,7 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="10dp"
             android:layout_marginEnd="16dp"
+            android:visibility="gone"
             android:src="@drawable/dot_view_use" />
 
         <LinearLayout

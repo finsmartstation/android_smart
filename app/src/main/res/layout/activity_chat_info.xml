@@ -237,6 +237,7 @@
                 android:visibility="gone" />
 
             <LinearLayout
+                android:id="@+id/llDes"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="26dp"
@@ -249,8 +250,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="6dp"
                     android:textAlignment="textStart"
-                    android:text="@string/grp_create_date"
-                    android:textColor="@color/dec_chat_info"
+                    android:textColor="@color/black"
                     android:textSize="18sp" />
 
                 <com.application.smartstation.view.CustomTextViewBold
@@ -267,14 +267,13 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="20dp"
-                android:layout_marginTop="26dp"
                 android:background="@color/view_chat_info" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="26dp"
-                android:orientation="vertical"
+                android:orientation="horizontal"
                 android:visibility="visible">
 
                 <com.application.smartstation.view.CustomTextViewBold
@@ -283,8 +282,26 @@
                     android:layout_height="wrap_content"
                     android:textAlignment="textStart"
                     android:text="@string/media_link"
+                    android:layout_marginEnd="10dp"
+                    android:layout_weight="1"
                     android:textColor="@color/black"
                     android:textSize="18sp" />
+
+                <com.application.smartstation.view.CustomTextViewBold
+                    android:id="@+id/txtMediaCount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAlignment="textStart"
+                    android:textColor="@color/grey"
+                    android:textSize="18sp" />
+
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:src="@drawable/ic_down_arrow"
+                    android:rotation="-90"
+                    android:layout_marginStart="10dp"
+                    />
 
 
             </LinearLayout>

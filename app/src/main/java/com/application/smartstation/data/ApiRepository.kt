@@ -342,6 +342,34 @@ class ApiRepository @Inject constructor(val apiService: ApiService) {
         }.flowOn(Dispatchers.IO)
     }
 
+    fun userBlock(inputParams: InputParams): Flow<BaseResponse> {
+        return flow {
+            val response = apiService.userBlock(inputParams)
+            emit(response)
+        }.flowOn(Dispatchers.IO)
+    }
+
+    fun userUnblock(inputParams: InputParams): Flow<BaseResponse> {
+        return flow {
+            val response = apiService.userUnblock(inputParams)
+            emit(response)
+        }.flowOn(Dispatchers.IO)
+    }
+
+    fun removeGrpUser(inputParams: InputParams): Flow<BaseResponse> {
+        return flow {
+            val response = apiService.removeGrpUser(inputParams)
+            emit(response)
+        }.flowOn(Dispatchers.IO)
+    }
+
+    fun updateGrpDes(inputParams: InputParams): Flow<BaseResponse> {
+        return flow {
+            val response = apiService.updateGrpDes(inputParams)
+            emit(response)
+        }.flowOn(Dispatchers.IO)
+    }
+
     fun getPrivateInfo(inputParams: InputParams): Flow<GetPrivateInfo> {
         return flow {
             val response = apiService.getPrivateInfo(inputParams)

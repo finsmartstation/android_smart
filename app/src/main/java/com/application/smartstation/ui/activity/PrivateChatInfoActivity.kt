@@ -40,6 +40,7 @@ class PrivateChatInfoActivity : BaseActivity() {
     var profilePic = ""
     var chatType = ""
     var receiver_id = ""
+    var blk = false
     var privateChatInfoGrpAdapter: PrivateChatInfoGrpAdapter? = null
     var CAMERA_MIC_PERMISSION_REQUEST_CODE = 791
 
@@ -111,6 +112,76 @@ class PrivateChatInfoActivity : BaseActivity() {
             }
         }
 
+        binding.llBlock.setOnClickListener {
+            if (blk){
+                userUnblock()
+            }else {
+                userBlock()
+            }
+        }
+
+    }
+
+    private fun userUnblock() {
+        val inputParams = InputParams()
+        inputParams.accessToken =
+            UtilsDefault.getSharedPreferenceString(Constants.ACCESS_TOKEN)
+        inputParams.user_id = UtilsDefault.getSharedPreferenceString(Constants.USER_ID)
+        inputParams.receiver_id = receiver_id
+
+        apiViewModel.userUnblock(inputParams).observe(this, Observer {
+            it.let {
+                when (it.status) {
+                    Status.LOADING -> {
+                        showProgress()
+                    }
+                    Status.SUCCESS -> {
+                        dismissProgress()
+                        if (it.data!!.status) {
+                            binding.txtBlock.text = resources.getString(R.string.block)
+                            blk = false
+                        } else {
+                            toast(it.data.message)
+                        }
+                    }
+                    Status.ERROR -> {
+                        dismissProgress()
+                        toast(it.message!!)
+                    }
+                }
+            }
+        })
+    }
+
+    private fun userBlock() {
+        val inputParams = InputParams()
+        inputParams.accessToken =
+            UtilsDefault.getSharedPreferenceString(Constants.ACCESS_TOKEN)
+        inputParams.user_id = UtilsDefault.getSharedPreferenceString(Constants.USER_ID)
+        inputParams.receiver_id = receiver_id
+
+        apiViewModel.userBlock(inputParams).observe(this, Observer {
+            it.let {
+                when (it.status) {
+                    Status.LOADING -> {
+                        showProgress()
+                    }
+                    Status.SUCCESS -> {
+                        dismissProgress()
+                        if (it.data!!.status) {
+                            binding.txtBlock.text = resources.getString(R.string.unblk)
+                            blk = true
+                        } else {
+                            toast(it.data.message)
+                        }
+                    }
+                    Status.ERROR -> {
+                        dismissProgress()
+                        toast(it.message!!)
+                    }
+                }
+            }
+        })
     }
 
     private fun calling(type: String) {
@@ -145,6 +216,13 @@ class PrivateChatInfoActivity : BaseActivity() {
                     Status.SUCCESS -> {
                         dismissProgress()
                         if (it.data!!.status) {
+                            if (it.data.data.user_block_chat.equals(0)){
+                                blk = false
+                                binding.txtBlock.text = resources.getString(R.string.block)
+                            }else{
+                                blk = true
+                                binding.txtBlock.text = resources.getString(R.string.unblk)
+                            }
                             name = it.data.data.receiver_data.name
                             profilePic = it.data.data.receiver_data.profile_pic
                             binding.txtName.text = it.data.data.receiver_data.name
