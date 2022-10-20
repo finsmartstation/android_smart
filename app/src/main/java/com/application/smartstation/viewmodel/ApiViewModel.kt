@@ -897,6 +897,186 @@ class ApiViewModel @Inject constructor(
 
     }
 
+    fun changePublicProfile(inputParams: InputParams) = liveData<Resource<BaseResponse>> {
+        if (UtilsDefault.isOnline()) {
+            repository.changePublicProfile(inputParams)
+                .onStart {
+                    emit(Resource.loading(data = null))
+                }
+                .catch {
+                    emit(Resource.error(data = null, msg = "Cannot reach server..try again"))
+                }
+                .collect {
+                    emit(Resource.success(it))
+                }
+        } else {
+            emit(Resource.error(data = null, msg = "No internet connection"))
+        }
+
+    }
+
+    fun getPublicProfile(inputParams: InputParams) = liveData<Resource<BaseResponse>> {
+        if (UtilsDefault.isOnline()) {
+            repository.getPublicProfile(inputParams)
+                .onStart {
+                    emit(Resource.loading(data = null))
+                }
+                .catch {
+                    emit(Resource.error(data = null, msg = "Cannot reach server..try again"))
+                }
+                .collect {
+                    emit(Resource.success(it))
+                }
+        } else {
+            emit(Resource.error(data = null, msg = "No internet connection"))
+        }
+
+    }
+
+    fun chatClear(inputParams: InputParams) = liveData<Resource<BaseResponse>> {
+        if (UtilsDefault.isOnline()) {
+            repository.chatClear(inputParams)
+                .onStart {
+                    emit(Resource.loading(data = null))
+                }
+                .catch {
+                    emit(Resource.error(data = null, msg = "Cannot reach server..try again"))
+                }
+                .collect {
+                    emit(Resource.success(it))
+                }
+        } else {
+            emit(Resource.error(data = null, msg = "No internet connection"))
+        }
+
+    }
+
+    fun chatClearGrp(inputParams: InputParams) = liveData<Resource<BaseResponse>> {
+        if (UtilsDefault.isOnline()) {
+            repository.chatClearGrp(inputParams)
+                .onStart {
+                    emit(Resource.loading(data = null))
+                }
+                .catch {
+                    emit(Resource.error(data = null, msg = "Cannot reach server..try again"))
+                }
+                .collect {
+                    emit(Resource.success(it))
+                }
+        } else {
+            emit(Resource.error(data = null, msg = "No internet connection"))
+        }
+
+    }
+
+    fun muteNoficitaionPrivate(inputParams: InputParams) = liveData<Resource<BaseResponse>> {
+        if (UtilsDefault.isOnline()) {
+            repository.muteNoficitaionPrivate(inputParams)
+                .onStart {
+                    emit(Resource.loading(data = null))
+                }
+                .catch {
+                    emit(Resource.error(data = null, msg = "Cannot reach server..try again"))
+                }
+                .collect {
+                    emit(Resource.success(it))
+                }
+        } else {
+            emit(Resource.error(data = null, msg = "No internet connection"))
+        }
+
+    }
+
+    fun unmuteNoficitaionPrivate(inputParams: InputParams) = liveData<Resource<BaseResponse>> {
+        if (UtilsDefault.isOnline()) {
+            repository.unmuteNoficitaionPrivate(inputParams)
+                .onStart {
+                    emit(Resource.loading(data = null))
+                }
+                .catch {
+                    emit(Resource.error(data = null, msg = "Cannot reach server..try again"))
+                }
+                .collect {
+                    emit(Resource.success(it))
+                }
+        } else {
+            emit(Resource.error(data = null, msg = "No internet connection"))
+        }
+
+    }
+
+    fun muteNotificaionGrp(inputParams: InputParams) = liveData<Resource<BaseResponse>> {
+        if (UtilsDefault.isOnline()) {
+            repository.muteNotificaionGrp(inputParams)
+                .onStart {
+                    emit(Resource.loading(data = null))
+                }
+                .catch {
+                    emit(Resource.error(data = null, msg = "Cannot reach server..try again"))
+                }
+                .collect {
+                    emit(Resource.success(it))
+                }
+        } else {
+            emit(Resource.error(data = null, msg = "No internet connection"))
+        }
+
+    }
+
+    fun unmuteNotificaionGrp(inputParams: InputParams) = liveData<Resource<BaseResponse>> {
+        if (UtilsDefault.isOnline()) {
+            repository.unmuteNotificaionGrp(inputParams)
+                .onStart {
+                    emit(Resource.loading(data = null))
+                }
+                .catch {
+                    emit(Resource.error(data = null, msg = "Cannot reach server..try again"))
+                }
+                .collect {
+                    emit(Resource.success(it))
+                }
+        } else {
+            emit(Resource.error(data = null, msg = "No internet connection"))
+        }
+
+    }
+
+    fun getGrpMedia(inputParams: InputParams) = liveData<Resource<GetMedia>> {
+        if (UtilsDefault.isOnline()) {
+            repository.getGrpMedia(inputParams)
+                .onStart {
+                    emit(Resource.loading(data = null))
+                }
+                .catch {
+                    emit(Resource.error(data = null, msg = "Cannot reach server..try again"))
+                }
+                .collect {
+                    emit(Resource.success(it))
+                }
+        } else {
+            emit(Resource.error(data = null, msg = "No internet connection"))
+        }
+
+    }
+
+    fun getPrivateMedia(inputParams: InputParams) = liveData<Resource<GetMedia>> {
+        if (UtilsDefault.isOnline()) {
+            repository.getPrivateMedia(inputParams)
+                .onStart {
+                    emit(Resource.loading(data = null))
+                }
+                .catch {
+                    emit(Resource.error(data = null, msg = "Cannot reach server..try again"))
+                }
+                .collect {
+                    emit(Resource.success(it))
+                }
+        } else {
+            emit(Resource.error(data = null, msg = "No internet connection"))
+        }
+
+    }
+
     fun getPrivateInfo(inputParams: InputParams) = liveData<Resource<GetPrivateInfo>> {
         if (UtilsDefault.isOnline()) {
             repository.getPrivateInfo(inputParams)

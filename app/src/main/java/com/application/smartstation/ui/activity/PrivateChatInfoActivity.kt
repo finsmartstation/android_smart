@@ -3,9 +3,9 @@ package com.application.smartstation.ui.activity
 import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Color
 import android.net.Uri
 import android.os.Build
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.Settings
 import android.view.View
@@ -14,11 +14,10 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.application.smartstation.R
-import com.application.smartstation.databinding.ActivityChatInfoBinding
 import com.application.smartstation.databinding.ActivityPrivateChatInfoBinding
+import com.application.smartstation.databinding.DialogBottomMuteBinding
 import com.application.smartstation.service.Status
 import com.application.smartstation.ui.adapter.PrivateChatInfoGrpAdapter
-import com.application.smartstation.ui.adapter.UserListGrpAdapter
 import com.application.smartstation.ui.model.CommonGrpList
 import com.application.smartstation.ui.model.InputParams
 import com.application.smartstation.util.Constants
@@ -26,8 +25,8 @@ import com.application.smartstation.util.UtilsDefault
 import com.application.smartstation.util.viewBinding
 import com.application.smartstation.viewmodel.ApiViewModel
 import com.bumptech.glide.Glide
-import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.google.android.material.appbar.AppBarLayout
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import dagger.hilt.android.AndroidEntryPoint
 import io.realm.internal.Util
 import kotlinx.android.synthetic.main.activity_chat_info.view.*
@@ -43,6 +42,7 @@ class PrivateChatInfoActivity : BaseActivity() {
     var blk = false
     var privateChatInfoGrpAdapter: PrivateChatInfoGrpAdapter? = null
     var CAMERA_MIC_PERMISSION_REQUEST_CODE = 791
+    var mBottomDialogDocument: BottomSheetDialog? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -96,6 +96,14 @@ class PrivateChatInfoActivity : BaseActivity() {
             finish()
         }
 
+        binding.llMute.setOnClickListener {
+            muteDialog()
+        }
+
+        binding.llClearChat.setOnClickListener {
+            clearChat()
+        }
+
         binding.llAudio.setOnClickListener {
             if (!checkPermissionForCameraAndMicrophone()) {
                 requestPermissionForCameraAndMicrophone()
@@ -120,6 +128,72 @@ class PrivateChatInfoActivity : BaseActivity() {
             }
         }
 
+    }
+
+    private fun setMute(type: String) {
+        val inputParams = InputParams()
+        inputParams.accessToken =
+            UtilsDefault.getSharedPreferenceString(Constants.ACCESS_TOKEN)
+        inputParams.user_id = UtilsDefault.getSharedPreferenceString(Constants.USER_ID)
+        inputParams.receiver_id = receiver_id
+        inputParams.type = type
+        inputParams.show_notification = "0"
+
+        apiViewModel.muteNoficitaionPrivate(inputParams).observe(this, Observer {
+            it.let {
+                when (it.status) {
+                    Status.LOADING -> {
+                        showProgress()
+                    }
+                    Status.SUCCESS -> {
+                        dismissProgress()
+                        if (it.data!!.status) {
+                            if (it.data.end_time.equals("always")){
+                                binding.txtMute.setText(it.data.end_time)
+                            }else{
+                                binding.txtMute.setText(resources.getString(R.string.until)+" "+UtilsDefault.dateMute(UtilsDefault.localTimeConvert(it.data.end_time)))
+                            }
+                        } else {
+                            toast(it.data.message)
+                        }
+                    }
+                    Status.ERROR -> {
+                        dismissProgress()
+                        toast(it.message!!)
+                    }
+                }
+            }
+        })
+    }
+
+    private fun clearChat() {
+        val inputParams = InputParams()
+        inputParams.accessToken =
+            UtilsDefault.getSharedPreferenceString(Constants.ACCESS_TOKEN)
+        inputParams.user_id = UtilsDefault.getSharedPreferenceString(Constants.USER_ID)
+        inputParams.receiver_id = receiver_id
+
+        apiViewModel.chatClear(inputParams).observe(this, Observer {
+            it.let {
+                when (it.status) {
+                    Status.LOADING -> {
+                        showProgress()
+                    }
+                    Status.SUCCESS -> {
+                        dismissProgress()
+                        if (it.data!!.status) {
+                            toast(it.data.message)
+                        } else {
+                            toast(it.data.message)
+                        }
+                    }
+                    Status.ERROR -> {
+                        dismissProgress()
+                        toast(it.message!!)
+                    }
+                }
+            }
+        })
     }
 
     private fun userUnblock() {
@@ -216,7 +290,7 @@ class PrivateChatInfoActivity : BaseActivity() {
                     Status.SUCCESS -> {
                         dismissProgress()
                         if (it.data!!.status) {
-                            if (it.data.data.user_block_chat.equals(0)){
+                            if (it.data.data.user_block_status.equals(0)){
                                 blk = false
                                 binding.txtBlock.text = resources.getString(R.string.block)
                             }else{
@@ -288,6 +362,45 @@ class PrivateChatInfoActivity : BaseActivity() {
                     Manifest.permission.RECORD_AUDIO),
                     CAMERA_MIC_PERMISSION_REQUEST_CODE)
             }
+        }
+    }
+
+    fun muteDialog(){
+        try {
+            val view = layoutInflater.inflate(R.layout.dialog_bottom_mute, null)
+            mBottomDialogDocument = BottomSheetDialog(this)
+            val bind = DialogBottomMuteBinding.bind(view)
+            mBottomDialogDocument!!.setCancelable(false)
+
+            mBottomDialogDocument!!.setOnShowListener {
+                (view!!.parent as View).setBackgroundColor(Color.TRANSPARENT)
+            }
+
+            mBottomDialogDocument!!.setContentView(view)
+            mBottomDialogDocument!!.show()
+
+            bind.llCancel.setOnClickListener {
+                mBottomDialogDocument!!.dismiss()
+            }
+
+            bind.llHrs.setOnClickListener {
+                mBottomDialogDocument!!.dismiss()
+                setMute("8_hours")
+            }
+
+            bind.llWeek.setOnClickListener {
+                mBottomDialogDocument!!.dismiss()
+                setMute("1_week")
+            }
+
+            bind.llWeek.setOnClickListener {
+                mBottomDialogDocument!!.dismiss()
+                setMute("always")
+            }
+
+
+        } catch (e: Exception) {
+            e.printStackTrace()
         }
     }
 

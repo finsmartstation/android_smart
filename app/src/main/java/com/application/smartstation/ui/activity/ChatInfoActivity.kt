@@ -1,6 +1,5 @@
 package com.application.smartstation.ui.activity
 
-import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Dialog
 import android.content.Intent
@@ -9,7 +8,6 @@ import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.Bundle
 import android.provider.ContactsContract
-import android.telephony.PhoneNumberUtils
 import android.text.TextUtils
 import android.util.Log
 import android.view.Gravity
@@ -28,11 +26,9 @@ import com.application.smartstation.ui.model.ContactListRes
 import com.application.smartstation.ui.model.InputParams
 import com.application.smartstation.ui.model.UserListGrp
 import com.application.smartstation.util.Constants
-import com.application.smartstation.util.RunTimePermission
 import com.application.smartstation.util.UtilsDefault
 import com.application.smartstation.util.viewBinding
 import com.application.smartstation.view.ImageSelectorDialog
-import com.application.smartstation.view.ImageVideoSelectorDialog
 import com.application.smartstation.viewmodel.ApiViewModel
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
@@ -154,9 +150,9 @@ class ChatInfoActivity : BaseActivity(), ImageSelectorDialog.Action {
             }
         })
 
-        phnPermission {
-            getContactList()
-        }
+//        phnPermission {
+//            getContactList()
+//        }
     }
 
     private fun openAdminPopup(model: UserListGrp) {
@@ -339,25 +335,25 @@ class ChatInfoActivity : BaseActivity(), ImageSelectorDialog.Action {
 
     private fun setData(data: ArrayList<UserListGrp>) {
         list = data
-        for (a in contactList) {
-            for (b in 0 until list.size) {
-                if (PhoneNumberUtils.compare(a.Phn, list[b].phone)) {
-                    list.set(b,UserListGrp(list[b].user_id,
-                        a.name,
-                        list[b].type,
-                        list[b].about,
-                        list[b].phone,
-                        list[b].profile_pic))
-                }else{
-                    list.set(b,UserListGrp(list[b].user_id,
-                        list[b].phone,
-                        list[b].type,
-                        list[b].about,
-                        list[b].phone,
-                        list[b].profile_pic))
-                }
-            }
-        }
+//        for (a in contactList) {
+//            for (b in 0 until list.size) {
+//                if (PhoneNumberUtils.compare(a.Phn, list[b].phone)) {
+//                    list.set(b,UserListGrp(list[b].user_id,
+//                        a.name,
+//                        list[b].type,
+//                        list[b].about,
+//                        list[b].phone,
+//                        list[b].profile_pic))
+//                }else{
+//                    list.set(b,UserListGrp(list[b].user_id,
+//                        list[b].phone,
+//                        list[b].type,
+//                        list[b].about,
+//                        list[b].phone,
+//                        list[b].profile_pic))
+//                }
+//            }
+//        }
         if (list.size > 10) {
             binding.txtView.visibility = View.VISIBLE
             userListGrpAdapter!!.setUser(list.subList(0, 10))
@@ -373,6 +369,10 @@ class ChatInfoActivity : BaseActivity(), ImageSelectorDialog.Action {
             intent.putExtra("name", name)
             setResult(1, intent)
             finish()
+        }
+
+        binding.llMute.setOnClickListener {
+            muteDialog()
         }
 
         binding.txtView.setOnClickListener {
@@ -410,6 +410,42 @@ class ChatInfoActivity : BaseActivity(), ImageSelectorDialog.Action {
         binding.llDes.setOnClickListener {
             showDialogChatDes()
         }
+    }
+
+    private fun setMute(type: String) {
+        val inputParams = InputParams()
+        inputParams.accessToken =
+            UtilsDefault.getSharedPreferenceString(Constants.ACCESS_TOKEN)
+        inputParams.user_id = UtilsDefault.getSharedPreferenceString(Constants.USER_ID)
+        inputParams.receiver_id = room
+        inputParams.type = type
+        inputParams.show_notification = "0"
+
+        apiViewModel.muteNotificaionGrp(inputParams).observe(this, Observer {
+            it.let {
+                when (it.status) {
+                    Status.LOADING -> {
+                        showProgress()
+                    }
+                    Status.SUCCESS -> {
+                        dismissProgress()
+                        if (it.data!!.status) {
+                            if (it.data.end_time.equals("always")){
+                                binding.txtMute.setText(it.data.end_time)
+                            }else{
+                                binding.txtMute.setText(resources.getString(R.string.until)+" "+UtilsDefault.dateMute(UtilsDefault.localTimeConvert(it.data.end_time)))
+                            }
+                        } else {
+                            toast(it.data.message)
+                        }
+                    }
+                    Status.ERROR -> {
+                        dismissProgress()
+                        toast(it.message!!)
+                    }
+                }
+            }
+        })
     }
 
     private fun exitDialog() {
@@ -749,6 +785,45 @@ class ChatInfoActivity : BaseActivity(), ImageSelectorDialog.Action {
                 }
             }
         })
+    }
+
+    fun muteDialog(){
+        try {
+            val view = layoutInflater.inflate(R.layout.dialog_bottom_mute, null)
+            mBottomDialogDocument = BottomSheetDialog(this)
+            val bind = DialogBottomMuteBinding.bind(view)
+            mBottomDialogDocument!!.setCancelable(false)
+
+            mBottomDialogDocument!!.setOnShowListener {
+                (view!!.parent as View).setBackgroundColor(Color.TRANSPARENT)
+            }
+
+            mBottomDialogDocument!!.setContentView(view)
+            mBottomDialogDocument!!.show()
+
+            bind.llCancel.setOnClickListener {
+                mBottomDialogDocument!!.dismiss()
+            }
+
+            bind.llHrs.setOnClickListener {
+                mBottomDialogDocument!!.dismiss()
+                setMute("8_hours")
+            }
+
+            bind.llWeek.setOnClickListener {
+                mBottomDialogDocument!!.dismiss()
+                setMute("1_week")
+            }
+
+            bind.llWeek.setOnClickListener {
+                mBottomDialogDocument!!.dismiss()
+                setMute("always")
+            }
+
+
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
     }
 
 }

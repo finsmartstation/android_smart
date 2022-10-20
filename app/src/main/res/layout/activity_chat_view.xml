@@ -25,6 +25,77 @@
             android:id="@+id/ilHeader"
             layout="@layout/chat_header_layout" />
 
+       <LinearLayout
+           android:id="@+id/llSearchView"
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           android:orientation="horizontal"
+           android:paddingStart="16dp"
+           android:paddingEnd="16dp"
+           android:paddingTop="8dp"
+           android:paddingBottom="8dp"
+           android:gravity="center"
+           android:visibility="gone"
+           android:background="@color/grey"
+           >
+
+           <ImageView
+               android:id="@+id/imgBack1"
+               android:layout_width="35dp"
+               android:layout_height="35dp"
+               android:layout_marginEnd="8dp"
+               android:padding="8dp"
+               android:clickable="true"
+               android:src="@drawable/ic_arrow_back_use" />
+
+
+        <androidx.appcompat.widget.SearchView
+            android:theme="@style/AppSearchView"
+            android:id="@+id/tbSearchView"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_centerVertical="true"
+            android:layout_weight="1"
+            app:queryHint="@string/search"
+            android:background="@drawable/btn_bg_use_gran"
+            app:closeIcon="@drawable/search_close"
+            app:iconifiedByDefault="false"
+            app:queryBackground="@null"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/down_arrow_search_toolbar"
+            app:layout_constraintStart_toEndOf="@+id/img_and_back_container"
+            app:layout_constraintTop_toTopOf="parent"
+            android:backgroundTint="@color/light_grey"
+            />
+
+
+        <ImageButton
+            android:id="@+id/tbUpArrow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:padding="4dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_keyboard_arrow_up" />
+
+        <ImageButton
+            android:id="@+id/tbDownArrow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+
+            android:layout_toLeftOf="@id/up_arrow_search_toolbar"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:padding="4dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/up_arrow_search_toolbar"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_keyboard_arrow_down" />
+       </LinearLayout>
 
         <LinearLayout
             android:id="@+id/clChat"

@@ -85,6 +85,8 @@ object Constants {
     var EXTRA_CONTACT_LIST = "contactList"
     @JvmField
     var PUSHNOTIFICATION = "PUSHNOTIFICATION"
+    @JvmField
+    var ADDSHORTCUT = "ADDSHORTCUT"
 
     //twilio
     @JvmField

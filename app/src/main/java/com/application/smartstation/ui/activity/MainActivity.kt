@@ -103,10 +103,6 @@ class MainActivity : BaseActivity(), InboxFragment.OnUnreadMailCountListener,
 
     private fun initView() {
 
-        phnPermission {
-            getContactList()
-        }
-
         if (!checkPermissionForCameraAndMicrophone()) {
             requestPermissionForCameraAndMicrophone()
         }
@@ -507,20 +503,20 @@ class MainActivity : BaseActivity(), InboxFragment.OnUnreadMailCountListener,
                         if (it.data!!.status) {
                             var list1 = it.data.data
                             if (list1.isNotEmpty()) {
-                                list.clear()
-                                for (a in contactList) {
-                                    for (b in list1) {
-                                        if (PhoneNumberUtils.compare(a.Phn, b.phone)) {
-                                            list.add(DataUserList(b.user_id,
-                                                a.name,
-                                                b.profile_pic,
-                                                b.phone,
-                                                b.country,
-                                                b.about))
-                                        }
-                                    }
-                                }
-                                setData(list)
+//                                list.clear()
+//                                for (a in contactList) {
+//                                    for (b in list1) {
+//                                        if (PhoneNumberUtils.compare(a.Phn, b.phone)) {
+//                                            list.add(DataUserList(b.user_id,
+//                                                a.name,
+//                                                b.profile_pic,
+//                                                b.phone,
+//                                                b.country,
+//                                                b.about))
+//                                        }
+//                                    }
+//                                }
+                                setData(list1)
                             }
                         } else {
                             toast(it.data.message)

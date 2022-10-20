@@ -70,9 +70,9 @@ class UserDetailsActivity : BaseActivity() {
             }
         })
 
-        phnPermission {
-            getContactList()
-        }
+//        phnPermission {
+//            getContactList()
+//        }
 
 
     }
@@ -110,19 +110,19 @@ class UserDetailsActivity : BaseActivity() {
                         if (it.data!!.status) {
                             val list1 = it.data.data
                             if (list1.isNotEmpty()) {
-                                list.clear()
-                                for (a in contactList) {
-                                    for (b in list1) {
-                                        if (PhoneNumberUtils.compare(a.Phn, b.phone)) {
-                                            list.add(DataUserList(b.user_id,
-                                                a.name,
-                                                b.profile_pic,
-                                                b.phone,
-                                                b.country,
-                                                b.about))
-                                        }
-                                    }
-                                }
+                                list = list1
+//                                for (a in contactList) {
+//                                    for (b in list1) {
+//                                        if (PhoneNumberUtils.compare(a.Phn, b.phone)) {
+//                                            list.add(DataUserList(b.user_id,
+//                                                a.name,
+//                                                b.profile_pic,
+//                                                b.phone,
+//                                                b.country,
+//                                                b.about))
+//                                        }
+//                                    }
+//                                }
                                 setData(list)
                             }
                         } else {

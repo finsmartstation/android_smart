@@ -215,4 +215,12 @@ class ImagePerviewActivity : BaseActivity(), SurfaceHolder.Callback, MediaPlayer
     override fun toggleFullScreen() {
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        if (player != null) {
+            player!!.stop()
+            player!!.release()
+        }
+    }
+
 }

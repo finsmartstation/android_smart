@@ -64,9 +64,9 @@ class CloudActivity : BaseActivity() {
         showLay = AnimationUtils.loadAnimation(this, R.anim.show_layout)
         hideLay = AnimationUtils.loadAnimation(this, R.anim.hide_layout)
 
-        phnPermission {
-            getContactList()
-        }
+//        phnPermission {
+//            getContactList()
+//        }
 
         cloudAdapter!!.onItemClick = { model ->
             startActivity(Intent(this, CloudViewActivity::class.java).putExtra("name", model.phone)
@@ -107,19 +107,19 @@ class CloudActivity : BaseActivity() {
                             if (list.isNotEmpty()) {
                                 binding.rvCloud.visibility = View.VISIBLE
                                 binding.txtNoFound.visibility = View.GONE
-                                for (a in contactList) {
-                                    for (b in 0 until list.size) {
-                                        if (PhoneNumberUtils.compare(a.Phn, list[b].phone)) {
-//                                            list.removeAt(b)
-                                            list.set(b,
-                                                CloudListRes(a.name,
-                                                    list[b].profile_pic,
-                                                    list[b].id,
-                                                    list[b].folder_name,
-                                                    list[b].user_id))
-                                        }
-                                    }
-                                }
+//                                for (a in contactList) {
+//                                    for (b in 0 until list.size) {
+//                                        if (PhoneNumberUtils.compare(a.Phn, list[b].phone)) {
+////                                            list.removeAt(b)
+//                                            list.set(b,
+//                                                CloudListRes(a.name,
+//                                                    list[b].profile_pic,
+//                                                    list[b].id,
+//                                                    list[b].folder_name,
+//                                                    list[b].user_id))
+//                                        }
+//                                    }
+//                                }
                                 setData(list)
                             } else {
                                 binding.rvCloud.visibility = View.GONE

@@ -21,15 +21,18 @@ import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.LinearLayout
 import android.widget.PopupWindow
+import android.widget.TextView
 import android.widget.TextView.OnEditorActionListener
 import android.widget.Toast
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
+import androidx.appcompat.widget.SearchView
 import androidx.core.content.ContextCompat
 import androidx.core.view.inputmethod.InputContentInfoCompat
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.aghajari.emojiview.AXEmojiManager
 import com.aghajari.emojiview.listener.OnStickerActions
 import com.aghajari.emojiview.listener.PopupListener
@@ -107,7 +110,9 @@ class ChatViewActivity : BaseActivity(), ImageVideoSelectorDialog.Action {
     var type = ""
     var receiverName = ""
     var receiverProfile = ""
+    var searchIndex = 0
     var imageParts: ArrayList<MultipartBody.Part?> = ArrayList()
+    var list: ArrayList<ChatDetailsRes> = ArrayList()
     var chatHistoryAdapter: AdapterChat? = null
     var layoutManager: LinearLayoutManager? = null
     var popupWindow:PopupWindow? = null
@@ -354,6 +359,115 @@ class ChatViewActivity : BaseActivity(), ImageVideoSelectorDialog.Action {
             requestPermissionForCameraAndMicrophone()
         }
 
+        //searchview
+
+        binding.tbSearchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String): Boolean {
+
+                val listSearch = searchTxt(query)
+
+                if (!listSearch.isEmpty()) {
+
+                    //get the found last message index
+                    searchIndex = listSearch.size - 1
+                    val foundMessageId: String = listSearch[searchIndex].id
+                    val mIndex: Int = getPosFromId(foundMessageId)
+                    scrollAndHighlightSearch(mIndex)
+                    binding.tbDownArrow.setOnClickListener(View.OnClickListener { //+2 because one for index and one for previous
+                        //check if there are another results
+                        if (listSearch.isEmpty() || searchIndex + 2 > listSearch.size) {
+//                            toast(resources.getString(R.string.not_found))
+                            return@OnClickListener
+                        }
+
+                        //increment current index
+                        searchIndex++
+                        val foundMessageId: String = listSearch[searchIndex].id
+                        //get the index from chatList by message id from searchedList
+                        val mIndex: Int = getPosFromId(foundMessageId)
+                        scrollAndHighlightSearch(mIndex)
+                    })
+                    binding.tbUpArrow.setOnClickListener(View.OnClickListener {
+                        if (listSearch.isEmpty() || searchIndex - 1 < 0) {
+//                            toast(resources.getString(R.string.not_found))
+                            return@OnClickListener
+                        }
+
+
+                        //decrement search index
+                        searchIndex -= 1
+                        val foundMessageId: String = listSearch[searchIndex].id
+                        val mIndex: Int = getPosFromId(foundMessageId)
+                        scrollAndHighlightSearch(mIndex)
+                    })
+                }else{
+                    setData(list)
+                }
+                return true
+            }
+
+            override fun onQueryTextChange(newText: String): Boolean {
+                return false
+            }
+        })
+
+        binding.tbSearchView.setOnQueryTextFocusChangeListener(View.OnFocusChangeListener { view, b ->
+            if (b)
+                UtilsDefault.showKeyboardForFocusedView(this)
+        })
+
+        binding.tbSearchView.setOnCloseListener(SearchView.OnCloseListener {
+//            isInSearchMode = false
+            true
+        })
+
+
+    }
+
+    fun searchTxt(txt:String):ArrayList<ChatDetailsRes>{
+        val templist: java.util.ArrayList<ChatDetailsRes> = java.util.ArrayList()
+        if (txt != "") {
+            val searchtext = txt.toLowerCase()
+            for (items in list) {
+                val chat = items.message.toLowerCase()
+                if (chat.contains(searchtext)) {
+                    templist.add(items)
+                }
+            }
+            return templist
+        }else{
+            setData(list)
+           templist.clear()
+            return templist
+        }
+    }
+
+    private fun scrollAndHighlightSearch(mIndex: Int) {
+        binding.rvChatRoom.scrollToPosition(mIndex)
+        val view = this.currentFocus
+        if(view != null)
+        UtilsDefault.hideKeyboardForFocusedView(this)
+        Handler().postDelayed({ //get view holder of this textView
+            val viewHolderForAdapterPosition: RecyclerView.ViewHolder =
+                binding.rvChatRoom.findViewHolderForAdapterPosition(mIndex)!!
+            //get textView
+            val tv =
+                viewHolderForAdapterPosition.itemView.findViewById<TextView>(R.id.txtMsg)
+            //highlight text
+            tv.setText(UtilsDefault.highlightText(tv.text.toString()))
+            tv.setTextColor(resources.getColor(R.color.black))
+        }, 100)
+    }
+
+
+    //get index from list using the id
+    private fun getPosFromId(messageId: String): Int {
+        for (a in 0 until list.size){
+            if (list[a].id.equals(messageId)){
+                return a
+            }
+        }
+        return 0
     }
 
     fun typingHandler() {
@@ -407,7 +521,7 @@ class ChatViewActivity : BaseActivity(), ImageVideoSelectorDialog.Action {
                     Status.SUCCESS -> {
                         dismissProgress()
                         if (it.data!!.status) {
-                            if (it.data.data.user_block_chat.equals(0)){
+                            if (it.data.data.user_block_status.equals(0)){
                                 blkStatus = false
                             }else{
                                 blkStatus = true
@@ -655,7 +769,10 @@ class ChatViewActivity : BaseActivity(), ImageVideoSelectorDialog.Action {
             }
         }
 
-
+        binding.imgBack1.setOnClickListener {
+            binding.llSearchView.visibility = View.GONE
+            binding.ilHeader.rlChat.visibility = View.VISIBLE
+        }
     }
 
     private fun calling(type: String) {
@@ -688,6 +805,17 @@ class ChatViewActivity : BaseActivity(), ImageVideoSelectorDialog.Action {
         bind.llMore.setOnClickListener {
             morePopup(v)
             i = 1
+            popupWindow.dismiss()
+        }
+
+        bind.txtSearch.setOnClickListener {
+            binding.ilHeader.rlChat.visibility = View.GONE
+            binding.llSearchView.visibility = View.VISIBLE
+        }
+
+        bind.txtMute.setOnClickListener{
+            startActivity(Intent(this, PrivateChatInfoActivity::class.java)
+                .putExtra(Constants.REC_ID, receiverId))
             popupWindow.dismiss()
         }
 
@@ -730,6 +858,10 @@ class ChatViewActivity : BaseActivity(), ImageVideoSelectorDialog.Action {
             }else {
                 userBlock()
             }
+        }
+
+        bind.txtClearChat.setOnClickListener {
+            clearChat()
         }
 
         popupWindow!!.setOnDismissListener(PopupWindow.OnDismissListener {
@@ -1092,7 +1224,7 @@ class ChatViewActivity : BaseActivity(), ImageVideoSelectorDialog.Action {
             if(!room.isNullOrEmpty()){
 
             }else{
-                if (messageSocketModel.data.user_block_chat.equals(0)){
+                if (messageSocketModel.data.user_block_status.equals(0)){
                     blkStatus = false
                 }else{
                     blkStatus = true
@@ -1109,6 +1241,7 @@ class ChatViewActivity : BaseActivity(), ImageVideoSelectorDialog.Action {
     }
 
     private fun setData(list: ArrayList<ChatDetailsRes>){
+        this.list = list
         chatHistoryAdapter!!.setChat(list)
         layoutManager!!.scrollToPosition(chatHistoryAdapter!!.itemCount - 1)
     }
@@ -1293,6 +1426,37 @@ class ChatViewActivity : BaseActivity(), ImageVideoSelectorDialog.Action {
                         if (it.data!!.status) {
                             blkStatus = true
                             popupWindow!!.dismiss()
+                        } else {
+                            toast(it.data.message)
+                        }
+                    }
+                    Status.ERROR -> {
+                        dismissProgress()
+                        toast(it.message!!)
+                    }
+                }
+            }
+        })
+    }
+
+    private fun clearChat() {
+        val inputParams = InputParams()
+        inputParams.accessToken =
+            UtilsDefault.getSharedPreferenceString(Constants.ACCESS_TOKEN)
+        inputParams.user_id = UtilsDefault.getSharedPreferenceString(Constants.USER_ID)
+        inputParams.receiver_id = receiverId
+
+        apiViewModel.chatClear(inputParams).observe(this, Observer {
+            it.let {
+                when (it.status) {
+                    Status.LOADING -> {
+                        showProgress()
+                    }
+                    Status.SUCCESS -> {
+                        dismissProgress()
+                        if (it.data!!.status) {
+                            popupWindow!!.dismiss()
+                            getChatDetails()
                         } else {
                             toast(it.data.message)
                         }

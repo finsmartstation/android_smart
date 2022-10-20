@@ -152,6 +152,36 @@ interface ApiService {
     @POST(ApiUrl.UPDATE_GRP_DES)
     suspend fun updateGrpDes(@Body inputParams: InputParams): BaseResponse
 
+    @POST(ApiUrl.PROFILE_PUBLIC_CHANGE)
+    suspend fun changePublicProfile(@Body inputParams: InputParams): BaseResponse
+
+    @POST(ApiUrl.GET_PROFILE_PUBLIC)
+    suspend fun getPublicProfile(@Body inputParams: InputParams): BaseResponse
+
+    @POST(ApiUrl.CLEAR_CHAT)
+    suspend fun chatClear(@Body inputParams: InputParams): BaseResponse
+
+    @POST(ApiUrl.CLEAR_CHAT_GRP)
+    suspend fun chatClearGrp(@Body inputParams: InputParams): BaseResponse
+
+    @POST(ApiUrl.MUTE_PRIVATE_CHAT_NOTIFICATION)
+    suspend fun muteNoficitaionPrivate(@Body inputParams: InputParams): BaseResponse
+
+    @POST(ApiUrl.UNMUTE_PRIVATE_CHAT_NOTIFICATION)
+    suspend fun unmuteNoficitaionPrivate(@Body inputParams: InputParams): BaseResponse
+
+    @POST(ApiUrl.MUTE_GRP_CHAT_NOTIFICATION)
+    suspend fun muteNotificaionGrp(@Body inputParams: InputParams): BaseResponse
+
+    @POST(ApiUrl.UNMUTE_GRP_CHAT_NOTIFICATION)
+    suspend fun unmuteNotificaionGrp(@Body inputParams: InputParams): BaseResponse
+
+    @POST(ApiUrl.GET_GRP_MEDIA)
+    suspend fun getGrpMedia(@Body inputParams: InputParams): GetMedia
+
+    @POST(ApiUrl.GET_PRIVATE_MEDIA)
+    suspend fun getPrivateMedia(@Body inputParams: InputParams): GetMedia
+
     @POST(ApiUrl.GET_PRIVATE_INFO)
     suspend fun getPrivateInfo(@Body inputParams: InputParams): GetPrivateInfo
 

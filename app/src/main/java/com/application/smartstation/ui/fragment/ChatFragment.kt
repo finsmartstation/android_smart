@@ -88,9 +88,9 @@ class ChatFragment : BaseFragment(R.layout.fragment_chat) {
             }
         }
 
-        phnPermission {
-            getContactList()
-        }
+//        phnPermission {
+//            getContactList()
+//        }
 
 
 

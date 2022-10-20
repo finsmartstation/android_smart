@@ -79,5 +79,15 @@ object ApiUrl {
     const val UNBLOCK_USER = API + "un_block_user_chat"
     const val REMOVE_USER_GRP = API + "remove_group_member"
     const val UPDATE_GRP_DES = API + "update_group_description"
+    const val PROFILE_PUBLIC_CHANGE = API + "update_profile_public_status"
+    const val GET_PROFILE_PUBLIC = API + "get_privacy_status"
+    const val CLEAR_CHAT = API + "clear_individual_chat"
+    const val CLEAR_CHAT_GRP = API + "clear_group_chat"
+    const val GET_GRP_MEDIA = API + "get_group_chat_medias"
+    const val GET_PRIVATE_MEDIA = API + "get_individual_chat_medias"
+    const val MUTE_PRIVATE_CHAT_NOTIFICATION = API + "mute_private_chat_notification"
+    const val UNMUTE_PRIVATE_CHAT_NOTIFICATION = API + "unmute_private_chat_notification"
+    const val MUTE_GRP_CHAT_NOTIFICATION = API + "mute_group_chat_notification"
+    const val UNMUTE_GRP_CHAT_NOTIFICATION = API + "unmute_group_chat_notification"
 
 }

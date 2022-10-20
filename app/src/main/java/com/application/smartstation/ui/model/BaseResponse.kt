@@ -69,6 +69,8 @@ class BaseResponse(
     var statuscode: String,
     var filepath: String,
     var cloud_id: String,
+    var privacy_status: String,
+    var end_time: String,
 )
 
 class UpdateProfilePicResponse(
@@ -164,7 +166,7 @@ class DataUserList(
 )
 
 class GetChatDetailsListResponse(var status: Boolean, var message: String, var data: ChatListRes)
-class ChatListRes(var group_name:String,var group_profile:String,var id:String,var user_left_status:String,var user_block_chat:Int,var list: ArrayList<ChatDetailsRes>)
+class ChatListRes(var group_name:String,var group_profile:String,var id:String,var user_left_status:String,var user_block_status:Int,var list: ArrayList<ChatDetailsRes>)
 class ChatDetailsRes(
     var id: String,
     var date: String,
@@ -417,11 +419,13 @@ class GetLetterHeaderFooterRes(var status: Boolean, var message: String, var sta
 class ListHeaderFooterRes(var id:String, var user_id: String, var name: String, var image: String,var default:Boolean)
 
 class GetPrivateInfo(var status: Boolean, var message: String, var statuscode:Int, var data:PrivateInfoRes)
-class PrivateInfoRes(var receiver_data:DataReceiverResInfo, var common_group_data:CommonGrpData, var media_count:Int, var user_block_chat:Int)
+class PrivateInfoRes(var receiver_data:DataReceiverResInfo, var common_group_data:CommonGrpData, var media_count:Int, var user_block_status:Int)
 class CommonGrpData(var no_of_groups:Int, var data:ArrayList<CommonGrpList>)
 class CommonGrpList(var group_id:String, var group_name:String, var group_profile_pic:String, var group_users:String)
 class DataReceiverResInfo(var name:String, var profile_pic:String, var phone:String, var about:String, var about_updated_datetime:String)
-
+class GetMedia(var status: Boolean, var message: String, var statuscode:Int, var data:DataMediaRes)
+class DataMediaRes(var medias:ArrayList<MediaRes>,var docs:ArrayList<MediaRes>,var links:ArrayList<MediaRes>)
+class MediaRes(var id:String, var user_id:String, var username:String, var date:String, var path:String, var type:String)
 
 
 

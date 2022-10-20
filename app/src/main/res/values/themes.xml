@@ -121,5 +121,13 @@
         <item name="android:backgroundTint">@color/grey</item>
     </style>
 
+    <style name="AppSearchView" parent="Widget.AppCompat.SearchView">
+        <item name="android:editTextColor">@color/black</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textColorHint">@color/grey</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:fontFamily">@font/dinmedium</item>
+    </style>
+
 
 </resources>

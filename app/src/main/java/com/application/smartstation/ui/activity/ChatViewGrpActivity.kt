@@ -2,21 +2,21 @@ package com.application.smartstation.ui.activity
 
 import android.Manifest
 import android.app.Activity
+import android.app.Dialog
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Color
+import android.graphics.drawable.BitmapDrawable
+import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.*
-import androidx.appcompat.app.AppCompatActivity
 import android.provider.MediaStore
 import android.provider.Settings
 import android.text.Editable
 import android.text.TextUtils
 import android.text.TextWatcher
 import android.util.Log
-import android.view.Gravity
-import android.view.LayoutInflater
-import android.view.View
+import android.view.*
 import android.view.inputmethod.EditorInfo
 import android.widget.LinearLayout
 import android.widget.PopupWindow
@@ -26,6 +26,9 @@ import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.core.content.ContextCompat
+import androidx.core.content.pm.ShortcutInfoCompat
+import androidx.core.content.pm.ShortcutManagerCompat
+import androidx.core.graphics.drawable.IconCompat
 import androidx.core.view.inputmethod.InputContentInfoCompat
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -43,7 +46,6 @@ import com.application.smartstation.databinding.*
 import com.application.smartstation.service.MailCallback
 import com.application.smartstation.service.Status
 import com.application.smartstation.service.background.SocketService
-import com.application.smartstation.ui.adapter.AdapterChat
 import com.application.smartstation.ui.adapter.AdapterChatGrp
 import com.application.smartstation.ui.model.*
 import com.application.smartstation.util.*
@@ -73,6 +75,7 @@ import com.thoughtbot.expandablecheckrecyclerview.models.MultiCheckExpandableGro
 import com.wafflecopter.multicontactpicker.ContactResult
 import com.wafflecopter.multicontactpicker.MultiContactPicker
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.android.synthetic.main.contact_token.*
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -87,6 +90,7 @@ import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 import org.json.JSONObject
 import java.io.File
+
 @AndroidEntryPoint
 class ChatViewGrpActivity : BaseActivity(), ImageVideoSelectorDialog.Action {
 
@@ -103,6 +107,8 @@ class ChatViewGrpActivity : BaseActivity(), ImageVideoSelectorDialog.Action {
     var imageParts: ArrayList<MultipartBody.Part?> = ArrayList()
     var chatHistoryAdapter: AdapterChatGrp? = null
     var layoutManager: LinearLayoutManager? = null
+
+    var popupWindow:PopupWindow? = null
 
     //request
     val PICK_CONTACT_REQUEST: Int = 5491
@@ -206,14 +212,14 @@ class ChatViewGrpActivity : BaseActivity(), ImageVideoSelectorDialog.Action {
     }
 
     private fun calling(type: String) {
-        val intent = Intent(this@ChatViewGrpActivity, CallActivity::class.java)
-        intent.putExtra(Constants.REC_ID, receiverId)
-        intent.putExtra(Constants.REC_NAME, receiverName)
-        intent.putExtra(Constants.REC_PROFILE, receiverProfile)
-        intent.putExtra(Constants.CALL_TYPE, type)
-        intent.putExtra(Constants.STATUS, "Call_Send")
-        intent.putExtra(Constants.ROOM_NAME, UtilsDefault.getRandomString(10))
-        startActivity(intent)
+//        val intent = Intent(this@ChatViewGrpActivity, CallActivity::class.java)
+//        intent.putExtra(Constants.REC_ID, receiverId)
+//        intent.putExtra(Constants.REC_NAME, receiverName)
+//        intent.putExtra(Constants.REC_PROFILE, receiverProfile)
+//        intent.putExtra(Constants.CALL_TYPE, type)
+//        intent.putExtra(Constants.STATUS, "Call_Send")
+//        intent.putExtra(Constants.ROOM_NAME, UtilsDefault.getRandomString(10))
+//        startActivity(intent)
     }
 
     fun menuPopup(v: View?) {
@@ -247,6 +253,14 @@ class ChatViewGrpActivity : BaseActivity(), ImageVideoSelectorDialog.Action {
             popupWindow.dismiss()
         }
 
+        bind.txtMute.setOnClickListener {
+            startActivityForResult(Intent(this, ChatInfoActivity::class.java)
+                .putExtra(Constants.NAME, receiverName)
+                .putExtra(Constants.PROFILE_PIC, receiverProfile)
+                .putExtra(Constants.CHAT_TYPE, chatType).putExtra(Constants.ROOM, room),1)
+            popupWindow.dismiss()
+        }
+
 
 
         popupWindow.setOnDismissListener(PopupWindow.OnDismissListener {
@@ -261,15 +275,135 @@ class ChatViewGrpActivity : BaseActivity(), ImageVideoSelectorDialog.Action {
         val popupView = inflater.inflate(R.layout.menu_chat_more_popup, null)
         val width = LinearLayout.LayoutParams.WRAP_CONTENT
         val height = LinearLayout.LayoutParams.WRAP_CONTENT
-        val popupWindow = PopupWindow(popupView, width, height, true)
-        popupWindow.isFocusable = true
-        popupWindow.isOutsideTouchable = true
-        popupWindow.showAtLocation(v, Gravity.TOP or Gravity.RIGHT, 0, 0)
+        popupWindow = PopupWindow(popupView, width, height, true)
+        popupWindow!!.isFocusable = true
+        popupWindow!!.isOutsideTouchable = true
+        popupWindow!!.showAtLocation(v, Gravity.TOP or Gravity.RIGHT, 0, 0)
 
         val bind = MenuChatMorePopupBinding.bind(popupView)
 
-        popupWindow.setOnDismissListener(PopupWindow.OnDismissListener {
+        bind.txtBlock.text = resources.getString(R.string.exit_grp_1)
+
+        bind.txtBlock.setOnClickListener {
+            exitDialog()
+        }
+
+        bind.txtClearChat.setOnClickListener {
+            clearChat()
+        }
+
+        bind.txtAddShortcut.setOnClickListener {
+            addShortcut()
+        }
+
+        popupWindow!!.setOnDismissListener(PopupWindow.OnDismissListener {
             binding.ilHeader.imgMenu.visibility = View.VISIBLE
+        })
+    }
+
+    private fun addShortcut() {
+
+        val bd: BitmapDrawable = UtilsDefault.loadImageFromURL(receiverProfile,receiverName) as BitmapDrawable
+
+        if (ShortcutManagerCompat.isRequestPinShortcutSupported(this)) {
+            val shortcutInfo: ShortcutInfoCompat = ShortcutInfoCompat.Builder(this, room)
+                .setIntent(Intent(this,
+                    ChatViewGrpActivity::class.java).setAction(Intent.ACTION_MAIN)) // !!! intent's action must be set on oreo
+                .setShortLabel(receiverName)
+                .setIcon(IconCompat.createWithAdaptiveBitmap(bd.bitmap))
+                .build()
+            ShortcutManagerCompat.requestPinShortcut(this, shortcutInfo, null)
+        }
+    }
+
+
+
+    private fun exitDialog() {
+        try {
+            val view = layoutInflater.inflate(R.layout.dialog_exit_grp, null)
+            val dialogLogout = Dialog(this)
+            val window: Window = dialogLogout.window!!
+            window.setGravity(Gravity.CENTER)
+            window.setLayout(WindowManager.LayoutParams.FILL_PARENT,
+                WindowManager.LayoutParams.FILL_PARENT)
+            window.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+            val bind = DialogExitGrpBinding.bind(view)
+            dialogLogout.setCancelable(false)
+
+            dialogLogout.setContentView(view)
+            dialogLogout.show()
+
+            bind.txtYes.setOnClickListener {
+                dialogLogout.dismiss()
+                val inputParams = InputParams()
+                inputParams.accessToken =
+                    UtilsDefault.getSharedPreferenceString(Constants.ACCESS_TOKEN)
+                inputParams.user_id = UtilsDefault.getSharedPreferenceString(Constants.USER_ID)
+                inputParams.group_id = room
+                exitGrp(inputParams)
+            }
+
+            bind.txtNo.setOnClickListener {
+                dialogLogout.dismiss()
+            }
+
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
+
+    private fun exitGrp(inputParams: InputParams) {
+        apiViewModel.grpExit(inputParams).observe(this, Observer {
+            it.let {
+                when (it.status) {
+                    Status.LOADING -> {
+                        showProgress()
+                    }
+                    Status.SUCCESS -> {
+                        dismissProgress()
+                        if (it.data!!.status) {
+                            finish()
+                        } else {
+                            toast(it.data.message)
+                        }
+                    }
+                    Status.ERROR -> {
+                        dismissProgress()
+                        toast(it.message!!)
+                    }
+                }
+            }
+        })
+    }
+
+    private fun clearChat() {
+        val inputParams = InputParams()
+        inputParams.accessToken =
+            UtilsDefault.getSharedPreferenceString(Constants.ACCESS_TOKEN)
+        inputParams.user_id = UtilsDefault.getSharedPreferenceString(Constants.USER_ID)
+        inputParams.group_id = room
+
+        apiViewModel.chatClearGrp(inputParams).observe(this, Observer {
+            it.let {
+                when (it.status) {
+                    Status.LOADING -> {
+                        showProgress()
+                    }
+                    Status.SUCCESS -> {
+                        dismissProgress()
+                        if (it.data!!.status) {
+                            popupWindow!!.dismiss()
+                            getGrpChatDetails()
+                        } else {
+                            toast(it.data.message)
+                        }
+                    }
+                    Status.ERROR -> {
+                        dismissProgress()
+                        toast(it.message!!)
+                    }
+                }
+            }
         })
     }
 
@@ -457,6 +591,8 @@ class ChatViewGrpActivity : BaseActivity(), ImageVideoSelectorDialog.Action {
 
     private fun initView() {
         StickerLoader(this).loadStickersIntoFilesDir()
+
+        binding.ilHeader.txtStatus.visibility = View.GONE
 
         initEmojiView()
 
@@ -1127,7 +1263,7 @@ class ChatViewGrpActivity : BaseActivity(), ImageVideoSelectorDialog.Action {
                         binding.ilHeader.txtTypingStatus.text =
                             typingModel.name + " " + resources.getString(R.string.typing)
                     } else {
-                        binding.ilHeader.txtStatus.visibility = View.VISIBLE
+                        binding.ilHeader.txtStatus.visibility = View.GONE
                         binding.ilHeader.txtTypingStatus.visibility = View.GONE
                     }
                 }   }

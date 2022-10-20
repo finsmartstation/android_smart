@@ -163,4 +163,12 @@ class MediaViewActivity : BaseActivity(), MediaPlayer.OnPreparedListener,
         }
         return false
     }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        if (player != null) {
+            player!!.stop()
+            player!!.release()
+        }
+    }
 }

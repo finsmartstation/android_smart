@@ -3,12 +3,14 @@ package com.application.smartstation.ui.activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import androidx.activity.viewModels
 import androidx.biometric.BiometricManager
 import com.application.smartstation.R
 import com.application.smartstation.databinding.ActivitySecurityBinding
 import com.application.smartstation.util.Constants
 import com.application.smartstation.util.UtilsDefault
 import com.application.smartstation.util.viewBinding
+import com.application.smartstation.viewmodel.ApiViewModel
 
 class SecurityActivity : BaseActivity() {
 

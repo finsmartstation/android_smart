@@ -370,6 +370,76 @@ class ApiRepository @Inject constructor(val apiService: ApiService) {
         }.flowOn(Dispatchers.IO)
     }
 
+    fun changePublicProfile(inputParams: InputParams): Flow<BaseResponse> {
+        return flow {
+            val response = apiService.changePublicProfile(inputParams)
+            emit(response)
+        }.flowOn(Dispatchers.IO)
+    }
+
+    fun getPublicProfile(inputParams: InputParams): Flow<BaseResponse> {
+        return flow {
+            val response = apiService.getPublicProfile(inputParams)
+            emit(response)
+        }.flowOn(Dispatchers.IO)
+    }
+
+    fun chatClear(inputParams: InputParams): Flow<BaseResponse> {
+        return flow {
+            val response = apiService.chatClear(inputParams)
+            emit(response)
+        }.flowOn(Dispatchers.IO)
+    }
+
+    fun chatClearGrp(inputParams: InputParams): Flow<BaseResponse> {
+        return flow {
+            val response = apiService.chatClearGrp(inputParams)
+            emit(response)
+        }.flowOn(Dispatchers.IO)
+    }
+
+    fun muteNoficitaionPrivate(inputParams: InputParams): Flow<BaseResponse> {
+        return flow {
+            val response = apiService.muteNoficitaionPrivate(inputParams)
+            emit(response)
+        }.flowOn(Dispatchers.IO)
+    }
+
+    fun unmuteNoficitaionPrivate(inputParams: InputParams): Flow<BaseResponse> {
+        return flow {
+            val response = apiService.unmuteNoficitaionPrivate(inputParams)
+            emit(response)
+        }.flowOn(Dispatchers.IO)
+    }
+
+    fun muteNotificaionGrp(inputParams: InputParams): Flow<BaseResponse> {
+        return flow {
+            val response = apiService.muteNotificaionGrp(inputParams)
+            emit(response)
+        }.flowOn(Dispatchers.IO)
+    }
+
+    fun unmuteNotificaionGrp(inputParams: InputParams): Flow<BaseResponse> {
+        return flow {
+            val response = apiService.unmuteNotificaionGrp(inputParams)
+            emit(response)
+        }.flowOn(Dispatchers.IO)
+    }
+
+    fun getGrpMedia(inputParams: InputParams): Flow<GetMedia> {
+        return flow {
+            val response = apiService.getGrpMedia(inputParams)
+            emit(response)
+        }.flowOn(Dispatchers.IO)
+    }
+
+    fun getPrivateMedia(inputParams: InputParams): Flow<GetMedia> {
+        return flow {
+            val response = apiService.getPrivateMedia(inputParams)
+            emit(response)
+        }.flowOn(Dispatchers.IO)
+    }
+
     fun getPrivateInfo(inputParams: InputParams): Flow<GetPrivateInfo> {
         return flow {
             val response = apiService.getPrivateInfo(inputParams)

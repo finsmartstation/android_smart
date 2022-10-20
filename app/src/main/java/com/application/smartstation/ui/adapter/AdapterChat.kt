@@ -179,6 +179,7 @@ class AdapterChat(val context: Context) : RecyclerView.Adapter<AdapterChat.ViewH
 
                     //txt
                     if (model.message_type.equals(Constants.TEXT)){
+                        binding.icSender.txtMsg.setTextColor(context.resources.getColor(R.color.white))
                         binding.icSender.txtMsg.visibility = View.VISIBLE
                         binding.icSender.mediaLayout.visibility = View.GONE
                         binding.icSender.txtTime.visibility = View.VISIBLE

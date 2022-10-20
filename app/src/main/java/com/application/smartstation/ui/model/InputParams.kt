@@ -103,4 +103,10 @@ class InputParams {
     var remove_user_id:String? = null
     var description:String? = null
 
+    //public show
+    var status:String? = null
+
+    //mute notification
+    var show_notification:String? = null
+
 }

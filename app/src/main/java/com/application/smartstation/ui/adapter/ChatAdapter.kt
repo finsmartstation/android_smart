@@ -61,15 +61,64 @@ class ChatAdapter(val context: Context) : RecyclerView.Adapter<ChatAdapter.ViewH
             if (model.unread_message.equals("0")) {
                 binding.llRead.visibility = View.GONE
                 if (!model.message_type.equals("")) {
-                    if (model.message_type.equals("text")) {
-                        binding.txtMsg.text = model.message
-                        binding.imgPht.visibility = View.GONE
-                    } else {
-                        binding.txtMsg.text = "Photo"
-                        binding.imgPht.visibility = View.VISIBLE
+                    if (!model.chat_type.equals("group")) {
+                        binding.txtMsgGrp.visibility = View.GONE
+                        if (model.message_type.equals(Constants.TEXT)) {
+                            binding.txtMsg.text = model.message
+                            binding.imgPht.visibility = View.GONE
+                        } else if (model.message_type.equals(Constants.IMAGE)) {
+                            binding.txtMsg.text = "Photo"
+                            binding.imgPht.setImageResource(R.drawable.ic_photo)
+                            binding.imgPht.visibility = View.VISIBLE
+                        }else if (model.message_type.equals(Constants.VIDEO)) {
+                            binding.txtMsg.text = Constants.VIDEO
+                            binding.imgPht.setImageResource(R.drawable.ic_video)
+                            binding.imgPht.visibility = View.VISIBLE
+                        }
+                        else if (model.message_type.equals(Constants.AUDIO)) {
+                            binding.txtMsg.text = Constants.AUDIO
+                            binding.imgPht.setImageResource(R.drawable.ic_audio)
+                            binding.imgPht.visibility = View.VISIBLE
+                        }else if (model.message_type.equals(Constants.DOCS)) {
+                            binding.txtMsg.text = "Document"
+                            binding.imgPht.setImageResource(R.drawable.ic_docs)
+                            binding.imgPht.visibility = View.VISIBLE
+                        }
+                        binding.txtMsg.setTextColor(context.resources.getColor(R.color.color_gray_2))
+                    } else{
+                        if (model.message_type.equals(Constants.TEXT)) {
+                            binding.txtMsg.text = model.message
+                            binding.imgPht.visibility = View.GONE
+                            binding.txtMsgGrp.visibility = View.GONE
+                        } else if (model.message_type.equals(Constants.IMAGE)) {
+                            binding.txtMsgGrp.visibility = View.VISIBLE
+                            binding.txtMsgGrp.text = model.name+": "
+                            binding.txtMsg.text = "Photo"
+                            binding.imgPht.setImageResource(R.drawable.ic_photo)
+                            binding.imgPht.visibility = View.VISIBLE
+                        }else if (model.message_type.equals(Constants.VIDEO)) {
+                            binding.txtMsgGrp.visibility = View.VISIBLE
+                            binding.txtMsgGrp.text = model.name+": "
+                            binding.txtMsg.text = Constants.VIDEO
+                            binding.imgPht.setImageResource(R.drawable.ic_video)
+                            binding.imgPht.visibility = View.VISIBLE
+                        }else if (model.message_type.equals(Constants.AUDIO)) {
+                            binding.txtMsgGrp.visibility = View.VISIBLE
+                            binding.txtMsgGrp.text = model.name+": "
+                            binding.txtMsg.text = Constants.AUDIO
+                            binding.imgPht.setImageResource(R.drawable.ic_audio)
+                            binding.imgPht.visibility = View.VISIBLE
+                        }else if (model.message_type.equals(Constants.DOCS)) {
+                            binding.txtMsgGrp.visibility = View.VISIBLE
+                            binding.txtMsgGrp.text = model.name+": "
+                            binding.txtMsg.text = "Document"
+                            binding.imgPht.setImageResource(R.drawable.ic_docs)
+                            binding.imgPht.visibility = View.VISIBLE
+                        }
+                        binding.txtMsg.setTextColor(context.resources.getColor(R.color.color_gray_2))
+                        binding.txtMsgGrp.setTextColor(context.resources.getColor(R.color.color_gray_2))
                     }
-                    binding.txtMsg.setTextColor(context.resources.getColor(R.color.color_gray_2))
-                } else {
+                }else {
                     binding.txtMsg.text = model.message
                 }
             } else {
@@ -80,14 +129,63 @@ class ChatAdapter(val context: Context) : RecyclerView.Adapter<ChatAdapter.ViewH
                     binding.txtUnread.text = model.unread_message
                 }
                 if (!model.message_type.equals("")) {
-                    if (model.message_type.equals(Constants.TEXT)) {
-                        binding.txtMsg.text = UtilsDefault.chatBold(model.message)
-                        binding.imgPht.visibility = View.GONE
-                    } else {
-                        binding.txtMsg.text = "Photo"
-                        binding.imgPht.visibility = View.VISIBLE
+                    if (!model.chat_type.equals("group")) {
+                        binding.txtMsgGrp.visibility = View.GONE
+                        if (model.message_type.equals(Constants.TEXT)) {
+                            binding.txtMsg.text = model.message
+                            binding.imgPht.visibility = View.GONE
+                        } else if (model.message_type.equals(Constants.IMAGE)) {
+                            binding.txtMsg.text = "Photo"
+                            binding.imgPht.setImageResource(R.drawable.ic_photo)
+                            binding.imgPht.visibility = View.VISIBLE
+                        }else if (model.message_type.equals(Constants.VIDEO)) {
+                            binding.txtMsg.text = Constants.VIDEO
+                            binding.imgPht.setImageResource(R.drawable.ic_video)
+                            binding.imgPht.visibility = View.VISIBLE
+                        }
+                        else if (model.message_type.equals(Constants.AUDIO)) {
+                            binding.txtMsg.text = Constants.AUDIO
+                            binding.imgPht.setImageResource(R.drawable.ic_audio)
+                            binding.imgPht.visibility = View.VISIBLE
+                        }else if (model.message_type.equals(Constants.DOCS)) {
+                            binding.txtMsg.text = "Document"
+                            binding.imgPht.setImageResource(R.drawable.ic_docs)
+                            binding.imgPht.visibility = View.VISIBLE
+                        }
+                        binding.txtMsg.setTextColor(context.resources.getColor(R.color.black))
+                    } else{
+                        if (model.message_type.equals(Constants.TEXT)) {
+                            binding.txtMsg.text = model.message
+                            binding.imgPht.visibility = View.GONE
+                            binding.txtMsgGrp.visibility = View.GONE
+                        } else if (model.message_type.equals(Constants.IMAGE)) {
+                            binding.txtMsgGrp.visibility = View.VISIBLE
+                            binding.txtMsgGrp.text = model.name+": "
+                            binding.txtMsg.text = "Photo"
+                            binding.imgPht.setImageResource(R.drawable.ic_photo)
+                            binding.imgPht.visibility = View.VISIBLE
+                        }else if (model.message_type.equals(Constants.VIDEO)) {
+                            binding.txtMsgGrp.visibility = View.VISIBLE
+                            binding.txtMsgGrp.text = model.name+": "
+                            binding.txtMsg.text = Constants.VIDEO
+                            binding.imgPht.setImageResource(R.drawable.ic_video)
+                            binding.imgPht.visibility = View.VISIBLE
+                        }else if (model.message_type.equals(Constants.AUDIO)) {
+                            binding.txtMsgGrp.visibility = View.VISIBLE
+                            binding.txtMsgGrp.text = model.name+": "
+                            binding.txtMsg.text = Constants.AUDIO
+                            binding.imgPht.setImageResource(R.drawable.ic_audio)
+                            binding.imgPht.visibility = View.VISIBLE
+                        }else if (model.message_type.equals(Constants.DOCS)) {
+                            binding.txtMsgGrp.visibility = View.VISIBLE
+                            binding.txtMsgGrp.text = model.name+": "
+                            binding.txtMsg.text = "Document"
+                            binding.imgPht.setImageResource(R.drawable.ic_docs)
+                            binding.imgPht.visibility = View.VISIBLE
+                        }
+                        binding.txtMsg.setTextColor(context.resources.getColor(R.color.black))
+                        binding.txtMsgGrp.setTextColor(context.resources.getColor(R.color.black))
                     }
-                    binding.txtMsg.setTextColor(context.resources.getColor(R.color.black))
                 } else {
                     binding.txtMsg.text = UtilsDefault.chatBold(model.message)
                 }

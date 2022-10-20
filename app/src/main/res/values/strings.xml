@@ -1277,5 +1277,16 @@
     <string name="save">Save</string>
     <string name="des_grp_1">The group description is visible to participants of this group and people invited to this group.</string>
     <string name="please_enter_grp_des">Please enter group description</string>
+    <string name="show_public">Show public</string>
+    <string name="dont_show_public">Don\'t show public</string>
+    <string name="not_found">Not found</string>
+    <string name="media">Media</string>
+    <string name="link">Link</string>
+    <string name="docs">Docs</string>
+    <string name="mute">Mute</string>
+    <string name="hrs_8">8 hours</string>
+    <string name="week_1">1 week</string>
+    <string name="always">Always</string>
+    <string name="until">until</string>
 
 </resources>

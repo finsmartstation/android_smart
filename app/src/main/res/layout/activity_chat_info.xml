@@ -274,6 +274,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="26dp"
                 android:orientation="horizontal"
+                android:gravity="center"
                 android:visibility="visible">
 
                 <com.application.smartstation.view.CustomTextViewBold
@@ -302,6 +303,43 @@
                     android:rotation="-90"
                     android:layout_marginStart="10dp"
                     />
+
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="20dp"
+                android:background="@color/view_chat_info" />
+
+            <LinearLayout
+                android:id="@+id/llMute"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="26dp"
+                android:orientation="horizontal">
+
+                <com.application.smartstation.view.CustomTextViewBold
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginEnd="10dp"
+                    android:layout_weight="1"
+                    android:text="@string/mute"
+                    android:textColor="@color/txt_color"
+                    android:textSize="18sp">
+
+                </com.application.smartstation.view.CustomTextViewBold>
+
+                <com.application.smartstation.view.CustomTextViewMedium
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:id="@+id/txtMute"
+                    android:textColor="@color/txt_color"
+                    android:textSize="18sp">
+
+                </com.application.smartstation.view.CustomTextViewMedium>
 
 
             </LinearLayout>

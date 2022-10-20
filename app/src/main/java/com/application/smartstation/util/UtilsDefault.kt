@@ -6,7 +6,10 @@ import android.app.*
 import android.content.*
 import android.content.res.Configuration
 import android.database.Cursor
+import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.Color
+import android.graphics.drawable.Drawable
 import android.media.MediaMetadataRetriever
 import android.media.RingtoneManager
 import android.net.ConnectivityManager
@@ -18,6 +21,10 @@ import android.preference.PreferenceManager
 import android.provider.MediaStore
 import android.provider.Settings
 import android.text.Html
+import android.text.Spannable
+import android.text.SpannableString
+import android.text.Spanned
+import android.text.style.BackgroundColorSpan
 import android.util.Base64
 import android.util.DisplayMetrics
 import android.util.Log
@@ -31,7 +38,11 @@ import com.application.smartstation.service.MailCallback
 import com.application.smartstation.service.background.SocketService
 import com.application.smartstation.ui.activity.MainActivity
 import java.io.File
+import java.io.IOException
+import java.io.InputStream
 import java.io.UnsupportedEncodingException
+import java.net.HttpURLConnection
+import java.net.URL
 import java.net.URLConnection
 import java.security.MessageDigest
 import java.security.NoSuchAlgorithmException
@@ -452,6 +463,14 @@ object UtilsDefault {
         return finalVal.toInt()
     }
 
+    fun showKeyboardForFocusedView(activity: Activity){
+        val inputManager = activity
+            .getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        val view = activity.currentFocus
+        if (view != null) {
+            inputManager.showSoftInput(view, 0)
+        }
+    }
 
     fun hideKeyboardForFocusedView(activity: Activity) {
         val inputManager = activity
@@ -673,6 +692,22 @@ object UtilsDefault {
             "Yesterday"
         } else {
             dateConvert(date)
+        }
+    }
+
+
+    fun dateMute(date: String?): String? {
+        val dateTime = SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(date)
+        val calendar = Calendar.getInstance()
+        calendar.time = dateTime
+        val today = Calendar.getInstance()
+        val yesterday = Calendar.getInstance()
+        yesterday.add(Calendar.DATE, -1)
+
+        return if (calendar[Calendar.YEAR] == today[Calendar.YEAR] && calendar[Calendar.DAY_OF_YEAR] == today[Calendar.DAY_OF_YEAR]) {
+            todayDate(date)
+        } else {
+            dateConvert(date)+" "+todayDate(date)
         }
     }
 
@@ -1022,6 +1057,39 @@ object UtilsDefault {
             cursor!!.close()
         }
         return audioArray
+    }
+
+    fun getBitmapFromURL(src: String?): Bitmap? {
+        return try {
+            val url = URL(src)
+            val connection: HttpURLConnection = url.openConnection() as HttpURLConnection
+            connection.setDoInput(true)
+            connection.connect()
+            val input: InputStream = connection.getInputStream()
+            BitmapFactory.decodeStream(input)
+        } catch (e: IOException) {
+            // Log exception
+            null
+        }
+    }
+
+    fun loadImageFromURL(url: String?, name: String?): Drawable? {
+        return try {
+            val iss = URL(url).content as InputStream
+            Drawable.createFromStream(iss, name)
+        } catch (e: java.lang.Exception) {
+            null
+        }
+    }
+
+    //this will highlight the text when user searches for message in chat
+    fun highlightText(fullText: String): Spanned? {
+        val wordtoSpan: Spannable = SpannableString(fullText)
+        wordtoSpan.setSpan(BackgroundColorSpan(Color.YELLOW),
+            0,
+            fullText.length,
+            Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        return wordtoSpan
     }
 
 }

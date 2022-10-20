@@ -63,9 +63,9 @@ class CreateGroupActivity : BaseActivity() {
             addGrp(model, pos)
         }
 
-        phnPermission {
-            getContactList()
-        }
+//        phnPermission {
+//            getContactList()
+//        }
 
         user = UtilsDefault.getSharedPreferenceString(Constants.USER_ID)!!
 
@@ -211,19 +211,19 @@ class CreateGroupActivity : BaseActivity() {
     }
 
     private fun setData(list: ArrayList<DataUserList>) {
-        lists.clear()
-        for (a in contactList) {
-            for (b in 0 until list.size) {
-                if (PhoneNumberUtils.compare(a.Phn, list[b].phone)) {
-                    lists.add(DataUserList(list[b].user_id,
-                        a.name,
-                        list[b].profile_pic,
-                        list[b].phone,
-                        list[b].country,
-                        list[b].about))
-                }
-            }
-        }
+        lists = list
+//        for (a in contactList) {
+//            for (b in 0 until list.size) {
+//                if (PhoneNumberUtils.compare(a.Phn, list[b].phone)) {
+//                    lists.add(DataUserList(list[b].user_id,
+//                        a.name,
+//                        list[b].profile_pic,
+//                        list[b].phone,
+//                        list[b].country,
+//                        list[b].about))
+//                }
+//            }
+//        }
         contactAdapter!!.setChat(lists)
     }
 

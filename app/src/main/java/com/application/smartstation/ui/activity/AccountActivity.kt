@@ -30,6 +30,10 @@ class AccountActivity : BaseActivity() {
             startActivity(Intent(this, SecurityActivity::class.java))
         }
 
+        binding.llPrivacy.setOnClickListener {
+            startActivity(Intent(this, PrivacyActivity::class.java))
+        }
+
         binding.llSignature.setOnClickListener {
             startActivity(Intent(this, SignatureActivity::class.java).putExtra("type", 1))
         }

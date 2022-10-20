@@ -112,6 +112,17 @@
                         android:layout_marginTop="5dp"
                         android:orientation="horizontal">
 
+                        <com.application.smartstation.view.CustomTextViewMedium
+                            android:id="@+id/txtMsgGrp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:ellipsize="end"
+                            android:maxLines="1"
+                            android:visibility="gone"
+                            android:layout_marginEnd="8dp"
+                            android:textColor="@color/txt_color"
+                            android:textSize="15sp" />
+
                         <ImageView
                             android:id="@+id/imgPht"
                             android:layout_width="20dp"
@@ -127,6 +138,7 @@
                             android:layout_height="wrap_content"
                             android:ellipsize="end"
                             android:maxLines="1"
+                            android:layout_weight="1"
                             android:textColor="@color/txt_color"
                             android:textSize="15sp" />
 

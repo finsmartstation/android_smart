@@ -3,9 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
     android:background="@color/white_bg"
-    tools:context=".ui.activity.SecurityActivity">
+    android:layout_height="match_parent"
+    tools:context=".ui.activity.PrivacyActivity">
 
     <ImageView
         android:layout_width="match_parent"
@@ -36,39 +36,6 @@
             android:layout_marginTop="8dp"
             android:orientation="horizontal">
 
-            <com.application.smartstation.view.CustomTextViewMedium
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginStart="16dp"
-                android:layout_marginEnd="16dp"
-                android:layout_weight="1"
-                android:text="@string/passcode"
-                android:textColor="@color/txt_color"
-                android:textSize="18sp">
-
-            </com.application.smartstation.view.CustomTextViewMedium>
-
-            <androidx.appcompat.widget.SwitchCompat
-                android:id="@+id/scPasscode"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="16dp"
-                android:thumb="@drawable/thumb_sc"
-                app:track="@drawable/sc_track">
-
-            </androidx.appcompat.widget.SwitchCompat>
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/llFingerPrint"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:orientation="horizontal"
-            android:visibility="gone">
-
             <com.application.smartstation.view.CustomTextViewBold
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -76,52 +43,18 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginEnd="16dp"
                 android:layout_weight="1"
-                android:text="@string/fingerprint"
+                android:text="@string/dont_show_public"
                 android:textColor="@color/txt_color"
                 android:textSize="18sp">
 
             </com.application.smartstation.view.CustomTextViewBold>
 
             <androidx.appcompat.widget.SwitchCompat
-                android:id="@+id/scFingerprint"
+                android:id="@+id/scPublic"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="16dp"
                 android:thumb="@drawable/thumb_sc"
-                app:track="@drawable/sc_track">
-
-            </androidx.appcompat.widget.SwitchCompat>
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/llTfa"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:visibility="gone"
-            android:orientation="horizontal">
-
-            <com.application.smartstation.view.CustomTextViewMedium
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginStart="16dp"
-                android:layout_marginEnd="16dp"
-                android:layout_weight="1"
-                android:text="@string/tfa"
-                android:textColor="@color/txt_color"
-                android:textSize="18sp">
-
-            </com.application.smartstation.view.CustomTextViewMedium>
-
-            <androidx.appcompat.widget.SwitchCompat
-                android:id="@+id/scTFA"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="16dp"
-                android:thumb="@drawable/thumb_sc"
-                android:visibility="invisible"
                 app:track="@drawable/sc_track">
 
             </androidx.appcompat.widget.SwitchCompat>
@@ -161,6 +94,5 @@
         </LinearLayout>
 
     </LinearLayout>
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

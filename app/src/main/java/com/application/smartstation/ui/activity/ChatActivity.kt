@@ -323,8 +323,6 @@ class ChatActivity : BaseActivity(), ImageVideoSelectorDialog.Action {
             grpRoomEmit(room)
         }
 
-
-
         runTimePermission = RunTimePermission(this)
 
         layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
@@ -482,8 +480,6 @@ class ChatActivity : BaseActivity(), ImageVideoSelectorDialog.Action {
         }
 
         //if it's cancelled (the user swiped to cancel) then delete the recordFile
-
-        //if it's cancelled (the user swiped to cancel) then delete the recordFile
         if (isCancelled) {
             recordFile!!.delete()
         } else {
@@ -501,10 +497,6 @@ class ChatActivity : BaseActivity(), ImageVideoSelectorDialog.Action {
             PullTransport.Default(RecorderSettings.getMic(), object : PullTransport.OnAudioChunkPulledListener {
                 override fun onAudioChunkPulled(audioChunk: AudioChunk?) {}
             }), recordFile)
-
-
-        //start record when the record sound "BEEP" finishes
-
 
         //start record when the record sound "BEEP" finishes
         Handler().postDelayed({ recorder!!.startRecording() },
