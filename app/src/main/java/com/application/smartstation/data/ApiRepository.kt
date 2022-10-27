@@ -426,6 +426,34 @@ class ApiRepository @Inject constructor(val apiService: ApiService) {
         }.flowOn(Dispatchers.IO)
     }
 
+    fun privateReportChat(inputParams: InputParams): Flow<BaseResponse> {
+        return flow {
+            val response = apiService.privateReportChat(inputParams)
+            emit(response)
+        }.flowOn(Dispatchers.IO)
+    }
+
+    fun grpReportChat(inputParams: InputParams): Flow<BaseResponse> {
+        return flow {
+            val response = apiService.grpReportChat(inputParams)
+            emit(response)
+        }.flowOn(Dispatchers.IO)
+    }
+
+    fun privateReportandBlkChat(inputParams: InputParams): Flow<BaseResponse> {
+        return flow {
+            val response = apiService.privateReportandBlkChat(inputParams)
+            emit(response)
+        }.flowOn(Dispatchers.IO)
+    }
+
+    fun grpReportandBlkChat(inputParams: InputParams): Flow<BaseResponse> {
+        return flow {
+            val response = apiService.grpReportandBlkChat(inputParams)
+            emit(response)
+        }.flowOn(Dispatchers.IO)
+    }
+
     fun getGrpMedia(inputParams: InputParams): Flow<GetMedia> {
         return flow {
             val response = apiService.getGrpMedia(inputParams)

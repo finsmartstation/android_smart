@@ -89,5 +89,9 @@ object ApiUrl {
     const val UNMUTE_PRIVATE_CHAT_NOTIFICATION = API + "unmute_private_chat_notification"
     const val MUTE_GRP_CHAT_NOTIFICATION = API + "mute_group_chat_notification"
     const val UNMUTE_GRP_CHAT_NOTIFICATION = API + "unmute_group_chat_notification"
+    const val REPORT_PRIVATE_CHAT = API + "report_individual_chat"
+    const val REPORT_GRP_CHAT = API + "report_group_chat"
+    const val REPORT_AND_BLK_PRIVATE_CHAT = API + "report_and_block_individual_chat"
+    const val REPORT_AND_BLK_GRP_CHAT = API + "report_and_left_group_chat"
 
 }

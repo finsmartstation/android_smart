@@ -58,6 +58,7 @@ class ChatInfoActivity : BaseActivity(), ImageSelectorDialog.Action {
     var room = ""
     var desGrp = ""
     var adminID = ""
+    var muteStatus = false
     var contactList: ArrayList<ContactListRes> = ArrayList()
     var grpUserList: ArrayList<UserListGrp> = ArrayList()
     var mBottomDialogDocument: BottomSheetDialog? = null
@@ -284,6 +285,21 @@ class ChatInfoActivity : BaseActivity(), ImageSelectorDialog.Action {
                             name = it.data.group_name
                             profilePic = it.data.group_profile
                             binding.txtName.text = it.data.group_name
+
+                            if (it.data.mute_status.equals(0)){
+                                binding.txtMuteName.text = resources.getString(R.string.mute)
+                                muteStatus = false
+                            }else{
+                                binding.txtMuteName.text = resources.getString(R.string.unmute)
+                                muteStatus = true
+                                if (it.data.mute_end_datetime.equals("always")){
+                                    binding.txtMute.setText(resources.getString(R.string.always))
+                                }else{
+                                    binding.txtMute.setText(resources.getString(R.string.until)+" "+UtilsDefault.dateMute(UtilsDefault.localTimeConvert(it.data.mute_end_datetime)))
+                                }
+                            }
+
+
                             if (it.data.description.isNullOrEmpty()){
                                 binding.txtAddDes.visibility = View.VISIBLE
                                 binding.llDes.visibility = View.GONE
@@ -372,7 +388,11 @@ class ChatInfoActivity : BaseActivity(), ImageSelectorDialog.Action {
         }
 
         binding.llMute.setOnClickListener {
-            muteDialog()
+            if (muteStatus){
+                unmuteDialog()
+            }else{
+                muteDialog()
+            }
         }
 
         binding.txtView.setOnClickListener {
@@ -410,6 +430,10 @@ class ChatInfoActivity : BaseActivity(), ImageSelectorDialog.Action {
         binding.llDes.setOnClickListener {
             showDialogChatDes()
         }
+
+        binding.llReport.setOnClickListener {
+            reportDialog()
+        }
     }
 
     private fun setMute(type: String) {
@@ -430,8 +454,10 @@ class ChatInfoActivity : BaseActivity(), ImageSelectorDialog.Action {
                     Status.SUCCESS -> {
                         dismissProgress()
                         if (it.data!!.status) {
+                            muteStatus = true
+                            binding.txtMuteName.setText(resources.getString(R.string.unmute))
                             if (it.data.end_time.equals("always")){
-                                binding.txtMute.setText(it.data.end_time)
+                                binding.txtMute.setText(resources.getString(R.string.always))
                             }else{
                                 binding.txtMute.setText(resources.getString(R.string.until)+" "+UtilsDefault.dateMute(UtilsDefault.localTimeConvert(it.data.end_time)))
                             }
@@ -824,6 +850,164 @@ class ChatInfoActivity : BaseActivity(), ImageSelectorDialog.Action {
         } catch (e: Exception) {
             e.printStackTrace()
         }
+    }
+
+    fun unmuteDialog(){
+        try {
+            val view = layoutInflater.inflate(R.layout.dialog_bottom_unmute, null)
+            mBottomDialogDocument = BottomSheetDialog(this)
+            val bind = DialogBottomUnmuteBinding.bind(view)
+            mBottomDialogDocument!!.setCancelable(false)
+
+            mBottomDialogDocument!!.setOnShowListener {
+                (view!!.parent as View).setBackgroundColor(Color.TRANSPARENT)
+            }
+
+            mBottomDialogDocument!!.setContentView(view)
+            mBottomDialogDocument!!.show()
+
+            bind.llCancel.setOnClickListener {
+                mBottomDialogDocument!!.dismiss()
+            }
+
+            bind.llUnmute.setOnClickListener {
+                mBottomDialogDocument!!.dismiss()
+                setUnmute()
+            }
+
+
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
+
+    private fun setUnmute() {
+        val inputParams = InputParams()
+        inputParams.accessToken =
+            UtilsDefault.getSharedPreferenceString(Constants.ACCESS_TOKEN)
+        inputParams.user_id = UtilsDefault.getSharedPreferenceString(Constants.USER_ID)
+        inputParams.receiver_id = room
+
+        apiViewModel.unmuteNoficitaionPrivate(inputParams).observe(this, Observer {
+            it.let {
+                when (it.status) {
+                    Status.LOADING -> {
+                        showProgress()
+                    }
+                    Status.SUCCESS -> {
+                        dismissProgress()
+                        if (it.data!!.status) {
+                            muteStatus = false
+                            binding.txtMuteName.setText(resources.getString(R.string.mute))
+                            binding.txtMute.setText("")
+                        } else {
+                            toast(it.data.message)
+                        }
+                    }
+                    Status.ERROR -> {
+                        dismissProgress()
+                        toast(it.message!!)
+                    }
+                }
+            }
+        })
+    }
+
+    fun reportDialog(){
+        try {
+            val view = layoutInflater.inflate(R.layout.dialog_bottom_report_grp, null)
+            mBottomDialogDocument = BottomSheetDialog(this)
+            val bind = DialogBottomReportGrpBinding.bind(view)
+            mBottomDialogDocument!!.setCancelable(false)
+
+            mBottomDialogDocument!!.setOnShowListener {
+                (view!!.parent as View).setBackgroundColor(Color.TRANSPARENT)
+            }
+
+            mBottomDialogDocument!!.setContentView(view)
+            mBottomDialogDocument!!.show()
+
+            bind.txtReport.text = resources.getString(R.string.report)+" this group?"
+
+            bind.llCancel.setOnClickListener {
+                mBottomDialogDocument!!.dismiss()
+            }
+
+            bind.llReport.setOnClickListener {
+                mBottomDialogDocument!!.dismiss()
+                setReport()
+            }
+
+            bind.llReportBlk.setOnClickListener {
+                mBottomDialogDocument!!.dismiss()
+                setReportandBlk()
+            }
+
+
+
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
+
+    private fun setReportandBlk() {
+        val inputParams = InputParams()
+        inputParams.accessToken =
+            UtilsDefault.getSharedPreferenceString(Constants.ACCESS_TOKEN)
+        inputParams.user_id = UtilsDefault.getSharedPreferenceString(Constants.USER_ID)
+        inputParams.group_id = room
+
+        apiViewModel.grpReportandBlkChat(inputParams).observe(this, Observer {
+            it.let {
+                when (it.status) {
+                    Status.LOADING -> {
+                        showProgress()
+                    }
+                    Status.SUCCESS -> {
+                        dismissProgress()
+                        if (it.data!!.status) {
+                            getUserListGrp()
+                        } else {
+                            toast(it.data.message)
+                        }
+                    }
+                    Status.ERROR -> {
+                        dismissProgress()
+                        toast(it.message!!)
+                    }
+                }
+            }
+        })
+    }
+
+    private fun setReport() {
+        val inputParams = InputParams()
+        inputParams.accessToken =
+            UtilsDefault.getSharedPreferenceString(Constants.ACCESS_TOKEN)
+        inputParams.user_id = UtilsDefault.getSharedPreferenceString(Constants.USER_ID)
+        inputParams.group_id = room
+
+        apiViewModel.grpReportChat(inputParams).observe(this, Observer {
+            it.let {
+                when (it.status) {
+                    Status.LOADING -> {
+                        showProgress()
+                    }
+                    Status.SUCCESS -> {
+                        dismissProgress()
+                        if (it.data!!.status) {
+                            toast(it.data.message)
+                        } else {
+                            toast(it.data.message)
+                        }
+                    }
+                    Status.ERROR -> {
+                        dismissProgress()
+                        toast(it.message!!)
+                    }
+                }
+            }
+        })
     }
 
 }

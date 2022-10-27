@@ -259,7 +259,7 @@
                     android:layout_marginTop="6dp"
                     android:textAlignment="textStart"
                     android:textColor="@color/dec_time_chat_info"
-                    android:textSize="18sp" />
+                    android:textSize="16sp" />
 
             </LinearLayout>
 
@@ -325,6 +325,7 @@
                     android:layout_gravity="center"
                     android:layout_marginEnd="10dp"
                     android:layout_weight="1"
+                    android:id="@+id/txtMuteName"
                     android:text="@string/mute"
                     android:textColor="@color/txt_color"
                     android:textSize="18sp">
@@ -336,8 +337,8 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:id="@+id/txtMute"
-                    android:textColor="@color/viewgrey"
-                    android:textSize="18sp">
+                    android:textColor="@color/gray"
+                    android:textSize="16sp">
 
                 </com.application.smartstation.view.CustomTextViewMedium>
 

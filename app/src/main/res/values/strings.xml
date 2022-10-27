@@ -1288,5 +1288,12 @@
     <string name="week_1">1 week</string>
     <string name="always">Always</string>
     <string name="until">until</string>
+    <string name="unmute">Unmute</string>
+    <string name="report_and_blk">Report and Block</string>
+    <string name="report_des">The last 5 message from this contact will be forwarded to Smart Station. This contact will not be notified.</string>
+    <string name="report_des_grp">The last 5 message from this group will be forwarded to Smart Station. No one in this group will be notified.</string>
+    <string name="report_des_1">If you report and block, your chat with this contact will be deleted from this device only.</string>
+    <string name="report_des_grp_1">If you report and exit, your chat with this group will be deleted from this device only.</string>
+    <string name="report_and_exit">Report and Exit</string>
 
 </resources>

@@ -18,7 +18,7 @@ public class DirManager {
     private static final String EXTENSION_JPG = ".jpg";
     private static final String EXTENSION_PNG = ".png";
     private static final String EXTENSION_MP4 = ".mp4";
-    private static final String EXTENSION_WAV = ".wav";
+    private static final String EXTENSION_WAV = ".mp3";
     private static final String APP_FOLDER_NAME = App.context().getString(R.string.folder_name_internal);
 
 

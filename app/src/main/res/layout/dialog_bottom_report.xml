@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/chat_round_use"
+        android:orientation="vertical">
+
+        <com.application.smartstation.view.CustomTextViewBold
+            android:id="@+id/txtReport"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:gravity="center"
+            android:layout_marginBottom="8dp"
+            android:letterSpacing="0.1"
+            android:lineSpacingExtra="@dimen/_3sdp"
+            android:layout_gravity="center"
+            android:textStyle="bold"
+            android:textColor="@color/color_gray_2"
+            android:textSize="16sp">
+
+        </com.application.smartstation.view.CustomTextViewBold>
+
+        <com.application.smartstation.view.CustomTextViewMedium
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="8dp"
+            android:gravity="center"
+            android:letterSpacing="0.1"
+            android:lineSpacingExtra="@dimen/_3sdp"
+            android:text="@string/report_des"
+            android:layout_gravity="center"
+            android:textColor="@color/color_gray_2"
+            android:textSize="14sp">
+
+        </com.application.smartstation.view.CustomTextViewMedium>
+
+        <com.application.smartstation.view.CustomTextViewMedium
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="8dp"
+            android:gravity="center"
+            android:letterSpacing="0.1"
+            android:lineSpacingExtra="@dimen/_3sdp"
+            android:text="@string/report_des_1"
+            android:layout_gravity="center"
+            android:textColor="@color/color_gray_2"
+            android:textSize="14sp">
+
+        </com.application.smartstation.view.CustomTextViewMedium>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/color_view" />
+
+        <LinearLayout
+            android:id="@+id/llReportBlk"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:gravity="center"
+            android:foreground="?attr/selectableItemBackground"
+            android:orientation="horizontal"
+            android:padding="16dp">
+
+            <com.application.smartstation.view.CustomTextViewBold
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="@string/report_and_blk"
+                android:textStyle="bold"
+                android:textColor="@color/black"
+                android:textSize="18sp">
+
+            </com.application.smartstation.view.CustomTextViewBold>
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/color_view" />
+
+        <LinearLayout
+            android:id="@+id/llReport"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:gravity="center"
+            android:foreground="?attr/selectableItemBackground"
+            android:orientation="horizontal"
+            android:padding="16dp">
+
+            <com.application.smartstation.view.CustomTextViewBold
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="@string/report"
+                android:textStyle="bold"
+                android:textColor="@color/black"
+                android:textSize="18sp">
+
+            </com.application.smartstation.view.CustomTextViewBold>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/llCancel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:background="@drawable/chat_round_use"
+        android:clickable="true"
+        android:foreground="?attr/selectableItemBackground"
+        android:orientation="vertical"
+        android:padding="15dp">
+
+        <com.application.smartstation.view.CustomTextViewBold
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="@string/cancel"
+            android:textStyle="bold"
+            android:textColor="@color/red"
+            android:textSize="18sp">
+
+        </com.application.smartstation.view.CustomTextViewBold>
+
+    </LinearLayout>
+
+</LinearLayout>

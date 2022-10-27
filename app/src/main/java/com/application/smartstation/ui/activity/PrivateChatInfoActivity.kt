@@ -16,6 +16,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.application.smartstation.R
 import com.application.smartstation.databinding.ActivityPrivateChatInfoBinding
 import com.application.smartstation.databinding.DialogBottomMuteBinding
+import com.application.smartstation.databinding.DialogBottomReportBinding
+import com.application.smartstation.databinding.DialogBottomUnmuteBinding
 import com.application.smartstation.service.Status
 import com.application.smartstation.ui.adapter.PrivateChatInfoGrpAdapter
 import com.application.smartstation.ui.model.CommonGrpList
@@ -40,6 +42,7 @@ class PrivateChatInfoActivity : BaseActivity() {
     var chatType = ""
     var receiver_id = ""
     var blk = false
+    var muteStatus = false
     var privateChatInfoGrpAdapter: PrivateChatInfoGrpAdapter? = null
     var CAMERA_MIC_PERMISSION_REQUEST_CODE = 791
     var mBottomDialogDocument: BottomSheetDialog? = null
@@ -97,7 +100,11 @@ class PrivateChatInfoActivity : BaseActivity() {
         }
 
         binding.llMute.setOnClickListener {
-            muteDialog()
+            if (muteStatus){
+                unmuteDialog()
+            }else{
+                muteDialog()
+            }
         }
 
         binding.llClearChat.setOnClickListener {
@@ -128,6 +135,10 @@ class PrivateChatInfoActivity : BaseActivity() {
             }
         }
 
+        binding.llReport.setOnClickListener {
+            reportDialog()
+        }
+
     }
 
     private fun setMute(type: String) {
@@ -148,8 +159,10 @@ class PrivateChatInfoActivity : BaseActivity() {
                     Status.SUCCESS -> {
                         dismissProgress()
                         if (it.data!!.status) {
+                            muteStatus = true
+                            binding.txtMuteName.setText(resources.getString(R.string.unmute))
                             if (it.data.end_time.equals("always")){
-                                binding.txtMute.setText(it.data.end_time)
+                                binding.txtMute.setText(resources.getString(R.string.always))
                             }else{
                                 binding.txtMute.setText(resources.getString(R.string.until)+" "+UtilsDefault.dateMute(UtilsDefault.localTimeConvert(it.data.end_time)))
                             }
@@ -297,6 +310,20 @@ class PrivateChatInfoActivity : BaseActivity() {
                                 blk = true
                                 binding.txtBlock.text = resources.getString(R.string.unblk)
                             }
+
+                            if (it.data.data.mute.mute_status.equals(0)){
+                                binding.txtMuteName.text = resources.getString(R.string.mute)
+                                muteStatus = false
+                            }else{
+                                binding.txtMuteName.text = resources.getString(R.string.unmute)
+                                muteStatus = true
+                                if (it.data.data.mute.end_datetime.equals("always")){
+                                    binding.txtMute.setText(resources.getString(R.string.always))
+                                }else{
+                                    binding.txtMute.setText(resources.getString(R.string.until)+" "+UtilsDefault.dateMute(UtilsDefault.localTimeConvert(it.data.data.mute.end_datetime)))
+                                }
+                            }
+
                             name = it.data.data.receiver_data.name
                             profilePic = it.data.data.receiver_data.profile_pic
                             binding.txtName.text = it.data.data.receiver_data.name
@@ -393,7 +420,7 @@ class PrivateChatInfoActivity : BaseActivity() {
                 setMute("1_week")
             }
 
-            bind.llWeek.setOnClickListener {
+            bind.llAlways.setOnClickListener {
                 mBottomDialogDocument!!.dismiss()
                 setMute("always")
             }
@@ -403,5 +430,164 @@ class PrivateChatInfoActivity : BaseActivity() {
             e.printStackTrace()
         }
     }
+
+    fun unmuteDialog(){
+        try {
+            val view = layoutInflater.inflate(R.layout.dialog_bottom_unmute, null)
+            mBottomDialogDocument = BottomSheetDialog(this)
+            val bind = DialogBottomUnmuteBinding.bind(view)
+            mBottomDialogDocument!!.setCancelable(false)
+
+            mBottomDialogDocument!!.setOnShowListener {
+                (view!!.parent as View).setBackgroundColor(Color.TRANSPARENT)
+            }
+
+            mBottomDialogDocument!!.setContentView(view)
+            mBottomDialogDocument!!.show()
+
+            bind.llCancel.setOnClickListener {
+                mBottomDialogDocument!!.dismiss()
+            }
+
+            bind.llUnmute.setOnClickListener {
+                mBottomDialogDocument!!.dismiss()
+                setUnmute()
+            }
+
+
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
+
+    private fun setUnmute() {
+        val inputParams = InputParams()
+        inputParams.accessToken =
+            UtilsDefault.getSharedPreferenceString(Constants.ACCESS_TOKEN)
+        inputParams.user_id = UtilsDefault.getSharedPreferenceString(Constants.USER_ID)
+        inputParams.receiver_id = receiver_id
+
+        apiViewModel.unmuteNoficitaionPrivate(inputParams).observe(this, Observer {
+            it.let {
+                when (it.status) {
+                    Status.LOADING -> {
+                        showProgress()
+                    }
+                    Status.SUCCESS -> {
+                        dismissProgress()
+                        if (it.data!!.status) {
+                            muteStatus = false
+                            binding.txtMuteName.setText(resources.getString(R.string.mute))
+                            binding.txtMute.setText("")
+                        } else {
+                            toast(it.data.message)
+                        }
+                    }
+                    Status.ERROR -> {
+                        dismissProgress()
+                        toast(it.message!!)
+                    }
+                }
+            }
+        })
+    }
+
+    fun reportDialog(){
+        try {
+            val view = layoutInflater.inflate(R.layout.dialog_bottom_report, null)
+            mBottomDialogDocument = BottomSheetDialog(this)
+            val bind = DialogBottomReportBinding.bind(view)
+            mBottomDialogDocument!!.setCancelable(false)
+
+            mBottomDialogDocument!!.setOnShowListener {
+                (view!!.parent as View).setBackgroundColor(Color.TRANSPARENT)
+            }
+
+            mBottomDialogDocument!!.setContentView(view)
+            mBottomDialogDocument!!.show()
+
+            bind.txtReport.text = resources.getString(R.string.report)+" "+name+"?"
+
+            bind.llCancel.setOnClickListener {
+                mBottomDialogDocument!!.dismiss()
+            }
+
+            bind.llReport.setOnClickListener {
+                mBottomDialogDocument!!.dismiss()
+                setReport()
+            }
+
+            bind.llReportBlk.setOnClickListener {
+                mBottomDialogDocument!!.dismiss()
+                setReportandBlk()
+            }
+
+
+
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
+
+    private fun setReportandBlk() {
+        val inputParams = InputParams()
+        inputParams.accessToken =
+            UtilsDefault.getSharedPreferenceString(Constants.ACCESS_TOKEN)
+        inputParams.user_id = UtilsDefault.getSharedPreferenceString(Constants.USER_ID)
+        inputParams.receiver_id = receiver_id
+
+        apiViewModel.privateReportandBlkChat(inputParams).observe(this, Observer {
+            it.let {
+                when (it.status) {
+                    Status.LOADING -> {
+                        showProgress()
+                    }
+                    Status.SUCCESS -> {
+                        dismissProgress()
+                        if (it.data!!.status) {
+                            getPrivateInfo()
+                        } else {
+                            toast(it.data.message)
+                        }
+                    }
+                    Status.ERROR -> {
+                        dismissProgress()
+                        toast(it.message!!)
+                    }
+                }
+            }
+        })
+    }
+
+    private fun setReport() {
+        val inputParams = InputParams()
+        inputParams.accessToken =
+            UtilsDefault.getSharedPreferenceString(Constants.ACCESS_TOKEN)
+        inputParams.user_id = UtilsDefault.getSharedPreferenceString(Constants.USER_ID)
+        inputParams.receiver_id = receiver_id
+
+        apiViewModel.privateReportChat(inputParams).observe(this, Observer {
+            it.let {
+                when (it.status) {
+                    Status.LOADING -> {
+                        showProgress()
+                    }
+                    Status.SUCCESS -> {
+                        dismissProgress()
+                        if (it.data!!.status) {
+                            toast(it.data.message)
+                        } else {
+                            toast(it.data.message)
+                        }
+                    }
+                    Status.ERROR -> {
+                        dismissProgress()
+                        toast(it.message!!)
+                    }
+                }
+            }
+        })
+    }
+
 
 }

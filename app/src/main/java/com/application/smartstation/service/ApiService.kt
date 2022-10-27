@@ -176,6 +176,18 @@ interface ApiService {
     @POST(ApiUrl.UNMUTE_GRP_CHAT_NOTIFICATION)
     suspend fun unmuteNotificaionGrp(@Body inputParams: InputParams): BaseResponse
 
+    @POST(ApiUrl.REPORT_PRIVATE_CHAT)
+    suspend fun privateReportChat(@Body inputParams: InputParams): BaseResponse
+
+    @POST(ApiUrl.REPORT_GRP_CHAT)
+    suspend fun grpReportChat(@Body inputParams: InputParams): BaseResponse
+
+    @POST(ApiUrl.REPORT_AND_BLK_PRIVATE_CHAT)
+    suspend fun privateReportandBlkChat(@Body inputParams: InputParams): BaseResponse
+
+    @POST(ApiUrl.REPORT_AND_BLK_GRP_CHAT)
+    suspend fun grpReportandBlkChat(@Body inputParams: InputParams): BaseResponse
+
     @POST(ApiUrl.GET_GRP_MEDIA)
     suspend fun getGrpMedia(@Body inputParams: InputParams): GetMedia
 
