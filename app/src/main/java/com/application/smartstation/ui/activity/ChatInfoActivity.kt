@@ -57,7 +57,6 @@ class ChatInfoActivity : BaseActivity(), ImageSelectorDialog.Action {
     var chatType = ""
     var room = ""
     var desGrp = ""
-    var adminID = ""
     var muteStatus = false
     var contactList: ArrayList<ContactListRes> = ArrayList()
     var grpUserList: ArrayList<UserListGrp> = ArrayList()
@@ -66,7 +65,6 @@ class ChatInfoActivity : BaseActivity(), ImageSelectorDialog.Action {
     var imageSelectorDialog: ImageSelectorDialog? = null
     var pics = ""
     var imageView:ImageView? = null
-    var bottomSheetBehavior: BottomSheetBehavior<*>? = null
 
     companion object {
         var list = ArrayList<UserListGrp>()
@@ -318,17 +316,13 @@ class ChatInfoActivity : BaseActivity(), ImageSelectorDialog.Action {
                             binding.txtDesTime.text = UtilsDefault.monthName(UtilsDefault.localTimeConvert(it.data.created_datetime)!!)!!
                             if (it.data.data.size != 0) {
                                 setData(it.data.data)
-                                binding.txtParticipants.text =
-                                    resources.getString(R.string.group) + " " + it.data.data.size + " " + resources.getString(
-                                        R.string.participants)
-                                binding.txtParticipants1.text =
-                                    it.data.data.size.toString() + " " + resources.getString(R.string.participants)
+                                binding.txtParticipants.text = resources.getString(R.string.group) + " " + it.data.data.size + " " + resources.getString(R.string.participants)
+                                binding.txtParticipants1.text = it.data.data.size.toString() + " " + resources.getString(R.string.participants)
                                 for (i in 0 until it.data.data.size) {
                                     if (UtilsDefault.getSharedPreferenceString(Constants.USER_ID)!!
                                             .equals(it.data.data[i].user_id)
                                     ) {
                                         if (it.data.data[i].type.equals("admin")) {
-
                                             binding.llAddContact.visibility = View.VISIBLE
                                         } else {
                                             binding.llAddContact.visibility = View.GONE
