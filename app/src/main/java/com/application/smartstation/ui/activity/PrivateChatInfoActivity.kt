@@ -8,6 +8,7 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
+import android.util.Log
 import android.view.View
 import androidx.activity.viewModels
 import androidx.core.content.ContextCompat
@@ -58,6 +59,7 @@ class PrivateChatInfoActivity : BaseActivity() {
         if (intent != null) {
             if (intent.getStringExtra(Constants.REC_ID) != null) {
                 receiver_id = intent.getStringExtra(Constants.REC_ID)!!
+                Log.d("INITVIEW......",receiver_id)
             }
         }
 
@@ -293,6 +295,12 @@ class PrivateChatInfoActivity : BaseActivity() {
             UtilsDefault.getSharedPreferenceString(Constants.ACCESS_TOKEN)
         inputParams.user_id = UtilsDefault.getSharedPreferenceString(Constants.USER_ID)
         inputParams.receiver_id = receiver_id
+
+        //EDIT06/12/22
+        Log.d("VALUES........",inputParams.accessToken.toString())
+        Log.d("VALUES........",inputParams.user_id.toString())
+        Log.d("VALUES........",inputParams.receiver_id.toString())
+
 
         apiViewModel.getPrivateInfo(inputParams).observe(this, Observer {
             it.let {

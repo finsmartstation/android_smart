@@ -37,6 +37,9 @@ android {
         debug {
 //            buildConfigField "String", "APP_BASE_URL", "\"https://finsmartstation.com\""
             buildConfigField "String", "APP_BASE_URL", "\"http://ec2-3-143-158-60.us-east-2.compute.amazonaws.com\""
+            //buildConfigField "String", "SOCKET_BASE_URL", "\"https://fsssocket.herokuapp.com\""
+
+            //edit 06/12/2022
             buildConfigField "String", "SOCKET_BASE_URL", "\"https://fsssocket.herokuapp.com\""
         }
         release {

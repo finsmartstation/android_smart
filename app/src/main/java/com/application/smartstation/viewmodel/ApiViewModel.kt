@@ -1,6 +1,7 @@
 package com.application.smartstation.viewmodel
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.liveData
 import com.application.smartstation.data.ApiRepository
@@ -1151,6 +1152,11 @@ class ApiViewModel @Inject constructor(
 
     fun getPrivateInfo(inputParams: InputParams) = liveData<Resource<GetPrivateInfo>> {
         if (UtilsDefault.isOnline()) {
+
+            //EDIT 061222
+            Log.d("APIVALUES",inputParams.user_id.toString())
+            Log.d("APIVALUES",inputParams.accessToken.toString())
+            Log.d("APIVALUES",inputParams.receiver_id.toString())
             repository.getPrivateInfo(inputParams)
                 .onStart {
                     emit(Resource.loading(data = null))

@@ -502,7 +502,9 @@ class MainActivity : BaseActivity(), InboxFragment.OnUnreadMailCountListener,
 //                        dismissProgress()
                         if (it.data!!.status) {
                             var list1 = it.data.data
+                            Log.d("LISTTTTT1.....",it.data.toString())
                             if (list1.isNotEmpty()) {
+                                //Log.d("LISTTTTT....",list1.toString())
 //                                list.clear()
 //                                for (a in contactList) {
 //                                    for (b in list1) {
